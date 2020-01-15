@@ -1,0 +1,16 @@
+package com.jig;
+
+import com.jig.util.SpringUtil;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+
+@SpringBootApplication
+public class VueApplication {
+
+    public static void main(String[] args) {
+//        SpringApplication.run(VueApplication.class, args);
+        ApplicationContext applicationContext = SpringApplication.run(VueApplication.class, args);
+        SpringUtil.setApplicationContext(applicationContext);
+    }
+}

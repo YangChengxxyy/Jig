@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>高级用户</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery-3.4.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        $(function () {
+            var seq_number = 0;
+            $(".nav li").on('click', function (e) {
+                const href = $(this).attr("href");
+                $(this).siblings().removeClass("active");
+                $(this).addClass("active");
+                $(".nav li[href='" + href + "']").siblings().removeClass("active");
+                $(".nav li[href='" + href + "']").addClass("active");
+            })
+
+            $("#add_seq").on('click', function (e) {
+                seq_number++;
+                $("#add_seq_block").append($("<div class='addblock'><div class='row form-group' id='add_seq_block'" + seq_number +
+                    "'><label for='seq_code' class='col-sm-3 control-label'>工夹具代码</label><div class='col-sm-3'>" +
+                    "<input type='text' class='form-control' name='add_seq_code" + seq_number + "'></div>" +
+                    "<label for='shop_number' class='col-sm-3 control-label'>采购数量</label> <div class='col-sm-2'>" +
+                    "<input type='text' class='form-control' name='add_shop_number" + seq_number + "'> </div> <div class='col-sm-1'></div></div></div>"))
+
+                if (seq_number >= 3) {
+                    $("#add_seq").attr("disabled", "disabled");
+                }
+            })
+
+            $("#close_add_modal").on('click', function (e) {
+                seq_number = 0;
+                $(".addblock").remove();
+            })
+        })
+    </script>
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="page-header" style="text-align: center">
+    <h3>
+        工夹具管理系统
+    </h3>
+</div>
+<div style="text-align: right;padding-right: 7%">
+    <div class="dropdown">
+        <button type="button" class="btn dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">----高级用户
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
+            <li role="presentation" class="dropdown-header">欢迎您，小张同学！</li>
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-user"></span>个人信息</a>
+            </li>
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#changePassword"><span
+                        class="glyphicon glyphicon-wrench"></span>修改密码</a>
+            </li>
+            <li role="menuitem" class="divider"></li>
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-off"></span>安全退出</a>
+            </li>
+
+        </ul>
+    </div>
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="label" aria-hidden="true"
+         style="text-align: left">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="label">修改密码</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form" class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">原密码：</label>
+                            <div class="col-md-8">
+                                <input class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">新密码：</label>
+                            <div class="col-md-8">
+                                <input class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">重复密码：</label>
+                            <div class="col-md-8">
+                                <input class="form-control">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary">确认修改</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row clearfix">
+        <div class="col-lg-3 column">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">功能菜单</h4>
+                </div>
+                <!--功能菜单 导航栏-->
+                <div class="panel-body">
+                    <div class="panel-group" id="left">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" data-toggle="collapse" data-parent="#left" href="#1">
+                                <h4 class="panel-title" data-toggle="tab" href="#main1">
+                                    采购管理
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse in" id="1">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li class="active" data-toggle="tab" href="#myShopList"><a>我的采购单</a></li>
+                                    <li data-toggle="tab" href="#historyShop"><a>历史采购记录</a></li>
+
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" data-toggle="collapse" data-parent="#left" href="#2">
+                                <h4 class="panel-title" data-toggle="tab" href="#main2">
+                                    报修管理
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse" id="2">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li class="active" data-toggle="tab" href="#myrepair"><a>我的报修审核</a></li>
+                                    <li data-toggle="tab" href="#historyMyrepair"><a>历史报修记录</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" data-toggle="collapse" data-parent="#left" href="#3">
+                                <h4 class="panel-title" data-toggle="tab" href="#main3">
+                                    报废管理
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse" id="3">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li class="active" data-toggle="tab" href="#myscrap"><a>我的报废申请</a></li>
+                                    <li data-toggle="tab" href="#historyMyscrap"><a>历史报废记录</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" data-toggle="collapse" data-parent="#left" href="#4">
+                                <h4 class="panel-title" data-toggle="tab" href="#main4">
+                                    工夹具信息管理
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse" id="4">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li class="active" data-toggle="tab" href="#seqInfo"><a>工夹具信息</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9 column">
+            <div class="panel panel-default tab-content">
+
+                <div id="main1" class="panel-body tab-content tab-pane fade in active">
+                    <ul class="nav nav-tabs">
+                        <li class="active" data-toggle="tab" href="#myShopList"><a>我的采购单</a></li>
+                        <li data-toggle="tab" href="#historyShop"><a>历史采购记录</a></li>
+                    </ul>
+                    <div class="panel-body tab-content">
+                        <!--我的采购单 -->
+                        <div id="myShopList" class="tab-pane fade in active">
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <!--添加采购单按钮 -->
+                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            data-target="#add_myshoplist">添加采购单
+                                    </button>
+                                    <div>
+                                        <div class="modal fade" id="add_myshoplist" tabindex="-1" role="dialog"
+                                             aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-hidden="true">&times;
+                                                        </button>
+                                                        <h4 class="modal-title">添加采购单</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form role="form" class="form-horizontal">
+                                                            <div class="form-group">
+                                                                <label for="add_shop_list_id"
+                                                                       class="col-sm-3 control-label">采购单据号</label>
+                                                                <div class="col-sm-8">
+                                                                    <input type="text" class="form-control"
+                                                                           id="add_shop_list_id">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="add_shop_man_name"
+                                                                       class="col-sm-3 control-label">采购人</label>
+                                                                <div class="col-sm-8">
+                                                                    <input type="text" class="form-control"
+                                                                           id="add_shop_man_name">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="add_production_id"
+                                                                       class="col-sm-3 control-label">产线id</label>
+                                                                <div class="col-sm-8">
+                                                                    <input type="text" class="form-control"
+                                                                           id="add_production_id">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="col-sm-4 col-sm-offset-8">
+                                                                    <button type="button" class="btn btn-success"
+                                                                            id="add_seq">添加工夹具
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <div id="add_seq_block">
+                                                                <div class="row form-group">
+                                                                    <label for="seq_code"
+                                                                           class="col-sm-3 control-label">工夹具代码</label>
+                                                                    <div class="col-sm-3">
+                                                                        <input type="text" class="form-control"
+                                                                               name="add_seq_code">
+                                                                    </div>
+                                                                    <label for="shop_number"
+                                                                           class="col-sm-3 control-label">采购数量</label>
+                                                                    <div class="col-sm-2">
+                                                                        <input type="text" class="form-control"
+                                                                               name="add_shop_number">
+                                                                    </div>
+                                                                    <div class="col-sm-1"></div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="add_submittime"
+                                                                       class="col-sm-3 control-label">申请时间</label>
+                                                                <div class="col-sm-8">
+                                                                    <input type="text" class="form-control"
+                                                                           id="add_submittime" value="自动获取当前时间"
+                                                                           readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default"
+                                                                        data-dismiss="modal" id="close_add_modal">关闭
+                                                                </button>
+                                                                <input type="button" class="btn btn-primary" value="添加">
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div><!-- /.modal-content -->
+                                            </div><!-- /.modal -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover" role="table">
+                                    <thead>
+                                    <tr>
+                                        <th>采购单据号</th>
+                                        <th>采购人</th>
+                                        <th>产线id</th>
+                                        <th>工夹具代码</th>
+                                        <th>申请时间</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>BO19072900000018</td>
+                                        <td>张三</td>
+                                        <td>BLKA10-L2</td>
+                                        <td>EF0789</td>
+                                        <td>2019-12-31 12:39</td>
+                                        <td>待初审</td>
+                                        <td>
+                                            <button class="btn btn-primary" data-toggle="modal"
+                                                    data-target="#myshoplist_detail">修改
+                                            </button>
+                                            <button class="btn btn-primary">删除</button>
+                                            <div>
+                                                <div class="modal fade" id="myshoplist_detail" tabindex="-1"
+                                                     role="dialog"
+                                                     aria-labelledby="chukuLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                        aria-hidden="true">&times;
+                                                                </button>
+                                                                <h4 class="modal-title" id="myModalLabel">我的采购单</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form role="form" class="form-horizontal">
+                                                                    <div class="form-group">
+                                                                        <label for="shop_list_id"
+                                                                               class="col-sm-3 control-label">采购单据号</label>
+                                                                        <div class="col-sm-8">
+                                                                            <input type="text" class="form-control"
+                                                                                   id="shop_list_id" value="BO19072900000018">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="shop_man_name"
+                                                                               class="col-sm-3 control-label">采购人</label>
+                                                                        <div class="col-sm-8">
+                                                                            <input type="text" class="form-control"
+                                                                                   id="shop_man_name" value="张三">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="production_id"
+                                                                               class="col-sm-3 control-label">产线id</label>
+                                                                        <div class="col-sm-8">
+                                                                            <input type="text" class="form-control"
+                                                                                   id="production_id" value="BLKA10-L2">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label for="seq_code"
+                                                                               class="col-sm-3 control-label">工夹具代码</label>
+                                                                        <div class="col-sm-3">
+                                                                            <input type="text" class="form-control"
+                                                                                   id="seq_code" value="1">
+                                                                        </div>
+                                                                        <label for="shop_number"
+                                                                               class="col-sm-3 control-label">采购数量</label>
+                                                                        <div class="col-sm-2">
+                                                                            <input type="text" class="form-control"
+                                                                                   id="shop_number" value="10">
+                                                                        </div>
+                                                                        <div class="col-sm-1"></div>
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="shop_applytime"
+                                                                               class="col-sm-3 control-label">申请时间</label>
+                                                                        <div class="col-sm-8">
+                                                                            <input type="text" class="form-control"
+                                                                                   id="shop_applytime"
+                                                                                   value="2020-1-4 18:25" readonly>
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="shop_applytime"
+                                                                               class="col-sm-3 control-label">审批状态</label>
+                                                                        <div class="col-sm-8">
+                                                                            <input type="text"
+                                                                                   class="form-control warning"
+                                                                                   value="待初审" readonly>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default"
+                                                                        data-dismiss="modal">关闭
+                                                                </button>
+                                                                <button type="button" class="btn btn-primary">确认修改
+                                                                </button>
+                                                            </div>
+                                                        </div><!-- /.modal-content -->
+                                                    </div><!-- /.modal -->
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>EF21841264561</td>
+                                        <td>李四</td>
+                                        <td>BLKA10-L2</td>
+                                        <td>EF2184</td>
+                                        <td>2020-01-03 09:10</td>
+                                        <td>初审通过</td>
+                                        <td>
+                                            <button class="btn btn-primary">修改</button>
+                                            <button class="btn btn-primary">删除</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row text-center">
+                                <ul class="pagination">
+                                    <li><a href="#">&laquo;</a></li>
+                                    <li class="active"><a href="#">1</a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#">5</a></li>
+                                    <li><a href="#">&raquo;</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div id="historyShop" class="tab-pane fade">
+                            <!--历史采购记录-->
+                            <div style="margin-bottom: 3%">
+                                <form role="form" class="form-horizontal">
+                                    <div class="form-group row">
+                                        <label for="sel_shoplist_id" class="col-sm-2 control-label">单据号</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" id="sel_shoplist_id">
+                                        </div>
+                                        <label for="sel_shopman_name" class="col-sm-2 control-label">采购人</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" id="sel_shopman_name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="sel_applytime" class="col-sm-2 control-label">申请日期</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" id="sel_applytime">
+                                        </div>
+                                        <label for="sel_status" class="col-sm-2 control-label">审批状态</label>
+                                        <div class="col-sm-3">
+                                            <select class="form-control" id="sel_status">
+                                                <option>待初审</option>
+                                                <option>初审通过</option>
+                                                <option>初审不通过</option>
+                                                <option>终审通过</option>
+                                                <option>终审不通过</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button class="btn btn-primary" type="button">查询</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover table-responsive" role="table">
+                                    <thead>
+                                    <tr>
+                                        <th>采购单据号</th>
+                                        <th>采购人</th>
+                                        <th>产线id</th>
+                                        <th>工夹具代码</th>
+                                        <th>申请时间</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>EF07897897892</td>
+                                        <td>张三</td>
+                                        <td>BLKA10-L2</td>
+                                        <td>EF0789</td>
+                                        <td>2019-12-31 12:39</td>
+                                        <td>待初审</td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary">查看</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row text-center">
+                                <ul class="pagination">
+                                    <li><a href="#">&laquo;</a></li>
+                                    <li class="active"><a href="#">1</a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#">5</a></li>
+                                    <li><a href="#">&raquo;</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="main2" class="panel-body tab-content tab-pane fade">
+                    <ul class="nav nav-tabs">
+                        <li class="active" data-toggle="tab" href="#myrepair"><a>我的报修</a></li>
+                        <li data-toggle="tab" href="#historyMyrepair"><a>历史报修记录</a></li>
+                    </ul>
+                    <div class="panel-body tab-content">
+                        <div id="myrepair" class="tab-pane fade in active ">
+                            <table class="table table-striped table-hover table-responsive" role="table">
+                                <thead>
+                                <tr>
+                                    <th>工夹具代码</th>
+                                    <th>工夹具序列号</th>
+                                    <th>申请人</th>
+                                    <th>故障原因</th>
+                                    <th>申请时间</th>
+                                    <th>审批状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>EF2189</td>
+                                    <td>1</td>
+                                    <td>小张</td>
+                                    <td>有不正常的响声</td>
+                                    <td>2019-12-31 12:39</td>
+                                    <td>待审批</td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-target="#repairDetail">查看
+                                        </button>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-target="#repairHistory">查看报修历史
+                                        </button>
+                                        <button type="button" class="btn btn-success">通过</button>
+                                        <button type="button" class="btn btn-danger">不通过</button>
+                                        <div>
+                                            <div class="modal fade" id="repairDetail" tabindex="-1" role="dialog"
+                                                 aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-hidden="true">&times;
+                                                            </button>
+                                                            <h4 class="modal-title">报修申请审批</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div>
+                                                                <form role="form" class="form-horizontal">
+                                                                    <div class="form-group">
+                                                                        <div class="col-sm-1"></div>
+                                                                        <label
+                                                                               class="col-sm-3 control-label">工夹具代码</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="form-control">EF2189</div>
+                                                                        </div>
+                                                                        <div class="col-sm-2"></div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="col-sm-1"></div>
+                                                                        <label class="col-sm-3 control-label">工夹具序列号</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="form-control">1</div>
+                                                                        </div>
+                                                                        <div class="col-sm-2"></div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="col-sm-1"></div>
+                                                                        <label class="col-sm-3 control-label">申请人</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="form-control">小张</div>
+                                                                        </div>
+                                                                        <div class="col-sm-2"></div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="col-sm-1"></div>
+                                                                        <label class="col-sm-3 control-label">申请时间</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="form-control">2019-12-31 12:39</div>
+                                                                        </div>
+                                                                        <div class="col-sm-2"></div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="col-sm-1"></div>
+                                                                        <label class="col-sm-3 control-label">故障原因</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="form-control">有不正常的响声</div>
+                                                                        </div>
+                                                                        <div class="col-sm-2"></div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="col-sm-1"></div>
+                                                                        <label class="col-sm-3 control-label">故障照片</label>
+                                                                        <div class="col-sm-6">
+                                                                            <img src="/wp-content/uploads/2014/06/download.png"
+                                                                                 class="img-rounded">
+                                                                        </div>
+                                                                        <div class="col-sm-2"></div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="col-sm-1"></div>
+                                                                        <label class="col-sm-3 control-label">审批状态</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="form-control">待审批</div>
+
+                                                                        </div>
+                                                                        <div class="col-sm-2"></div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default"
+                                                                    data-dismiss="modal">关闭
+                                                            </button>
+                                                        </div>
+                                                    </div><!-- /.modal-content -->
+                                                </div><!-- /.modal -->
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="historyMyrepair" class="tab-pane fade">
+                            <!--历史报修记录-->
+                            <div style="margin-bottom: 3%">
+                                <form role="form" class="form-horizontal">
+                                    <div class="form-group row">
+                                        <label for="sel_shoplist_id" class="col-sm-2 control-label">工夹具代码</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" name="sel_repair_seq_code">
+                                        </div>
+                                        <label for="shop_number" class="col-sm-2 control-label">申请人</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" name="sel_repair_submit_name">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button class="btn btn-default" type="button">清空</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="sel_applytime" class="col-sm-2 control-label">故障原因</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" name="sel_repair_reason">
+                                        </div>
+                                        <label for="sel_status" class="col-sm-2 control-label">审批状态</label>
+                                        <div class="col-sm-3">
+                                            <select class="form-control">
+                                                <option>初审通过</option>
+                                                <option>初审不通过</option>
+                                                <option>终审不通过</option>
+                                                <option>终审通过</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button class="btn btn-primary" type="button">查询</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <table class="table table-striped table-hover table-responsive" role="table">
+                                <thead>
+                                <tr>
+                                    <th>工夹具代码</th>
+                                    <th>工夹具序列号</th>
+                                    <th>申请人</th>
+                                    <th>故障原因</th>
+                                    <th>申请时间</th>
+                                    <th>审批状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>EF2189</td>
+                                    <td>1</td>
+                                    <td>小张</td>
+                                    <td>有不正常的响声</td>
+                                    <td>2019-12-31 12:39</td>
+                                    <td>待审批</td>
+                                    <td>
+                                        <button class="btn btn-primary" data-toggle="modal"
+                                                data-target="#history_repair_detail">查看
+                                        </button>
+                                        <div>
+                                            <div class="modal fade" id="history_repair_detail" tabindex="-1" role="dialog"
+                                                 aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-hidden="true">&times;
+                                                            </button>
+                                                            <h4 class="modal-title">报修申请审批</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div>
+                                                                <form role="form" class="form-horizontal">
+                                                                    <div class="form-group">
+                                                                        <div class="col-sm-1"></div>
+                                                                        <label
+                                                                                class="col-sm-3 control-label">工夹具代码</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="form-control">EF2189</div>
+                                                                        </div>
+                                                                        <div class="col-sm-2"></div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="col-sm-1"></div>
+                                                                        <label class="col-sm-3 control-label">工夹具序列号</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="form-control">1</div>
+                                                                        </div>
+                                                                        <div class="col-sm-2"></div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="col-sm-1"></div>
+                                                                        <label class="col-sm-3 control-label">申请人</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="form-control">小张</div>
+                                                                        </div>
+                                                                        <div class="col-sm-2"></div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="col-sm-1"></div>
+                                                                        <label class="col-sm-3 control-label">申请时间</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="form-control">2019-12-31 12:39</div>
+                                                                        </div>
+                                                                        <div class="col-sm-2"></div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="col-sm-1"></div>
+                                                                        <label class="col-sm-3 control-label">故障原因</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="form-control">有不正常的响声</div>
+                                                                        </div>
+                                                                        <div class="col-sm-2"></div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="col-sm-1"></div>
+                                                                        <label class="col-sm-3 control-label">故障照片</label>
+                                                                        <div class="col-sm-6">
+                                                                            <img src="/wp-content/uploads/2014/06/download.png"
+                                                                                 class="img-rounded">
+                                                                        </div>
+                                                                        <div class="col-sm-2"></div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="col-sm-1"></div>
+                                                                        <label class="col-sm-3 control-label">审批状态</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="form-control">待审批</div>
+
+                                                                        </div>
+                                                                        <div class="col-sm-2"></div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default"
+                                                                    data-dismiss="modal">关闭
+                                                            </button>
+                                                        </div>
+                                                    </div><!-- /.modal-content -->
+                                                </div><!-- /.modal -->
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="main3" class="panel-body tab-content tab-pane fade">
+                    <ul class="nav nav-tabs">
+                        <li class="active" data-toggle="tab" href="#myscrap"><a>我的报废申请</a></li>
+                        <li data-toggle="tab" href="#historyMyscrap"><a>历史报废记录</a></li>
+                    </ul>
+                    <div class="panel-body tab-content">
+                        <div id="myscrap" class="tab-pane fade in active table-responsive">
+                            <!--我的报废-->
+                            <table class="table table-striped table-hover table-responsive" role="table">
+                                <thead>
+                                <tr>
+                                    <th>工夹具代码</th>
+                                    <th>工夹具序列号</th>
+                                    <th>申请人</th>
+                                    <th>故障原因</th>
+                                    <th>申请时间</th>
+                                    <th>审批状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>EF2189</td>
+                                    <td>1</td>
+                                    <td>小张</td>
+                                    <td>有不正常的响声</td>
+                                    <td>2019-12-31 12:39</td>
+                                    <td>待初审</td>
+                                    <td>
+                                        <button class="btn btn-primary">查看</button>
+                                        <button class="btn btn-primary">删除</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="historyMyscrap" class="tab-pane fade table-responsive">
+                            <!--历史报废记录-->
+                            <div style="margin-bottom: 3%">
+                                <form role="form" class="form-horizontal">
+                                    <div class="form-group row">
+                                        <label for="sel_shoplist_id" class="col-sm-2 control-label">工夹具代码</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" name="sel_repair_seq_code">
+                                        </div>
+                                        <label class="col-sm-2 control-label">申请人</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" name="sel_repair_submit_name">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button class="btn btn-default" type="button">清空</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="sel_applytime" class="col-sm-2 control-label">报废原因</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" name="sel_repair_reason">
+                                        </div>
+                                        <label for="sel_status" class="col-sm-2 control-label">审批状态</label>
+                                        <div class="col-sm-3">
+                                            <select class="form-control">
+                                                <option>初审通过</option>
+                                                <option>初审不通过</option>
+                                                <option>终审不通过</option>
+                                                <option>终审通过</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button class="btn btn-primary" type="button">查询</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <table class="table table-striped table-hover table-responsive" role="table">
+                                <thead>
+                                <tr>
+                                    <th>工夹具代码</th>
+                                    <th>工夹具序列号</th>
+                                    <th>申请人</th>
+                                    <th>故障原因</th>
+                                    <th>申请时间</th>
+                                    <th>审批状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>EF2189</td>
+                                    <td>1</td>
+                                    <td>小张</td>
+                                    <td>有不正常的响声</td>
+                                    <td>2019-12-31 12:39</td>
+                                    <td>待初审</td>
+                                    <td>
+                                        <button class="btn btn-primary">查看</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="main4" class="panel-body tab-content tab-pane fade">
+                    <ul class="nav nav-tabs">
+                        <li class="active" data-toggle="tab" href="#seqInfo"><a>工夹具信息</a></li>
+                    </ul>
+                    <div class="panel-body tab-content">
+                        <div id="seqInfo" class="tab-pane fade in active table-responsive">
+                            <table class="table table-striped table-hover" role="table">
+                                <thead>
+                                <tr>
+                                    <th style="display: none">工夹具id</th>
+                                    <th>工夹具代码</th>
+                                    <th>工夹具名称</th>
+                                    <th>工夹具模组</th>
+                                    <th>工夹具料号</th>
+                                    <th>类别</th>
+                                    <th>每条产线所需</th>
+                                    <th>用途</th>
+                                    <th>检点周期</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td style="display:none;">1091</td>
+                                    <td>EF2189</td>
+                                    <td>MOD 3XM2 调谐夹具</td>
+                                    <td>
+                                        <label>
+                                            <select class="btn btn-default">
+                                                <option>MOD 3XM2</option>
+                                            </select>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label>
+                                            <select class="btn btn-default">
+                                                <option>PNA90320/1</option>
+                                                <option>PNA90320/2</option>
+                                                <option>PNA90322/1</option>
+                                            </select>
+                                        </label>
+                                    </td>
+                                    <td>JABIL FU 79</td>
+                                    <td>3</td>
+                                    <td>打调谐盖板</td>
+                                    <td>30天</td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-target="#edit_seqInfo">修改
+                                        </button>
+                                    </td>
+                                    <div>
+                                        <div class="modal fade" id="edit_seqInfo" tabindex="-1" role="dialog"
+                                             aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-hidden="true">×
+                                                        </button>
+                                                        <h4 class="modal-title">修改工夹具信息</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-horizontal">
+                                                            <div class="form-group">
+                                                                <label class="col-sm-3 control-label">工夹具代码</label>
+                                                                <div class="col-sm-8">
+                                                                    <input class="form-control" value="EF2186">
+                                                                </div>
+                                                                <div class="col-sm-1"></div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-3 control-label">工夹具名字</label>
+                                                                <div class="col-sm-8">
+                                                                    <input class="form-control" value="MOD 3XM2 保护夹具">
+                                                                </div>
+                                                                <div class="col-sm-1"></div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-3 control-label">所属部门</label>
+                                                                <div class="col-sm-8">
+                                                                    <input class="form-control" value="JW05">
+                                                                </div>
+                                                                <div class="col-sm-1"></div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-3 control-label">工夹具模组</label>
+                                                                <div class="col-sm-8">
+                                                                    <select class="form-control">
+                                                                        <option>MOD 3XM2</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-sm-1"></div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-3 control-label">工夹具料号</label>
+                                                                <div class="col-sm-8">
+                                                                    <select class="form-control">
+                                                                        <option>PNA90320/1</option>
+                                                                        <option>PNA90320/2</option>
+                                                                        <option>PNA90322/1</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-sm-1"></div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-3 control-label">用途</label>
+                                                                <div class="col-sm-8">
+                                                                    <input class="form-control" value="保护">
+                                                                </div>
+                                                                <div class="col-sm-1"></div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-3 control-label">每条产线所需</label>
+                                                                <div class="col-sm-8">
+                                                                    <input class="form-control" value="1">
+                                                                </div>
+                                                                <div class="col-sm-1"></div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-3 control-label">责任人</label>
+                                                                <div class="col-sm-8">
+                                                                    <input class="form-control"
+                                                                           value="Lei Qian 1230936">
+                                                                </div>
+                                                                <div class="col-sm-1"></div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-3 control-label">保养点检周期</label>
+                                                                <div class="col-sm-8">
+                                                                    <input class="form-control" value="30天">
+                                                                </div>
+                                                                <div class="col-sm-1"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default"
+                                                                data-dismiss="modal">关闭
+                                                        </button>
+                                                        <button type="button" class="btn btn-primary">提交修改</button>
+                                                    </div>
+                                                </div><!-- /.modal-content -->
+                                            </div><!-- /.modal-dialog -->
+                                        </div>
+                                    </div>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row text-center">
+                            <ul class="pagination">
+                                <li><a href="#">&laquo;</a></li>
+                                <li class="active"><a href="#">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#">5</a></li>
+                                <li><a href="#">&raquo;</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

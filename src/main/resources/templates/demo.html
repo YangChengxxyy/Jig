@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>demo</title>
+    <script src="js/jquery-3.4.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/vue.js"></script>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <script th:inline="javascript">
+        $(function () {
+            //为页码添加点击事件
+            $("#list li").click(function (e) {
+                console.log($(this).text());
+                $(this).siblings().removeClass("active");//所有页码去除 active 样式
+                $(this).addClass("active");//给自己添加 active 样式
+                //通过jQuery里的ajax方法访问后台
+                $.ajax({
+                    url: 'get_demo_list',
+                    data: {
+                        page_number: $(this).text()
+                    },
+                    success: function (res) {
+                        //成功之后将demoVue对象里的$data里的stu值改变
+                        //然后vue自动去渲染网页
+                        demoVue.$data.stu = res;
+                    }
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+<div class="container-fluid" id="demo">
+    <div class="row">
+        <div class="col-md-6 col-md-push-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        测试demo
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped table-hover" role="table">
+                        <!--                        展示一个人的方法-->
+                        <thead>
+                        <tr>
+                            <th>学号</th>
+                            <th>姓名</th>
+                            <th>性别</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="item in stu">
+                            <td>{{item.stu_no}}</td>
+                            <td>{{item.name}}</td>
+                            <td>{{item.sex}}</td>
+                            <td><button class="btn btn-default" v-on:click="getStu_no" v-bind:data-stu_no="item.stu_no">测试</button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="center-block" id="list">
+                        <ul class="pagination">
+                            <li class="active"><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="panel-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    // vue代码部分
+    // el表示作用域哪个元素内，#表示通过id查找，.表示类查找
+    // data表示放在这个元素内的数据，这和小程序类似
+    // 还有别的许多方法，这里用不上
+    const demoVue = new Vue({
+        el: "#demo",
+        data: {
+            stu: [[${hxy}]],//获取后台model传来的值
+            isList: false
+        },
+        created: function () {
+            console.log("new vue");
+            console.log(this.$data.stu)
+        },
+        methods:{
+            getStu_no:function (event) {
+                console.log(event)
+            }
+        }
+    });
+</script>
+</body>
+</html>

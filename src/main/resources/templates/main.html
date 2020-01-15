@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>初级用户</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery-3.4.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/axios/axios.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        $(function () {
+            $(".nav li").on('click', function (e) {
+                const href = $(this).attr("href");
+                $(this).siblings().removeClass("active");
+                $(this).addClass("active");
+                $(".nav li[href='" + href + "']").siblings().removeClass("active");
+                $(".nav li[href='" + href + "']").addClass("active");
+            })
+        })
+    </script>
+</head>
+<body>
+<div class="page-header" style="text-align: center">
+    <h1>
+        工夹具管理系统
+        <small>————初级用户</small>
+    </h1>
+</div>
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-lg-3 column">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">功能菜单</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="panel-group" id="left">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" data-toggle="collapse" data-parent="#left" href="#1">
+                                <h4 class="panel-title" data-toggle="tab" href="#main1">
+                                    仓库管理
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse in" id="1">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li class="active" data-toggle="tab" href="#sqgjuck"><a>工夹具出库</a></li>
+                                    <li data-toggle="tab" href="#ghgjj"><a>归还工夹具</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" data-toggle="collapse" data-parent="#left" href="#2">
+                                <h4 class="panel-title" data-toggle="tab" href="#main2">
+                                    模块2
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse" id="2">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li class="active" data-toggle="tab" href="#gn3"><a>功能3</a></li>
+                                    <li data-toggle="tab" href="#gn4"><a>功能4</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9 column">
+            <div class="panel panel-default tab-content">
+
+                <div id="main1" class="panel-body tab-content tab-pane fade in active">
+                    <ul class="nav nav-tabs">
+                        <li class="active" data-toggle="tab" href="#sqgjuck"><a>工夹具出库</a></li>
+                        <li data-toggle="tab" href="#ghgjj"><a>归还工夹具</a></li>
+                    </ul>
+                    <div class="panel-body tab-content">
+                        <div id="sqgjuck" class="tab-pane fade in active">
+                            申请工夹具出库内容
+                        </div>
+                        <div id="ghgjj" class="tab-pane fade">
+                            归还工夹具内容
+                        </div>
+                    </div>
+                </div>
+
+                <div id="main2" class="panel-body tab-content tab-pane fade">
+                    <ul class="nav nav-tabs">
+                        <li class="active" data-toggle="tab" href="#gn3"><a>功能3</a></li>
+                        <li data-toggle="tab" href="#gn4"><a>功能4</a></li>
+                    </ul>
+                    <div class="panel-body tab-content">
+                        <div id="gn3" class="tab-pane fade in active">
+                            功能3内容
+                        </div>
+                        <div id="gn4" class="tab-pane fade">
+                            功能4内容
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-footer">
+                    <div id="app">
+                        {{ message }}
+                    </div>
+                    <div id="app-2">
+                        <span v-bind:title="message" v-on:click="aaa">
+                            鼠标悬停几秒钟查看此处动态绑定的提示信息！
+                        </span>
+                    </div>
+                    <script>
+                        import axios from "./js/axios/axios"
+                        var app = new Vue({
+                            el: '#app',
+                            data: {
+                                message: 'Hello Vue!'
+                            }
+                        });
+                        var app2 = new Vue({
+                            el: "#app-2",
+                            data: {
+                                message: '123213'
+                            },
+                            methods:{
+                                aaa:function () {
+                                    alert("aaa");
+
+                                }
+                            }
+                        })
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
