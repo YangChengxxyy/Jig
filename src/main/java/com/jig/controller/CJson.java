@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 public class CJson {
     @RequestMapping(value = "get_demo_list", method = {RequestMethod.POST, RequestMethod.GET})
-    public @ResponseBody String getDemoList(HttpServletRequest request) {
+    public static String getDemoList(HttpServletRequest request) {
         int pageNumber = Integer.parseInt(request.getParameter("page_number"));
         List<DemoEntity> a = new ArrayList<>();
         DemoEntity people = new DemoEntity();
