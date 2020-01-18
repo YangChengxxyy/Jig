@@ -1,9 +1,7 @@
 package com.jig.util;
 
 import com.jig.entity.DemoEntity;
-import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,26 +9,48 @@ import java.util.List;
 
 public class JsonUtil {
 
+    /**
+     * @param o 对象
+     * @return JSONObject对象
+     */
     public static JSONObject objectToJson(Object o) {
         return new JSONObject(o);
     }
 
-    public static JSONObject objectAddMessage(Object o, String messageName, Object message) {
+    /**
+     * @param o     对象
+     * @param key   键
+     * @param value 值
+     * @return JSONObject对象
+     */
+    public static JSONObject objectAddvalue(Object o, String key, Object value) {
         JSONObject jsonObject = new JSONObject(o);
-        jsonObject.put(messageName, message);
+        jsonObject.put(key, value);
         return jsonObject;
     }
 
+    /**
+     * @param t   对象
+     * @param <T> 必须继承Collection<E>
+     * @return JSONObject对象
+     */
     public static <T extends Collection> JSONObject arrayToJson(T t) {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("data",t);
+        jsonObject.put("data", t);
         return jsonObject;
     }
 
-    public static <T extends Collection> JSONObject arrayAddMessage(T t, String messageName, Object message) {
+    /**
+     * @param t     对象
+     * @param key   键
+     * @param value 值
+     * @param <T>   必须继承Collection<E>
+     * @return JSONObject对象
+     */
+    public static <T extends Collection> JSONObject arrayAddvalue(T t, String key, Object value) {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("data",t);
-        jsonObject.put(messageName, message);
+        jsonObject.put("data", t);
+        jsonObject.put(key, value);
         return jsonObject;
     }
 
@@ -41,6 +61,6 @@ public class JsonUtil {
         people.setSex("男");
         people.setStu_no("189050536");
         a.add(people);
-        System.out.println(arrayAddMessage(a,"j",3));
+        System.out.println(arrayAddvalue(a, "j", 3));
     }
 }

@@ -113,7 +113,9 @@
     // el表示作用域哪个元素内，#表示通过id查找，.表示类查找
     // data表示放在这个元素内的数据，这和小程序类似
     // 还有别的许多方法，这里用不上
-
+    $.ajaxSetup({
+        dataType:"json"
+    })
     const demoVue = new Vue({
         el: "#demo",
         data: {
@@ -133,7 +135,7 @@
                     //然后vue自动去渲染网页
                     console.log(res);
                     demoVue.$data.stu = res.data;
-                    demoVue.$data.max_page_number=res.max;
+                    demoVue.$data.max_page_number = res.max;
                 }
             });
 
