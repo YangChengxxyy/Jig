@@ -12,16 +12,45 @@
         $(function () {
             //为页码添加点击事件
             $("#list li").click(function (e) {
-                demoVue.now_page_number = parseInt($(this).text()) || $(this).text();
-                $.ajax({
-                    url: 'get_demo_list',
-                    data: {
-                        page_number: $(this).text()
-                    },
-                    success: function (res) {
-                        demoVue.$data.stu = res;
+                const now = parseInt($("#list li.active").text());
+                if ($(this).text() === '«') {
+                    if (now > 1) {
+                        demoVue.$data.now_page_number = now - 1;
+                        $.ajax({
+                            url: 'get_demo_list',
+                            data: {
+                                page_number: demoVue.$data.now_page_number
+                            },
+                            success: function (res) {
+                                demoVue.$data.stu = res.data;
+                            }
+                        })
                     }
-                })
+                } else if ($(this).text() === '»') {
+                    if (now < demoVue.$data.max_page_number) {
+                        demoVue.$data.now_page_number = now + 1;
+                        $.ajax({
+                            url: 'get_demo_list',
+                            data: {
+                                page_number: demoVue.$data.now_page_number
+                            },
+                            success: function (res) {
+                                demoVue.$data.stu = res.data;
+                            }
+                        })
+                    }
+                } else {
+                    demoVue.now_page_number = parseInt($(this).text());
+                    $.ajax({
+                        url: 'get_demo_list',
+                        data: {
+                            page_number: $(this).text()
+                        },
+                        success: function (res) {
+                            demoVue.$data.stu = res.data;
+                        }
+                    })
+                }
             })
         })
     </script>
@@ -44,6 +73,7 @@
                             <th>学号</th>
                             <th>姓名</th>
                             <th>性别</th>
+                            <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -61,13 +91,13 @@
                     </table>
                     <div class="center-block" id="list">
                         <ul class="pagination">
-                            <li><a>&laquo;</a></li>
+                            <li :class="havePrevious"><a>&laquo;</a></li>
                             <li><a v-if="now_page_number - 2 > 0">{{now_page_number-2}}</a></li>
                             <li><a v-if="now_page_number - 1 > 0">{{now_page_number-1}}</a></li>
                             <li class="active"><a>{{now_page_number}}</a></li>
                             <li><a v-if="now_page_number + 1 <= max_page_number">{{now_page_number+1}}</a></li>
                             <li><a v-if="now_page_number + 2 <= max_page_number">{{now_page_number+2}}</a></li>
-                            <li><a>&raquo;</a></li>
+                            <li :class="haveNext"><a>&raquo;</a></li>
                         </ul>
                     </div>
                 </div>
@@ -83,11 +113,6 @@
     // el表示作用域哪个元素内，#表示通过id查找，.表示类查找
     // data表示放在这个元素内的数据，这和小程序类似
     // 还有别的许多方法，这里用不上
-    class DemoEntity {
-        constructor() {
-
-        }
-    }
 
     const demoVue = new Vue({
         el: "#demo",
@@ -106,17 +131,25 @@
                 success: function (res) {
                     //成功之后将demoVue对象里的$data里的stu值改变
                     //然后vue自动去渲染网页
-                    demoVue.$data.stu = res;
+                    console.log(res);
+                    demoVue.$data.stu = res.data;
+                    demoVue.$data.max_page_number=res.max;
                 }
             });
-            $.ajax({
-                url:'get_demo_page_number',
-                success:function (res) {
-                    demoVue.$data.max_page_number = res;
-                }
-            })
+
         },
-        methods: {}
+        computed: {
+            havePrevious: function () {
+                return {
+                    disabled: this.now_page_number === 1
+                }
+            },
+            haveNext: function () {
+                return {
+                    disabled: this.now_page_number === this.max_page_number
+                }
+            }
+        }
     });
 
 </script>
