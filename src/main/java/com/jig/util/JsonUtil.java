@@ -23,7 +23,7 @@ public class JsonUtil {
      * @param value 值
      * @return JSONObject对象
      */
-    public static JSONObject objectAddvalue(Object o, String key, Object value) {
+    public static JSONObject objectAddValue(Object o, String key, Object value) {
         JSONObject jsonObject = new JSONObject(o);
         jsonObject.put(key, value);
         return jsonObject;
@@ -47,7 +47,7 @@ public class JsonUtil {
      * @param <T>   必须继承Collection<E>
      * @return JSONObject对象
      */
-    public static <T extends Collection> JSONObject arrayAddvalue(T t, String key, Object value) {
+    public static <T extends Collection> JSONObject arrayAddValue(T t, String key, Object value) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("data", t);
         jsonObject.put(key, value);
@@ -61,6 +61,6 @@ public class JsonUtil {
         people.setSex("男");
         people.setStu_no("189050536");
         a.add(people);
-        System.out.println(arrayAddvalue(a, "j", 3));
+        System.out.println(arrayAddValue(a, "j", 3));
     }
 }
