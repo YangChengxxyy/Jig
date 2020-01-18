@@ -1,0 +1,12 @@
+GET http://localhost:8080/get_demo_list?page_number=3
+Accept: application/json
+
+###
+POST http://localhost:8080/get_demo_list
+Content-Type: application/json
+
+{
+  "page_number": "1"
+}
+
+###
