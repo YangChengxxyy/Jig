@@ -18,13 +18,13 @@ public class CJson {
      * @return 第几页的数据，最大页数的Map
      */
     @RequestMapping(value = "get_demo_list", method = {RequestMethod.POST, RequestMethod.GET})
-    public static Map<Object, Object> getDemoList(@RequestParam(value = "page_number") String page_number) {
+    public static Map<Object, Object> getDemoList(@RequestParam(value = "page_number") int[] page_number) {
         List<DemoEntity> a = new ArrayList<>();
         DemoEntity people = new DemoEntity();
         people.setName("yc");
         people.setSex("男");
         people.setStu_no("189050536");
-        for (int i = 0; i < Integer.parseInt(page_number); i++) {
+        for (int i = 0; i < page_number[0]; i++) {
             a.add(people);
         }
         Map<Object, Object> map = new HashMap<>();
