@@ -30,26 +30,24 @@ public class JsonUtil {
     }
 
     /**
-     * @param t   对象
-     * @param <T> 必须继承Collection<E>
+     * @param o 对象
      * @return JSONObject对象
      */
-    public static <T extends Collection> JSONObject arrayToJson(T t) {
+    public static JSONObject arrayToJson(Object o) {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("data", t);
+        jsonObject.put("data", o);
         return jsonObject;
     }
 
     /**
-     * @param t     对象
+     * @param o     对象
      * @param key   键
      * @param value 值
-     * @param <T>   必须继承Collection<E>
      * @return JSONObject对象
      */
-    public static <T extends Collection> JSONObject arrayAddValue(T t, String key, Object value) {
+    public static JSONObject arrayAddValue(Object o, String key, Object value) {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("data", t);
+        jsonObject.put("data", o);
         jsonObject.put(key, value);
         return jsonObject;
     }

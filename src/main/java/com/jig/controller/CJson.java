@@ -26,11 +26,6 @@ public class CJson {
         for (int i = 0; i < pageNumber; i++) {
             a.add(people);
         }
-        return JsonUtil.arrayAddValue(a,"max",3).toString();
-    }
-
-    @RequestMapping("get_demo_page_number")
-    public int getDemoPageNumber() {
-        return 3;
+        return JsonUtil.arrayAddValue(a, "max", 3).toString();
     }
 }
