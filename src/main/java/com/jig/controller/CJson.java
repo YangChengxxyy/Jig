@@ -1,31 +1,35 @@
 package com.jig.controller;
 
 import com.jig.entity.DemoEntity;
-import com.jig.util.JsonUtil;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class CJson {
+    /**
+     * @param page_number 页数
+     * @return 第几页的数据，最大页数的Map
+     */
     @RequestMapping(value = "get_demo_list", method = {RequestMethod.POST, RequestMethod.GET})
-    public static String getDemoList(HttpServletRequest request) {
-        int pageNumber = Integer.parseInt(request.getParameter("page_number"));
+    public static Map<Object, Object> getDemoList(@RequestParam(value = "page_number") String page_number) {
         List<DemoEntity> a = new ArrayList<>();
         DemoEntity people = new DemoEntity();
         people.setName("yc");
         people.setSex("男");
         people.setStu_no("189050536");
-        for (int i = 0; i < pageNumber; i++) {
+        for (int i = 0; i < Integer.parseInt(page_number); i++) {
             a.add(people);
         }
-        return JsonUtil.arrayAddValue(a, "max", 3).toString();
+        Map<Object, Object> map = new HashMap<>();
+        map.put("data", a);
+        map.put("max", 3);
+        return map;
     }
 }
