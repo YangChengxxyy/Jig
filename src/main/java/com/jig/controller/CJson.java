@@ -15,7 +15,7 @@ import java.util.Map;
 public class CJson {
     /**
      * @param page_number 页数
-     * @return 第几页的数据，最大页数的Map
+     * @return 第几页的数据，最大页数的 ap
      */
     @RequestMapping(value = "get_demo_list", method = {RequestMethod.POST, RequestMethod.GET})
     public static Map<Object, Object> getDemoList(@RequestParam(value = "page_number") int page_number) {

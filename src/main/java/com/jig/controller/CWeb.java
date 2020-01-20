@@ -22,4 +22,12 @@ public class CWeb {
         model.addAttribute("peoples", a);
         return "demo";
     }
+    @RequestMapping("show_login")
+    public String login(){
+        return "login";
+    }
+    @RequestMapping("show_su")
+    public String showSu(){
+        return "supervisor";
+    }
 }
