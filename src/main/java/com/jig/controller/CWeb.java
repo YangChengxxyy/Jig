@@ -26,8 +26,8 @@ public class CWeb {
     public String login(){
         return "login";
     }
-    @RequestMapping("show_su")
+    @RequestMapping("test")
     public String showSu(){
-        return "supervisor";
+        return "naive";
     }
 }

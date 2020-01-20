@@ -18,4 +18,8 @@ public class SpringUtil {
             System.out.println(beanName);
         }
     }
+
+    public static void main(String[] args) {
+        System.out.println((int)Math.ceil(1/5.0));
+    }
 }
