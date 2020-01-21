@@ -14,7 +14,7 @@ import java.util.List;
 
 public class POIUtils {
 
-    public static <T> String getExcel(T t, List<T> list,String url) throws Exception {
+    public static <T> HSSFWorkbook getExcel(T t, List<T> list) throws Exception {
         //获取对象的类对象
         Class<?> aClass = t.getClass();
         //创建一个List，用来存放对象属性的get方法名
@@ -54,13 +54,12 @@ public class POIUtils {
                 cell.setCellValue(invoke == null ? "" : invoke.toString());
             }
         }
-        sheets.write(new FileOutputStream(url + s + ".xls"));
-        return s;
+        return sheets;
     }
     public static void deleteFile(String pathname){
         File file = new File(pathname);
         if (file.exists()) {
-            file.delete()
+            file.delete();
         }
     }
 

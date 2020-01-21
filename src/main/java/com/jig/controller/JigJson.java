@@ -46,7 +46,7 @@ public class JigJson {
         Map<Object, Object> map = new HashMap<>();
         List<JigDefinition> list = jigService.searchJigDefinition(code, name, workcell, family, user_for, page_number);
         map.put("data", list);
-        POIUtils.getExcel(list.get(0),list,"E:\\");
+        POIUtils.getExcel(list.get(0),list);
         map.put("max", jigService.searchJigDefinitionPage(code, name, workcell, family, user_for));
         return map;
     }

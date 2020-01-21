@@ -4,6 +4,7 @@ import com.jig.entity.DemoEntity;
 import com.jig.entity.JigDefinition;
 import com.jig.service.JigService;
 import com.jig.util.POIUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.hibernate.validator.internal.util.StringHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,39 +46,20 @@ public class JigWeb {
         return "naive";
     }
 
-    @RequestMapping("download_excel")
-    public void downExcel(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String user_for, @RequestParam(value = "page_number") int page_number) throws Exception {
+    @RequestMapping("demo_download_excel")
+    public void downExcel(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String user_for, @RequestParam(value = "page_number") int page_number, @RequestParam(value = "file_name") String file_name) throws Exception {
         List<JigDefinition> list = jigService.searchJigDefinition(code, name, workcell, family, user_for, page_number);
-        String url = "E:\\excel\\";
-        String s = POIUtils.getExcel(list.get(0), list,"E:\\excel\\")+".xls";
+        HSSFWorkbook excel = POIUtils.getExcel(list.get(0), list);
         response.setHeader("content-type", "application/octet-stream");
         response.setContentType("application/octet-stream;charset=utf-8");
-        response.setHeader("Content-Disposition", "attachment; filename="
-                + s);
-        byte[] buff = new byte[1024];
-        BufferedInputStream bis = null;
+        response.setHeader("Content-Disposition", "attachment; filename=" + file_name);
         OutputStream os = null;
         try {
             os = response.getOutputStream();
-            bis = new BufferedInputStream(new FileInputStream(
-                    new File(url+s)));
-            int i = bis.read(buff);
-            while (i != -1) {
-                os.write(buff, 0, buff.length);
-                os.flush();
-                i = bis.read(buff);
-            }
+            excel.write(os);
+
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            POIUtils.deleteFile(url+s);
-            if (bis != null) {
-                try {
-                    bis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 }
