@@ -622,27 +622,27 @@
                                 <div class="form-group row">
                                     <label for="jig_code" class="col-sm-2 control-label">工夹具代码</label>
                                     <div class="col-sm-3">
-                                        <input type="text" class="form-control" id="jig_code">
+                                        <input type="text" class="form-control" id="jig_code" v-model="code">
                                     </div>
                                     <label class="col-sm-2 control-label" for="jig_name">工夹具名字</label>
                                     <div class="col-sm-3">
-                                        <input type="text" class="form-control" id="jig_name">
+                                        <input type="text" class="form-control" id="jig_name" v-model="name">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label" for="jig_workcell">部门</label>
                                     <div class="col-sm-3">
-                                        <input type="text" class="form-control" id="jig_workcell">
+                                        <input type="text" class="form-control" id="jig_workcell" v-model="workcell">
                                     </div>
                                     <label for="jig_family" class="col-sm-2 control-label">类别</label>
                                     <div class="col-sm-3">
-                                        <input type="text" class="form-control" id="jig_family">
+                                        <input type="text" class="form-control" id="jig_family" v-model="family">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label" for="jig_userfor">用途</label>
                                     <div class="col-sm-3">
-                                        <input type="text" class="form-control" id="jig_userfor">
+                                        <input type="text" class="form-control" id="jig_userfor" v-model="user_for">
                                     </div>
                                     <div class="col-sm-2"></div>
                                     <div class="col-sm-1">
@@ -686,13 +686,22 @@
                             </div>
                             <div class="text-center row" v-if="max_page_number != 0">
                                 <ul class="pagination">
-                                    <li :class="havePrevious"><a>&laquo;</a></li>
-                                    <li><a v-if="now_page_number - 2 > 0">{{now_page_number-2}}</a></li>
-                                    <li><a v-if="now_page_number - 1 > 0">{{now_page_number-1}}</a></li>
-                                    <li class="active"><a>{{now_page_number}}</a></li>
-                                    <li><a v-if="now_page_number + 1 <= max_page_number">{{now_page_number+1}}</a></li>
-                                    <li><a v-if="now_page_number + 2 <= max_page_number">{{now_page_number+2}}</a></li>
-                                    <li :class="haveNext"><a>&raquo;</a></li>
+                                    <li :class="havePrevious" class="previous"
+                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)"><a>&larr;上一页</a>
+                                    </li>
+                                    <li v-if="now_page_number - 2 > 0" @click="turn_page(now_page_number-2)"><a>{{now_page_number-2}}</a>
+                                    </li>
+                                    <li v-if="now_page_number - 1 > 0" @click="turn_page(now_page_number-1)"><a>{{now_page_number-1}}</a>
+                                    </li>
+                                    <li class="active" @click="turn_page(now_page_number)"><a>{{now_page_number}}</a>
+                                    </li>
+                                    <li v-if="now_page_number + 1 <= max_page_number"
+                                        @click="turn_page(now_page_number+1)"><a>{{now_page_number+1}}</a></li>
+                                    <li v-if="now_page_number + 2 <= max_page_number"
+                                        @click="turn_page(now_page_number+2)"><a>{{now_page_number+2}}</a></li>
+                                    <li :class="haveNext" class="next"
+                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)">
+                                        <a>下一页&rarr;</a></li>
                                 </ul>
                             </div>
                             <div class="modal fade" id="check" tabindex="-1" role="dialog"
@@ -723,6 +732,12 @@
                                                     <label class="col-sm-3 control-label">所属部门</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">{{jig.workcell}}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">类别</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{jig.family}}</div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -834,18 +849,23 @@
             jig_list: [],
             now_page_number: 1,
             max_page_number: 0,
-            jig: null
+            jig: null,
+            name: null,
+            workcell: null,
+            family: null,
+            user_for: null,
+            code: null,
         },
         methods: {
-            search: function (res) {
+            search: function () {
                 $.ajax({
                     url: "search_jig_definition",
                     data: {
-                        code: $("#jig_code").val(),
-                        name: $("#jig_name").val(),
-                        workcell: $("#jig_workcell").val(),
-                        family: $("#jig_family").val(),
-                        user_for: $("#jig_userfor").val(),
+                        code: this.code,
+                        name: this.name,
+                        workcell: this.workcell,
+                        family: this.family,
+                        user_for: this.user_for,
                         page_number: 1
                     },
                     success: function (res) {
@@ -869,18 +889,47 @@
                         search_jig.$data.jig = res
                         search_jig.$data.jig.part_no = search_jig.$data.jig.part_no.split("|");
                         search_jig.$data.jig.model = search_jig.$data.jig.model.split("|");
+                        console.log(search_jig.$data.jig)
                     }
                 })
             },
             clear: function () {
-                search_jig.$data.jig = null;
-                search_jig.$data.max_page_number = 0;
-                search_jig.$data.jig_list = [];
-                $("#jig_code").val("");
-                $("#jig_name").val("");
-                $("#jig_workcell").val("");
-                $("#jig_family").val("");
-                $("#jig_userfor").val("");
+                this.$data.jig = null;
+                this.$data.max_page_number = 0;
+                this.$data.now_page_number = 1;
+                this.$data.jig_list = [];
+                this.$data.code = null;
+                this.$data.name = null;
+                this.$data.workcell = null;
+                this.$data.family = null;
+                this.$data.user_for = null;
+            },
+            turn_page: function (page_number) {
+                if (page_number === this.now_page_number) {
+                    console.log("page_number === this.now_page_number")
+                    return false;
+                }
+                $.ajax({
+                    url: "search_jig_definition",
+                    data: {
+                        code: this.code,
+                        name: this.name,
+                        workcell: this.workcell,
+                        family: this.family,
+                        user_for: this.user_for,
+                        page_number: page_number
+                    },
+                    success: function (res) {
+                        if (res.data.length === 0) {
+                            alert("没有结果！")
+                        } else {
+                            search_jig.$data.now_page_number = page_number
+                            search_jig.$data.jig_list = res.data;
+                            search_jig.$data.max_page_number = res.max;
+                            console.log(res)
+                        }
+                    }
+                })
             }
         },
         computed: {

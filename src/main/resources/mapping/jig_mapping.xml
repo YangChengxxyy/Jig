@@ -49,30 +49,8 @@
         </if>
     </select>
     <select id="getSimpleJigDefinition" resultType="com.jig.entity.JigDefinition">
-        SELECT jd.*,
-               w.workcell,
-               name1.name owner_name,
-               name2.name rec_by_name,
-               name3.name edit_by_name
-        FROM jig_definition jd,
-             workcell w,
-             (SELECT `user`.`name`
-              FROM `user`,
-                   jig_definition
-              WHERE `user`.id = jig_definition.`owner`
-                and jig_definition.id = #{id}) name1,
-             (SELECT `user`.`name`
-              FROM `user`,
-                   jig_definition
-              WHERE `user`.id = jig_definition.rec_by
-                and jig_definition.id = #{id}
-             ) name2,
-             (SELECT `user`.`name`
-              FROM `user`,
-                   jig_definition
-              WHERE `user`.id = jig_definition.edit_by
-                and jig_definition.id = #{id}) name3
-        WHERE jd.id = #{id}
-          AND w.id = jd.workcell_id
+        select *
+        from jig_definition_entity_view
+        where `id` = #{id}
     </select>
 </mapper>

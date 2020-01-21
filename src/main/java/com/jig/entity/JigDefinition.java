@@ -19,6 +19,7 @@ public class JigDefinition {
     private String edit_time;
     private String edit_by;
     private String edit_by_name;
+    private String workcell_id;
     private String workcell;
     private String remark;
 
@@ -45,8 +46,6 @@ public class JigDefinition {
     public void setEdit_by_name(String edit_by_name) {
         this.edit_by_name = edit_by_name;
     }
-
-    private String workcell_id;
 
     public String getWorkcell_id() {
         return workcell_id;
