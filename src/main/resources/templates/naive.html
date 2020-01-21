@@ -646,7 +646,7 @@
                                     </div>
                                     <div class="col-sm-2"></div>
                                     <div class="col-sm-1">
-                                        <button class="btn btn-default" @click="clear">清空</button>
+                                        <button class="btn btn-default pull-right" @click="clear">清空</button>
                                     </div>
                                     <div class="col-sm-1">
                                         <button class="btn btn-primary" @click="search" type="button">查询</button>
@@ -906,7 +906,6 @@
             },
             turn_page: function (page_number) {
                 if (page_number === this.now_page_number) {
-                    console.log("page_number === this.now_page_number")
                     return false;
                 }
                 $.ajax({
