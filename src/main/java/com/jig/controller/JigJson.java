@@ -3,6 +3,7 @@ package com.jig.controller;
 import com.jig.entity.DemoEntity;
 import com.jig.entity.JigDefinition;
 import com.jig.service.JigService;
+import com.jig.util.POIUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-public class CJson {
+public class JigJson {
     @Autowired
     private JigService jigService;
 
@@ -40,10 +41,12 @@ public class CJson {
     }
 
     @RequestMapping("search_jig_definition")
-    public Map<Object, Object> searchJigDefinition(@RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String user_for, @RequestParam(value = "page_number") int page_number) {
+    public Map<Object, Object> searchJigDefinition(@RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String user_for, @RequestParam(value = "page_number") int page_number) throws Exception {
         page_number = (page_number - 1) * 5;
         Map<Object, Object> map = new HashMap<>();
-        map.put("data", jigService.searchJigDefinition(code, name, workcell, family, user_for, page_number));
+        List<JigDefinition> list = jigService.searchJigDefinition(code, name, workcell, family, user_for, page_number);
+        map.put("data", list);
+        POIUtils.getExcel(list.get(0),list,"E:\\");
         map.put("max", jigService.searchJigDefinitionPage(code, name, workcell, family, user_for));
         return map;
     }

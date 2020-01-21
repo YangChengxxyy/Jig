@@ -1,13 +1,11 @@
 package com.jig.util;
 
-import com.jig.entity.DemoEntity;
-import com.jig.entity.JigDefinition;
-import com.jig.service.JigService;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -16,7 +14,7 @@ import java.util.List;
 
 public class POIUtils {
 
-    public static <T> HSSFWorkbook getExcel(T t, List<T> list, String url) throws Exception {
+    public static <T> String getExcel(T t, List<T> list,String url) throws Exception {
         //获取对象的类对象
         Class<?> aClass = t.getClass();
         //创建一个List，用来存放对象属性的get方法名
@@ -32,7 +30,6 @@ public class POIUtils {
         for (Field declaredField : declaredFields) {
             String fileName = declaredField.getName();
             String getMethodName = "get" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1);
-//            System.out.println(getMethodName);
             methodNameList.add(getMethodName);
         }
         HSSFWorkbook sheets = new HSSFWorkbook();
@@ -44,7 +41,6 @@ public class POIUtils {
             cell.setCellValue(declaredFields[i].toString());
 
         }
-        row.createCell(0);
         for (int i = 0; i < declaredFields.length; i++) {
             cell = row.createCell(i);
             cell.setCellValue(declaredFields[i].getName());
@@ -57,21 +53,15 @@ public class POIUtils {
                 Object invoke = declaredMethod.invoke(list.get(i - 1), null);
                 cell.setCellValue(invoke == null ? "" : invoke.toString());
             }
-            System.out.println();
         }
         sheets.write(new FileOutputStream(url + s + ".xls"));
-        return sheets;
+        return s;
+    }
+    public static void deleteFile(String pathname){
+        File file = new File(pathname);
+        if (file.exists()) {
+            file.delete()
+        }
     }
 
-    public static void main(String[] args) throws Exception {
-        List<DemoEntity> a = new ArrayList<>();
-        DemoEntity people = new DemoEntity();
-        people.setName("yc");
-        people.setSex("男");
-        people.setStu_no("189050536");
-        for (int i = 0; i < 3; i++) {
-            a.add(people);
-        }
-        getExcel(people, a,"E:\\");
-    }
 }
