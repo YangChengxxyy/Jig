@@ -859,6 +859,7 @@
         },
         methods: {
             search: function () {
+                this.now_page_number = 1;
                 $.ajax({
                     url: "search_jig_definition",
                     data: {
