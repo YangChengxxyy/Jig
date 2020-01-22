@@ -686,8 +686,7 @@
                             </div>
                             <div class="text-center row" v-if="max_page_number != 0">
                                 <ul class="pagination">
-                                    <li :class="havePrevious" class="previous"
-                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
+                                    <li :class="havePrevious" @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
                                         <a>&uarr;上一页</a>
                                     </li>
                                     <li v-if="now_page_number - 2 > 0" @click="turn_page(now_page_number-2)"><a>{{now_page_number-2}}</a>
@@ -700,8 +699,7 @@
                                         @click="turn_page(now_page_number+1)"><a>{{now_page_number+1}}</a></li>
                                     <li v-if="now_page_number + 2 <= max_page_number"
                                         @click="turn_page(now_page_number+2)"><a>{{now_page_number+2}}</a></li>
-                                    <li :class="haveNext" class="next"
-                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)">
+                                    <li :class="haveNext" @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)">
                                         <a>下一页&darr;</a></li>
                                 </ul>
                             </div>
