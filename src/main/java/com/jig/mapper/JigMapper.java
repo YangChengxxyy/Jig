@@ -14,4 +14,6 @@ public interface JigMapper {
     int searchJigDefinitionPage(String code, String name, String workcell, String family, String user_for);
 
     JigDefinition getSimpleJigDefinition(String id);
+
+    List<JigDefinition> searchAllJigDefinition(String code, String name, String workcell, String family, String user_for);
 }

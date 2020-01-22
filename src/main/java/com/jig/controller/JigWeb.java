@@ -46,9 +46,37 @@ public class JigWeb {
         return "naive";
     }
 
-    @RequestMapping("demo_download_excel")
-    public void downExcel(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String user_for, @RequestParam(value = "page_number") int page_number, @RequestParam(value = "file_name") String file_name) throws Exception {
+    /**
+     * @param request     request
+     * @param response    response
+     * @param code        工夹具代码
+     * @param name        工夹具名字
+     * @param workcell    工作部门
+     * @param family      类别
+     * @param user_for    用途
+     * @param page_number 页码
+     * @param file_name   文件名
+     * @throws Exception Exception
+     */
+    @RequestMapping("naive_download_search_one_excel")
+    public void naiveDownloadSearchOneExcel(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String user_for, @RequestParam(value = "page_number") int page_number, @RequestParam(value = "file_name") String file_name) throws Exception {
         List<JigDefinition> list = jigService.searchJigDefinition(code, name, workcell, family, user_for, page_number);
+        HSSFWorkbook excel = POIUtils.getExcel(list.get(0), list);
+        response.setHeader("content-type", "application/octet-stream");
+        response.setContentType("application/octet-stream;charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment; filename=" + file_name);
+        OutputStream os = null;
+        try {
+            os = response.getOutputStream();
+            excel.write(os);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @RequestMapping("naive_download_search_all_excel")
+    public void naiveDownloadSearchAllExcel(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String user_for, @RequestParam(value = "file_name") String file_name) throws Exception{
+        List<JigDefinition> list = jigService.searchAllJigDefinition(code, name, workcell, family, user_for);
         HSSFWorkbook excel = POIUtils.getExcel(list.get(0), list);
         response.setHeader("content-type", "application/octet-stream");
         response.setContentType("application/octet-stream;charset=utf-8");

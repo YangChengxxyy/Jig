@@ -27,4 +27,8 @@ public class JigService {
     public JigDefinition getSimpleJigDefinition(String id) {
         return jigMapper.getSimpleJigDefinition(id);
     }
+
+    public List<JigDefinition> searchAllJigDefinition(String code, String name, String workcell, String family, String user_for) {
+        return jigMapper.searchAllJigDefinition(code,name,workcell,family,user_for);
+    }
 }

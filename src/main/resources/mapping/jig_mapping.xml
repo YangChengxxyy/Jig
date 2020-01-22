@@ -2,17 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jig.mapper.JigMapper">
     <select id="searchJigDefinition" resultType="com.jig.entity.JigDefinition">
-        SELECT jd.*, jf.family, workcell.workcell
+        SELECT jd.*, jf.family, workcell.workcell,u1.name owner_name,u2.name rec_by_name,u3.name edit_by_name
         FROM jig_definition jd,
         jig_family jf,
-        workcell
+        workcell,
+        user u1,
+        user u2,
+        user u3
         WHERE jd.family_id = jf.id
         and jd.workcell_id = workcell.id
+        and jd.owner=u1.id
+        and jd.rec_by=u2.id
+        and jd.edit_by=u3.id
         <if test="code != null">
             and code like concat('%',#{code},'%')
         </if>
         <if test="name != null">
-            and name like concat('%',#{name},'%')
+            and jd.name like concat('%',#{name},'%')
         </if>
         <if test="workcell != null">
             and workcell like concat('%',#{workcell},'%')
@@ -36,7 +42,7 @@
             and code like concat('%',#{code},'%')
         </if>
         <if test="name != null">
-            and name like concat('%',#{name},'%')
+            and jd.name like concat('%',#{name},'%')
         </if>
         <if test="workcell != null">
             and workcell like concat('%',#{workcell},'%')
@@ -52,5 +58,34 @@
         select *
         from jig_definition_entity_view
         where `id` = #{id}
+    </select>
+    <select id="searchAllJigDefinition" resultType="com.jig.entity.JigDefinition">
+        SELECT jd.*, jf.family, workcell.workcell,u1.name owner_name,u2.name rec_by_name,u3.name edit_by_name
+        FROM jig_definition jd,
+        jig_family jf,
+        workcell,
+        user u1,
+        user u2,
+        user u3
+        WHERE jd.family_id = jf.id
+        and jd.workcell_id = workcell.id
+        and jd.owner=u1.id
+        and jd.rec_by=u2.id
+        and jd.edit_by=u3.id
+        <if test="code != null">
+            and code like concat('%',#{code},'%')
+        </if>
+        <if test="name != null">
+            and jd.name like concat('%',#{name},'%')
+        </if>
+        <if test="workcell != null">
+            and workcell like concat('%',#{workcell},'%')
+        </if>
+        <if test="family != null">
+            and family like concat('%',#{family},'%')
+        </if>
+        <if test="user_for != null">
+            and user_for like concat('%',#{user_for},'%')
+        </if>
     </select>
 </mapper>
