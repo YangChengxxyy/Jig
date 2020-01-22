@@ -688,7 +688,7 @@
                                 <ul class="pagination">
                                     <li :class="havePrevious" class="previous"
                                         @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
-                                        <a>&larr;上一页</a>
+                                        <a>&uarr;上一页</a>
                                     </li>
                                     <li v-if="now_page_number - 2 > 0" @click="turn_page(now_page_number-2)"><a>{{now_page_number-2}}</a>
                                     </li>
@@ -702,7 +702,7 @@
                                         @click="turn_page(now_page_number+2)"><a>{{now_page_number+2}}</a></li>
                                     <li :class="haveNext" class="next"
                                         @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)">
-                                        <a>下一页&rarr;</a></li>
+                                        <a>下一页&darr;</a></li>
                                 </ul>
                             </div>
                             <div class="modal fade" id="check" tabindex="-1" role="dialog"
