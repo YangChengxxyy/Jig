@@ -1,11 +1,10 @@
 package com.jig.util;
 
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -31,45 +30,45 @@ public class POIUtils {
             String getMethodName = "get" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1);
             methodNameList.add(getMethodName);
         }
-        HSSFWorkbook sheets = new HSSFWorkbook();
-        HSSFSheet sheet = sheets.createSheet(s);
-
-        //设置样式
-        HSSFCellStyle style = sheets.createCellStyle();
-        HSSFFont font = sheets.createFont();
-//        font.setFontName("等线");
-        font.setBold(true);
-        font.setColor(HSSFFont.COLOR_RED);
-        style.setFont(font);
-
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet(s);
         HSSFRow row = sheet.createRow(0);
         HSSFCell cell = null;
         for (int i = 0; i < declaredFields.length; i++) {
             cell = row.createCell(i);
-            cell.setCellStyle(style);
             cell.setCellValue(declaredFields[i].getName());
+            HSSFCellStyle cellStyle = workbook.createCellStyle();
+            //设置垂直居中
+            cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            //设置下边框
+            HSSFFont font = workbook.createFont();
+            font.setFontName("等线");//设置字体名称
+            font.setFontHeightInPoints((short)12);//设置字号
+            font.setItalic(false);//设置是否为斜体
+            font.setBold(true);//设置是否加粗
+            cellStyle.setFont(font);
+            sheet.autoSizeColumn(1);
+            //渲染单元格
+            cell.setCellStyle(cellStyle);
         }
-
-        font.setColor(HSSFFont.COLOR_NORMAL);
-        font.setBold(false);
-        style.setFont(font);
         for (int i = 1; i <= list.size(); i++) {
             row = sheet.createRow(i);
             for (int j = 0; j < declaredFields.length; j++) {
                 cell = row.createCell(j);
-                cell.setCellStyle(style);
                 Method declaredMethod = aClass.getDeclaredMethod(methodNameList.get(j), null);
                 Object invoke = declaredMethod.invoke(list.get(i - 1), null);
                 cell.setCellValue(invoke == null ? "" : invoke.toString());
+                sheet.autoSizeColumn(1,true);
             }
         }
-        return sheets;
+        return workbook;
     }
-    public static void deleteFile(String pathname){
+    public static boolean deleteFile(String pathname){
         File file = new File(pathname);
         if (file.exists()) {
-            file.delete();
+            return file.delete();
         }
+        return false;
     }
 
     public static String getIpAddress(HttpServletRequest request) {
