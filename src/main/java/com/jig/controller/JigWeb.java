@@ -42,7 +42,8 @@ public class JigWeb {
     }
 
     @RequestMapping("test")
-    public String showSu() {
+    public String showSu(HttpServletRequest request) {
+        System.out.println(POIUtils.getIpAddress(request));
         return "naive";
     }
 
