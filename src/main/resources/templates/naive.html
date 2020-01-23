@@ -648,8 +648,8 @@
                                     <div class="col-sm-4">
                                         <button class="btn btn-default" @click="clear">清空</button>
                                         <button class="btn btn-primary" @click="search" type="button">查询</button>
-                                        <a class="btn btn-default" :href="onePageUrl">导出本页</a>
-                                        <a class="btn btn-primary" :href="allPageUrl">导出全部</a>
+                                        <a class="btn btn-default" :href="onePageUrl" :class="{'disabled': jig_list.length === 0}">导出本页</a>
+                                        <a class="btn btn-primary" :href="allPageUrl" :class="{'disabled': jig_list.length === 0}">导出全部</a>
                                     </div>
                                 </div>
                             </div>

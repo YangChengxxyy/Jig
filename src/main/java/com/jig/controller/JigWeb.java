@@ -3,9 +3,8 @@ package com.jig.controller;
 import com.jig.entity.DemoEntity;
 import com.jig.entity.JigDefinition;
 import com.jig.service.JigService;
-import com.jig.util.POIUtils;
+import com.jig.util.PoiUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.hibernate.validator.internal.util.StringHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class JigWeb {
 
     @RequestMapping("test")
     public String showSu(HttpServletRequest request) {
-        System.out.println(POIUtils.getIpAddress(request));
+        System.out.println(PoiUtil.getIpAddress(request));
         return "naive";
     }
 
@@ -62,7 +62,7 @@ public class JigWeb {
     @RequestMapping("naive_download_search_one_excel")
     public void naiveDownloadSearchOneExcel(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String user_for, @RequestParam(value = "page_number") int page_number, @RequestParam(value = "file_name") String file_name) throws Exception {
         List<JigDefinition> list = jigService.searchJigDefinition(code, name, workcell, family, user_for, page_number);
-        HSSFWorkbook excel = POIUtils.getExcel(list.get(0), list);
+        HSSFWorkbook excel = PoiUtil.getExcel( list);
         response.setHeader("content-type", "application/octet-stream");
         response.setContentType("application/octet-stream;charset=utf-8");
         response.setHeader("Content-Disposition", "attachment; filename=" + file_name);
@@ -78,7 +78,7 @@ public class JigWeb {
     @RequestMapping("naive_download_search_all_excel")
     public void naiveDownloadSearchAllExcel(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String user_for, @RequestParam(value = "file_name") String file_name) throws Exception{
         List<JigDefinition> list = jigService.searchAllJigDefinition(code, name, workcell, family, user_for);
-        HSSFWorkbook excel = POIUtils.getExcel(list.get(0), list);
+        HSSFWorkbook excel = PoiUtil.getExcel(list);
         response.setHeader("content-type", "application/octet-stream");
         response.setContentType("application/octet-stream;charset=utf-8");
         response.setHeader("Content-Disposition", "attachment; filename=" + file_name);
