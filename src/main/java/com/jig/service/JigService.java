@@ -15,12 +15,12 @@ public class JigService {
     @Autowired
     private JigMapper jigMapper;
 
-    public List<JigDefinition> searchJigDefinition(String code, String name, String workcell, String family, String user_for, int page_number) {
-        return jigMapper.searchJigDefinition(code, name, workcell, family, user_for, page_number);
+    public List<JigDefinition> searchJigDefinition(String code, String name, String workcell, String family, String userFor, int pageNumber) {
+        return jigMapper.searchJigDefinition(code, name, workcell, family, userFor, pageNumber);
     }
 
-    public int searchJigDefinitionPage(String code, String name, String workcell, String family, String user_for) {
-        int a = jigMapper.searchJigDefinitionPage(code, name, workcell, family, user_for);
+    public int searchJigDefinitionPage(String code, String name, String workcell, String family, String userFor) {
+        int a = jigMapper.searchJigDefinitionPage(code, name, workcell, family, userFor);
         return (int) Math.ceil(a / 5.0);
     }
 
@@ -28,7 +28,7 @@ public class JigService {
         return jigMapper.getSimpleJigDefinition(id);
     }
 
-    public List<JigDefinition> searchAllJigDefinition(String code, String name, String workcell, String family, String user_for) {
-        return jigMapper.searchAllJigDefinition(code,name,workcell,family,user_for);
+    public List<JigDefinition> searchAllJigDefinition(String code, String name, String workcell, String family, String userFor) {
+        return jigMapper.searchAllJigDefinition(code, name, workcell, family, userFor);
     }
 }

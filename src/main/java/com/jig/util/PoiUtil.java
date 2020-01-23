@@ -11,9 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author YC
+ */
 public class PoiUtil {
-    private static final Map<String, String> DIR;
-    private static final String[] ENNAME = {
+    private static final Map<String, String> COMPARISONTABLE;
+    private static final String[] ENGLISH = {
             "id",
             "name",
             "code",
@@ -36,7 +39,7 @@ public class PoiUtil {
             "workcell",
             "remark"
     };
-    private static final String[] ZHNAME = {
+    private static final String[] CHINESE = {
             "id",
             "工夹具名字",
             "工夹具代码",
@@ -61,12 +64,13 @@ public class PoiUtil {
     };
 
     static {
-        DIR = new HashMap<>();
-        for (int i = 0; i < ENNAME.length; i++) {
-            DIR.put(ENNAME[i], ZHNAME[i]);
+        COMPARISONTABLE = new HashMap<>();
+        for (int i = 0; i < ENGLISH.length; i++) {
+            COMPARISONTABLE.put(ENGLISH[i], CHINESE[i]);
         }
     }
-    public static<T> HSSFWorkbook getExcel(List<T> list) throws Exception {
+
+    public static <T> HSSFWorkbook getExcel(List<T> list) throws Exception {
         Object t = list.get(0);
         //获取对象的类对象
         Class<?> aClass = t.getClass();
@@ -87,16 +91,20 @@ public class PoiUtil {
         int[] maxs = new int[declaredFields.length];
         for (int i = 0; i < declaredFields.length; i++) {
             cell = row.createCell(i);
-            cell.setCellValue(DIR.get(declaredFields[i].getName()));
+            cell.setCellValue(COMPARISONTABLE.get(declaredFields[i].getName()));
             HSSFCellStyle cellStyle = workbook.createCellStyle();
             //设置垂直居中
             cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
             //设置下边框
             HSSFFont font = workbook.createFont();
-            font.setFontName("等线");//设置字体名称
-            font.setFontHeightInPoints((short) 12);//设置字号
-            font.setItalic(false);//设置是否为斜体
-            font.setBold(true);//设置是否加粗
+            //设置字体名称
+            font.setFontName("等线");
+            //设置字号
+            font.setFontHeightInPoints((short) 12);
+            //设置是否为斜体
+            font.setItalic(false);
+            //设置是否加粗
+            font.setBold(true);
             cellStyle.setFont(font);
             sheet.autoSizeColumn(1);
             //渲染单元格
@@ -116,10 +124,14 @@ public class PoiUtil {
                 cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
                 //设置下边框
                 HSSFFont font = workbook.createFont();
-                font.setFontName("等线");//设置字体名称
-                font.setFontHeightInPoints((short) 12);//设置字号
-                font.setItalic(false);//设置是否为斜体
-                font.setBold(false);//设置是否加粗
+                //设置字体名称
+                font.setFontName("等线");
+                //设置字号
+                font.setFontHeightInPoints((short) 12);
+                //设置是否为斜体
+                font.setItalic(false);
+                //设置是否加粗
+                font.setBold(false);
                 cellStyle.setFont(font);
                 //渲染单元格
                 cell.setCellStyle(cellStyle);
@@ -142,19 +154,20 @@ public class PoiUtil {
 
     public static String getIpAddress(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        String unknown = "unknown";
+        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
             ip = request.getHeader("HTTP_CLIENT_IP");
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
             ip = request.getHeader("HTTP_X_FORWARDED_FOR");
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
         return ip;

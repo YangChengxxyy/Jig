@@ -9,7 +9,6 @@ import org.springframework.context.ApplicationContext;
 public class VueApplication {
 
     public static void main(String[] args) {
-//        SpringApplication.run(VueApplication.class, args);
         ApplicationContext applicationContext = SpringApplication.run(VueApplication.class, args);
         SpringUtil.setApplicationContext(applicationContext);
     }
