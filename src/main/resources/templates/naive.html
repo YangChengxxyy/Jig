@@ -648,8 +648,10 @@
                                     <div class="col-sm-4">
                                         <button class="btn btn-default" @click="clear">清空</button>
                                         <button class="btn btn-primary" @click="search" type="button">查询</button>
-                                        <a class="btn btn-default" :href="onePageUrl" :class="{'disabled': jig_list.length === 0}">导出本页</a>
-                                        <a class="btn btn-primary" :href="allPageUrl" :class="{'disabled': jig_list.length === 0}">导出全部</a>
+                                        <a class="btn btn-default" :href="onePageUrl"
+                                           :class="{'disabled': jig_list.length === 0}">导出本页</a>
+                                        <a class="btn btn-primary" :href="allPageUrl"
+                                           :class="{'disabled': jig_list.length === 0}">导出全部</a>
                                     </div>
                                 </div>
                             </div>
@@ -685,22 +687,63 @@
                                 </table>
                             </div>
                             <div class="text-center row" v-if="max_page_number != 0">
-                                <ul class="pagination">
-                                    <li :class="havePrevious" @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
-                                        <a>&uarr;上一页</a>
+                                <ul v-if="now_page_number <= 3 && now_page_number < max_page_number-1"
+                                    class="pagination">
+                                    <li :class="havePrevious"
+                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
+                                        <a>&laquo;</a></li>
+                                    <li :class="{'active': now_page_number == 1}"
+                                        @click="turn_page(1)"><a>1</a></li>
+                                    <li :class="{'active': now_page_number == 2}"
+                                        @click="turn_page(2)"><a>2</a></li>
+                                    <li :class="{'active': now_page_number == 3}"
+                                        @click="turn_page(3)"><a>3</a></li>
+                                    <li class="disabled"><a>...</a></li>
+                                    <li @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a>
                                     </li>
-                                    <li v-if="now_page_number - 2 > 0" @click="turn_page(now_page_number-2)"><a>{{now_page_number-2}}</a>
+                                    <li @click="turn_page(max_page_number)"><a>{{max_page_number}}</a>
                                     </li>
-                                    <li v-if="now_page_number - 1 > 0" @click="turn_page(now_page_number-1)"><a>{{now_page_number-1}}</a>
+                                    <li :class="haveNext"
+                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)">
+                                        <a>&raquo;</a>
                                     </li>
+                                </ul>
+                                <ul v-else-if="now_page_number > 3 && now_page_number+1 <= max_page_number-2"
+                                    class="pagination">
+                                    <li :class="havePrevious"
+                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
+                                        <a>&laquo;</a></li>
+                                    <li @click="turn_page(1)"><a>1</a></li>
+                                    <li @click="turn_page(2)"><a>2</a></li>
+                                    <li class="disabled"><a>...</a></li>
+                                    <li @click="turn_page(now_page_number-1)"><a>{{now_page_number-1}}</a></li>
                                     <li class="active" @click="turn_page(now_page_number)"><a>{{now_page_number}}</a>
                                     </li>
-                                    <li v-if="now_page_number + 1 <= max_page_number"
-                                        @click="turn_page(now_page_number+1)"><a>{{now_page_number+1}}</a></li>
-                                    <li v-if="now_page_number + 2 <= max_page_number"
-                                        @click="turn_page(now_page_number+2)"><a>{{now_page_number+2}}</a></li>
-                                    <li :class="haveNext" @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)">
-                                        <a>下一页&darr;</a></li>
+                                    <li @click="turn_page(now_page_number+1)"><a>{{now_page_number+1}}</a></li>
+                                    <li class="disabled"><a>...</a></li>
+                                    <li @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a></li>
+                                    <li @click="turn_page(max_page_number)"><a>{{max_page_number}}</a></li>
+                                    <li :class="haveNext"
+                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>
+                                    </li>
+                                </ul>
+                                <ul v-else-if="now_page_number>=4 && now_page_number >= max_page_number-2"
+                                    class="pagination">
+                                    <li :class="havePrevious"
+                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
+                                        <a>&laquo;</a></li>
+                                    <li @click="turn_page(1)"><a>1</a></li>
+                                    <li @click="turn_page(2)"><a>2</a></li>
+                                    <li class="disabled"><a>...</a></li>
+                                    <li :class="{'active' : now_page_number == max_page_number-2 }"
+                                        @click="turn_page(max_page_number-2)"><a>{{max_page_number-2}}</a></li>
+                                    <li :class="{'active' : now_page_number == max_page_number-1 }"
+                                        @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a></li>
+                                    <li :class="{'active' : now_page_number == max_page_number }"
+                                        @click="turn_page(max_page_number)"><a>{{max_page_number}}</a></li>
+                                    <li :class="haveNext"
+                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>
+                                    </li>
                                 </ul>
                             </div>
                             <div class="modal fade" id="check" tabindex="-1" role="dialog"
@@ -846,14 +889,14 @@
         el: "#search_jig",
         data: {
             jig_list: [],
-            now_page_number: 1,
-            max_page_number: 0,
             jig: "",
             name: "",
             workcell: "",
             family: "",
             user_for: "",
             code: "",
+            now_page_number: 1,
+            max_page_number: 0
         },
         methods: {
             search: function () {
@@ -886,7 +929,7 @@
                         id: id
                     },
                     success: function (res) {
-                        search_jig.$data.jig = res
+                        search_jig.$data.jig = res;
                         search_jig.$data.jig.part_no = search_jig.$data.jig.part_no.split("|");
                         search_jig.$data.jig.model = search_jig.$data.jig.model.split("|");
                         console.log(search_jig.$data.jig)
@@ -950,6 +993,5 @@
             }
         }
     })
-
 </script>
 </html>

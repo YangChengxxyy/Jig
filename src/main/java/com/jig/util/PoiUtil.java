@@ -37,7 +37,8 @@ public class PoiUtil {
             "edit_by_name",
             "workcell_id",
             "workcell",
-            "remark"
+            "remark",
+            "JigDefinition"
     };
     private static final String[] CHINESE = {
             "id",
@@ -61,10 +62,11 @@ public class PoiUtil {
             "工作部门id",
             "工作部门",
             "备注",
+            "工夹具定义"
     };
 
     static {
-        COMPARISONTABLE = new HashMap<>();
+        COMPARISONTABLE = new HashMap<>(25);
         for (int i = 0; i < ENGLISH.length; i++) {
             COMPARISONTABLE.put(ENGLISH[i], CHINESE[i]);
         }
@@ -85,7 +87,7 @@ public class PoiUtil {
             methodNameList.add(getMethodName);
         }
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("查询数据");
+        HSSFSheet sheet = workbook.createSheet(COMPARISONTABLE.get(aClass.getSimpleName()));
         HSSFRow row = sheet.createRow(0);
         HSSFCell cell = null;
         int[] maxs = new int[declaredFields.length];
@@ -152,7 +154,7 @@ public class PoiUtil {
         return workbook;
     }
 
-    public static String getIpAddress(HttpServletRequest request) {
+    public static void getIpAddress(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
         String unknown = "unknown";
         if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
@@ -170,6 +172,6 @@ public class PoiUtil {
         if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
-        return ip;
+        System.out.println(ip);
     }
 }

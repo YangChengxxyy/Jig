@@ -43,30 +43,23 @@ public class JigWeb {
 
     @RequestMapping("test")
     public String showSu(HttpServletRequest request) {
-        System.out.println(PoiUtil.getIpAddress(request));
+        PoiUtil.getIpAddress(request);
         return "naive";
     }
 
     @RequestMapping("naive_download_search_one_excel")
     public void naiveDownloadSearchOneExcel(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor, @RequestParam(value = "page_number") int pageNumber, @RequestParam(value = "file_name") String fileName) throws Exception {
         List<JigDefinition> list = jigService.searchJigDefinition(code, name, workcell, family, userFor, pageNumber);
-        HSSFWorkbook excel = PoiUtil.getExcel(list);
-        response.setHeader("content-type", "application/octet-stream");
-        response.setContentType("application/octet-stream;charset=utf-8");
-        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
-        OutputStream os = null;
-        try {
-            os = response.getOutputStream();
-            excel.write(os);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        outputFile(response, fileName, list);
     }
 
     @RequestMapping("naive_download_search_all_excel")
     public void naiveDownloadSearchAllExcel(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor, @RequestParam(value = "file_name") String fileName) throws Exception {
         List<JigDefinition> list = jigService.searchAllJigDefinition(code, name, workcell, family, userFor);
+        outputFile(response, fileName, list);
+    }
+
+    private void outputFile(HttpServletResponse response, String fileName, List<JigDefinition> list) throws Exception {
         HSSFWorkbook excel = PoiUtil.getExcel(list);
         response.setHeader("content-type", "application/octet-stream");
         response.setContentType("application/octet-stream;charset=utf-8");

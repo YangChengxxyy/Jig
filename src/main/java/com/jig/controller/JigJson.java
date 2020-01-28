@@ -31,7 +31,7 @@ public class JigJson {
         }
         Map<Object, Object> map = new HashMap<>(2);
         map.put("data", a);
-        map.put("max", 3);
+        map.put("max", 11);
         return map;
     }
 
