@@ -35,16 +35,29 @@ public class JigJson {
         return map;
     }
 
+    /**
+     * @param code       工夹具代码
+     * @param name       工夹具名字
+     * @param workcell   工作部门
+     * @param family     类别
+     * @param userFor    用途
+     * @param pageNumber 页码
+     * @return 查询到的对应页数的Map对象 { data:数据 ,max:最大页数 }
+     */
     @RequestMapping("search_jig_definition")
-    public Map<Object, Object> searchJigDefinition(@RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userfor, @RequestParam(value = "page_number") int pageNumber) throws Exception {
+    public Map<Object, Object> searchJigDefinition(@RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor, @RequestParam(value = "page_number") int pageNumber) throws Exception {
         pageNumber = (pageNumber - 1) * 5;
         Map<Object, Object> map = new HashMap<>(2);
-        List<JigDefinition> list = jigService.searchJigDefinition(code, name, workcell, family, userfor, pageNumber);
+        List<JigDefinition> list = jigService.searchJigDefinition(code, name, workcell, family, userFor, pageNumber);
         map.put("data", list);
-        map.put("max", jigService.searchJigDefinitionPage(code, name, workcell, family, userfor));
+        map.put("max", jigService.searchJigDefinitionPage(code, name, workcell, family, userFor));
         return map;
     }
 
+    /**
+     * @param id 数据库id
+     * @return 查询到的JigDefinition对象
+     */
     @RequestMapping("get_simple_jig_definition")
     public JigDefinition getSimpleJigDefinition(@RequestParam(value = "id") String id) {
         return jigService.getSimpleJigDefinition(id);

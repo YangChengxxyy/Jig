@@ -2,6 +2,7 @@ package com.jig.mapper;
 
 import com.jig.entity.JigDefinition;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 public interface JigMapper {
 
     /**
-     * 通过Mybaits的方法来实现查询到对应页数的工夹具List
+     * 通过Mybatis的方法来实现查询到对应页数的工夹具List
      *
      * @param code       工夹具代码
      * @param name       工夹具名字
@@ -21,10 +22,10 @@ public interface JigMapper {
      * @param pageNumber 页码
      * @return 查询到的对应页数的List对象
      */
-    List<JigDefinition> searchJigDefinition(String code, String name, String workcell, String family, String userFor, int pageNumber);
+    List<JigDefinition> searchJigDefinition(String code, String name, String workcell, String family,String userFor, int pageNumber);
 
     /**
-     * 通过Mybaits的方法来实现查询
+     * 通过Mybatis的方法来实现查询
      *
      * @param code     工夹具代码
      * @param name     工夹具名字
@@ -36,7 +37,7 @@ public interface JigMapper {
     int searchJigDefinitionPage(String code, String name, String workcell, String family, String userFor);
 
     /**
-     * 通过Mybaits的方法来实现查询
+     * 通过Mybatis的方法来实现查询
      *
      * @param id id
      * @return 单个JigDefinition对象
@@ -44,7 +45,7 @@ public interface JigMapper {
     JigDefinition getSimpleJigDefinition(String id);
 
     /**
-     * 通过Mybaits的方法来实现查询到所有的工夹具List
+     * 通过Mybatis的方法来实现查询到所有的工夹具List
      *
      * @param code     工夹具代码
      * @param name     工夹具名字

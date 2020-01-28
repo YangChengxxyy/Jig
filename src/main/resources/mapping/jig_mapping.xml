@@ -16,11 +16,11 @@
             <if test="family != null">
                 and family like concat('%',#{family},'%')
             </if>
-            <if test="user_for != null">
-                and user_for like concat('%',#{user_for},'%')
+            <if test="userFor != null">
+                and user_for like concat('%',#{userFor},'%')
             </if>
         </where>
-        limit #{page_number},5
+        limit #{pageNumber},5
     </select>
     <select id="searchJigDefinitionPage" resultType="java.lang.Integer">
         SELECT count(*)
@@ -38,8 +38,8 @@
             <if test="family != null">
                 and family like concat('%',#{family},'%')
             </if>
-            <if test="user_for != null">
-                and user_for like concat('%',#{user_for},'%')
+            <if test="userFor != null">
+                and user_for like concat('%',#{userFor},'%')
             </if>
         </where>
     </select>
@@ -63,8 +63,8 @@
             <if test="family != null">
                 and family like concat('%',#{family},'%')
             </if>
-            <if test="user_for != null">
-                and user_for like concat('%',#{user_for},'%')
+            <if test="userFor != null">
+                and user_for like concat('%',#{userFor},'%')
             </if>
         </where>
     </select>
