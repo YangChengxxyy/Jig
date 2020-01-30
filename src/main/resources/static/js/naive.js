@@ -29,8 +29,8 @@ var search_jig = new Vue({
                     if (res.data.length === 0) {
                         alert("没有结果！")
                     } else {
-                        that.$data.jig_list = res.data;
-                        that.$data.max_page_number = res.max;
+                        that.jig_list = res.data;
+                        that.max_page_number = res.max;
                     }
                 }
             })
@@ -43,22 +43,22 @@ var search_jig = new Vue({
                     id: id
                 },
                 success: function (res) {
-                    that.$data.jig = res;
-                    that.$data.jig.part_no = that.$data.jig.part_no.split("|");
-                    that.$data.jig.model = that.$data.jig.model.split("|");
+                    that.jig = res;
+                    that.jig.part_no = that.jig.part_no.split("|");
+                    that.jig.model = that.jig.model.split("|");
                 }
             })
         },
         clear: function () {
-            this.$data.jig = null;
-            this.$data.max_page_number = 0;
-            this.$data.now_page_number = 1;
-            this.$data.jig_list = [];
-            this.$data.code = "";
-            this.$data.name = "";
-            this.$data.workcell = "";
-            this.$data.family = "";
-            this.$data.user_for = "";
+            this.jig = null;
+            this.max_page_number = 0;
+            this.now_page_number = 1;
+            this.jig_list = [];
+            this.code = "";
+            this.name = "";
+            this.workcell = "";
+            this.family = "";
+            this.user_for = "";
         },
         turn_page: function (page_number) {
             const that = this;
@@ -79,9 +79,9 @@ var search_jig = new Vue({
                     if (res.data.length === 0) {
                         alert("没有结果！")
                     } else {
-                        that.$data.now_page_number = page_number;
-                        that.$data.jig_list = res.data;
-                        that.$data.max_page_number = res.max;
+                        that.now_page_number = page_number;
+                        that.jig_list = res.data;
+                        that.max_page_number = res.max;
                     }
                 }
             })
@@ -121,13 +121,17 @@ var jig_outgoing = new Vue({
         $.ajax({
             url: "get_outgoing_submit",
             success: function (res) {
-                that.$data.outgoing_submit_list = res
+                that.outgoing_submit_list = res
             }
         })
     },
     methods: {
         changeCheck: function (user_id) {
-            this.$data.user_id = user_id;
+            this.user_id = user_id;
+            this.check_user_id = "";
+            this.code_seq_id = "";
+            this.user_name = "";
+            this.position = "";
         },
         outgoing: function () {
             if (this.user_id === this.check_user_id) {
@@ -152,10 +156,11 @@ var jig_outgoing = new Vue({
         },
         getPosition: function () {
             const that = this;
-            if (this.code_seq_id.indexOf("-") !== -1){//先判断是否输入正确
+            if (this.code_seq_id.indexOf("-") === -1) {//先判断是否输入正确
                 return false;
             }
             const splits = this.code_seq_id.split("-");
+            console.log(splits);
             $.ajax({
                 url: "get_position",
                 data: {
@@ -163,7 +168,8 @@ var jig_outgoing = new Vue({
                     seq_id: splits[1]
                 },
                 success: function (res) {
-                    that.position = res.jig_cabinet_id + "-" + res.location_id + "-" + res.bin;
+                    console.log(res);
+                    that.position = res.jig_cabinet_id + "-" + res.location_id + (res.bin == null ? "" : ("-" + res.bin));
                 }
             })
         }

@@ -83,4 +83,10 @@
           AND jig_stock.`code` = outgoing_submit.`code`
         GROUP BY outgoing_submit.`code`
     </select>
+    <select id="getPosition" resultType="com.jig.entity.Position">
+        select jig_cabinet_id, location_id, bin
+        from jig_position
+        where code = #{code}
+          and seq_id = #{seq_id}
+    </select>
 </mapper>

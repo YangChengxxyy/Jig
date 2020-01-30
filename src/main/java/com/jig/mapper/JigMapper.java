@@ -2,6 +2,7 @@ package com.jig.mapper;
 
 import com.jig.entity.JigDefinition;
 import com.jig.entity.OutgoingSubmit;
+import com.jig.entity.Position;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -58,4 +59,6 @@ public interface JigMapper {
     List<JigDefinition> searchAllJigDefinition(String code, String name, String workcell, String family, String userFor);
 
     List<OutgoingSubmit> getOutgoingSubmit();
+
+    Position getPosition(String code, String seq_id);
 }

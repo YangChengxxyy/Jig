@@ -2,6 +2,7 @@ package com.jig.service;
 
 import com.jig.entity.JigDefinition;
 import com.jig.entity.OutgoingSubmit;
+import com.jig.entity.Position;
 import com.jig.mapper.JigMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,5 +36,9 @@ public class JigService {
 
     public List<OutgoingSubmit> getOutgoingSubmit() {
         return jigMapper.getOutgoingSubmit();
+    }
+
+    public Position getPosition(String code, String seq_id) {
+        return jigMapper.getPosition(code,seq_id);
     }
 }

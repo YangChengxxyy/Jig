@@ -72,6 +72,6 @@ public class JigJson {
 
     @RequestMapping("get_position")
     public Position getPosition(@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id) {
-        return null;
+        return jigService.getPosition(code,seq_id);
     }
 }
