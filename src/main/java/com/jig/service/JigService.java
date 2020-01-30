@@ -1,6 +1,7 @@
 package com.jig.service;
 
 import com.jig.entity.JigDefinition;
+import com.jig.entity.OutgoingSubmit;
 import com.jig.mapper.JigMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,5 +31,9 @@ public class JigService {
 
     public List<JigDefinition> searchAllJigDefinition(String code, String name, String workcell, String family, String userFor) {
         return jigMapper.searchAllJigDefinition(code, name, workcell, family, userFor);
+    }
+
+    public List<OutgoingSubmit> getOutgoingSubmit() {
+        return jigMapper.getOutgoingSubmit();
     }
 }

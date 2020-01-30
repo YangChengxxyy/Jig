@@ -1,6 +1,7 @@
 package com.jig.mapper;
 
 import com.jig.entity.JigDefinition;
+import com.jig.entity.OutgoingSubmit;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -55,4 +56,6 @@ public interface JigMapper {
      * @return 查询到的所有结果的List对象
      */
     List<JigDefinition> searchAllJigDefinition(String code, String name, String workcell, String family, String userFor);
+
+    List<OutgoingSubmit> getOutgoingSubmit();
 }

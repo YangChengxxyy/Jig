@@ -2,6 +2,7 @@ package com.jig.controller;
 
 import com.jig.entity.DemoEntity;
 import com.jig.entity.JigDefinition;
+import com.jig.entity.OutgoingSubmit;
 import com.jig.service.JigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,5 +62,9 @@ public class JigJson {
     @RequestMapping("get_simple_jig_definition")
     public JigDefinition getSimpleJigDefinition(@RequestParam(value = "id") String id) {
         return jigService.getSimpleJigDefinition(id);
+    }
+    @RequestMapping("get_outgoing_submit")
+    public List<OutgoingSubmit> getOutgoingSubmit(){
+        return jigService.getOutgoingSubmit();
     }
 }

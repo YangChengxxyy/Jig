@@ -68,4 +68,19 @@
             </if>
         </where>
     </select>
+    <select id="getOutgoingSubmit" resultType="com.jig.entity.OutgoingSubmit">
+        SELECT outgoing_submit.*,
+               jig_definition.`name`,
+               `user`.`name`        user_name,
+               jig_definition.user_for,
+               sum(jig_stock.count) count
+        FROM jig_definition,
+             outgoing_submit,
+             `user`,
+             jig_stock
+        WHERE jig_definition.`code` = outgoing_submit.`code`
+          AND `user`.id = outgoing_submit.user_id
+          AND jig_stock.`code` = outgoing_submit.`code`
+        GROUP BY outgoing_submit.`code`
+    </select>
 </mapper>
