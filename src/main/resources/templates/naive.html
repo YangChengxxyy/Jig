@@ -184,61 +184,57 @@
                                         {{item.count}}
                                     </td>
                                     <td>
-                                        <button class="btn btn-primary" data-toggle="modal" data-target="#chuku">出库
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#chuku" @click="changeCheck(item.user_id)">出库
                                         </button>
-                                        <div class="modal fade" id="chuku" tabindex="-1" role="dialog"
-                                             aria-labelledby="chukuLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                                aria-hidden="true">&times;
-                                                        </button>
-                                                        <h4 class="modal-title" id="myModalLabel">确认信息</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form role="form" class="form-horizontal">
-                                                            <div class="form-group row">
-                                                                <label for="no"
-                                                                       class="col-sm-3 control-label">刷卡或者输入工号</label>
-                                                                <div class="col-sm-7">
-                                                                    <div class="input-group">
-                                                                        <input type="text" class="form-control" id="no">
-                                                                        <span class="input-group-addon"><span
-                                                                                class="glyphicon glyphicon-qrcode"></span></span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-2 control-label"
-                                                                     style="text-align: left">
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row">
-                                                                <label for="seq_id" class="col-sm-3 control-label">扫描工夹具二维码</label>
-                                                                <div class="col-sm-7">
-                                                                    <div class="input-group">
-                                                                        <input type="text" class="form-control"
-                                                                               id="seq_id">
-                                                                        <span class="input-group-addon"><span
-                                                                                class="glyphicon glyphicon-qrcode"></span></span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-2 control-label"
-                                                                     style="text-align: left">
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-default"
-                                                                data-dismiss="modal">关闭
-                                                        </button>
-                                                        <button type="button" class="btn btn-primary">提交更改</button>
-                                                    </div>
-                                                </div><!-- /.modal-content -->
-                                            </div><!-- /.modal -->
-                                        </div>
                                     </td>
                                 </tr>
+                                <div class="modal fade" id="chuku" tabindex="-1" role="dialog"
+                                     aria-labelledby="chukuLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-hidden="true">&times;
+                                                </button>
+                                                <h4 class="modal-title" id="myModalLabel">确认信息</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form role="form" class="form-horizontal">
+                                                    <div class="form-group row">
+                                                        <label for="no" class="col-sm-3 control-label">刷卡或者输入工号</label>
+                                                        <div class="col-sm-7">
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control" id="no" v-model.trim="check_user_id" @change="getUsername">
+                                                                <span class="input-group-addon"><span class="glyphicon glyphicon-qrcode"></span></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2 control-label"
+                                                             style="text-align: left">{{user_name}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="seq_id" class="col-sm-3 control-label">扫描工夹具二维码</label>
+                                                        <div class="col-sm-7">
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control" id="seq_id" v-model.trim="code_seq_id" @change="getPosition">
+                                                                <span class="input-group-addon"><span class="glyphicon glyphicon-qrcode"></span></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2 control-label"
+                                                             style="text-align: left">{{position}}
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal">关闭
+                                                </button>
+                                                <button type="button" class="btn btn-primary" @click="outgoing">提交出库</button>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal -->
+                                </div>
                                 </tbody>
                             </table>
                         </div><!--  /工夹具出库  -->
@@ -861,129 +857,5 @@
     </div>
 </div>
 </body>
-<script>
-    var search_jig = new Vue({
-        el: "#search_jig",
-        data: {
-            jig_list: [],
-            jig: "",
-            name: "",
-            workcell: "",
-            family: "",
-            user_for: "",
-            code: "",
-            now_page_number: 1,
-            max_page_number: 0
-        },
-        methods: {
-            search: function () {
-                this.now_page_number = 1;
-                const that = this;
-                $.ajax({
-                    url: "search_jig_definition",
-                    data: {
-                        code: this.code,
-                        name: this.name,
-                        workcell: this.workcell,
-                        family: this.family,
-                        user_for: this.user_for,
-                        page_number: 1
-                    },
-                    success: function (res) {
-                        if (res.data.length === 0) {
-                            alert("没有结果！")
-                        } else {
-                            that.$data.jig_list = res.data;
-                            that.$data.max_page_number = res.max;
-                        }
-                    }
-                })
-            },
-            check_detail: function (event, id) {
-                const that = this;
-                $.ajax({
-                    url: "get_simple_jig_definition",
-                    data: {
-                        id: id
-                    },
-                    success: function (res) {
-                        that.$data.jig = res;
-                        that.$data.jig.part_no = search_jig.$data.jig.part_no.split("|");
-                        that.$data.jig.model = search_jig.$data.jig.model.split("|");
-                    }
-                })
-            },
-            clear: function () {
-                this.$data.jig = null;
-                this.$data.max_page_number = 0;
-                this.$data.now_page_number = 1;
-                this.$data.jig_list = [];
-                this.$data.code = "";
-                this.$data.name = "";
-                this.$data.workcell = "";
-                this.$data.family = "";
-                this.$data.user_for = "";
-            },
-            turn_page: function (page_number) {
-                const that = this;
-                if (page_number === this.now_page_number) {
-                    return false;
-                }
-                $.ajax({
-                    url: "search_jig_definition",
-                    data: {
-                        code: this.code,
-                        name: this.name,
-                        workcell: this.workcell,
-                        family: this.family,
-                        user_for: this.user_for,
-                        page_number: page_number
-                    },
-                    success: function (res) {
-                        if (res.data.length === 0) {
-                            alert("没有结果！")
-                        } else {
-                            that.$data.now_page_number = page_number
-                            that.$data.jig_list = res.data;
-                            that.$data.max_page_number = res.max;
-                        }
-                    }
-                })
-            }
-        },
-        computed: {
-            havePrevious: function () {
-                return {
-                    disabled: this.now_page_number === 1
-                }
-            },
-            haveNext: function () {
-                return {
-                    disabled: this.now_page_number === this.max_page_number
-                }
-            },
-            onePageUrl: function () {
-                return "naive_download_search_one_excel?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&page_number=" + this.now_page_number + "&file_name=onePage" + this.now_page_number + ".xls";
-            },
-            allPageUrl: function () {
-                return "naive_download_search_all_excel?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&file_name=allPage.xls";
-            }
-        }
-    })
-    var jig_outgoing = new Vue({
-        el:"#jig_outgoing",
-        data:{
-            outgoing_submit_list:[]
-        },
-        created:function () {
-            const that = this;
-            $.ajax({
-                url:"get_outgoing_submit",
-                success:function (res) {
-                    that.$data.outgoing_submit_list = res
-                }
-            })
-        }
-    })
-</script>
+<script src="/js/naive.js"></script>
 </html>

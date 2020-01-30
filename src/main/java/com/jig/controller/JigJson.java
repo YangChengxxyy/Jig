@@ -3,6 +3,7 @@ package com.jig.controller;
 import com.jig.entity.DemoEntity;
 import com.jig.entity.JigDefinition;
 import com.jig.entity.OutgoingSubmit;
+import com.jig.entity.Position;
 import com.jig.service.JigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,8 +64,14 @@ public class JigJson {
     public JigDefinition getSimpleJigDefinition(@RequestParam(value = "id") String id) {
         return jigService.getSimpleJigDefinition(id);
     }
+
     @RequestMapping("get_outgoing_submit")
-    public List<OutgoingSubmit> getOutgoingSubmit(){
+    public List<OutgoingSubmit> getOutgoingSubmit() {
         return jigService.getOutgoingSubmit();
+    }
+
+    @RequestMapping("get_position")
+    public Position getPosition(@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id) {
+        return null;
     }
 }
