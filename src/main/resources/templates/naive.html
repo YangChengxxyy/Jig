@@ -211,7 +211,9 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-3 control-label"
-                                                         style="text-align: left">{{user_name}}&nbsp;<span v-if="check_user_id == user_id" class="glyphicon glyphicon-ok pull-right" style="color: rgba(47,255,47,0.89)"></span>
+                                                         style="text-align: left">{{user_name}}
+                                                        <span v-if="check1" class="glyphicon glyphicon-ok pull-right text-success"></span>
+                                                        <span v-else class="glyphicon glyphicon-remove pull-right text-danger"></span>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -223,7 +225,9 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-3 control-label"
-                                                         style="text-align: left">{{position}}&nbsp;<span v-if="code_seq_id.indexOf(code) != -1" class="glyphicon glyphicon-ok pull-right" style="color: rgba(47,255,47,0.89)"></span>
+                                                         style="text-align: left">{{position}}
+                                                        <span v-if="check2" class="glyphicon glyphicon-ok pull-right text-success"></span>
+                                                        <span v-else class="glyphicon glyphicon-remove pull-right text-danger"></span>
                                                     </div>
                                                 </div>
                                             </form>
@@ -232,7 +236,7 @@
                                             <button type="button" class="btn btn-default"
                                                     data-dismiss="modal">关闭
                                             </button>
-                                            <button type="button" class="btn btn-primary" @click="outgoing">提交出库</button>
+                                            <button type="button" class="btn btn-primary" @click="outgoing" :class="{'disabled': !(user_id != null && check1 && check2)}">提交出库</button>
                                         </div>
                                     </div><!-- /.modal-content -->
                                 </div><!-- /.modal -->
@@ -344,7 +348,7 @@
                                                             </div>
                                                             <div class="form-group row">
                                                                 <label for="location" class="col-sm-3 control-label">确认位置为</label>
-                                                                <div class="col-sm-7">
+                                                                <div class="col-sm-6">
                                                                     <div class="input-group">
                                                                         <div class="form-control">
                                                                             12-12

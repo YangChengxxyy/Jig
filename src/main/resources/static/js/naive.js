@@ -112,10 +112,12 @@ var jig_outgoing = new Vue({
         outgoing_submit_list: [],
         user_id: "",
         check_user_id: "",
-        code:"",
+        code: "",
         code_seq_id: "",
         user_name: "",
-        position: ""
+        position: "",
+        check1: false,
+        check2: false
     },
     created: function () {
         const that = this;
@@ -127,20 +129,19 @@ var jig_outgoing = new Vue({
         })
     },
     methods: {
-        changeCheck: function (user_id,code) {
+        changeCheck: function (user_id, code) {
             this.user_id = user_id;
             this.code = code;
             this.check_user_id = "";
             this.code_seq_id = "";
             this.user_name = "";
             this.position = "";
+            this.check1 = false;
+            this.check2 = false;
         },
         outgoing: function () {
-            if (this.user_id === this.check_user_id) {
-                $.ajax({
-                    url: "",
-                    data: {}
-                })
+            if (this.check1 && this.check2) {
+                console.warn("");
             }
         },
         getUsername: function () {
@@ -152,16 +153,17 @@ var jig_outgoing = new Vue({
                 },
                 success: function (res) {
                     that.user_name = res;
+                    that.check1 = that.user_id === that.check_user_id;
                 }
             })
         },
         getPosition: function () {
             const that = this;
+            that.check2 = that.code_seq_id.indexOf(that.code) !== -1;
             if (this.code_seq_id.indexOf("-") === -1) {//先判断是否输入正确
                 return false;
             }
-            const splits = this.code_seq_id.split("-");
-            console.log(splits);
+            const splits = that.code_seq_id.split("-");
             $.ajax({
                 url: "get_position",
                 data: {
@@ -169,8 +171,8 @@ var jig_outgoing = new Vue({
                     seq_id: splits[1]
                 },
                 success: function (res) {
-                    console.log(res);
-                    that.position = res.jig_cabinet_id + "-" + res.location_id + (res.bin == null ? "" : ("-" + res.bin));
+                    that.position = (res.jig_cabinet_id == null ? "" : ("" + res.jig_cabinet_id)) + (res.location_id == null ? "" : ("-" + res.location_id)) + (res.bin == null ? "" : ("-" + res.bin));
+                    that.check2 = that.code_seq_id.indexOf(that.code) !== -1;
                 }
             })
         }
