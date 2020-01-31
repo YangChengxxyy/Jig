@@ -1,7 +1,7 @@
 package com.jig.service;
 
 import com.jig.entity.JigDefinition;
-import com.jig.entity.OutgoingSubmit;
+import com.jig.entity.OutgoSubmit;
 import com.jig.entity.Position;
 import com.jig.mapper.JigMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +34,19 @@ public class JigService {
         return jigMapper.searchAllJigDefinition(code, name, workcell, family, userFor);
     }
 
-    public List<OutgoingSubmit> getOutgoingSubmit() {
+    public List<OutgoSubmit> getOutgoingSubmit() {
         return jigMapper.getOutgoingSubmit();
     }
 
     public Position getPosition(String code, String seq_id) {
         return jigMapper.getPosition(code,seq_id);
+    }
+
+    public void outgoingJig(String id, String code, String seq_id, String rec_id) {
+        jigMapper.outgoingJig(id,code,seq_id,rec_id);
+    }
+
+    public void deleteOutgoSubmit(String id) {
+        jigMapper.deleteOutgoSubmit(id);
     }
 }

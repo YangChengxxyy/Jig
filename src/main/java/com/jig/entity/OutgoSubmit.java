@@ -3,7 +3,7 @@ package com.jig.entity;
 /**
  * @author YC
  */
-public class OutgoingSubmit {
+public class OutgoSubmit {
     private String id;
     private String code;
     private String name;

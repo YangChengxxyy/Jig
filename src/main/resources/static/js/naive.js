@@ -117,7 +117,8 @@ var jig_outgoing = new Vue({
         user_name: "",
         position: "",
         check1: false,
-        check2: false
+        check2: false,
+        id: ""
     },
     created: function () {
         const that = this;
@@ -129,9 +130,10 @@ var jig_outgoing = new Vue({
         })
     },
     methods: {
-        changeCheck: function (user_id, code) {
+        changeCheck: function (user_id, code, id) {
             this.user_id = user_id;
             this.code = code;
+            this.id = id;
             this.check_user_id = "";
             this.code_seq_id = "";
             this.user_name = "";
@@ -141,7 +143,27 @@ var jig_outgoing = new Vue({
         },
         outgoing: function () {
             if (this.check1 && this.check2) {
-                //todo:完成出库实现
+                const splits = this.code_seq_id.split("-");
+                var that = this;
+                $.ajax({
+                    url: "outgoing_jig",
+                    data: {
+                        id: this.id,
+                        code: splits[0],
+                        seq_id: splits[1],
+                        rec_id: $("#id").val()
+                    },
+                    success:function (res) {
+                        $("#chuku").modal("hide");
+                        alert(res);
+                        $.ajax({
+                            url: "get_outgoing_submit",
+                            success: function (res) {
+                                that.outgoing_submit_list = res
+                            }
+                        })
+                    }
+                });
             }
         },
         getUsername: function () {
@@ -171,8 +193,13 @@ var jig_outgoing = new Vue({
                     seq_id: splits[1]
                 },
                 success: function (res) {
-                    that.position = (res.jig_cabinet_id == null ? "" : ("" + res.jig_cabinet_id)) + (res.location_id == null ? "" : ("-" + res.location_id)) + (res.bin == null ? "" : ("-" + res.bin));
-                    that.check2 = that.code_seq_id.indexOf(that.code) !== -1;
+                    if (res.status === '1'){
+                        that.position = (res.jig_cabinet_id == null ? "" : ("" + res.jig_cabinet_id)) + (res.location_id == null ? "" : ("-" + res.location_id)) + (res.bin == null ? "" : ("-" + res.bin));
+                        that.check2 = that.code_seq_id.indexOf(that.code) !== -1;
+                    }else{
+                        that.position = "未在库中";
+                    }
+
                 }
             })
         }

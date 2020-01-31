@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>初级用户</title>
@@ -32,7 +32,8 @@
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="userMenu">
-            <li role="presentation" class="dropdown-header">欢迎您，小杨同学！</li>
+            <li role="presentation" class="dropdown-header" id="user" th:inline="text">欢迎您，[[${session.get('user').getName()}]]！</li>
+            <input style="display: none" th:value="${session.get('user').getId()}" id="id">
             <li role="presentation">
                 <a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-user"></span>个人信息</a>
             </li>
@@ -184,7 +185,8 @@
                                         {{item.count}}
                                     </td>
                                     <td>
-                                        <button class="btn btn-primary" data-toggle="modal" data-target="#chuku" @click="changeCheck(item.user_id,item.code)">出库
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#chuku"
+                                                @click="changeCheck(item.user_id,item.code,item.id)">出库
                                         </button>
                                     </td>
                                 </tr>
@@ -206,28 +208,36 @@
                                                     <label for="no" class="col-sm-3 control-label">刷卡或者输入工号</label>
                                                     <div class="col-sm-6">
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control" id="no" v-model.trim="check_user_id" @change="getUsername">
-                                                            <span class="input-group-addon"><span class="glyphicon glyphicon-qrcode"></span></span>
+                                                            <input type="text" class="form-control" id="no"
+                                                                   v-model.trim="check_user_id" @change="getUsername">
+                                                            <span class="input-group-addon"><span
+                                                                    class="glyphicon glyphicon-qrcode"></span></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-3 control-label"
                                                          style="text-align: left">{{user_name}}
-                                                        <span v-if="check1" class="glyphicon glyphicon-ok pull-right text-success"></span>
-                                                        <span v-else class="glyphicon glyphicon-remove pull-right text-danger"></span>
+                                                        <span v-if="check1"
+                                                              class="glyphicon glyphicon-ok pull-right text-success"></span>
+                                                        <span v-else
+                                                              class="glyphicon glyphicon-remove pull-right text-danger"></span>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="seq_id" class="col-sm-3 control-label">扫描工夹具二维码</label>
                                                     <div class="col-sm-6">
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control" id="seq_id" v-model.trim="code_seq_id" @change="getPosition">
-                                                            <span class="input-group-addon"><span class="glyphicon glyphicon-qrcode"></span></span>
+                                                            <input type="text" class="form-control" id="seq_id"
+                                                                   v-model.trim="code_seq_id" @change="getPosition">
+                                                            <span class="input-group-addon"><span
+                                                                    class="glyphicon glyphicon-qrcode"></span></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-3 control-label"
                                                          style="text-align: left">{{position}}
-                                                        <span v-if="check2" class="glyphicon glyphicon-ok pull-right text-success"></span>
-                                                        <span v-else class="glyphicon glyphicon-remove pull-right text-danger"></span>
+                                                        <span v-if="check2"
+                                                              class="glyphicon glyphicon-ok pull-right text-success"></span>
+                                                        <span v-else
+                                                              class="glyphicon glyphicon-remove pull-right text-danger"></span>
                                                     </div>
                                                 </div>
                                             </form>
@@ -236,7 +246,9 @@
                                             <button type="button" class="btn btn-default"
                                                     data-dismiss="modal">关闭
                                             </button>
-                                            <button type="button" class="btn btn-primary" @click="outgoing" :class="{'disabled': !(user_id != null && check1 && check2)}">提交出库</button>
+                                            <button type="button" class="btn btn-primary" @click="outgoing"
+                                                    :class="{'disabled': !(user_id != null && check1 && check2)}">提交出库
+                                            </button>
                                         </div>
                                     </div><!-- /.modal-content -->
                                 </div><!-- /.modal -->

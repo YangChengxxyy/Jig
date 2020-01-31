@@ -4,6 +4,7 @@ public class Position {
     private String jig_cabinet_id;
     private String location_id;
     private String bin;
+    private String status;
 
     public String getJig_cabinet_id() {
         return jig_cabinet_id;
@@ -27,5 +28,13 @@ public class Position {
 
     public void setBin(String bin) {
         this.bin = bin;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
