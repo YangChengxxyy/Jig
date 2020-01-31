@@ -198,8 +198,8 @@ var jig_outgoing = new Vue({
                         that.check2 = that.code_seq_id.indexOf(that.code) !== -1;
                     }else{
                         that.position = "未在库中";
+                        that.check2 = false;
                     }
-
                 }
             })
         }

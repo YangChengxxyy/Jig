@@ -87,19 +87,7 @@
         </where>
     </select>
     <select id="getOutgoingSubmit" resultType="com.jig.entity.OutgoSubmit">
-        SELECT outgo_submit.*,
-               jig_definition.`name`,
-               `user`.`name`        user_name,
-               jig_definition.user_for,
-               sum(jig_stock.count) count
-        FROM jig_definition,
-             outgo_submit,
-             `user`,
-             jig_stock
-        WHERE jig_definition.`code` = outgo_submit.`code`
-          AND `user`.id = outgo_submit.user_id
-          AND jig_stock.`code` = outgo_submit.`code`
-        GROUP BY outgo_submit.`code`
+        select * from outgo_submit_entity_view
     </select>
     <select id="getPosition" resultType="com.jig.entity.Position">
         select jig_cabinet_id, location_id, bin, status
