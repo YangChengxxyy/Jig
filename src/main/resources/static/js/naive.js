@@ -141,7 +141,7 @@ var jig_outgoing = new Vue({
         },
         outgoing: function () {
             if (this.check1 && this.check2) {
-                console.warn("");
+                //todo:完成出库实现
             }
         },
         getUsername: function () {
