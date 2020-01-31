@@ -184,7 +184,7 @@
                                         {{item.count}}
                                     </td>
                                     <td>
-                                        <button class="btn btn-primary" data-toggle="modal" data-target="#chuku" @click="changeCheck(item.user_id)">出库
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#chuku" @click="changeCheck(item.user_id,item.code)">出库
                                         </button>
                                     </td>
                                 </tr>
@@ -211,7 +211,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-3 control-label"
-                                                         style="text-align: left">{{user_name}}
+                                                         style="text-align: left">{{user_name}}&nbsp;<span v-if="check_user_id == user_id" class="glyphicon glyphicon-ok pull-right" style="color: rgba(47,255,47,0.89)"></span>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -223,7 +223,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-3 control-label"
-                                                         style="text-align: left">{{position}}
+                                                         style="text-align: left">{{position}}&nbsp;<span v-if="code_seq_id.indexOf(code) != -1" class="glyphicon glyphicon-ok pull-right" style="color: rgba(47,255,47,0.89)"></span>
                                                     </div>
                                                 </div>
                                             </form>

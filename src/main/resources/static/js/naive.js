@@ -112,6 +112,7 @@ var jig_outgoing = new Vue({
         outgoing_submit_list: [],
         user_id: "",
         check_user_id: "",
+        code:"",
         code_seq_id: "",
         user_name: "",
         position: ""
@@ -126,8 +127,9 @@ var jig_outgoing = new Vue({
         })
     },
     methods: {
-        changeCheck: function (user_id) {
+        changeCheck: function (user_id,code) {
             this.user_id = user_id;
+            this.code = code;
             this.check_user_id = "";
             this.code_seq_id = "";
             this.user_name = "";
@@ -142,7 +144,6 @@ var jig_outgoing = new Vue({
             }
         },
         getUsername: function () {
-            console.log("change");
             const that = this;
             $.ajax({
                 url: "get_user_name",

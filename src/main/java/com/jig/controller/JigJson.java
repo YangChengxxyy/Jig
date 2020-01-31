@@ -65,11 +65,21 @@ public class JigJson {
         return jigService.getSimpleJigDefinition(id);
     }
 
+    /**
+     *
+     * @return 出库申请
+     */
     @RequestMapping("get_outgoing_submit")
     public List<OutgoingSubmit> getOutgoingSubmit() {
         return jigService.getOutgoingSubmit();
     }
 
+    /**
+     *
+     * @param code 工夹具代码
+     * @param seq_id 工夹具序列号
+     * @return 位置
+     */
     @RequestMapping("get_position")
     public Position getPosition(@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id) {
         return jigService.getPosition(code,seq_id);
