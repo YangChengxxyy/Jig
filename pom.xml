@@ -11,6 +11,7 @@
     <groupId>com</groupId>
     <artifactId>jig</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
     <name>JIG</name>
     <description>Demo project for Spring Boot And Vue.js</description>
 
@@ -78,6 +79,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <finalName>jig</finalName>
     </build>
 
 </project>
