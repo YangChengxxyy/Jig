@@ -2,7 +2,7 @@ function position(res) {
     return (res.jig_cabinet_id == null ? "" : ("" + res.jig_cabinet_id)) + (res.location_id == null ? "" : ("-" + res.location_id)) + (res.bin == null ? "" : ("-" + res.bin));
 }
 
-var search_jig = new Vue({
+const search_jig = new Vue({
     el: "#search_jig",
     data: {
         jig_list: [],
@@ -110,7 +110,7 @@ var search_jig = new Vue({
         }
     }
 });
-var jig_outgoing = new Vue({
+const jig_outgoing = new Vue({
     el: "#jig_outgoing",
     data: {
         outgoing_submit_list: [],
@@ -128,7 +128,7 @@ var jig_outgoing = new Vue({
         this.getData();
     },
     methods: {
-        getData:function(){
+        getData: function () {
             const that = this;
             $.ajax({
                 url: "get_outgoing_submit",
@@ -184,7 +184,7 @@ var jig_outgoing = new Vue({
         },
         getPosition: function () {
             const that = this;
-            that.check2 = that.code_seq_id.indexOf(that.code+"-") !== -1;
+            that.check2 = that.code_seq_id.indexOf(that.code + "-") !== -1;
             if (!that.check2) {//先判断是否输入正确
                 return false;
             }
@@ -229,7 +229,7 @@ var return_jig = new Vue({
     },
     methods: {
         getData:function(){
-            var that = this;
+            const that = this;
             $.ajax({
                 url: "get_outgoing_jig",
                 success: function (res) {
@@ -285,7 +285,7 @@ var return_jig = new Vue({
             })
         },
         returnJig: function () {
-            var that = this;
+            const that = this;
             const splits = this.code_seq_id.split("-");
             if (this.check1 && this.check2 && this.check3) {
                 $.ajax({

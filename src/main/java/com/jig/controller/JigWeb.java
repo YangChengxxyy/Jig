@@ -75,7 +75,6 @@ public class JigWeb {
         try {
             os = response.getOutputStream();
             excel.write(os);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
