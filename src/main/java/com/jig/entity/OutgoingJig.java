@@ -1,17 +1,17 @@
 package com.jig.entity;
 
-/**
- * @author YC
- */
-public class OutgoingSubmit {
+public class OutgoingJig {
     private String id;
     private String code;
     private String name;
+    private String seq_id;
     private String user_id;
     private String user_name;
-    private String user_for;
     private String submit_time;
-    private String count;
+    private String outgo_time;
+    private String jig_cabinet_id;
+    private String location_id;
+    private String bin;
 
     public String getId() {
         return id;
@@ -37,6 +37,14 @@ public class OutgoingSubmit {
         this.name = name;
     }
 
+    public String getSeq_id() {
+        return seq_id;
+    }
+
+    public void setSeq_id(String seq_id) {
+        this.seq_id = seq_id;
+    }
+
     public String getUser_id() {
         return user_id;
     }
@@ -53,14 +61,6 @@ public class OutgoingSubmit {
         this.user_name = user_name;
     }
 
-    public String getUser_for() {
-        return user_for;
-    }
-
-    public void setUser_for(String user_for) {
-        this.user_for = user_for;
-    }
-
     public String getSubmit_time() {
         return submit_time;
     }
@@ -69,11 +69,35 @@ public class OutgoingSubmit {
         this.submit_time = submit_time;
     }
 
-    public String getCount() {
-        return count;
+    public String getOutgo_time() {
+        return outgo_time;
     }
 
-    public void setCount(String count) {
-        this.count = count;
+    public void setOutgo_time(String outgo_time) {
+        this.outgo_time = outgo_time;
+    }
+
+    public String getJig_cabinet_id() {
+        return jig_cabinet_id;
+    }
+
+    public void setJig_cabinet_id(String jig_cabinet_id) {
+        this.jig_cabinet_id = jig_cabinet_id;
+    }
+
+    public String getLocation_id() {
+        return location_id;
+    }
+
+    public void setLocation_id(String location_id) {
+        this.location_id = location_id;
+    }
+
+    public String getBin() {
+        return bin;
+    }
+
+    public void setBin(String bin) {
+        this.bin = bin;
     }
 }

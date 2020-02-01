@@ -2,6 +2,7 @@ package com.jig.controller;
 
 import com.jig.entity.DemoEntity;
 import com.jig.entity.JigDefinition;
+import com.jig.entity.User;
 import com.jig.service.JigService;
 import com.jig.util.PoiUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -44,6 +46,11 @@ public class JigWeb {
     @RequestMapping("test")
     public String showSu(HttpServletRequest request) {
         PoiUtil.getIpAddress(request);
+        User user = new User();
+        user.setName("Xianghai Zhang");
+        user.setId("1215072");
+        HttpSession httpSession = request.getSession();
+        httpSession.setAttribute("user",user);
         return "naive";
     }
 

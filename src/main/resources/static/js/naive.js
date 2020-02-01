@@ -1,3 +1,7 @@
+function position(res) {
+    return (res.jig_cabinet_id == null ? "" : ("" + res.jig_cabinet_id)) + (res.location_id == null ? "" : ("-" + res.location_id)) + (res.bin == null ? "" : ("-" + res.bin));
+}
+
 var search_jig = new Vue({
     el: "#search_jig",
     data: {
@@ -112,9 +116,13 @@ var jig_outgoing = new Vue({
         outgoing_submit_list: [],
         user_id: "",
         check_user_id: "",
+        code: "",
         code_seq_id: "",
         user_name: "",
-        position: ""
+        position: "",
+        check1: false,
+        check2: false,
+        id: ""
     },
     created: function () {
         const that = this;
@@ -126,23 +134,43 @@ var jig_outgoing = new Vue({
         })
     },
     methods: {
-        changeCheck: function (user_id) {
+        changeCheck: function (user_id, code, id) {
             this.user_id = user_id;
+            this.code = code;
+            this.id = id;
             this.check_user_id = "";
             this.code_seq_id = "";
             this.user_name = "";
             this.position = "";
+            this.check1 = false;
+            this.check2 = false;
         },
         outgoing: function () {
-            if (this.user_id === this.check_user_id) {
+            if (this.check1 && this.check2) {
+                const splits = this.code_seq_id.split("-");
+                var that = this;
                 $.ajax({
-                    url: "",
-                    data: {}
-                })
+                    url: "outgo_jig",
+                    data: {
+                        id: this.id,
+                        code: splits[0],
+                        seq_id: splits[1],
+                        rec_id: $("#id").val()
+                    },
+                    success: function (res) {
+                        $("#chuku").modal("hide");
+                        alert(res);
+                        $.ajax({
+                            url: "get_outgoing_submit",
+                            success: function (res) {
+                                that.outgoing_submit_list = res
+                            }
+                        })
+                    }
+                });
             }
         },
         getUsername: function () {
-            console.log("change");
             const that = this;
             $.ajax({
                 url: "get_user_name",
@@ -151,16 +179,17 @@ var jig_outgoing = new Vue({
                 },
                 success: function (res) {
                     that.user_name = res;
+                    that.check1 = that.user_id === that.check_user_id;
                 }
             })
         },
         getPosition: function () {
             const that = this;
+            that.check2 = that.code_seq_id.indexOf(that.code) !== -1;
             if (this.code_seq_id.indexOf("-") === -1) {//先判断是否输入正确
                 return false;
             }
-            const splits = this.code_seq_id.split("-");
-            console.log(splits);
+            const splits = that.code_seq_id.split("-");
             $.ajax({
                 url: "get_position",
                 data: {
@@ -168,8 +197,90 @@ var jig_outgoing = new Vue({
                     seq_id: splits[1]
                 },
                 success: function (res) {
-                    console.log(res);
-                    that.position = res.jig_cabinet_id + "-" + res.location_id + (res.bin == null ? "" : ("-" + res.bin));
+                    if (res.status === '1') {
+                        that.position = position(res);
+                        that.check2 = that.code_seq_id.indexOf(that.code) !== -1;
+                    } else {
+                        that.position = "未在库中";
+                        that.check2 = false;
+                    }
+                }
+            })
+        }
+    }
+});
+var return_jig = new Vue({
+    el: "#return_jig",
+    data: {
+        outgoing_jig_list: [],
+        user_id: "",
+        check_user_id: "",
+        code: "",
+        code_seq_id: "",
+        user_name: "",
+        position: "",
+        check1: false,
+        check2: false,
+        id: ""
+    },
+    created: function () {
+        var that = this;
+        $.ajax({
+            url: "get_outgoing_jig",
+            success: function (res) {
+                that.outgoing_jig_list = res;
+                $.each(that.outgoing_jig_list,function (i,v) {
+                    v.position = position(v);
+                })
+            }
+        });
+    },
+    methods: {
+        changeCheck: function (user_id, code, id) {
+            this.user_id = user_id;
+            this.code = code;
+            this.id = id;
+            this.check_user_id = "";
+            this.code_seq_id = "";
+            this.user_name = "";
+            this.position = "";
+            this.check1 = false;
+            this.check2 = false;
+        },
+        getUsername: function () {
+            const that = this;
+            $.ajax({
+                url: "get_user_name",
+                data: {
+                    user_id: this.check_user_id
+                },
+                success: function (res) {
+                    that.user_name = res;
+                    that.check1 = that.user_id === that.check_user_id;
+                }
+            })
+        },
+        getPosition: function () {
+            const that = this;
+            that.check2 = that.code_seq_id.indexOf(that.code) !== -1;
+            if (this.code_seq_id.indexOf("-") === -1) {//先判断是否输入正确
+                return false;
+            }
+            const splits = that.code_seq_id.split("-");
+            $.ajax({
+                url: "get_position",
+                data: {
+                    code: splits[0],
+                    seq_id: splits[1]
+                },
+                success: function (res) {
+                    if (res.status === '1') {
+                        that.position = position(res);
+                        that.check2 = that.code_seq_id.indexOf(that.code) !== -1;
+                    } else {
+                        that.position = "未在库中";
+                        that.check2 = false;
+                    }
                 }
             })
         }

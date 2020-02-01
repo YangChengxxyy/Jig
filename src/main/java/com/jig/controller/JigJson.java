@@ -1,9 +1,6 @@
 package com.jig.controller;
 
-import com.jig.entity.DemoEntity;
-import com.jig.entity.JigDefinition;
-import com.jig.entity.OutgoingSubmit;
-import com.jig.entity.Position;
+import com.jig.entity.*;
 import com.jig.service.JigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,13 +62,44 @@ public class JigJson {
         return jigService.getSimpleJigDefinition(id);
     }
 
+    /**
+     * @return 出库申请
+     */
     @RequestMapping("get_outgoing_submit")
-    public List<OutgoingSubmit> getOutgoingSubmit() {
+    public List<OutgoSubmit> getOutgoingSubmit() {
         return jigService.getOutgoingSubmit();
     }
 
+    /**
+     * @param code   工夹具代码
+     * @param seq_id 工夹具序列号
+     * @return 位置
+     */
     @RequestMapping("get_position")
     public Position getPosition(@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id) {
-        return jigService.getPosition(code,seq_id);
+        return jigService.getPosition(code, seq_id);
+    }
+
+    /**
+     * @param id     出库申请id
+     * @param code   工夹具代码
+     * @param seq_id 工夹具序列号
+     * @param rec_id 记录人id
+     * @return
+     */
+    @RequestMapping("outgo_jig")
+    public String outgoJig(@RequestParam(value = "id") String id, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "rec_id") String rec_id) {
+        jigService.outgoJig(id,code,seq_id,rec_id);
+        jigService.deleteOutgoSubmit(id);
+        return "success";
+    }
+
+    /**
+     *
+     * @return 需要入库的工夹具信息
+     */
+    @RequestMapping("get_outgoing_jig")
+    public List<OutgoingJig> getOutgoingJig(){
+        return  jigService.getOutgoingJig();
     }
 }
