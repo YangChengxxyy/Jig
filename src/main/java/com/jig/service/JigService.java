@@ -36,7 +36,7 @@ public class JigService {
     }
 
     public List<OutgoSubmit> getOutgoingSubmit() {
-        return jigMapper.getOutgoingSubmit();
+        return jigMapper.getOutgoSubmit();
     }
 
     public Position getPosition(String code, String seq_id) {
@@ -45,13 +45,16 @@ public class JigService {
 
     public void outgoJig(String id, String code, String seq_id, String rec_id) {
         jigMapper.outgoJig(id,code,seq_id,rec_id);
-    }
-
-    public void deleteOutgoSubmit(String id) {
         jigMapper.deleteOutgoSubmit(id);
     }
 
     public List<OutgoingJig> getOutgoingJig() {
         return jigMapper.getOutgoingJig();
     }
+
+    public void returnJig(String id, String code, String seq_id, String rec_id) {
+        jigMapper.returnJig(id,code,seq_id,rec_id);
+        jigMapper.deleteOutgoingJig(id);
+    }
+
 }

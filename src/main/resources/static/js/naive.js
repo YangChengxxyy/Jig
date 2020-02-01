@@ -125,15 +125,18 @@ var jig_outgoing = new Vue({
         id: ""
     },
     created: function () {
-        const that = this;
-        $.ajax({
-            url: "get_outgoing_submit",
-            success: function (res) {
-                that.outgoing_submit_list = res
-            }
-        })
+        this.getData();
     },
     methods: {
+        getData:function(){
+            const that = this;
+            $.ajax({
+                url: "get_outgoing_submit",
+                success: function (res) {
+                    that.outgoing_submit_list = res
+                }
+            })
+        },
         changeCheck: function (user_id, code, id) {
             this.user_id = user_id;
             this.code = code;
@@ -160,12 +163,8 @@ var jig_outgoing = new Vue({
                     success: function (res) {
                         $("#chuku").modal("hide");
                         alert(res);
-                        $.ajax({
-                            url: "get_outgoing_submit",
-                            success: function (res) {
-                                that.outgoing_submit_list = res
-                            }
-                        })
+                        that.getData();
+                        return_jig.getData();
                     }
                 });
             }
@@ -185,8 +184,8 @@ var jig_outgoing = new Vue({
         },
         getPosition: function () {
             const that = this;
-            that.check2 = that.code_seq_id.indexOf(that.code) !== -1;
-            if (this.code_seq_id.indexOf("-") === -1) {//先判断是否输入正确
+            that.check2 = that.code_seq_id.indexOf(that.code+"-") !== -1;
+            if (!that.check2) {//先判断是否输入正确
                 return false;
             }
             const splits = that.code_seq_id.split("-");
@@ -199,7 +198,7 @@ var jig_outgoing = new Vue({
                 success: function (res) {
                     if (res.status === '1') {
                         that.position = position(res);
-                        that.check2 = that.code_seq_id.indexOf(that.code) !== -1;
+                        that.check2 = that.code_seq_id.indexOf(that.code + "-") !== -1;
                     } else {
                         that.position = "未在库中";
                         that.check2 = false;
@@ -214,38 +213,44 @@ var return_jig = new Vue({
     data: {
         outgoing_jig_list: [],
         user_id: "",
-        check_user_id: "",
         code: "",
+        check_user_id: "",
+        check_position: "",
         code_seq_id: "",
         user_name: "",
         position: "",
         check1: false,
         check2: false,
+        check3: false,
         id: ""
     },
     created: function () {
-        var that = this;
-        $.ajax({
-            url: "get_outgoing_jig",
-            success: function (res) {
-                that.outgoing_jig_list = res;
-                $.each(that.outgoing_jig_list,function (i,v) {
-                    v.position = position(v);
-                })
-            }
-        });
+        this.getData();
     },
     methods: {
-        changeCheck: function (user_id, code, id) {
-            this.user_id = user_id;
-            this.code = code;
-            this.id = id;
+        getData:function(){
+            var that = this;
+            $.ajax({
+                url: "get_outgoing_jig",
+                success: function (res) {
+                    that.outgoing_jig_list = res;
+                    $.each(that.outgoing_jig_list, function (i, v) {
+                        v.position = position(v);
+                    })
+                }
+            });
+        },
+        changeCheck: function (user_id, code, position, id) {
+            this.user_id = user_id; //用于校验user_id输入是否正确
+            this.id = id; //用于入库
+            this.check_position = position;//用于校验code_seq_id是否正确
             this.check_user_id = "";
             this.code_seq_id = "";
             this.user_name = "";
             this.position = "";
             this.check1 = false;
             this.check2 = false;
+            this.check3 = false;
         },
         getUsername: function () {
             const that = this;
@@ -262,7 +267,7 @@ var return_jig = new Vue({
         },
         getPosition: function () {
             const that = this;
-            that.check2 = that.code_seq_id.indexOf(that.code) !== -1;
+            that.check2 = that.code_seq_id.indexOf(that.code + "-") !== -1;
             if (this.code_seq_id.indexOf("-") === -1) {//先判断是否输入正确
                 return false;
             }
@@ -274,15 +279,32 @@ var return_jig = new Vue({
                     seq_id: splits[1]
                 },
                 success: function (res) {
-                    if (res.status === '1') {
-                        that.position = position(res);
-                        that.check2 = that.code_seq_id.indexOf(that.code) !== -1;
-                    } else {
-                        that.position = "未在库中";
-                        that.check2 = false;
-                    }
+                    that.position = position(res);
+                    that.check2 = that.position === that.check_position && that.code_seq_id.indexOf(that.code + "-") !== -1
                 }
             })
+        },
+        returnJig: function () {
+            var that = this;
+            const splits = this.code_seq_id.split("-");
+            if (this.check1 && this.check2 && this.check3) {
+                $.ajax({
+                    url: "return_jig",
+                    data: {
+                        code: splits[0],
+                        seq_id: splits[1],
+                        rec_id: $("#id").val(),
+                        id: this.id,
+                        user_id: this.user_id
+                    },
+                    success: function (res) {
+                        alert(res);
+                        $("#ruku").modal("hide");
+                        that.getData();
+                        jig_outgoing.getData();
+                    }
+                })
+            }
         }
     }
 });
