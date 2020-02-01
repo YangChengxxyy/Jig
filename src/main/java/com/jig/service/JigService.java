@@ -56,5 +56,4 @@ public class JigService {
         jigMapper.returnJig(id,code,seq_id,rec_id);
         jigMapper.deleteOutgoingJig(id);
     }
-
 }
