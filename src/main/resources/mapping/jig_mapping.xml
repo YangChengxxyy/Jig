@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jig.mapper.JigMapper">
-    <insert id="outgoingJig">
+    <insert id="outgoJig">
         insert into outgo_income_history(submit_time, user_id, status, rec_id, rec_time, code, seq_id)
         values ((select submit_time from outgo_submit where outgo_submit.id = #{id}),
                 (select user_id from outgo_submit where outgo_submit.id = #{id}),
@@ -87,12 +87,16 @@
         </where>
     </select>
     <select id="getOutgoingSubmit" resultType="com.jig.entity.OutgoSubmit">
-        select * from outgo_submit_entity_view
+        select *
+        from outgo_submit_entity_view
     </select>
     <select id="getPosition" resultType="com.jig.entity.Position">
         select jig_cabinet_id, location_id, bin, status
         from jig_position
         where code = #{code}
           and seq_id = #{seq_id}
+    </select>
+    <select id="getOutgoingJig" resultType="com.jig.entity.OutgoingJig">
+        select * from outgoing_jig_entity_view
     </select>
 </mapper>

@@ -1,9 +1,6 @@
 package com.jig.controller;
 
-import com.jig.entity.DemoEntity;
-import com.jig.entity.JigDefinition;
-import com.jig.entity.OutgoSubmit;
-import com.jig.entity.Position;
+import com.jig.entity.*;
 import com.jig.service.JigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -90,10 +87,19 @@ public class JigJson {
      * @param rec_id 记录人id
      * @return
      */
-    @RequestMapping("outgoing_jig")
-    public String outgoingJig(@RequestParam(value = "id") String id, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "rec_id") String rec_id) {
-        jigService.outgoingJig(id,code,seq_id,rec_id);
+    @RequestMapping("outgo_jig")
+    public String outgoJig(@RequestParam(value = "id") String id, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "rec_id") String rec_id) {
+        jigService.outgoJig(id,code,seq_id,rec_id);
         jigService.deleteOutgoSubmit(id);
         return "success";
+    }
+
+    /**
+     *
+     * @return 需要入库的工夹具信息
+     */
+    @RequestMapping("get_outgoing_jig")
+    public List<OutgoingJig> getOutgoingJig(){
+        return  jigService.getOutgoingJig();
     }
 }

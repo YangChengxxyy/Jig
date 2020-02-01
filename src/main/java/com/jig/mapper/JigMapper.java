@@ -2,6 +2,7 @@ package com.jig.mapper;
 
 import com.jig.entity.JigDefinition;
 import com.jig.entity.OutgoSubmit;
+import com.jig.entity.OutgoingJig;
 import com.jig.entity.Position;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -61,7 +62,9 @@ public interface JigMapper {
 
     Position getPosition(String code, String seq_id);
 
-    void outgoingJig(String id, String code, String seq_id, String rec_id);
+    void outgoJig(String id, String code, String seq_id, String rec_id);
 
     void deleteOutgoSubmit(String id);
+
+    List<OutgoingJig> getOutgoingJig();
 }
