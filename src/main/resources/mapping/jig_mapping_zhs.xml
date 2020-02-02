@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jig.mapper.JigMapper_zhs">
+    <insert id="addShoplist">
+        insert into purchase_income_submit(submit_id,code,count,submit_time,status,production_line_id,bill_no)
+        values (#{submit_id},#{code},#{count},#{submit_time},0,
+        select id from production_line where name = #{production_line_id},
+        #{bill_no})
+
+    </insert>
+
+</mapper>
