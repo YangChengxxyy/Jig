@@ -24,7 +24,7 @@ public interface JigMapper {
      * @param pageNumber 页码
      * @return 查询到的对应页数的List对象
      */
-    List<JigDefinition> searchJigDefinition(String code, String name, String workcell, String family,String userFor, int pageNumber);
+    List<JigDefinition> searchJigDefinition(String code, String name, String workcell, String family, String userFor, int pageNumber);
 
     /**
      * 通过Mybatis的方法来实现查询
@@ -58,13 +58,60 @@ public interface JigMapper {
      */
     List<JigDefinition> searchAllJigDefinition(String code, String name, String workcell, String family, String userFor);
 
-    List<OutgoSubmit> getOutgoingSubmit();
+    /**
+     * 获取出库申请集合
+     *
+     * @return 出库申请集合
+     */
+    List<OutgoSubmit> getOutgoSubmit();
 
+    /**
+     * 获取工夹具位置
+     *
+     * @param code   工夹具代码
+     * @param seq_id 工夹具序列号
+     * @return Position对象
+     */
     Position getPosition(String code, String seq_id);
 
+    /**
+     * 工夹具出库
+     *
+     * @param id     outgo_submit表id
+     * @param code   工夹具代码
+     * @param seq_id 工夹具序列号
+     * @param rec_id 记录人id
+     */
     void outgoJig(String id, String code, String seq_id, String rec_id);
 
+    /**
+     * 删除对应记录
+     *
+     * @param id outgo_submit表id
+     */
     void deleteOutgoSubmit(String id);
 
+    /**
+     * 获得已出库工夹具OutgoingJig对象
+     *
+     * @return 已出库工夹具OutgoingJig对象
+     */
     List<OutgoingJig> getOutgoingJig();
+
+    /**
+     * 工夹具入库
+     *
+     * @param id     outgoing_jig表id
+     * @param code   工夹具代码
+     * @param seq_id 工夹具序列号
+     * @param rec_id 记录人id
+     */
+    void returnJig(String id, String code, String seq_id, String rec_id);
+
+    /**
+     * 删除对应的记录
+     *
+     * @param id outgoing_jig表id
+     */
+    void deleteOutgoingJig(String id);
 }

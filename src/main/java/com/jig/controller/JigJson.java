@@ -35,6 +35,7 @@ public class JigJson {
     }
 
     /**
+     * 搜索工夹具
      * @param code       工夹具代码
      * @param name       工夹具名字
      * @param workcell   工作部门
@@ -54,7 +55,8 @@ public class JigJson {
     }
 
     /**
-     * @param id 数据库id
+     * 获取单个JigDefinition对象
+     * @param id jig_definition表id
      * @return 查询到的JigDefinition对象
      */
     @RequestMapping("get_simple_jig_definition")
@@ -63,6 +65,7 @@ public class JigJson {
     }
 
     /**
+     * 获取出库申请
      * @return 出库申请
      */
     @RequestMapping("get_outgoing_submit")
@@ -71,6 +74,7 @@ public class JigJson {
     }
 
     /**
+     * 过去工夹具位置
      * @param code   工夹具代码
      * @param seq_id 工夹具序列号
      * @return 位置
@@ -81,25 +85,39 @@ public class JigJson {
     }
 
     /**
-     * @param id     出库申请id
+     * 工夹具出库
+     * @param id     outgo_submit表id
      * @param code   工夹具代码
      * @param seq_id 工夹具序列号
      * @param rec_id 记录人id
-     * @return
+     * @return 字符串；出库成功
      */
     @RequestMapping("outgo_jig")
     public String outgoJig(@RequestParam(value = "id") String id, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "rec_id") String rec_id) {
-        jigService.outgoJig(id,code,seq_id,rec_id);
-        jigService.deleteOutgoSubmit(id);
-        return "success";
+        jigService.outgoJig(id, code, seq_id, rec_id);
+        return "出库成功！";
     }
 
     /**
-     *
+     * 获取需要入库的工夹具信息
      * @return 需要入库的工夹具信息
      */
     @RequestMapping("get_outgoing_jig")
-    public List<OutgoingJig> getOutgoingJig(){
-        return  jigService.getOutgoingJig();
+    public List<OutgoingJig> getOutgoingJig() {
+        return jigService.getOutgoingJig();
+    }
+
+    /**
+     * 工夹具入库
+     * @param code   工夹具代码
+     * @param seq_id 工夹具序列号
+     * @param rec_id 记录人id
+     * @param id     outgoing_jig表id
+     * @return 字符串；入库成功
+     */
+    @RequestMapping("return_jig")
+    public String returnJig(@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "rec_id") String rec_id, @RequestParam(value = "id") String id) {
+        jigService.returnJig(id, code, seq_id, rec_id);
+        return "入库成功";
     }
 }

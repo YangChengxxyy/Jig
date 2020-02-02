@@ -14,9 +14,24 @@
         where code = #{code}
           and seq_id = #{seq_id}
     </insert>
+    <update id="returnJig">
+        update jig_position
+        set status = 1
+        where code = #{code}
+          and seq_id = #{seq_id};
+        insert into outgo_income_history(submit_time, user_id, status, rec_id, rec_time, code, seq_id)
+        values ((select submit_time from outgoing_jig where outgoing_jig.id = #{id}),
+                (select user_id from outgoing_jig where outgoing_jig.id = #{id}),
+                1, #{rec_id}, now(), #{code}, #{seq_id});
+    </update>
     <delete id="deleteOutgoSubmit">
         delete
         from outgo_submit
+        where id = #{id}
+    </delete>
+    <delete id="deleteOutgoingJig">
+        delete
+        from outgoing_jig
         where id = #{id}
     </delete>
     <select id="searchJigDefinition" resultType="com.jig.entity.JigDefinition">
@@ -86,7 +101,7 @@
             </if>
         </where>
     </select>
-    <select id="getOutgoingSubmit" resultType="com.jig.entity.OutgoSubmit">
+    <select id="getOutgoSubmit" resultType="com.jig.entity.OutgoSubmit">
         select *
         from outgo_submit_entity_view
     </select>
@@ -97,6 +112,7 @@
           and seq_id = #{seq_id}
     </select>
     <select id="getOutgoingJig" resultType="com.jig.entity.OutgoingJig">
-        select * from outgoing_jig_entity_view
+        select *
+        from outgoing_jig_entity_view
     </select>
 </mapper>
