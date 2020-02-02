@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <script src="js/jquery-3.4.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/vue.js"></script>
     <script>
         $(function () {
             $(".nav li").on('click',function (e) {
@@ -164,127 +165,111 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>BO19070500000002</td>
-                                        <td>张三</td>
-                                        <td>BLKA10-L2</td>
-                                        <td>EF0789</td>
-                                        <td>2019-12-31 12:39</td>
-                                        <td>初审通过</td>
-                                        <td>
-                                            <button class="btn btn-primary" data-toggle="modal"
-                                                    data-target="#myshoplist_detail">查看
-                                            </button>
-                                            <div>
-                                                <div class="modal fade" id="myshoplist_detail" tabindex="-1"
-                                                     role="dialog"
-                                                     aria-labelledby="chukuLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <button type="button" class="close" data-dismiss="modal"
-                                                                        aria-hidden="true">&times;
-                                                                </button>
-                                                                <h4 class="modal-title" id="myModalLabel">我的采购单</h4>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <form role="form" class="form-horizontal">
-                                                                    <div class="form-group">
-                                                                        <label for="shop_list_id"
-                                                                               class="col-sm-3 control-label">采购单据号</label>
-                                                                        <div class="col-sm-8">
-                                                                            <input type="text" class="form-control"
-                                                                                   id="shop_list_id" value="BO19070500000002">
-                                                                        </div>
-                                                                        <div class="col-sm-1"></div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label for="shop_man_name"
-                                                                               class="col-sm-3 control-label">采购人</label>
-                                                                        <div class="col-sm-8">
-                                                                            <input type="text" class="form-control"
-                                                                                   id="shop_man_name" value="张三">
-                                                                        </div>
-                                                                        <div class="col-sm-1"></div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label for="production_id"
-                                                                               class="col-sm-3 control-label">产线id</label>
-                                                                        <div class="col-sm-8">
-                                                                            <input type="text" class="form-control"
-                                                                                   id="production_id" value="BLKA10-L2">
-                                                                        </div>
-                                                                        <div class="col-sm-1"></div>
-                                                                    </div>
-                                                                    <div class="form-group row">
-                                                                        <label for="seq_code"
-                                                                               class="col-sm-3 control-label">工夹具代码</label>
-                                                                        <div class="col-sm-3">
-                                                                            <input type="text" class="form-control"
-                                                                                   id="seq_code" value="EF0789">
-                                                                        </div>
-                                                                        <label for="shop_number"
-                                                                               class="col-sm-3 control-label">采购数量</label>
-                                                                        <div class="col-sm-2">
-                                                                            <input type="text" class="form-control"
-                                                                                   id="shop_number" value="50">
-                                                                        </div>
-                                                                        <div class="col-sm-1"></div>
-                                                                    </div>
-
-                                                                    <div class="form-group">
-                                                                        <label for="shop_applytime"
-                                                                               class="col-sm-3 control-label">申请时间</label>
-                                                                        <div class="col-sm-8">
-                                                                            <input type="text" class="form-control"
-                                                                                   id="shop_applytime"
-                                                                                   value="2020-1-4 18:25" readonly>
-                                                                        </div>
-                                                                        <div class="col-sm-1"></div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label for="shop_applytime"
-                                                                               class="col-sm-3 control-label">审批状态</label>
-                                                                        <div class="col-sm-8">
-                                                                            <input type="text"
-                                                                                   class="form-control warning"
-                                                                                   value="初审通过" readonly>
-                                                                        </div>
-                                                                        <div class="col-sm-1"></div>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                            <div class="text-center">
-                                                                <button type="button" class="btn btn-success">审批&nbsp;&nbsp;&nbsp;通过</button>
-                                                                <button type="button" class="btn btn-danger">审批不通过
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-default"
-                                                                        data-dismiss="modal">关闭
-                                                                </button>
-                                                            </div>
-                                                        </div><!-- /.modal-content -->
-                                                    </div><!-- /.modal -->
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>BO19070500000001</td>
-                                        <td>李四</td>
-                                        <td>BLKA10-L2</td>
-                                        <td>EF2184</td>
-                                        <td>2020-01-03 09:10</td>
-                                        <td>初审通过</td>
-                                        <td>
-                                            <button class="btn btn-primary">查看</button>
-                                        </td>
-                                    </tr>
+                                        <tr v-for="item in purchaseCheck_list">
+                                            <td>{{item.bill_no}}</td>
+                                            <td>{{item.name}}</td>
+                                            <td>{{item.production_line_id}}</td>
+                                            <td>
+                                                <label>
+                                                    <select class="btn btn-default">
+                                                        <option  v-for="c in item.code.split('|')">{{c}}</option>
+                                                    </select>
+                                                </label>
+                                            </td>
+                                            <td>{{item.submit_time}}</td>
+                                            <td v-if="item.status==0">初审未通过</td>
+                                            <td v-if="item.status==1">初审通过</td>
+                                            <td v-if="item.status==2">终审未通过</td>
+                                            <td v-if="item.status==3">终审通过</td>
+                                            <td>
+                                                <button class="btn btn-primary" data-toggle="modal"
+                                                        data-target="#myshoplist_detail" @click="get_purchaselist_detail(item.id)">查看
+                                                </button>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
-
+                        </div>
+                        <div>
+                            <div class="modal fade" id="myshoplist_detail" tabindex="-1"
+                                 role="dialog"
+                                 aria-labelledby="chukuLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-hidden="true">&times;
+                                            </button>
+                                            <h4 class="modal-title" id="myModalLabel">我的采购单</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form role="form" class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">采购单据号</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{purchaselist.bill_no}}</div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">采购人</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{purchaselist.submit_name}}</div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">产线id</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{purchaselist.production_line_id}}</div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                                <div v-for="n in length">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 control-label">工夹具代码</label>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-control">{{purchaselist.code[n-1}}</div>
+                                                        </div>
+                                                        <label class="col-sm-3 control-label">采购数量</label>
+                                                        <div class="col-sm-2">
+                                                            <div class="form-control">{{purchaselist.number[n-1]}}</div>
+                                                        </div>
+                                                        <div class="col-sm-1"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">申请时间</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{purchaselist.submit_time}}</div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">审批状态</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text"
+                                                               class="form-control warning"
+                                                               value="初审通过" readonly>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="button" class="btn btn-success">审批&nbsp;&nbsp;&nbsp;通过</button>
+                                            <button type="button" class="btn btn-danger">审批不通过
+                                            </button>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default"
+                                                    data-dismiss="modal">关闭
+                                            </button>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal -->
+                            </div>
                         </div>
                         <div id="historyShop" class="tab-pane fade">
                             <!--历史采购记录-->
@@ -672,5 +657,6 @@
         </div>
     </div>
 </div>
+<script src="js/manager.js"></script>
 </body>
 </html>

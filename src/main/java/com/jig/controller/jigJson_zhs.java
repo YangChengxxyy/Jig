@@ -1,6 +1,7 @@
 package com.jig.controller;
 
 import com.jig.entity.DemoEntity;
+import com.jig.entity.PurchaseIncomeSubmit;
 import com.jig.service.JigService_zhs;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,16 @@ public class jigJson_zhs {
             return "添加失败！";
         }
         return "添加成功！";
+    }
+
+    @RequestMapping(value = "get_manager_purchaseCheck_list",method = {RequestMethod.GET,RequestMethod.POST})
+    public List<PurchaseIncomeSubmit> getManagerPurchaseCheckList(@RequestParam(value = "user_id") String user_id){
+        return jigService.get_manager_purchaseCheck_list(user_id);
+    }
+
+    @RequestMapping(value = "get_manager_purchase_detail",method = {RequestMethod.GET,RequestMethod.POST})
+    public PurchaseIncomeSubmit get_manager_purchase_detail(@RequestParam(value = "id") String id){
+        return jigService.get_manager_purchase_detail(id);
     }
 
 }

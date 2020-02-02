@@ -16,4 +16,9 @@ public class JigWeb_zhs {
     public String showHighMain(){
         return "high";
     }
+
+    @RequestMapping(value = "show_manager_main",method = {RequestMethod.GET,RequestMethod.POST})
+    public String showManagerMain(){
+        return "manager";
+    }
 }

@@ -3,6 +3,7 @@ package com.jig.entity;
 public class PurchaseIncomeSubmit {
     private String id;
     private String submit_id;
+    private String name;//采购人姓名
     private String code;//多个用 | 分开
     private String count;//多个用 | 分开
     private String first_time;//初审时间
@@ -14,6 +15,7 @@ public class PurchaseIncomeSubmit {
     private String status;//审核状态 ,0初审未通过 ,1初审通过,2 终审未通过, 3终审通过
     private int production_line_id;//产线id
     private String bill_no;//单据号
+    private String submit_time;
     private String tool_photo_url;//工夹具照片路径
 
     public String getId() {
@@ -30,6 +32,14 @@ public class PurchaseIncomeSubmit {
 
     public void setSubmit_id(String submit_id) {
         this.submit_id = submit_id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCode() {
@@ -118,6 +128,14 @@ public class PurchaseIncomeSubmit {
 
     public void setBill_no(String bill_no) {
         this.bill_no = bill_no;
+    }
+
+    public String getSubmit_time() {
+        return submit_time;
+    }
+
+    public void setSubmit_time(String submit_time) {
+        this.submit_time = submit_time;
     }
 
     public String getTool_photo_url() {

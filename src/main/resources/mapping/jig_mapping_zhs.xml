@@ -8,5 +8,11 @@
         #{bill_no})
 
     </insert>
-
+    <select id="get_manager_purchaseCheck_list" resultType="com.jig.entity.PurchaseIncomeSubmit">
+        select * from purchase_income_submit p inner join user u on p.submit_id = u.id
+        where p.status = 0 or p.status = 1;
+    </select>
+    <select id="get_manager_purchase_detail" resultType="com.jig.entity.PurchaseIncomeSubmit">
+        select * from purchase_income_submit where id = #{id}
+    </select>
 </mapper>
