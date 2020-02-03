@@ -4,9 +4,8 @@
     <insert id="addShoplist">
         insert into purchase_income_submit(submit_id,code,count,submit_time,status,production_line_id,bill_no)
         values (#{submit_id},#{code},#{count},#{submit_time},0,
-        select id from production_line where name = #{production_line_id},
+        (select id from production_line where name = #{production_line_id}),
         #{bill_no})
-
     </insert>
 
 </mapper>

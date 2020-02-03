@@ -14,6 +14,10 @@
         where code = #{code}
           and seq_id = #{seq_id}
     </insert>
+    <insert id="addShoplist">
+        insert into purchase_income_submit(submit_id, code, count, submit_time, status, production_line_id, bill_no)
+        values (#{submit_id}, #{code}, #{number}, now(), 0, #{production_line_id}, #{bill_no});
+    </insert>
     <update id="returnJig">
         update jig_position
         set status = 1
@@ -114,5 +118,21 @@
     <select id="getOutgoingJig" resultType="com.jig.entity.OutgoingJig">
         select *
         from outgoing_jig_entity_view
+    </select>
+    <select id="getProductionLineList" resultType="com.jig.entity.ProductionLine">
+        select *
+        from production_line;
+    </select>
+    <select id="getCodeList" resultType="java.lang.String">
+        select code
+        from jig_definition;
+    </select>
+    <select id="getPurchaseIncomeSubmitList" resultType="com.jig.entity.PurchaseIncomeSubmit">
+        select purchase_income_submit.*,production_line.name production_line_name,user.name submit_name
+        from purchase_income_submit,
+             user,
+             production_line
+        where user.id = purchase_income_submit.submit_id
+          and purchase_income_submit.production_line_id = production_line.id
     </select>
 </mapper>

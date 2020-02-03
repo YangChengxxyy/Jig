@@ -32,7 +32,9 @@
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="userMenu">
-            <li role="presentation" class="dropdown-header" id="user" th:inline="text">欢迎您，[[${session.get('user').getName()}]]！</li>
+            <li role="presentation" class="dropdown-header" id="user" th:inline="text">
+                欢迎您，[[${session.get('user').getName()}]]！
+            </li>
             <input style="display: none" th:value="${session.get('user').getId()}" id="id">
             <li role="presentation">
                 <a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-user"></span>个人信息</a>
@@ -308,7 +310,8 @@
                                         {{item.position}}
                                     </td>
                                     <td>
-                                        <button class="btn btn-primary" data-toggle="modal" data-target="#ruku" @click="changeCheck(item.user_id,item.code,item.position,item.id)">入库
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#ruku"
+                                                @click="changeCheck(item.user_id,item.code,item.position,item.id)">入库
                                         </button>
                                     </td>
                                 </tr>
@@ -332,7 +335,8 @@
                                                     <div class="col-sm-6">
                                                         <div class="input-group">
                                                             <input type="text" class="form-control"
-                                                                   id="no2" v-model.trim="check_user_id" @change="getUsername">
+                                                                   id="no2" v-model.trim="check_user_id"
+                                                                   @change="getUsername">
                                                             <span class="input-group-addon"><span
                                                                     class="glyphicon glyphicon-qrcode"></span></span>
                                                         </div>
@@ -351,7 +355,8 @@
                                                     <div class="col-sm-6">
                                                         <div class="input-group">
                                                             <input type="text" class="form-control"
-                                                                   id="seq_id2" v-model.trim="code_seq_id" @change="getPosition">
+                                                                   id="seq_id2" v-model.trim="code_seq_id"
+                                                                   @change="getPosition">
                                                             <span class="input-group-addon"><span
                                                                     class="glyphicon glyphicon-qrcode"></span></span>
                                                         </div>
@@ -385,7 +390,10 @@
                                             <button type="button" class="btn btn-default"
                                                     data-dismiss="modal">关闭
                                             </button>
-                                            <button type="button" class="btn btn-primary" :class="{'disabled': !(user_id != null && check1 && check2 && check3)}" @click="returnJig">提交更改</button>
+                                            <button type="button" class="btn btn-primary"
+                                                    :class="{'disabled': !(user_id != null && check1 && check2 && check3)}"
+                                                    @click="returnJig">提交更改
+                                            </button>
                                         </div>
                                     </div><!-- /.modal-content -->
                                 </div><!-- /.modal -->
@@ -648,6 +656,7 @@
                                 </table>
                             </div>
                             <div class="text-center row" v-if="max_page_number != 0">
+                                <div v-if="max_page_number >5">
                                 <ul v-if="now_page_number <= 3 && now_page_number < max_page_number-1"
                                     class="pagination">
                                     <li :class="havePrevious"
@@ -706,6 +715,19 @@
                                         @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>
                                     </li>
                                 </ul>
+                                </div>
+                                <div v-else>
+                                    <ul class="pagination">
+                                        <li :class="havePrevious"
+                                            @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
+                                            <a>&laquo;</a></li>
+                                        <li v-for="n in max_page_number" :class="{'active': n == now_page_number }" @click="turn_page(n)"><a>{{n}}</a></li>
+                                        <li :class="haveNext"
+                                            @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)">
+                                            <a>&raquo;</a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                             <div class="modal fade" id="check" tabindex="-1" role="dialog"
                                  aria-labelledby="checkLabel" aria-hidden="true">
@@ -845,5 +867,5 @@
     </div>
 </div>
 </body>
-<script src="/js/naive.js"></script>
+<script src="/js/naive_vue.js"></script>
 </html>

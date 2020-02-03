@@ -1,10 +1,8 @@
 package com.jig.mapper;
 
-import com.jig.entity.JigDefinition;
-import com.jig.entity.OutgoSubmit;
-import com.jig.entity.OutgoingJig;
-import com.jig.entity.Position;
+import com.jig.entity.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,7 +12,7 @@ import java.util.List;
 public interface JigMapper {
 
     /**
-     * 通过Mybatis的方法来实现查询到对应页数的工夹具List
+     * 获取查询到的对应页数的List对象
      *
      * @param code       工夹具代码
      * @param name       工夹具名字
@@ -27,7 +25,7 @@ public interface JigMapper {
     List<JigDefinition> searchJigDefinition(String code, String name, String workcell, String family, String userFor, int pageNumber);
 
     /**
-     * 通过Mybatis的方法来实现查询
+     * 获取查询到的结果总页数
      *
      * @param code     工夹具代码
      * @param name     工夹具名字
@@ -39,7 +37,7 @@ public interface JigMapper {
     int searchJigDefinitionPage(String code, String name, String workcell, String family, String userFor);
 
     /**
-     * 通过Mybatis的方法来实现查询
+     * 获取单个JigDefinition对象
      *
      * @param id id
      * @return 单个JigDefinition对象
@@ -114,4 +112,36 @@ public interface JigMapper {
      * @param id outgoing_jig表id
      */
     void deleteOutgoingJig(String id);
+
+    /**
+     * 添加采购入库申请
+     *
+     * @param submit_id          申请人id
+     * @param bill_no            订单号
+     * @param production_line_id 产线id
+     * @param code               工夹具代码
+     * @param number             数量
+     */
+    void addShoplist(@Param("submit_id") String submit_id, @Param("bill_no") String bill_no, @Param("production_line_id") String production_line_id, @Param("code") String code, @Param("number") String number);
+
+    /**
+     * 获取产线列表
+     *
+     * @return 产线列表
+     */
+    List<ProductionLine> getProductionLineList();
+
+    /**
+     * 获取工夹具代码列表
+     *
+     * @return 工夹具代码列表
+     */
+    List<String> getCodeList();
+
+    /**
+     * 获取采购入库申请列表
+     *
+     * @return 采购入库申请列表
+     */
+    List<PurchaseIncomeSubmit> getPurchaseIncomeSubmitList();
 }

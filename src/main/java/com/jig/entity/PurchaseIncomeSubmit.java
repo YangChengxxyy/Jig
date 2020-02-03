@@ -1,8 +1,11 @@
 package com.jig.entity;
 
+import org.springframework.boot.builder.SpringApplicationBuilder;
+
 public class PurchaseIncomeSubmit {
     private String id;
     private String submit_id;
+    private String submit_name;
     private String code;//多个用 | 分开
     private String count;//多个用 | 分开
     private String first_time;//初审时间
@@ -13,6 +16,7 @@ public class PurchaseIncomeSubmit {
     private String final_acceptor;//终审人
     private String status;//审核状态 ,0初审未通过 ,1初审通过,2 终审未通过, 3终审通过
     private int production_line_id;//产线id
+    private String production_line_name;
     private String bill_no;//单据号
     private String tool_photo_url;//工夹具照片路径
 
@@ -30,6 +34,14 @@ public class PurchaseIncomeSubmit {
 
     public void setSubmit_id(String submit_id) {
         this.submit_id = submit_id;
+    }
+
+    public String getSubmit_name() {
+        return submit_name;
+    }
+
+    public void setSubmit_name(String submit_name) {
+        this.submit_name = submit_name;
     }
 
     public String getCode() {
@@ -110,6 +122,14 @@ public class PurchaseIncomeSubmit {
 
     public void setProduction_line_id(int production_line_id) {
         this.production_line_id = production_line_id;
+    }
+
+    public String getProduction_line_name() {
+        return production_line_name;
+    }
+
+    public void setProduction_line_name(String production_line_name) {
+        this.production_line_name = production_line_name;
     }
 
     public String getBill_no() {

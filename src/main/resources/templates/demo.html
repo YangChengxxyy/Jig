@@ -102,7 +102,8 @@
                             <li><a>{{max_page_number}}</a></li>
                             <li :class="haveNext"><a>&raquo;</a></li>
                         </ul>
-                        <ul v-else-if="now_page_number > 3 && now_page_number+1 <= max_page_number-2" class="pagination">
+                        <ul v-else-if="now_page_number > 3 && now_page_number+1 <= max_page_number-2"
+                            class="pagination">
                             <li :class="havePrevious"><a>&laquo;</a></li>
                             <li><a>1</a></li>
                             <li><a>2</a></li>
@@ -120,9 +121,12 @@
                             <li><a>1</a></li>
                             <li><a>2</a></li>
                             <li><a>...</a></li>
-                            <li :class="{'active' : now_page_number == max_page_number-2 }"><a>{{max_page_number-2}}</a></li>
-                            <li :class="{'active' : now_page_number == max_page_number-1 }"><a>{{max_page_number-1}}</a></li>
-                            <li :class="{'active' : now_page_number == max_page_number }"><a>{{max_page_number}}</a></li>
+                            <li :class="{'active' : now_page_number == max_page_number-2 }"><a>{{max_page_number-2}}</a>
+                            </li>
+                            <li :class="{'active' : now_page_number == max_page_number-1 }"><a>{{max_page_number-1}}</a>
+                            </li>
+                            <li :class="{'active' : now_page_number == max_page_number }"><a>{{max_page_number}}</a>
+                            </li>
                             <li :class="haveNext"><a>&raquo;</a></li>
                         </ul>
                     </div>
@@ -133,6 +137,10 @@
             </div>
         </div>
     </div>
+</div>
+<div id="demo2">
+    <input v-model="ggg[n-1]" @change="hhh" v-for="n in l">
+    <button type="button" @click="add"></button>
 </div>
 <script th:inline="javascript">
     // vue代码部分
@@ -185,7 +193,21 @@
             }
         }
     });
-
+    const demmo2Vue = new Vue({
+        el: "#demo2",
+        data: {
+            ggg: [],
+            l: 3
+        },
+        methods: {
+            hhh: function () {
+                console.log(this.ggg);
+            },
+            add: function () {
+                this.l++;
+            }
+        }
+    })
 </script>
 </body>
 </html>

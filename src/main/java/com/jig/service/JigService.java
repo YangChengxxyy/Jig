@@ -1,10 +1,8 @@
 package com.jig.service;
 
-import com.jig.entity.JigDefinition;
-import com.jig.entity.OutgoSubmit;
-import com.jig.entity.OutgoingJig;
-import com.jig.entity.Position;
+import com.jig.entity.*;
 import com.jig.mapper.JigMapper;
+import com.jig.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,5 +53,23 @@ public class JigService {
     public void returnJig(String id, String code, String seq_id, String rec_id) {
         jigMapper.returnJig(id,code,seq_id,rec_id);
         jigMapper.deleteOutgoingJig(id);
+    }
+
+    public void addShoplist(String submit_id, String bill_no, String production_line_id, String[] codes, Integer[] numbers) {
+        String code = StringUtil.combination(codes,"|");
+        String number = StringUtil.combination(numbers,"|");
+        jigMapper.addShoplist(submit_id,bill_no,production_line_id,code,number);
+    }
+
+    public List<ProductionLine> getProductionLineList() {
+        return jigMapper.getProductionLineList();
+    }
+
+    public List<String> getCodeList() {
+        return jigMapper.getCodeList();
+    }
+
+    public List<PurchaseIncomeSubmit> getPurchaseIncomeSubmitList() {
+        return jigMapper.getPurchaseIncomeSubmitList();
     }
 }

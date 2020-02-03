@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>高级用户</title>
@@ -18,15 +18,15 @@
     <script>
         $(function () {
             var dateRange1 = new pickerDateRange('date1', {
-                stopToday : false,
-                isTodayValid : true,
+                stopToday: false,
+                isTodayValid: true,
                 startDate: '2020-2-01',
                 endDate: '2020-2-02',
-                needCompare : false,
-                defaultText : ' 到 ',
-                autoSubmit : false,
-                inputTrigger : 'input_trigger1',
-                theme : 'ta'
+                needCompare: false,
+                defaultText: ' 到 ',
+                autoSubmit: false,
+                inputTrigger: 'input_trigger1',
+                theme: 'ta'
             });
 
             var seq_number = 0;
@@ -39,15 +39,15 @@
                 $(".nav li[href='" + href + "']").addClass("active");
             })
 
-            $("#bt_addshoplist").click(function () {
-                var aData = new Date();
-                var submit_time =
-                    aData.getFullYear() + "-" + ((aData.getMonth() + 1)>=10?aData.getMonth()+1:"0"+aData.getMonth()+1) + "-" +
-                    ((aData.getDate())>=10?aData.getDate():"0"+aData.getDate()) + " " +
-                    ((aData.getHours())>=10?aData.getHours():"0"+aData.getHours()) +":"+
-                    ((aData.getMinutes())>=10?aData.getMinutes():"0"+aData.getMinutes());
-                $("#add_submittime").val(submit_time);
-            })
+            // $("#bt_addshoplist").click(function () {
+            //     var aData = new Date();
+            //     var submit_time =
+            //         aData.getFullYear() + "-" + ((aData.getMonth() + 1)>=10?aData.getMonth()+1:"0"+aData.getMonth()+1) + "-" +
+            //         ((aData.getDate())>=10?aData.getDate():"0"+aData.getDate()) + " " +
+            //         ((aData.getHours())>=10?aData.getHours():"0"+aData.getHours()) +":"+
+            //         ((aData.getMinutes())>=10?aData.getMinutes():"0"+aData.getMinutes());
+            //     $("#add_submittime").val(submit_time);
+            // })
             /*$("#add_seq").on('click', function (e) {
                 seq_number++;
                 $("#add_seq_block").append($("<div class='addblock'><div class='row form-group' id='add_seq_block'" + seq_number +
@@ -55,12 +55,10 @@
                     "<input type='text' class='form-control' name='add_seq_code" + seq_number + "'></div>" +
                     "<label for='shop_number' class='col-sm-3 control-label'>采购数量</label> <div class='col-sm-2'>" +
                     "<input type='text' class='form-control' name='add_shop_number" + seq_number + "'> </div> <div class='col-sm-1'></div></div></div>"))
-
                 if (seq_number >= 3) {
                     $("#add_seq").attr("disabled", "disabled");
                 }
             })
-
             $("#close_add_modal").on('click', function (e) {
                 seq_number = 0;
                 $(".addblock").remove();
@@ -68,13 +66,13 @@
 
 
             $('#bt_sideleft').click(function () {
-                if(navis_side==0) {
+                if (navis_side == 0) {
                     $('#navbar_left').hide(1000);
                     setTimeout(function () {
                         $('#navbar_right').attr('class', 'col-lg-12 column');
-                    },1000);
+                    }, 1000);
                     navis_side = 1;
-                }else{
+                } else {
                     $('#navbar_left').show(1000);
                     $('#navbar_right').attr('class', 'col-lg-9 column');
                     navis_side = 0;
@@ -92,7 +90,8 @@
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle show pull-left" href="#sidebar" id="bt_sideleft">
-                <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
+                    class="icon-bar"></span><span class="icon-bar"></span>
             </button>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
@@ -102,7 +101,8 @@
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                       aria-expanded="false"><span class="glyphicon glyphicon-user"></span>&nbsp;小张同学&nbsp;<span class="caret"></span></a>
+                       aria-expanded="false"><span class="glyphicon glyphicon-user"></span>&nbsp;小张同学&nbsp;<span
+                            class="caret"></span></a>
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
                         <li role="presentation">
                             <a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-user"></span>个人信息</a>
@@ -161,7 +161,7 @@
 <div class="container-fluid all">
     <div class="row clearfix">
         <div class="col-lg-3 column" id="navbar_left">
-            <div class="panel panel-default" >
+            <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">功能菜单</h4>
                 </div>
@@ -244,136 +244,8 @@
                                 <div class="col-sm-2">
                                     <!--添加采购单按钮 -->
                                     <button type="button" class="btn btn-primary" data-toggle="modal"
-                                            data-target="#add_myshoplist" @click="changeSubmitTime" id="bt_addshoplist">添加采购单
+                                            data-target="#add_myshoplist" id="bt_addshoplist">添加采购单
                                     </button>
-                                    <div>
-                                        <div class="modal fade" id="add_myshoplist" tabindex="-1" role="dialog"
-                                             aria-labelledby="myModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                                aria-hidden="true">&times;
-                                                        </button>
-                                                        <h4 class="modal-title">添加采购单</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form role="form" class="form-horizontal">
-                                                            <div class="form-group">
-                                                                <label for="add_shop_list_id"
-                                                                       class="col-sm-3 control-label">采购单据号</label>
-                                                                <div class="col-sm-8">
-                                                                    <input type="text" class="form-control"
-                                                                           id="add_shop_list_id" v-model="bill_no">
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="add_shop_submit_name"
-                                                                       class="col-sm-3 control-label">采购人</label>
-                                                                <div class="col-sm-8">
-                                                                    <input type="text" class="form-control"
-                                                                           id="add_shop_submit_name" v-model="submit_name">
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="add_production_id"
-                                                                       class="col-sm-3 control-label">产线id</label>
-                                                                <div class="col-sm-8">
-                                                                    <input type="text" class="form-control"
-                                                                           id="add_production_id" v-model="production_line_id">
-                                                                </div>
-                                                            </div>
-                                                            <!--<div class="form-group">
-                                                                <div class="col-sm-4 col-sm-offset-8">
-                                                                    <button type="button" class="btn btn-success"
-                                                                            id="add_seq">添加工夹具
-                                                                    </button>
-                                                                </div>
-                                                            </div>-->
-                                                            <div id="add_seq_block">
-                                                                <div class="row form-group">
-                                                                    <label for="add_seq_code1"
-                                                                           class="col-sm-3 control-label">工夹具代码</label>
-                                                                    <div class="col-sm-3">
-                                                                        <input type="text" class="form-control"
-                                                                               id="add_seq_code1" v-model="code1">
-                                                                    </div>
-                                                                    <label for="add_shop_number1"
-                                                                           class="col-sm-3 control-label">采购数量</label>
-                                                                    <div class="col-sm-2">
-                                                                        <input type="text" class="form-control"
-                                                                               id="add_shop_number1" v-model="number1">
-                                                                    </div>
-                                                                    <div class="col-sm-1"></div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row form-group">
-                                                                <label for="add_seq_code2"
-                                                                       class="col-sm-3 control-label">工夹具代码</label>
-                                                                <div class="col-sm-3">
-                                                                    <input type="text" class="form-control"
-                                                                           id="add_seq_code2" v-model="code2">
-                                                                </div>
-                                                                <label for="add_shop_number2"
-                                                                       class="col-sm-3 control-label">采购数量</label>
-                                                                <div class="col-sm-2">
-                                                                    <input type="text" class="form-control"
-                                                                           id="add_shop_number2" v-model="number2">
-                                                                </div>
-                                                                <div class="col-sm-1"></div>
-                                                            </div>
-                                                            <div class="row form-group">
-                                                                <label for="add_seq_code3"
-                                                                       class="col-sm-3 control-label">工夹具代码</label>
-                                                                <div class="col-sm-3">
-                                                                    <input type="text" class="form-control"
-                                                                           id="add_seq_code3" v-model="code3">
-                                                                </div>
-                                                                <label for="add_shop_number3"
-                                                                       class="col-sm-3 control-label">采购数量</label>
-                                                                <div class="col-sm-2">
-                                                                    <input type="text" class="form-control"
-                                                                           id="add_shop_number3" v-model="number3">
-                                                                </div>
-                                                                <div class="col-sm-1"></div>
-                                                            </div>
-                                                            <div class="row form-group">
-                                                                <label for="add_seq_code4"
-                                                                       class="col-sm-3 control-label">工夹具代码</label>
-                                                                <div class="col-sm-3">
-                                                                    <input type="text" class="form-control"
-                                                                           id="add_seq_code4" v-model="code4">
-                                                                </div>
-                                                                <label for="add_shop_number4"
-                                                                       class="col-sm-3 control-label">采购数量</label>
-                                                                <div class="col-sm-2">
-                                                                    <input type="text" class="form-control"
-                                                                           id="add_shop_number4" v-model="number4">
-                                                                </div>
-                                                                <div class="col-sm-1"></div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="add_submittime"
-                                                                       class="col-sm-3 control-label">申请时间</label>
-                                                                <div class="col-sm-8">
-                                                                    <input type="text" class="form-control"
-                                                                           id="add_submittime" value="自动获取当前时间" v-model="submit_time"
-                                                                           readonly>
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-default"
-                                                                        data-dismiss="modal" id="close_add_modal">关闭
-                                                                </button>
-                                                                <input type="button" class="btn btn-primary" value="添加" v-on:click="add_shoplist('1215072')">
-
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div><!-- /.modal-content -->
-                                            </div><!-- /.modal -->
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                             <div class="table-responsive">
@@ -382,7 +254,7 @@
                                     <tr>
                                         <th>采购单据号</th>
                                         <th>采购人</th>
-                                        <th>产线id</th>
+                                        <th>产线</th>
                                         <th>工夹具代码</th>
                                         <th>申请时间</th>
                                         <th>状态</th>
@@ -390,116 +262,103 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>BO19072900000018</td>
-                                        <td>张三</td>
-                                        <td>BLKA10-L2</td>
-                                        <td>EF0789</td>
-                                        <td>2019-12-31 12:39</td>
+                                    <tr v-for="item in purchase_income_submit_list" :key="item.id">
+                                        <td>{{item.id}}</td>
+                                        <td>{{item.submit_time}}</td>
+                                        <td>{{item.production_line_name}}</td>
+                                        <td>{{item.code}}</td>
+                                        <td>{{item.submit_time}}</td>
                                         <td>待初审</td>
                                         <td>
                                             <button class="btn btn-primary" data-toggle="modal"
                                                     data-target="#myshoplist_detail">修改
                                             </button>
                                             <button class="btn btn-primary">删除</button>
-                                            <div>
-                                                <div class="modal fade" id="myshoplist_detail" tabindex="-1"
-                                                     role="dialog"
-                                                     aria-labelledby="chukuLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <button type="button" class="close" data-dismiss="modal"
-                                                                        aria-hidden="true">&times;
-                                                                </button>
-                                                                <h4 class="modal-title" id="myModalLabel">我的采购单</h4>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <form role="form" class="form-horizontal">
-                                                                    <div class="form-group">
-                                                                        <label for="shop_list_id"
-                                                                               class="col-sm-3 control-label">采购单据号</label>
-                                                                        <div class="col-sm-8">
-                                                                            <input type="text" class="form-control"
-                                                                                   id="shop_list_id" value="BO19072900000018">
-                                                                        </div>
+                                            <div class="modal fade" id="myshoplist_detail" tabindex="-1"
+                                                 role="dialog"
+                                                 aria-labelledby="chukuLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-hidden="true">&times;
+                                                            </button>
+                                                            <h4 class="modal-title" id="myModalLabel">我的采购单</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form role="form" class="form-horizontal">
+                                                                <div class="form-group">
+                                                                    <label for="shop_list_id"
+                                                                           class="col-sm-3 control-label">采购单据号</label>
+                                                                    <div class="col-sm-8">
+                                                                        <input type="text" class="form-control"
+                                                                               id="shop_list_id"
+                                                                               value="BO19072900000018">
                                                                     </div>
-                                                                    <div class="form-group">
-                                                                        <label for="shop_man_name"
-                                                                               class="col-sm-3 control-label">采购人</label>
-                                                                        <div class="col-sm-8">
-                                                                            <input type="text" class="form-control"
-                                                                                   id="shop_man_name" value="张三">
-                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="shop_man_name"
+                                                                           class="col-sm-3 control-label">采购人</label>
+                                                                    <div class="col-sm-8">
+                                                                        <input type="text" class="form-control"
+                                                                               id="shop_man_name" value="张三">
                                                                     </div>
-                                                                    <div class="form-group">
-                                                                        <label for="production_id"
-                                                                               class="col-sm-3 control-label">产线id</label>
-                                                                        <div class="col-sm-8">
-                                                                            <input type="text" class="form-control"
-                                                                                   id="production_id" value="BLKA10-L2">
-                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="production_id"
+                                                                           class="col-sm-3 control-label">产线id</label>
+                                                                    <div class="col-sm-8">
+                                                                        <input type="text" class="form-control"
+                                                                               id="production_id" value="BLKA10-L2">
                                                                     </div>
-                                                                    <div class="form-group row">
-                                                                        <label for="seq_code"
-                                                                               class="col-sm-3 control-label">工夹具代码</label>
-                                                                        <div class="col-sm-3">
-                                                                            <input type="text" class="form-control"
-                                                                                   id="seq_code" value="1">
-                                                                        </div>
-                                                                        <label for="shop_number"
-                                                                               class="col-sm-3 control-label">采购数量</label>
-                                                                        <div class="col-sm-2">
-                                                                            <input type="text" class="form-control"
-                                                                                   id="shop_number" value="10">
-                                                                        </div>
-                                                                        <div class="col-sm-1"></div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="seq_code"
+                                                                           class="col-sm-3 control-label">工夹具代码</label>
+                                                                    <div class="col-sm-3">
+                                                                        <input type="text" class="form-control"
+                                                                               id="seq_code" value="1">
                                                                     </div>
+                                                                    <label for="shop_number"
+                                                                           class="col-sm-3 control-label">采购数量</label>
+                                                                    <div class="col-sm-2">
+                                                                        <input type="text" class="form-control"
+                                                                               id="shop_number" value="10">
+                                                                    </div>
+                                                                    <div class="col-sm-1"></div>
+                                                                </div>
 
-                                                                    <div class="form-group">
-                                                                        <label for="shop_applytime"
-                                                                               class="col-sm-3 control-label">申请时间</label>
-                                                                        <div class="col-sm-8">
-                                                                            <input type="text" class="form-control"
-                                                                                   id="shop_applytime"
-                                                                                   value="2020-1-4 18:25" readonly>
+                                                                <div class="form-group">
+                                                                    <label for="shop_applytime"
+                                                                           class="col-sm-3 control-label">申请时间</label>
+                                                                    <div class="col-sm-8">
+                                                                        <input type="text" class="form-control"
+                                                                               id="shop_applytime"
+                                                                               value="2020-1-4 18:25" readonly>
 
-                                                                        </div>
                                                                     </div>
-                                                                    <div class="form-group">
-                                                                        <label for="shop_applytime"
-                                                                               class="col-sm-3 control-label">审批状态</label>
-                                                                        <div class="col-sm-8">
-                                                                            <input type="text"
-                                                                                   class="form-control warning"
-                                                                                   value="待初审" readonly>
-                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="shop_applytime"
+                                                                           class="col-sm-3 control-label">审批状态</label>
+                                                                    <div class="col-sm-8">
+                                                                        <input type="text"
+                                                                               class="form-control warning"
+                                                                               value="待初审" readonly>
                                                                     </div>
-                                                                </form>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-default"
-                                                                        data-dismiss="modal">关闭
-                                                                </button>
-                                                                <button type="button" class="btn btn-primary">确认修改
-                                                                </button>
-                                                            </div>
-                                                        </div><!-- /.modal-content -->
-                                                    </div><!-- /.modal -->
-                                                </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default"
+                                                                    data-dismiss="modal">关闭
+                                                            </button>
+                                                            <button type="button" class="btn btn-primary">确认修改
+                                                            </button>
+                                                        </div>
+                                                    </div><!-- /.modal-content -->
+                                                </div><!-- /.modal -->
                                             </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>EF21841264561</td>
-                                        <td>李四</td>
-                                        <td>BLKA10-L2</td>
-                                        <td>EF2184</td>
-                                        <td>2020-01-03 09:10</td>
-                                        <td>初审通过</td>
-                                        <td>
-                                            <button class="btn btn-primary">修改</button>
-                                            <button class="btn btn-primary">删除</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -517,6 +376,90 @@
                                 </ul>
                             </div>
                         </div>
+                        <div class="modal fade" id="add_myshoplist" tabindex="-1" role="dialog"
+                             aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                                aria-hidden="true">&times;
+                                        </button>
+                                        <h4 class="modal-title">添加采购单</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form role="form" class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">采购单据号</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" v-model="bill_no">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">采购人id</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" v-model="submit_id">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">产线</label>
+                                                <div class="col-sm-8">
+                                                    <select class="form-control" v-model="production_line_id">
+                                                        <option v-for="item in production_line_list" :value="item.id">
+                                                            {{item.name}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-8 col-sm-offset-3">
+                                                    <div class="pull-right">
+                                                        <button type="button" class="btn btn-default" @click="clean">
+                                                            清空
+                                                        </button>
+                                                        <button type="button" class="btn btn-success" @click="addMax"
+                                                                :class="{'disabled':max === 4}">
+                                                            添加工夹具
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div v-for="n in max">
+                                                <div class="row form-group">
+                                                    <label class="col-sm-3 control-label">工夹具代码</label>
+                                                    <div class="col-sm-3">
+                                                        <select class="form-control" v-model.trim="code[n-1]">
+                                                            <option v-for="item in code_list" :value="item">{{item}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                    <label class="col-sm-3 control-label">采购数量</label>
+                                                    <div class="col-sm-2">
+                                                        <input type="number" class="form-control"
+                                                               v-model.trim="number[n-1]" @keyup.tab="addMax" min="1"
+                                                               max="100">
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label
+                                                        class="col-sm-3 control-label">申请时间</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" value="自动获取当前时间" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal" id="close_add_modal" @click="closeAdd">关闭
+                                                </button>
+                                                <input type="button" class="btn btn-primary" value="添加"
+                                                       @click="add_shoplist">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal -->
+                        </div>
 
                         <div id="historyShop" class="tab-pane fade">
                             <!--历史采购记录-->
@@ -531,7 +474,7 @@
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control" id="sel_shopman_name">
                                         </div>
-                                        <div class = "col-sm-2">
+                                        <div class="col-sm-2">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -689,7 +632,8 @@
                                                                         <div class="col-sm-1"></div>
                                                                         <label class="col-sm-3 control-label">申请时间</label>
                                                                         <div class="col-sm-6">
-                                                                            <div class="form-control">2019-12-31 12:39</div>
+                                                                            <div class="form-control">2019-12-31 12:39
+                                                                            </div>
                                                                         </div>
                                                                         <div class="col-sm-2"></div>
                                                                     </div>
@@ -770,19 +714,21 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="sel_repair_start_applytime" class="col-sm-2 control-label">起始日期</label>
+                                        <label for="sel_repair_start_applytime"
+                                               class="col-sm-2 control-label">起始日期</label>
                                         <div class="col-sm-3">
                                             <div class='input-group date' id='sel_repair_start_applytime'>
-                                                <input type='text' class="form-control" />
+                                                <input type='text' class="form-control"/>
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                 </span>
                                             </div>
                                         </div>
-                                        <label for="sel_repair_end_applytime" class="col-sm-2 control-label">结束日期</label>
+                                        <label for="sel_repair_end_applytime"
+                                               class="col-sm-2 control-label">结束日期</label>
                                         <div class="col-sm-3">
                                             <div class='input-group date' id='sel_repair_end_applytime'>
-                                                <input type='text' class="form-control" />
+                                                <input type='text' class="form-control"/>
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                 </span>
@@ -825,7 +771,8 @@
                                                 data-target="#history_repair_detail">查看
                                         </button>
                                         <div>
-                                            <div class="modal fade" id="history_repair_detail" tabindex="-1" role="dialog"
+                                            <div class="modal fade" id="history_repair_detail" tabindex="-1"
+                                                 role="dialog"
                                                  aria-labelledby="myModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
@@ -867,7 +814,8 @@
                                                                         <div class="col-sm-1"></div>
                                                                         <label class="col-sm-3 control-label">申请时间</label>
                                                                         <div class="col-sm-6">
-                                                                            <div class="form-control">2019-12-31 12:39</div>
+                                                                            <div class="form-control">2019-12-31 12:39
+                                                                            </div>
                                                                         </div>
                                                                         <div class="col-sm-2"></div>
                                                                     </div>
@@ -987,10 +935,11 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="sel_scrap_start_applytime" class="col-sm-2 control-label">起始日期</label>
+                                        <label for="sel_scrap_start_applytime"
+                                               class="col-sm-2 control-label">起始日期</label>
                                         <div class="col-sm-3">
                                             <div class='input-group date' id='sel_scrap_start_applytime'>
-                                                <input type='text' class="form-control" />
+                                                <input type='text' class="form-control"/>
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                 </span>
@@ -999,7 +948,7 @@
                                         <label for="sel_scrap_end_applytime" class="col-sm-2 control-label">结束日期</label>
                                         <div class="col-sm-3">
                                             <div class='input-group date' id='sel_scrap_end_applytime'>
-                                                <input type='text' class="form-control" />
+                                                <input type='text' class="form-control"/>
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                 </span>
@@ -1219,5 +1168,5 @@
     </div>
 </div>
 </body>
-<script src="js/high.js"></script>
+<script src="js/high_vue.js"></script>
 </html>
