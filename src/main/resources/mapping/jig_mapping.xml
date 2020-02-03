@@ -16,7 +16,7 @@
     </insert>
     <insert id="addShoplist">
         insert into purchase_income_submit(submit_id, code, count, submit_time, status, production_line_id, bill_no)
-        values (#{submit_id}, #{code}, #{number}, now(), 0, #{production_line_id}, #{bill_no});
+        values (#{submit_id}, #{code}, #{count}, now(), 0, #{production_line_id}, #{bill_no});
     </insert>
     <update id="returnJig">
         update jig_position

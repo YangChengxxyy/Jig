@@ -136,15 +136,15 @@ public class JigJson {
      * @param bill_no            订单号
      * @param production_line_id 产线id
      * @param codes              工夹具代码
-     * @param numbers            数量
+     * @param counts             数量
      * @return 添加成功，否则服务器异常
      */
     @RequestMapping(value = "add_shoplist", method = RequestMethod.GET)
     public String addShoplist(@RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "bill_no") String bill_no,
                               @RequestParam(value = "production_line_id") String production_line_id, @RequestParam(value = "code[]") String[] codes,
-                              @RequestParam(value = "number[]") Integer[] numbers) {
+                              @RequestParam(value = "count[]") Integer[] counts) {
         try {
-            jigService.addShoplist(submit_id, bill_no, production_line_id, codes, numbers);
+            jigService.addShoplist(submit_id, bill_no, production_line_id, codes, counts);
         } catch (Exception e) {
             return "服务器异常";
         }

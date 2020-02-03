@@ -23,12 +23,12 @@ var add_myshoplist = new Vue({
         production_line_id: "",
         max: 1,
         code: [],
-        number: [],
+        count: [],
         production_line_list: production_line_list,
         code_list: code_list
     },
     created: function () {
-        const that = this;
+
     },
     methods: {
         addMax: function () {
@@ -37,8 +37,6 @@ var add_myshoplist = new Vue({
             }
         },
         add_shoplist: function () {
-            console.log(this.code);
-            console.log(this.number);
             $.ajax({
                 url: "add_shoplist",
                 data: {
@@ -46,12 +44,13 @@ var add_myshoplist = new Vue({
                     submit_id: this.submit_id,
                     production_line_id: this.production_line_id,
                     code: this.code,
-                    number: this.number
+                    count: this.count
                 },
                 success: function (res) {
                     if (res === "添加成功") {
                         alert(res);
                         $("#add_myshoplist").modal("hide");
+                        show_myshoplist.getData();
                     } else {
                         alert(res);
                     }
@@ -60,28 +59,45 @@ var add_myshoplist = new Vue({
         },
         clean: function () {
             this.code = [];
-            this.number = [];
+            this.count = [];
             this.max = 1;
-        },
-        closeAdd: function () {
-
         }
     }
 });
 //我的采购单数据的显示
 var show_myshoplist = new Vue({
-    el: "myShopList",
+    el: "#myShopList",
     data: {
         purchase_income_submit_list: [],
-        purchase_income_submit: null
+        purchase_income_submit: null,
+        production_line_list: production_line_list,
+        code_list: code_list,
+        change_production_id: "",
+        change_code:[],
+        change_count:[]
     },
     created: function () {
-        var that = this;
-        $.ajax({
-            url: "get_purchase_income_submit_list",
-            success: function (res) {
-                that.purchase_income_submit_list = res;
-            }
-        })
+        this.getData();
     },
+    methods: {
+        getData(){
+            const that = this;
+            $.ajax({
+                url: "get_purchase_income_submit_list",
+                success: function (res) {
+                    $.each(res, function (i, v) {
+                        v.code = v.code.split("|");
+                        v.count = v.count.split("|");
+                    });
+                    that.purchase_income_submit_list = res;
+                }
+            })
+        },
+        changeSubmit: function (id, index) {
+            this.purchase_income_submit = this.purchase_income_submit_list[index];
+            this.change_production_id = this.purchase_income_submit.production_line_id;
+            this.change_code = this.purchase_income_submit.code;
+            this.change_count = this.purchase_income_submit.count;
+        }
+    }
 });

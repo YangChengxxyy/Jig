@@ -22,7 +22,7 @@ public interface JigMapper {
      * @param pageNumber 页码
      * @return 查询到的对应页数的List对象
      */
-    List<JigDefinition> searchJigDefinition(String code, String name, String workcell, String family, String userFor, int pageNumber);
+    List<JigDefinition> searchJigDefinition(@Param("code") String code, @Param("name") String name, @Param("workcell") String workcell, @Param("family") String family, @Param("userFor") String userFor, @Param("pageNumber") int pageNumber);
 
     /**
      * 获取查询到的结果总页数
@@ -34,7 +34,7 @@ public interface JigMapper {
      * @param userFor  用途
      * @return 查询到的结果总页数
      */
-    int searchJigDefinitionPage(String code, String name, String workcell, String family, String userFor);
+    int searchJigDefinitionPage(@Param("code") String code, @Param("name") String name, @Param("workcell") String workcell, @Param("family") String family, @Param("userFor") String userFor);
 
     /**
      * 获取单个JigDefinition对象
@@ -42,7 +42,7 @@ public interface JigMapper {
      * @param id id
      * @return 单个JigDefinition对象
      */
-    JigDefinition getSimpleJigDefinition(String id);
+    JigDefinition getSimpleJigDefinition(@Param("id") String id);
 
     /**
      * 通过Mybatis的方法来实现查询到所有的工夹具List
@@ -54,7 +54,7 @@ public interface JigMapper {
      * @param userFor  用途
      * @return 查询到的所有结果的List对象
      */
-    List<JigDefinition> searchAllJigDefinition(String code, String name, String workcell, String family, String userFor);
+    List<JigDefinition> searchAllJigDefinition(@Param("code") String code, @Param("name") String name, @Param("workcell") String workcell, @Param("family") String family, @Param("userFor") String userFor);
 
     /**
      * 获取出库申请集合
@@ -70,7 +70,7 @@ public interface JigMapper {
      * @param seq_id 工夹具序列号
      * @return Position对象
      */
-    Position getPosition(String code, String seq_id);
+    Position getPosition(@Param("code") String code, @Param("seq_id") String seq_id);
 
     /**
      * 工夹具出库
@@ -80,14 +80,14 @@ public interface JigMapper {
      * @param seq_id 工夹具序列号
      * @param rec_id 记录人id
      */
-    void outgoJig(String id, String code, String seq_id, String rec_id);
+    void outgoJig(@Param("id") String id, @Param("code") String code, @Param("seq_id") String seq_id, @Param("rec_id") String rec_id);
 
     /**
      * 删除对应记录
      *
      * @param id outgo_submit表id
      */
-    void deleteOutgoSubmit(String id);
+    void deleteOutgoSubmit(@Param("id") String id);
 
     /**
      * 获得已出库工夹具OutgoingJig对象
@@ -104,14 +104,14 @@ public interface JigMapper {
      * @param seq_id 工夹具序列号
      * @param rec_id 记录人id
      */
-    void returnJig(String id, String code, String seq_id, String rec_id);
+    void returnJig(@Param("id") String id, @Param("code") String code, @Param("seq_id") String seq_id, @Param("rec_id") String rec_id);
 
     /**
      * 删除对应的记录
      *
      * @param id outgoing_jig表id
      */
-    void deleteOutgoingJig(String id);
+    void deleteOutgoingJig(@Param("id") String id);
 
     /**
      * 添加采购入库申请
@@ -120,9 +120,9 @@ public interface JigMapper {
      * @param bill_no            订单号
      * @param production_line_id 产线id
      * @param code               工夹具代码
-     * @param number             数量
+     * @param count              数量
      */
-    void addShoplist(@Param("submit_id") String submit_id, @Param("bill_no") String bill_no, @Param("production_line_id") String production_line_id, @Param("code") String code, @Param("number") String number);
+    void addShoplist(@Param("submit_id") String submit_id, @Param("bill_no") String bill_no, @Param("production_line_id") String production_line_id, @Param("code") String code, @Param("count") String count);
 
     /**
      * 获取产线列表

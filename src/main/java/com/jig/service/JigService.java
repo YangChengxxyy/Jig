@@ -38,11 +38,11 @@ public class JigService {
     }
 
     public Position getPosition(String code, String seq_id) {
-        return jigMapper.getPosition(code,seq_id);
+        return jigMapper.getPosition(code, seq_id);
     }
 
     public void outgoJig(String id, String code, String seq_id, String rec_id) {
-        jigMapper.outgoJig(id,code,seq_id,rec_id);
+        jigMapper.outgoJig(id, code, seq_id, rec_id);
         jigMapper.deleteOutgoSubmit(id);
     }
 
@@ -51,14 +51,14 @@ public class JigService {
     }
 
     public void returnJig(String id, String code, String seq_id, String rec_id) {
-        jigMapper.returnJig(id,code,seq_id,rec_id);
+        jigMapper.returnJig(id, code, seq_id, rec_id);
         jigMapper.deleteOutgoingJig(id);
     }
 
-    public void addShoplist(String submit_id, String bill_no, String production_line_id, String[] codes, Integer[] numbers) {
-        String code = StringUtil.combination(codes,"|");
-        String number = StringUtil.combination(numbers,"|");
-        jigMapper.addShoplist(submit_id,bill_no,production_line_id,code,number);
+    public void addShoplist(String submit_id, String bill_no, String production_line_id, String[] codes, Integer[] counts) {
+        String code = StringUtil.combination(codes, "|");
+        String count = StringUtil.combination(counts, "|");
+        jigMapper.addShoplist(submit_id, bill_no, production_line_id, code, count);
     }
 
     public List<ProductionLine> getProductionLineList() {

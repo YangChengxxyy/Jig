@@ -12,7 +12,6 @@
     <script src="js/bootstrap-datetimepicker.min.js"></script>
     <script src="js/locales/bootstrap-datetimepicker.zh-CN.js"></script>-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <script type="text/javascript" src="js/dateRange.js"></script>
     <link rel="stylesheet" type="text/css" href="css/dateRange.css"/>
     <script>
@@ -255,25 +254,33 @@
                                         <th>采购单据号</th>
                                         <th>采购人</th>
                                         <th>产线</th>
-                                        <th>工夹具代码</th>
+                                        <th>工夹具代码及数量</th>
                                         <th>申请时间</th>
                                         <th>状态</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr v-for="item in purchase_income_submit_list" :key="item.id">
-                                        <td>{{item.id}}</td>
-                                        <td>{{item.submit_time}}</td>
+                                    <tr v-for="(item,index) in purchase_income_submit_list" :key="item.id">
+                                        <td>{{item.bill_no}}</td>
+                                        <td>{{item.submit_name}}</td>
                                         <td>{{item.production_line_name}}</td>
-                                        <td>{{item.code}}</td>
+                                        <td>
+                                            <select class="btn btn-default">
+                                                <option v-for="(value,index) in item.code">{{value+" — "}}{{item.count[index]}}件</option>
+                                            </select>
+                                        </td>
                                         <td>{{item.submit_time}}</td>
-                                        <td>待初审</td>
+                                        <td v-if="item.status == 0">待初审</td>
+                                        <td v-else-if="item.status == 1">初审未通过</td>
+                                        <td v-else-if="item.status == 2">初审通过</td>
+                                        <td v-else-if="item.status == 3">终审未通过</td>
+                                        <td v-else>终审通过</td>
                                         <td>
                                             <button class="btn btn-primary" data-toggle="modal"
-                                                    data-target="#myshoplist_detail">修改
+                                                    data-target="#myshoplist_detail" :class="{'disabled':item.status != 0 }" @click="changeSubmit(item.id,index)">修改
                                             </button>
-                                            <button class="btn btn-primary">删除</button>
+                                            <button class="btn btn-primary" :class="{'disabled':item.status != 0 }">删除</button>
                                             <div class="modal fade" id="myshoplist_detail" tabindex="-1"
                                                  role="dialog"
                                                  aria-labelledby="chukuLabel" aria-hidden="true">
@@ -286,14 +293,12 @@
                                                             <h4 class="modal-title" id="myModalLabel">我的采购单</h4>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <form role="form" class="form-horizontal">
+                                                            <form role="form" class="form-horizontal" v-if="purchase_income_submit != null">
                                                                 <div class="form-group">
-                                                                    <label for="shop_list_id"
-                                                                           class="col-sm-3 control-label">采购单据号</label>
+                                                                    <label class="col-sm-3 control-label">采购单据号</label>
                                                                     <div class="col-sm-8">
                                                                         <input type="text" class="form-control"
-                                                                               id="shop_list_id"
-                                                                               value="BO19072900000018">
+                                                                               :value="purchase_income_submit.bill_no">
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group">
@@ -301,29 +306,25 @@
                                                                            class="col-sm-3 control-label">采购人</label>
                                                                     <div class="col-sm-8">
                                                                         <input type="text" class="form-control"
-                                                                               id="shop_man_name" value="张三">
+                                                                               id="shop_man_name" :value="purchase_income_submit.submit_name" readonly>
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label for="production_id"
-                                                                           class="col-sm-3 control-label">产线id</label>
+                                                                    <label class="col-sm-3 control-label">产线id</label>
                                                                     <div class="col-sm-8">
-                                                                        <input type="text" class="form-control"
-                                                                               id="production_id" value="BLKA10-L2">
+                                                                        <select class="form-control" v-model="change_production_id">
+                                                                            <option v-for="item in production_line_list" :value="item.id">{{item.name}}</option>
+                                                                        </select>
                                                                     </div>
                                                                 </div>
-                                                                <div class="form-group row">
-                                                                    <label for="seq_code"
-                                                                           class="col-sm-3 control-label">工夹具代码</label>
+                                                                <div class="form-group row" v-for="(item,index) in purchase_income_submit.code">
+                                                                    <label class="col-sm-3 control-label">工夹具代码</label>
                                                                     <div class="col-sm-3">
-                                                                        <input type="text" class="form-control"
-                                                                               id="seq_code" value="1">
+                                                                        <input type="text" class="form-control" :value="item" v-model="change_code[index]">
                                                                     </div>
-                                                                    <label for="shop_number"
-                                                                           class="col-sm-3 control-label">采购数量</label>
+                                                                    <label class="col-sm-3 control-label">采购数量</label>
                                                                     <div class="col-sm-2">
-                                                                        <input type="text" class="form-control"
-                                                                               id="shop_number" value="10">
+                                                                        <input type="number" class="form-control" :value="purchase_income_submit.count[index]" min="1" max="99" v-model="change_count[index]">
                                                                     </div>
                                                                     <div class="col-sm-1"></div>
                                                                 </div>
@@ -435,8 +436,8 @@
                                                     <label class="col-sm-3 control-label">采购数量</label>
                                                     <div class="col-sm-2">
                                                         <input type="number" class="form-control"
-                                                               v-model.trim="number[n-1]" @keyup.tab="addMax" min="1"
-                                                               max="100">
+                                                               v-model.trim="count[n-1]" min="1"
+                                                               max="99">
                                                     </div>
                                                     <div class="col-sm-1"></div>
                                                 </div>
@@ -450,7 +451,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default"
-                                                        data-dismiss="modal" id="close_add_modal" @click="closeAdd">关闭
+                                                        data-dismiss="modal" id="close_add_modal">关闭
                                                 </button>
                                                 <input type="button" class="btn btn-primary" value="添加"
                                                        @click="add_shoplist">

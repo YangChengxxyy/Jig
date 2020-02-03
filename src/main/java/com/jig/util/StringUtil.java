@@ -12,7 +12,7 @@ public class StringUtil {
 
     public static void show(String[] a) {
         for (String b : a) {
-            System.out.print(b+"\t");
+            System.out.print(b + "\t");
         }
     }
 }

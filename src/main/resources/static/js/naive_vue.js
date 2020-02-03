@@ -39,19 +39,10 @@ const search_jig = new Vue({
                 }
             })
         },
-        check_detail: function (event, id) {
-            const that = this;
-            $.ajax({
-                url: "get_simple_jig_definition",
-                data: {
-                    id: id
-                },
-                success: function (res) {
-                    that.jig = res;
-                    that.jig.part_no = that.jig.part_no.split("|");
-                    that.jig.model = that.jig.model.split("|");
-                }
-            })
+        check_detail: function (index) {
+            this.jig = this.jig_list[index];
+            this.jig.part_no = this.jig.part_no.split("|");
+            this.jig.model = this.jig.model.split("|");
         },
         clear: function () {
             this.jig = null;

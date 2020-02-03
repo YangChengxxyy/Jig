@@ -18,18 +18,19 @@ import java.util.Map;
 public class jigJson_zhs {
     @Autowired
     private JigService_zhs jigService;
-    @RequestMapping(value = "get_stu_list",method = {RequestMethod.POST, RequestMethod.GET})
-    public Map<Object,Object> getStuList(@RequestParam(value = "ask") int ask){
+
+    @RequestMapping(value = "get_stu_list", method = {RequestMethod.POST, RequestMethod.GET})
+    public Map<Object, Object> getStuList(@RequestParam(value = "ask") int ask) {
         List<DemoEntity> a = new ArrayList<>();
         DemoEntity people = new DemoEntity();
         people.setName("zhs");
         people.setSex("男");
         people.setStu_no("189050539");
-        for(int i=0;i<ask;i++){
+        for (int i = 0; i < ask; i++) {
             a.add(people);
         }
         Map<Object, Object> map = new HashMap<>();
-        map.put("data",a);
+        map.put("data", a);
         return map;
     }
 
