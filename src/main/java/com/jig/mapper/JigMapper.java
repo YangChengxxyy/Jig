@@ -144,4 +144,6 @@ public interface JigMapper {
      * @return 采购入库申请列表
      */
     List<PurchaseIncomeSubmit> getPurchaseIncomeSubmitList();
+
+    void updatePurchaseIncomeSubmit(@Param("id") String id, @Param("code") String code, @Param("count") String count, @Param("production_line_id") String production_line_id);
 }

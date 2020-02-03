@@ -72,4 +72,10 @@ public class JigService {
     public List<PurchaseIncomeSubmit> getPurchaseIncomeSubmitList() {
         return jigMapper.getPurchaseIncomeSubmitList();
     }
+
+    public void updatePurchaseIncomeSubmit(String id, String[] codes, String[] counts, String production_line_id) {
+        String code = StringUtil.combination(codes, "|");
+        String count = StringUtil.combination(counts, "|");
+        jigMapper.updatePurchaseIncomeSubmit(id,code,count,production_line_id);
+    }
 }

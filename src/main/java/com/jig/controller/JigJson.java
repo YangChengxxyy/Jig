@@ -180,4 +180,15 @@ public class JigJson {
     public List<PurchaseIncomeSubmit> getPurchaseIncomeSubmitList() {
         return jigService.getPurchaseIncomeSubmitList();
     }
+    @RequestMapping("update_purchase_income_submit")
+    public String updatePurchaseIncomeSubmit(@RequestParam(value = "id")String id,@RequestParam(value = "code[]")String[] codes,
+                                             @RequestParam(value = "count[]") String[] counts,
+                                             @RequestParam("production_line_id")String  production_line_id){
+        try{
+            jigService.updatePurchaseIncomeSubmit(id,codes,counts,production_line_id);
+        }catch (Exception e){
+            return "服务器错误";
+        }
+        return "修改成功";
+    }
 }

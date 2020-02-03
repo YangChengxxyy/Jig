@@ -278,92 +278,109 @@
                                         <td v-else>终审通过</td>
                                         <td>
                                             <button class="btn btn-primary" data-toggle="modal"
-                                                    data-target="#myshoplist_detail" :class="{'disabled':item.status != 0 }" @click="changeSubmit(item.id,index)">修改
+                                                    data-target="#myshoplist_detail" :class="{'disabled':item.status != 0 }" @click="change(item.id,index)">修改
                                             </button>
                                             <button class="btn btn-primary" :class="{'disabled':item.status != 0 }">删除</button>
-                                            <div class="modal fade" id="myshoplist_detail" tabindex="-1"
-                                                 role="dialog"
-                                                 aria-labelledby="chukuLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-hidden="true">&times;
-                                                            </button>
-                                                            <h4 class="modal-title" id="myModalLabel">我的采购单</h4>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form role="form" class="form-horizontal" v-if="purchase_income_submit != null">
-                                                                <div class="form-group">
-                                                                    <label class="col-sm-3 control-label">采购单据号</label>
-                                                                    <div class="col-sm-8">
-                                                                        <input type="text" class="form-control"
-                                                                               :value="purchase_income_submit.bill_no">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label for="shop_man_name"
-                                                                           class="col-sm-3 control-label">采购人</label>
-                                                                    <div class="col-sm-8">
-                                                                        <input type="text" class="form-control"
-                                                                               id="shop_man_name" :value="purchase_income_submit.submit_name" readonly>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="col-sm-3 control-label">产线id</label>
-                                                                    <div class="col-sm-8">
-                                                                        <select class="form-control" v-model="change_production_id">
-                                                                            <option v-for="item in production_line_list" :value="item.id">{{item.name}}</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group row" v-for="(item,index) in purchase_income_submit.code">
-                                                                    <label class="col-sm-3 control-label">工夹具代码</label>
-                                                                    <div class="col-sm-3">
-                                                                        <input type="text" class="form-control" :value="item" v-model="change_code[index]">
-                                                                    </div>
-                                                                    <label class="col-sm-3 control-label">采购数量</label>
-                                                                    <div class="col-sm-2">
-                                                                        <input type="number" class="form-control" :value="purchase_income_submit.count[index]" min="1" max="99" v-model="change_count[index]">
-                                                                    </div>
-                                                                    <div class="col-sm-1"></div>
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="shop_applytime"
-                                                                           class="col-sm-3 control-label">申请时间</label>
-                                                                    <div class="col-sm-8">
-                                                                        <input type="text" class="form-control"
-                                                                               id="shop_applytime"
-                                                                               value="2020-1-4 18:25" readonly>
-
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label for="shop_applytime"
-                                                                           class="col-sm-3 control-label">审批状态</label>
-                                                                    <div class="col-sm-8">
-                                                                        <input type="text"
-                                                                               class="form-control warning"
-                                                                               value="待初审" readonly>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default"
-                                                                    data-dismiss="modal">关闭
-                                                            </button>
-                                                            <button type="button" class="btn btn-primary">确认修改
-                                                            </button>
-                                                        </div>
-                                                    </div><!-- /.modal-content -->
-                                                </div><!-- /.modal -->
-                                            </div>
                                         </td>
                                     </tr>
                                     </tbody>
                                 </table>
+                                <div class="modal fade" id="myshoplist_detail" tabindex="-1"
+                                     role="dialog"
+                                     aria-labelledby="chukuLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-hidden="true">&times;
+                                                </button>
+                                                <h4 class="modal-title" id="myModalLabel">我的采购单</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form role="form" class="form-horizontal" v-if="purchase_income_submit != null">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">采购单据号</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control"
+                                                                   :value="purchase_income_submit.bill_no" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="shop_man_name"
+                                                               class="col-sm-3 control-label">采购人</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control"
+                                                                   id="shop_man_name" :value="purchase_income_submit.submit_name" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">产线id</label>
+                                                        <div class="col-sm-8">
+                                                            <select class="form-control" v-model="change_production_line_id">
+                                                                <option v-for="item in production_line_list" :value="item.id">{{item.name}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-8 col-sm-offset-3">
+                                                            <div class="pull-right">
+                                                                <button type="button" class="btn btn-default" @click="clean">
+                                                                    清空
+                                                                </button>
+                                                                <button type="button" class="btn btn-success" @click="add"
+                                                                        :class="{'disabled':change_code.length === 4}">
+                                                                    添加工夹具
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row" v-for="(item,index) in change_code">
+                                                        <label class="col-sm-3 control-label">工夹具代码</label>
+                                                        <div class="col-sm-3">
+                                                            <select class="form-control" v-model="change_code[index]" :style="{'borderColor': change_code[index] == ''? '#c9302c':'#ccc'}">
+                                                                <option disabled  value="">请选择</option>
+                                                                <option v-for="item in code_list" :value="item">{{item}}</option>
+                                                            </select>
+                                                        </div>
+                                                        <label class="col-sm-2 control-label">采购数量</label>
+                                                        <div class="col-sm-2">
+                                                            <input type="number" class="form-control" min="1" max="99" v-model.trim="change_count[index]" :style="{'borderColor': change_count[index] == ''? '#c9302c':'#ccc'}">
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <button class="btn btn-danger pull-right" @click="del(index)" :class="{'disabled':change_code.length == 1}"><span class="glyphicon glyphicon-remove"></span></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="shop_applytime"
+                                                               class="col-sm-3 control-label">申请时间</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control"
+                                                                   id="shop_applytime"
+                                                                   value="2020-1-4 18:25" readonly>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="shop_applytime"
+                                                               class="col-sm-3 control-label">审批状态</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text"
+                                                                   class="form-control warning"
+                                                                   value="待初审" readonly>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal">关闭
+                                                </button>
+                                                <button type="button" class="btn btn-primary" @click="changeSubmit">确认修改
+                                                </button>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal -->
+                                </div>
                             </div>
                             <div class="row text-center">
                                 <ul class="pagination">
@@ -392,19 +409,19 @@
                                             <div class="form-group">
                                                 <label class="col-sm-3 control-label">采购单据号</label>
                                                 <div class="col-sm-8">
-                                                    <input type="text" class="form-control" v-model="bill_no">
+                                                    <input type="text" class="form-control" v-model="bill_no" :style="{'borderColor': bill_no == ''? '#c9302c':'#ccc'}">
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-3 control-label">采购人id</label>
                                                 <div class="col-sm-8">
-                                                    <input type="text" class="form-control" v-model="submit_id">
+                                                    <input type="text" class="form-control" v-model="submit_id" :style="{'borderColor': submit_id == ''? '#c9302c':'#ccc'}">
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-3 control-label">产线</label>
                                                 <div class="col-sm-8">
-                                                    <select class="form-control" v-model="production_line_id">
+                                                    <select class="form-control" v-model="production_line_id" :style="{'borderColor': production_line_id == ''? '#c9302c':'#ccc'}">
                                                         <option v-for="item in production_line_list" :value="item.id">
                                                             {{item.name}}
                                                         </option>
@@ -428,18 +445,20 @@
                                                 <div class="row form-group">
                                                     <label class="col-sm-3 control-label">工夹具代码</label>
                                                     <div class="col-sm-3">
-                                                        <select class="form-control" v-model.trim="code[n-1]">
-                                                            <option v-for="item in code_list" :value="item">{{item}}
-                                                            </option>
+                                                        <select class="form-control" v-model.trim="code[n-1]" :style="{'borderColor': code[n-1] == ''? '#c9302c':'#ccc'}">
+                                                            <option value=""></option>
+                                                            <option v-for="item in code_list" :value="item">{{item}}</option>
                                                         </select>
                                                     </div>
-                                                    <label class="col-sm-3 control-label">采购数量</label>
+                                                    <label class="col-sm-2 control-label">采购数量</label>
                                                     <div class="col-sm-2">
-                                                        <input type="number" class="form-control"
+                                                        <input type="number" class="form-control" :style="{'borderColor':count[n-1] ==''? '#c9302c':'#ccc' }"
                                                                v-model.trim="count[n-1]" min="1"
                                                                max="99">
                                                     </div>
-                                                    <div class="col-sm-1"></div>
+                                                    <div class="col-sm-1">
+                                                        <button class="btn btn-danger pull-right" @click="del(n-1)" :class="{'disabled' : max == 1}"><span class="glyphicon glyphicon-remove"></span></button>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">

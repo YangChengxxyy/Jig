@@ -28,6 +28,13 @@
                 (select user_id from outgoing_jig where outgoing_jig.id = #{id}),
                 1, #{rec_id}, now(), #{code}, #{seq_id});
     </update>
+    <update id="updatePurchaseIncomeSubmit">
+        update purchase_income_submit
+        set code              = #{code},
+            count=#{count},
+            production_line_id=#{production_line_id}
+        where id = #{id}
+    </update>
     <delete id="deleteOutgoSubmit">
         delete
         from outgo_submit
@@ -128,7 +135,7 @@
         from jig_definition;
     </select>
     <select id="getPurchaseIncomeSubmitList" resultType="com.jig.entity.PurchaseIncomeSubmit">
-        select purchase_income_submit.*,production_line.name production_line_name,user.name submit_name
+        select purchase_income_submit.*, production_line.name production_line_name, user.name submit_name
         from purchase_income_submit,
              user,
              production_line
