@@ -39,6 +39,7 @@ var add_myshoplist = new Vue({
             }
         },
         add_shoplist: function () {
+            var that =  this;
             if ($("#add_myshoplist [style='border-color: rgb(201, 48, 44);']").length > 0) {
                 $("#add_myshoplist [style='border-color: rgb(201, 48, 44);']:eq(0)").focus();
                 return false;
@@ -56,7 +57,7 @@ var add_myshoplist = new Vue({
                     if (res === "添加成功") {
                         alert(res);
                         $("#add_myshoplist").modal("hide");
-                        this.clean()
+                        that.clean()
                         show_myshoplist.getData();
                     } else {
                         alert(res);
@@ -136,6 +137,7 @@ var show_myshoplist = new Vue({
             }
         },
         changeSubmit:function () {
+            var that = this;
             if ($("#show_myshoplist [style='border-color: rgb(201, 48, 44);']").length > 0) {
                 $("#show_myshoplist [style='border-color: rgb(201, 48, 44);']:eq(0)").focus();
                 return false;
@@ -152,7 +154,7 @@ var show_myshoplist = new Vue({
                     alert(res);
                     if (res !=="服务器错误"){
                         $("#myshoplist_detail").modal("hide");
-                        this.getData();
+                        that.getData();
                     }
                 }
             })
