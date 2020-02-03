@@ -8,6 +8,7 @@
     <script src="js/jquery-3.4.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/vue.js"></script>
+    <script src="js/myJq.js"></script>
     <!--<script src="js/moment-with-locales.js"></script>
     <script src="js/bootstrap-datetimepicker.min.js"></script>
     <script src="js/locales/bootstrap-datetimepicker.zh-CN.js"></script>-->
@@ -434,8 +435,7 @@
                                                         <button type="button" class="btn btn-default" @click="clean">
                                                             清空
                                                         </button>
-                                                        <button type="button" class="btn btn-success" @click="addMax"
-                                                                :class="{'disabled':max === 4}">
+                                                        <button type="button" class="btn btn-success" @click="addMax" :class="{'disabled':max === 4}">
                                                             添加工夹具
                                                         </button>
                                                     </div>
@@ -472,8 +472,8 @@
                                                 <button type="button" class="btn btn-default"
                                                         data-dismiss="modal" id="close_add_modal">关闭
                                                 </button>
-                                                <input type="button" class="btn btn-primary" value="添加"
-                                                       @click="add_shoplist">
+                                                <button type="button" class="btn btn-primary"
+                                                        @click.stop="add_shoplist">添加</button>
                                             </div>
                                         </form>
                                     </div>

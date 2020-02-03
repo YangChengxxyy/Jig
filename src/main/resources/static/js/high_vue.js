@@ -39,31 +39,34 @@ var add_myshoplist = new Vue({
             }
         },
         add_shoplist: function () {
-            var that =  this;
-            if ($("#add_myshoplist [style='border-color: rgb(201, 48, 44);']").length > 0) {
-                $("#add_myshoplist [style='border-color: rgb(201, 48, 44);']:eq(0)").focus();
+            const a = $("#add_myshoplist [style*='border-color: rgb(201, 48, 44);']");
+            if (a.length > 0) {
+                $("#add_myshoplist [style*='border-color: rgb(201, 48, 44);']:eq(0)").focus();
+                a.shake(2, 10, 200);
                 return false;
-            }
-            $.ajax({
-                url: "add_shoplist",
-                data: {
-                    bill_no: this.bill_no,
-                    submit_id: this.submit_id,
-                    production_line_id: this.production_line_id,
-                    code: this.code,
-                    count: this.count
-                },
-                success: function (res) {
-                    if (res === "添加成功") {
-                        alert(res);
-                        $("#add_myshoplist").modal("hide");
-                        that.clean()
-                        show_myshoplist.getData();
-                    } else {
-                        alert(res);
+            } else {
+                var that = this;
+                $.ajax({
+                    url: "add_shoplist",
+                    data: {
+                        bill_no: this.bill_no,
+                        submit_id: this.submit_id,
+                        production_line_id: this.production_line_id,
+                        code: this.code,
+                        count: this.count
+                    },
+                    success: function (res) {
+                        if (res === "添加成功") {
+                            alert(res);
+                            $("#add_myshoplist").modal("hide");
+                            that.clean()
+                            show_myshoplist.getData();
+                        } else {
+                            alert(res);
+                        }
                     }
-                }
-            })
+                })
+            }
         },
         clean: function () {
             this.code = [""];
@@ -94,7 +97,7 @@ var show_myshoplist = new Vue({
         change_production_line_id: "",
         change_code: [],
         change_count: [],
-        change_id:null
+        change_id: null
     },
     created: function () {
         this.getData();
@@ -136,28 +139,31 @@ var show_myshoplist = new Vue({
                 this.change_count.splice(index, 1);
             }
         },
-        changeSubmit:function () {
-            var that = this;
-            if ($("#show_myshoplist [style='border-color: rgb(201, 48, 44);']").length > 0) {
-                $("#show_myshoplist [style='border-color: rgb(201, 48, 44);']:eq(0)").focus();
+        changeSubmit: function () {
+            const a =  $("#myshoplist_detail [style*='border-color: rgb(201, 48, 44);']");
+            if (a.length > 0) {
+                $("#myshoplist_detail [style*='border-color: rgb(201, 48, 44);']:eq(0)").focus();
+                a.shake(2, 10, 200);
                 return false;
-            }
-            $.ajax({
-                url:"update_purchase_income_submit",
-                data:{
-                    id:this.change_id,
-                    production_line_id:this.change_production_line_id,
-                    code:this.change_code,
-                    count:this.change_count
-                },
-                success:function (res) {
-                    alert(res);
-                    if (res !=="服务器错误"){
-                        $("#myshoplist_detail").modal("hide");
-                        that.getData();
+            } else {
+                var that = this;
+                $.ajax({
+                    url: "update_purchase_income_submit",
+                    data: {
+                        id: this.change_id,
+                        production_line_id: this.change_production_line_id,
+                        code: this.change_code,
+                        count: this.change_count
+                    },
+                    success: function (res) {
+                        alert(res);
+                        if (res !== "服务器错误") {
+                            $("#myshoplist_detail").modal("hide");
+                            that.getData();
+                        }
                     }
-                }
-            })
+                })
+            }
         }
     }
 });
