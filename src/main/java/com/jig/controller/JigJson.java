@@ -139,8 +139,8 @@ public class JigJson {
      */
     @RequestMapping(value = "add_shoplist", method = RequestMethod.GET)
     public String addShoplist(@RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "bill_no") String bill_no,
-                              @RequestParam(value = "production_line_id") String production_line_id, @RequestParam(value = "code[]") String[] codes,
-                              @RequestParam(value = "count[]") Integer[] counts) {
+                              @RequestParam(value = "production_line_id") String production_line_id, @RequestParam(value = "code") String codes,
+                              @RequestParam(value = "count") String counts) {
         try {
             jigService.addShoplist(submit_id, bill_no, production_line_id, codes, counts);
         } catch (Exception e) {
@@ -182,11 +182,11 @@ public class JigJson {
         return map;
     }
     @RequestMapping("update_purchase_income_submit")
-    public String updatePurchaseIncomeSubmit(@RequestParam(value = "id")String id,@RequestParam(value = "code[]")String[] codes,
-                                             @RequestParam(value = "count[]") String[] counts,
+    public String updatePurchaseIncomeSubmit(@RequestParam(value = "id")String id,@RequestParam(value = "code")String code,
+                                             @RequestParam(value = "count") String count,
                                              @RequestParam("production_line_id")String  production_line_id){
         try{
-            jigService.updatePurchaseIncomeSubmit(id,codes,counts,production_line_id);
+            jigService.updatePurchaseIncomeSubmit(id,code,count,production_line_id);
         }catch (Exception e){
             return "服务器错误";
         }

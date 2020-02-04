@@ -1,7 +1,6 @@
 function position(res) {
     return (res.jig_cabinet_id == null ? "" : ("" + res.jig_cabinet_id)) + (res.location_id == null ? "" : ("-" + res.location_id)) + (res.bin == null ? "" : ("-" + res.bin));
 }
-
 const search_jig = new Vue({
     el: "#search_jig",
     data: {
@@ -16,7 +15,7 @@ const search_jig = new Vue({
         max_page_number: 0
     },
     methods: {
-        getData(){
+        getData() {
             const that = this;
             $.ajax({
                 url: "search_jig_definition",
@@ -126,7 +125,7 @@ const return_jig = new Vue({
         this.getData();
     },
     methods: {
-        getData:function(){
+        getData: function () {
             const that = this;
             $.ajax({
                 url: "get_outgoing_jig",

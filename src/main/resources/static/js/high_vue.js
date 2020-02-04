@@ -60,8 +60,8 @@ var add_myshoplist = new Vue({
                         bill_no: this.bill_no,
                         submit_id: this.submit_id,
                         production_line_id: this.production_line_id,
-                        code: this.code,
-                        count: this.count
+                        code: this.code.join("|"),
+                        count: this.count.join("|")
                     },
                     success: function (res) {
                         if (res === "添加成功") {
@@ -163,8 +163,8 @@ var show_myshoplist = new Vue({
                     data: {
                         id: this.change_id,
                         production_line_id: this.change_production_line_id,
-                        code: this.change_code,
-                        count: this.change_count
+                        code: this.change_code.join("|"),
+                        count: this.change_count.join("|")
                     },
                     success: function (res) {
                         alert(res);
