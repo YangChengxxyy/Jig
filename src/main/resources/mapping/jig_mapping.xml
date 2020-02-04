@@ -141,5 +141,14 @@
              production_line
         where user.id = purchase_income_submit.submit_id
           and purchase_income_submit.production_line_id = production_line.id
+        limit #{page_number},5
+    </select>
+    <select id="getPurchaseIncomeSubmitListPage" resultType="java.lang.Integer">
+        select count(*)
+        from purchase_income_submit,
+             user,
+             production_line
+        where user.id = purchase_income_submit.submit_id
+          and purchase_income_submit.production_line_id = production_line.id
     </select>
 </mapper>

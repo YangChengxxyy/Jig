@@ -47,12 +47,10 @@ public class JigJson {
      */
     @RequestMapping("search_jig_definition")
     public Map<Object, Object> searchJigDefinition(@RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor, @RequestParam(value = "page_number") int pageNumber) throws Exception {
-        pageNumber = (pageNumber - 1) * 5;
         Map<Object, Object> map = new HashMap<>(2);
         List<JigDefinition> list = jigService.searchJigDefinition(code, name, workcell, family, userFor, pageNumber);
         map.put("data", list);
-//        map.put("max", jigService.searchJigDefinitionPage(code, name, workcell, family, userFor));
-        map.put("max", 3);
+        map.put("max", jigService.searchJigDefinitionPage(code, name, workcell, family, userFor));
         return map;
     }
 
@@ -177,8 +175,11 @@ public class JigJson {
      * @return 采购入库申请列表
      */
     @RequestMapping("get_purchase_income_submit_list")
-    public List<PurchaseIncomeSubmit> getPurchaseIncomeSubmitList() {
-        return jigService.getPurchaseIncomeSubmitList();
+    public Map<String, Object> getPurchaseIncomeSubmitList(@RequestParam(value = "page_number")int page_number) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("data",jigService.getPurchaseIncomeSubmitList(page_number));
+        map.put("max", jigService.getPurchaseIncomeSubmitListPage(page_number));
+        return map;
     }
     @RequestMapping("update_purchase_income_submit")
     public String updatePurchaseIncomeSubmit(@RequestParam(value = "id")String id,@RequestParam(value = "code[]")String[] codes,

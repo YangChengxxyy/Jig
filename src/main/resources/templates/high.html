@@ -168,7 +168,6 @@
                 <!--功能菜单 导航栏-->
                 <div class="panel-body">
                     <div class="panel-group" id="left">
-
                         <div class="panel panel-default">
                             <div class="panel-heading" data-toggle="collapse" data-parent="#left" href="#1">
                                 <h4 class="panel-title" data-toggle="tab" href="#main1">
@@ -285,6 +284,80 @@
                                     </tr>
                                     </tbody>
                                 </table>
+                                <div class="text-center row" v-if="max_page_number != 0">
+                                    <div v-if="max_page_number >5">
+                                        <ul v-if="now_page_number <= 3 && now_page_number < max_page_number-1"
+                                            class="pagination">
+                                            <li :class="havePrevious"
+                                                @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
+                                                <a>&laquo;</a></li>
+                                            <li :class="{'active': now_page_number == 1}"
+                                                @click="turn_page(1)"><a>1</a></li>
+                                            <li :class="{'active': now_page_number == 2}"
+                                                @click="turn_page(2)"><a>2</a></li>
+                                            <li :class="{'active': now_page_number == 3}"
+                                                @click="turn_page(3)"><a>3</a></li>
+                                            <li class="disabled"><a>...</a></li>
+                                            <li @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a>
+                                            </li>
+                                            <li @click="turn_page(max_page_number)"><a>{{max_page_number}}</a>
+                                            </li>
+                                            <li :class="haveNext"
+                                                @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)">
+                                                <a>&raquo;</a>
+                                            </li>
+                                        </ul>
+                                        <ul v-else-if="now_page_number > 3 && now_page_number+1 <= max_page_number-2"
+                                            class="pagination">
+                                            <li :class="havePrevious"
+                                                @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
+                                                <a>&laquo;</a></li>
+                                            <li @click="turn_page(1)"><a>1</a></li>
+                                            <li @click="turn_page(2)"><a>2</a></li>
+                                            <li class="disabled"><a>...</a></li>
+                                            <li @click="turn_page(now_page_number-1)"><a>{{now_page_number-1}}</a></li>
+                                            <li class="active" @click="turn_page(now_page_number)"><a>{{now_page_number}}</a>
+                                            </li>
+                                            <li @click="turn_page(now_page_number+1)"><a>{{now_page_number+1}}</a></li>
+                                            <li class="disabled"><a>...</a></li>
+                                            <li @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a></li>
+                                            <li @click="turn_page(max_page_number)"><a>{{max_page_number}}</a></li>
+                                            <li :class="haveNext"
+                                                @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>
+                                            </li>
+                                        </ul>
+                                        <ul v-else-if="now_page_number>=4 && now_page_number >= max_page_number-2"
+                                            class="pagination">
+                                            <li :class="havePrevious"
+                                                @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
+                                                <a>&laquo;</a></li>
+                                            <li @click="turn_page(1)"><a>1</a></li>
+                                            <li @click="turn_page(2)"><a>2</a></li>
+                                            <li class="disabled"><a>...</a></li>
+                                            <li :class="{'active' : now_page_number == max_page_number-2 }"
+                                                @click="turn_page(max_page_number-2)"><a>{{max_page_number-2}}</a></li>
+                                            <li :class="{'active' : now_page_number == max_page_number-1 }"
+                                                @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a></li>
+                                            <li :class="{'active' : now_page_number == max_page_number }"
+                                                @click="turn_page(max_page_number)"><a>{{max_page_number}}</a></li>
+                                            <li :class="haveNext"
+                                                @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div v-else>
+                                        <ul class="pagination">
+                                            <li :class="havePrevious"
+                                                @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
+                                                <a>&laquo;</a></li>
+                                            <li v-for="n in max_page_number" :class="{'active': n == now_page_number }" @click="turn_page(n)"><a>{{n}}</a></li>
+                                            <li :class="haveNext"
+                                                @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)">
+                                                <a>&raquo;</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                                 <div class="modal fade" id="myshoplist_detail" tabindex="-1"
                                      role="dialog"
                                      aria-labelledby="chukuLabel" aria-hidden="true">
@@ -338,7 +411,7 @@
                                                         <label class="col-sm-3 control-label">工夹具代码</label>
                                                         <div class="col-sm-3">
                                                             <select class="form-control" v-model="change_code[index]" :style="{'borderColor': change_code[index] == ''? '#c9302c':'#ccc'}">
-                                                                <option disabled  value="">请选择</option>
+                                                                <option :value="change_code[index]">{{change_code[index]}}</option>
                                                                 <option v-for="item in code_list" :value="item">{{item}}</option>
                                                             </select>
                                                         </div>
@@ -347,7 +420,7 @@
                                                             <input type="number" class="form-control" min="1" max="99" v-model.trim="change_count[index]" :style="{'borderColor': change_count[index] == ''? '#c9302c':'#ccc'}">
                                                         </div>
                                                         <div class="col-sm-1">
-                                                            <button class="btn btn-danger pull-right" @click="del(index)" :class="{'disabled':change_code.length == 1}"><span class="glyphicon glyphicon-remove"></span></button>
+                                                            <button type="button" class="btn btn-danger pull-right" @click="del(index)" :class="{'disabled':change_code.length == 1}"><span class="glyphicon glyphicon-remove"></span></button>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -393,7 +466,7 @@
                                         <h4 class="modal-title">添加采购单</h4>
                                     </div>
                                     <div class="modal-body">
-                                        <form role="form" class="form-horizontal">
+                                        <div class="form-horizontal">
                                             <div class="form-group">
                                                 <label class="col-sm-3 control-label">采购单据号</label>
                                                 <div class="col-sm-8">
@@ -433,7 +506,7 @@
                                                     <label class="col-sm-3 control-label">工夹具代码</label>
                                                     <div class="col-sm-3">
                                                         <select class="form-control" v-model.trim="code[n-1]" :style="{'borderColor': code[n-1] == ''? '#c9302c':'#ccc'}">
-                                                            <option value=""></option>
+                                                            <option :value="code[n-1]">{{code[n-1]}}</option>
                                                             <option v-for="item in code_list" :value="item">{{item}}</option>
                                                         </select>
                                                     </div>
@@ -444,25 +517,18 @@
                                                                max="99">
                                                     </div>
                                                     <div class="col-sm-1">
-                                                        <button class="btn btn-danger pull-right" @click="del(n-1)" :class="{'disabled' : max == 1}"><span class="glyphicon glyphicon-remove"></span></button>
+                                                        <button type="button" class="btn btn-danger pull-right" @click="del(n-1)" :class="{'disabled' : max == 1}"><span class="glyphicon glyphicon-remove"></span></button>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label
-                                                        class="col-sm-3 control-label">申请时间</label>
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control" value="自动获取当前时间" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default"
-                                                        data-dismiss="modal" id="close_add_modal">关闭
-                                                </button>
-                                                <button type="button" class="btn btn-primary"
-                                                        @click.stop="add_shoplist">添加</button>
-                                            </div>
-                                        </form>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default"
+                                                data-dismiss="modal" id="close_add_modal">关闭
+                                        </button>
+                                        <button type="button" class="btn btn-primary"
+                                                @click.stop="add_shoplist">添加</button>
                                     </div>
                                 </div><!-- /.modal-content -->
                             </div><!-- /.modal -->
@@ -692,13 +758,13 @@
                             <div style="margin-bottom: 3%">
                                 <form role="form" class="form-horizontal">
                                     <div class="form-group row">
-                                        <label for="sel_shoplist_id" class="col-sm-2 control-label">工夹具代码</label>
+                                        <label class="col-sm-2 control-label">工夹具代码</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" name="sel_repair_seq_code">
+                                            <input type="text" class="form-control">
                                         </div>
-                                        <label for="shop_number" class="col-sm-2 control-label">申请人</label>
+                                        <label class="col-sm-2 control-label">申请人</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" name="sel_repair_submit_name">
+                                            <input type="text" class="form-control">
                                         </div>
                                         <div class="col-sm-2">
                                         </div>

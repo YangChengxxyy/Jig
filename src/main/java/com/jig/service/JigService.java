@@ -17,6 +17,7 @@ public class JigService {
     private JigMapper jigMapper;
 
     public List<JigDefinition> searchJigDefinition(String code, String name, String workcell, String family, String userFor, int pageNumber) {
+        pageNumber = (pageNumber - 1) * 5;
         return jigMapper.searchJigDefinition(code, name, workcell, family, userFor, pageNumber);
     }
 
@@ -69,13 +70,19 @@ public class JigService {
         return jigMapper.getCodeList();
     }
 
-    public List<PurchaseIncomeSubmit> getPurchaseIncomeSubmitList() {
-        return jigMapper.getPurchaseIncomeSubmitList();
+    public List<PurchaseIncomeSubmit> getPurchaseIncomeSubmitList(int page_number) {
+        page_number = (page_number - 1) * 5;
+        return jigMapper.getPurchaseIncomeSubmitList(page_number);
     }
 
     public void updatePurchaseIncomeSubmit(String id, String[] codes, String[] counts, String production_line_id) {
         String code = StringUtil.combination(codes, "|");
         String count = StringUtil.combination(counts, "|");
-        jigMapper.updatePurchaseIncomeSubmit(id,code,count,production_line_id);
+        jigMapper.updatePurchaseIncomeSubmit(id, code, count, production_line_id);
+    }
+
+    public int getPurchaseIncomeSubmitListPage(int page_number) {
+        int a = jigMapper.getPurchaseIncomeSubmitListPage(page_number);
+        return (int) Math.ceil(a / 5.0);
     }
 }

@@ -25,10 +25,18 @@ var add_myshoplist = new Vue({
         code: [""],
         count: [1],
         production_line_list: production_line_list,
-        code_list: code_list
+        code_list: code_list,
     },
-    created: function () {
-
+    watch: {
+        code: function (n) {
+            let that = this;
+            that.code_list = code_list;
+            $.each(n, function (i, v) {
+                that.code_list = that.code_list.filter(function (item) {
+                    return item !== v;
+                })
+            });
+        }
     },
     methods: {
         addMax: function () {
@@ -59,7 +67,7 @@ var add_myshoplist = new Vue({
                         if (res === "添加成功") {
                             alert(res);
                             $("#add_myshoplist").modal("hide");
-                            that.clean()
+                            that.clean();
                             show_myshoplist.getData();
                         } else {
                             alert(res);
@@ -79,10 +87,6 @@ var add_myshoplist = new Vue({
                 this.count.splice(index, 1);
                 this.max -= 1;
             }
-        },
-        show: function () {
-            console.log(this.code);
-            console.log(this.count);
         }
     }
 });
@@ -97,7 +101,10 @@ var show_myshoplist = new Vue({
         change_production_line_id: "",
         change_code: [],
         change_count: [],
-        change_id: null
+        change_id: null,
+        //分页所需
+        now_page_number: 1,
+        max_page_number: 0
     },
     created: function () {
         this.getData();
@@ -107,12 +114,16 @@ var show_myshoplist = new Vue({
             const that = this;
             $.ajax({
                 url: "get_purchase_income_submit_list",
+                data: {
+                    page_number: this.now_page_number
+                },
                 success: function (res) {
-                    $.each(res, function (i, v) {
+                    $.each(res.data, function (i, v) {
                         v.code = v.code.split("|");
                         v.count = v.count.split("|");
                     });
-                    that.purchase_income_submit_list = res;
+                    that.purchase_income_submit_list = res.data;
+                    that.max_page_number = res.max;
                 }
             })
         },
@@ -140,7 +151,7 @@ var show_myshoplist = new Vue({
             }
         },
         changeSubmit: function () {
-            const a =  $("#myshoplist_detail [style*='border-color: rgb(201, 48, 44);']");
+            const a = $("#myshoplist_detail [style*='border-color: rgb(201, 48, 44);']");
             if (a.length > 0) {
                 $("#myshoplist_detail [style*='border-color: rgb(201, 48, 44);']:eq(0)").focus();
                 a.shake(2, 10, 200);
@@ -163,6 +174,40 @@ var show_myshoplist = new Vue({
                         }
                     }
                 })
+            }
+        },
+        turn_page: function (page_number) {
+            const that = this;
+            if (page_number === this.now_page_number) {
+                return false;
+            }
+            this.now_page_number = page_number;
+            this.getData();
+        }
+    },
+    watch: {
+        change_code: function (n) {
+            let that = this;
+            that.code_list = code_list;
+            $.each(n, function (i, v) {
+                that.code_list = that.code_list.filter(function (item) {
+                    return item !== v;
+                })
+            });
+        }
+    },
+    /**
+     * 分页所需
+     */
+    computed: {
+        havePrevious: function () {
+            return {
+                disabled: this.now_page_number === 1
+            }
+        },
+        haveNext: function () {
+            return {
+                disabled: this.now_page_number === this.max_page_number
             }
         }
     }
