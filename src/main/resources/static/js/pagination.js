@@ -5,6 +5,26 @@
  * 当前页 最大页数
  * 重点：父组件必须要有getData()这个方法
  */
+/*  getData模板
+    getData: function () {
+            const that = this;
+            $.ajax({
+                url: 自己的url,
+                data: {
+                    now_page_number:now_page_number
+                    ,以及自己data
+                },
+                success: function (res) {
+                    if (res.data.length === 0) {
+                        alert("没有结果！")
+                    } else {
+                        需要赋值的变量 = res.data;
+                        that.max_page_number = res.max;
+                    }
+                }
+            })
+        }
+ */
 Vue.component('my-pagination', {
     props: ['now_page_number', 'max_page_number'],
     template: "<div v-if=\"max_page_number >5\">\n" +
