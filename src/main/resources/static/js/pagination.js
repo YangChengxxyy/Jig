@@ -11,7 +11,7 @@
             $.ajax({
                 url: 自己的url,
                 data: {
-                    now_page_number:now_page_number
+                    now_page_number:this.now_page_number
                     ,以及自己data
                 },
                 success: function (res) {
