@@ -1,6 +1,7 @@
 package com.jig.controller;
 
 import com.jig.entity.DemoEntity;
+import com.jig.entity.JigDefinition;
 import com.jig.entity.PurchaseIncomeSubmit;
 import com.jig.service.JigService_zhs;
 import org.apache.ibatis.annotations.Param;
@@ -82,8 +83,50 @@ public class jigJson_zhs {
     }
 
     @RequestMapping(value = "get_manager_purchase_detail",method = {RequestMethod.GET,RequestMethod.POST})
-    public PurchaseIncomeSubmit get_manager_purchase_detail(@RequestParam(value = "id") String id){
+    public PurchaseIncomeSubmit getManagerPurchaseDetail(@RequestParam(value = "id") String id){
         return jigService.get_manager_purchase_detail(id);
+    }
+
+    @RequestMapping(value = "manager_first_pass_purchase_submit",method = {RequestMethod.GET,RequestMethod.POST})
+    public String  managerFirstPassPurchase(@RequestParam(value = "id") String id,@RequestParam(value = "pass") String pass){
+        int flag = jigService.manager_first_pass_purchase_submit(id,pass);
+        if(flag<0){
+            return "操作失败！";
+        }
+        return "操作成功！";
+    }
+
+    @RequestMapping(value = "get_manager_jig_info_list",method = {RequestMethod.GET,RequestMethod.POST})
+    public Map<Object,Object> getManagerJigInfoList(@RequestParam(value = "page_number") int page_number){
+        page_number = (page_number-1)*5;
+        Map<Object, Object> map = new HashMap<>(2);
+        List<JigDefinition> list =  jigService.get_manager_jig_info_list(page_number);
+        int max = jigService.get_manager_jig_info_list_pages();
+        map.put("data",list);
+        map.put("max",max);
+        return map;
+    }
+
+    @RequestMapping(value = "get_manager_purchaselist_history",method = {RequestMethod.GET,RequestMethod.POST})
+    public Map<Object,Object> getManagerPurchaseList(@RequestParam(value = "bill_no") String bill_no,
+                                                     @RequestParam(value = "submit_name") String submit_name,
+                                                     @RequestParam(value = "submit_time") String submit_time,
+                                                     @RequestParam(value = "status") String status,
+                                                     @RequestParam(value = "page_number") int page_number){
+        page_number = (page_number-1)*5;
+        String start_date = "";
+        String end_date = "";
+        if(submit_time!="") {
+            start_date = submit_time.substring(0,10);
+            end_date = submit_time.substring(13);
+        }
+
+        Map<Object, Object> map = new HashMap<>(2);
+        List<PurchaseIncomeSubmit> list = jigService.get_manager_purchaselist_history(bill_no,submit_name,start_date,end_date,status,page_number);
+        int max = jigService.get_manager_purchaselist_history_pages(bill_no,submit_name,start_date,end_date,status);
+        map.put("data",list);
+        map.put("max",max);
+        return map;
     }
 
 }

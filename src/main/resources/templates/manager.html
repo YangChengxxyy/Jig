@@ -1,12 +1,21 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>经理</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/daterangepicker.css"/>
     <script src="js/jquery-3.4.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
+
+
+    <script src="js/moment.js"></script>
+    <script src="js/daterangepicker.js"></script>
     <script src="js/vue.js"></script>
+    <!--<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
         $(function () {
             $(".nav li").on('click',function (e) {
@@ -16,6 +25,28 @@
                 $(".nav li[href='"+href+"']").siblings().removeClass("active");
                 $(".nav li[href='"+href+"']").addClass("active");
             })
+
+            $("#bt1").click(function () {
+                var s = $("#date1").val();
+                alert(s);
+                $("#submit_time_hidden").val(s);
+            })
+
+            $("#purchase_submit_date").daterangepicker({
+                "opens": "center",
+                locale: { //汉化
+                    format: "YYYY-MM-DD", //设置显示格式
+                    applyLabel: '确定', //确定按钮文本
+                    cancelLabel: '取消', //取消按钮文本
+                    daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+                    monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
+                        '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                    firstDay: 1
+                }
+            }).on("hide.daterangepicker",function (ev) {
+                //触发DOM对象上的原生input事件
+                this.dispatchEvent(new Event('input'))
+            });
         })
     </script>
 </head>
@@ -150,6 +181,7 @@
                         <li data-toggle="tab" href="#storehouse"><a>仓库余量</a></li>
                     </ul>
                     <div class="panel-body tab-content">
+                        <!--采购审批-->
                         <div id="shopCheck" class="tab-pane fade in active">
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover" role="table">
@@ -158,7 +190,7 @@
                                         <th>采购单据号</th>
                                         <th>采购人</th>
                                         <th>产线id</th>
-                                        <th>工夹具代码</th>
+                                        <th>工夹具代码及数量</th>
                                         <th>申请时间</th>
                                         <th>状态</th>
                                         <th>操作</th>
@@ -172,26 +204,27 @@
                                             <td>
                                                 <label>
                                                     <select class="btn btn-default">
-                                                        <option  v-for="c in item.code.split('|')">{{c}}</option>
+                                                        <option  v-for="(code,index) in item.code.split('|')">{{code}} -- {{item.count.split('|')[index]}}件</option>
                                                     </select>
                                                 </label>
                                             </td>
                                             <td>{{item.submit_time}}</td>
-                                            <td v-if="item.status==0">初审未通过</td>
-                                            <td v-if="item.status==1">初审通过</td>
-                                            <td v-if="item.status==2">终审未通过</td>
-                                            <td v-if="item.status==3">终审通过</td>
+                                            <td v-if="item.status==0">待审批</td>
+                                            <td v-if="item.status==1">初审未通过</td>
+                                            <td v-if="item.status==2">初审通过</td>
+                                            <td v-if="item.status==3">终审未通过</td>
+                                            <td v-if="item.status==4">终审通过</td>
                                             <td>
-                                                <button class="btn btn-primary" data-toggle="modal"
+                                                <button class="btn btn-success" data-toggle="modal"
                                                         data-target="#myshoplist_detail" @click="get_purchaselist_detail(item.id)">查看
                                                 </button>
+                                                <button class="btn btn-primary" @click="pass_submit(item.id,4)" >终审通过</button>
+                                                <button class="btn btn-danger" @click="pass_submit(item.id,3)">终审不通过</button>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                        <div>
                             <div class="modal fade" id="myshoplist_detail" tabindex="-1"
                                  role="dialog"
                                  aria-labelledby="chukuLabel" aria-hidden="true">
@@ -226,15 +259,15 @@
                                                     </div>
                                                     <div class="col-sm-1"></div>
                                                 </div>
-                                                <div v-for="n in length">
+                                                <div v-for="(item,index) in purchaselist.code">
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 control-label">工夹具代码</label>
                                                         <div class="col-sm-3">
-                                                            <div class="form-control">{{purchaselist.code[n-1}}</div>
+                                                            <div class="form-control">{{item}}</div>
                                                         </div>
                                                         <label class="col-sm-3 control-label">采购数量</label>
                                                         <div class="col-sm-2">
-                                                            <div class="form-control">{{purchaselist.number[n-1]}}</div>
+                                                            <div class="form-control">{{purchaselist.count[index]}}</div>
                                                         </div>
                                                         <div class="col-sm-1"></div>
                                                     </div>
@@ -249,18 +282,15 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-3 control-label">审批状态</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text"
-                                                               class="form-control warning"
-                                                               value="初审通过" readonly>
+                                                        <div class="form-control" v-if="purchaselist.status==0">待审批</div>
+                                                        <div class="form-control" v-if="purchaselist.status==1">初审未通过</div>
+                                                        <div class="form-control" v-if="purchaselist.status==2">初审通过</div>
+                                                        <div class="form-control" v-if="purchaselist.status==3">终审未通过</div>
+                                                        <div class="form-control" v-if="purchaselist.status==4">终审通过</div>
                                                     </div>
                                                     <div class="col-sm-1"></div>
                                                 </div>
                                             </form>
-                                        </div>
-                                        <div class="text-center">
-                                            <button type="button" class="btn btn-success">审批&nbsp;&nbsp;&nbsp;通过</button>
-                                            <button type="button" class="btn btn-danger">审批不通过
-                                            </button>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default"
@@ -270,7 +300,8 @@
                                     </div><!-- /.modal-content -->
                                 </div><!-- /.modal -->
                             </div>
-                        </div>
+                        </div><!-- /采购审批 -->
+
                         <div id="historyShop" class="tab-pane fade">
                             <!--历史采购记录-->
                             <div style="margin-top: 2%;margin-bottom: 3%">
@@ -278,30 +309,31 @@
                                     <div class="form-group row">
                                         <label for="sel_shoplist_id" class="col-sm-2 control-label">单据号</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" id="sel_shoplist_id">
+                                            <input type="text" class="form-control" id="sel_shoplist_id" v-model="bill_no">
                                         </div>
-                                        <label for="shop_number" class="col-sm-2 control-label">采购人</label>
+                                        <label class="col-sm-2 control-label">采购人</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" id="sel_shopman_name">
+                                            <input type="text" class="form-control" id="sel_shopman_name" v-model="submit_name">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="sel_applytime" class="col-sm-2 control-label">申请日期</label>
+                                        <label for="div_date1" class="col-sm-2 control-label">选择时间</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" id="sel_applytime">
+                                            <div class='input-group' id='div_date1'>
+                                                <input id="purchase_submit_date" class="form-control" v-model="submit_time"></input>
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-remove" @click="clear_date"></span>
+                                                </span>
+                                            </div>
                                         </div>
                                         <label for="sel_status" class="col-sm-2 control-label">审批状态</label>
                                         <div class="col-sm-3">
-                                            <select class="form-control" id="sel_status">
-                                                <option>待初审</option>
-                                                <option>初审通过</option>
-                                                <option>初审不通过</option>
-                                                <option>终审不通过</option>
-                                                <option>终审通过</option>
+                                            <select class="form-control" id="sel_status" v-model="status">
+                                                <option v-for="option in options" v-bind:value="option.value">{{option.text}}</option>
                                             </select>
                                         </div>
                                         <div class="col-sm-2">
-                                            <button class="btn btn-primary" type="button">查询</button>
+                                            <button class="btn btn-primary" type="button" @click="get_purchaselist">查询</button>
                                         </div>
                                     </div>
                                 </form>
@@ -313,28 +345,174 @@
                                         <th>采购单据号</th>
                                         <th>采购人</th>
                                         <th>产线id</th>
-                                        <th>工夹具代码</th>
+                                        <th>工夹具代码及其数量</th>
                                         <th>申请时间</th>
                                         <th>状态</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>BO19072900000018</td>
-                                        <td>张三</td>
-                                        <td>BLKA10-L2</td>
-                                        <td>EF0789</td>
-                                        <td>2019-01-09 12:45</td>
-                                        <td>终审通过</td>
+                                    <tr v-for="item in purchaselist">
+                                        <td>{{item.bill_no}}</td>
+                                        <td>{{item.name}}</td>
+                                        <td>{{item.production_line_id}}</td>
                                         <td>
-                                            <button type="button" class="btn btn-primary">查看</button>
+                                            <label>
+                                                <select class="btn btn-default">
+                                                    <option  v-for="(code,index) in item.code.split('|')">{{code}} -- {{item.count.split('|')[index]}}件</option>
+                                                </select>
+                                            </label>
+                                        </td>
+                                        <td>{{item.submit_time}}</td>
+                                        <td v-if="item.status==0">待审批</td>
+                                        <td v-if="item.status==1">初审未通过</td>
+                                        <td v-if="item.status==2">初审通过</td>
+                                        <td v-if="item.status==3">终审未通过</td>
+                                        <td v-if="item.status==4">终审通过</td>
+                                        <td>
+                                            <button type="button" data-target="#myshoplist_history_detail"
+                                                    data-toggle="modal" class="btn btn-primary" @click="get_purchaselist_detail(item.id)">查看</button>
                                         </td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
+                            <div class="text-center row" v-if="max_page_number != 0">
+                                <ul v-if="now_page_number <= 3 && now_page_number < max_page_number-1"
+                                    class="pagination">
+                                    <li :class="havePrevious"
+                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
+                                        <a>&laquo;</a></li>
+                                    <li :class="{'active': now_page_number == 1}"
+                                        @click="turn_page(1)"><a>1</a></li>
+                                    <li :class="{'active': now_page_number == 2}"
+                                        @click="turn_page(2)"><a>2</a></li>
+                                    <li :class="{'active': now_page_number == 3}"
+                                        @click="turn_page(3)"><a>3</a></li>
+                                    <li class="disabled"><a>...</a></li>
+                                    <li @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a>
+                                    </li>
+                                    <li @click="turn_page(max_page_number)"><a>{{max_page_number}}</a>
+                                    </li>
+                                    <li :class="haveNext"
+                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)">
+                                        <a>&raquo;</a>
+                                    </li>
+                                </ul>
+                                <ul v-else-if="now_page_number > 3 && now_page_number+1 <= max_page_number-2"
+                                    class="pagination">
+                                    <li :class="havePrevious"
+                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
+                                        <a>&laquo;</a></li>
+                                    <li @click="turn_page(1)"><a>1</a></li>
+                                    <li @click="turn_page(2)"><a>2</a></li>
+                                    <li class="disabled"><a>...</a></li>
+                                    <li @click="turn_page(now_page_number-1)"><a>{{now_page_number-1}}</a></li>
+                                    <li class="active" @click="turn_page(now_page_number)"><a>{{now_page_number}}</a>
+                                    </li>
+                                    <li @click="turn_page(now_page_number+1)"><a>{{now_page_number+1}}</a></li>
+                                    <li class="disabled"><a>...</a></li>
+                                    <li @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a></li>
+                                    <li @click="turn_page(max_page_number)"><a>{{max_page_number}}</a></li>
+                                    <li :class="haveNext"
+                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>
+                                    </li>
+                                </ul>
+                                <ul v-else-if="now_page_number>=4 && now_page_number >= max_page_number-2"
+                                    class="pagination">
+                                    <li :class="havePrevious"
+                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
+                                        <a>&laquo;</a></li>
+                                    <li @click="turn_page(1)"><a>1</a></li>
+                                    <li @click="turn_page(2)"><a>2</a></li>
+                                    <li class="disabled"><a>...</a></li>
+                                    <li :class="{'active' : now_page_number == max_page_number-2 }"
+                                        @click="turn_page(max_page_number-2)"><a>{{max_page_number-2}}</a></li>
+                                    <li :class="{'active' : now_page_number == max_page_number-1 }"
+                                        @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a></li>
+                                    <li :class="{'active' : now_page_number == max_page_number }"
+                                        @click="turn_page(max_page_number)"><a>{{max_page_number}}</a></li>
+                                    <li :class="haveNext"
+                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="modal fade" id="myshoplist_history_detail" tabindex="-1"
+                                 role="dialog"
+                                 aria-labelledby="chukuLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-hidden="true">&times;
+                                            </button>
+                                            <h4 class="modal-title">我的采购单</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form role="form" class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">采购单据号</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{purchase_submit.bill_no}}</div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">采购人</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{purchase_submit.name}}</div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">产线id</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{purchase_submit.production_line_id}}</div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                                <div v-for="(item,index) in purchase_submit.code">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 control-label">工夹具代码</label>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-control">{{item}}</div>
+                                                        </div>
+                                                        <label class="col-sm-3 control-label">采购数量</label>
+                                                        <div class="col-sm-2">
+                                                            <div class="form-control">{{purchase_submit.count[index]}}</div>
+                                                        </div>
+                                                        <div class="col-sm-1"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">申请时间</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{purchase_submit.submit_time}}</div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">审批状态</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control" v-if="purchase_submit.status==0">待审批</div>
+                                                        <div class="form-control" v-if="purchase_submit.status==1">初审未通过</div>
+                                                        <div class="form-control" v-if="purchase_submit.status==2">初审通过</div>
+                                                        <div class="form-control" v-if="purchase_submit.status==3">终审未通过</div>
+                                                        <div class="form-control" v-if="purchase_submit.status==4">终审通过</div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default"
+                                                    data-dismiss="modal">关闭
+                                            </button>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal -->
+                            </div>
+                        </div><!-- /历史采购记录-->
                         <div id="storehouse" class="tab-pane fade">
                             <!--仓库余量-->
                             <div style="margin-top: 2%;margin-bottom: 3%">
@@ -344,13 +522,13 @@
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control" id="sel_code_id">
                                         </div>
-                                        <label for="shop_number" class="col-sm-2 control-label">工夹具id</label>
+                                        <label  class="col-sm-2 control-label">工夹具id</label>
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control" id="sel_seq_id">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="sel_applytime" class="col-sm-2 control-label">入库日期</label>
+                                        <label for="sel_reg_date" class="col-sm-2 control-label">入库日期</label>
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control" id="sel_reg_date">
                                         </div>
@@ -594,7 +772,7 @@
 
                     </ul>
                     <div class="panel-body tab-content">
-                            <!--工夹具信息-->
+                        <!--工夹具信息-->
                         <div id="seqInfo" class="tab-pane fade in active table-responsive">
                             <table class="table table-striped table-hover" role="table">
                                 <thead>
@@ -612,42 +790,218 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
+                                <tr v-for="jig in jig_list">
                                     <td style="display:none;">1091</td>
-                                    <td>EF2189</td>
-                                    <td>MOD 3XM2 调谐夹具</td>
+                                    <td>{{jig.code}}</td>
+                                    <td>{{jig.name}}</td>
+                                    <td>{{jig.model}}</td>
                                     <td>
                                         <label>
                                             <select class="btn btn-default">
-                                                <option>MOD 3XM2</option>
+                                                <option v-for="part_no in jig.part_no.split('|')">{{part_no}}</option>
                                             </select>
                                         </label>
                                     </td>
-                                    <td>
-                                        <label>
-                                            <select class="btn btn-default">
-                                                <option>PNA90320/1</option>
-                                                <option>PNA90320/2</option>
-                                                <option>PNA90322/1</option>
-                                            </select>
-                                        </label>
-                                    </td>
-                                    <td>JABIL FU 79</td>
-                                    <td>3</td>
-                                    <td>打调谐盖板</td>
-                                    <td>30天</td>
+                                    <td>{{jig.family}}</td>
+                                    <td>{{jig.upl}}</td>
+                                    <td>{{jig.user_for}}</td>
+                                    <td>{{jig.pm_period}}</td>
                                     <td>
                                         <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                data-target="#edit_seqInfo">修改
+                                                data-target="#edit_jigInfo">修改
                                         </button>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
-                        </div>
+                            <div class="text-center row" v-if="max_page_number != 0">
+                                <ul v-if="now_page_number <= 3 && now_page_number < max_page_number-1"
+                                    class="pagination">
+                                    <li :class="havePrevious"
+                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
+                                        <a>&laquo;</a></li>
+                                    <li :class="{'active': now_page_number == 1}"
+                                        @click="turn_page(1)"><a>1</a></li>
+                                    <li :class="{'active': now_page_number == 2}"
+                                        @click="turn_page(2)"><a>2</a></li>
+                                    <li :class="{'active': now_page_number == 3}"
+                                        @click="turn_page(3)"><a>3</a></li>
+                                    <li class="disabled"><a>...</a></li>
+                                    <li @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a>
+                                    </li>
+                                    <li @click="turn_page(max_page_number)"><a>{{max_page_number}}</a>
+                                    </li>
+                                    <li :class="haveNext"
+                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)">
+                                        <a>&raquo;</a>
+                                    </li>
+                                </ul>
+                                <ul v-else-if="now_page_number > 3 && now_page_number+1 <= max_page_number-2"
+                                    class="pagination">
+                                    <li :class="havePrevious"
+                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
+                                        <a>&laquo;</a></li>
+                                    <li @click="turn_page(1)"><a>1</a></li>
+                                    <li @click="turn_page(2)"><a>2</a></li>
+                                    <li class="disabled"><a>...</a></li>
+                                    <li @click="turn_page(now_page_number-1)"><a>{{now_page_number-1}}</a></li>
+                                    <li class="active" @click="turn_page(now_page_number)"><a>{{now_page_number}}</a>
+                                    </li>
+                                    <li @click="turn_page(now_page_number+1)"><a>{{now_page_number+1}}</a></li>
+                                    <li class="disabled"><a>...</a></li>
+                                    <li @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a></li>
+                                    <li @click="turn_page(max_page_number)"><a>{{max_page_number}}</a></li>
+                                    <li :class="haveNext"
+                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>
+                                    </li>
+                                </ul>
+                                <ul v-else-if="now_page_number>=4 && now_page_number >= max_page_number-2"
+                                    class="pagination">
+                                    <li :class="havePrevious"
+                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
+                                        <a>&laquo;</a></li>
+                                    <li @click="turn_page(1)"><a>1</a></li>
+                                    <li @click="turn_page(2)"><a>2</a></li>
+                                    <li class="disabled"><a>...</a></li>
+                                    <li :class="{'active' : now_page_number == max_page_number-2 }"
+                                        @click="turn_page(max_page_number-2)"><a>{{max_page_number-2}}</a></li>
+                                    <li :class="{'active' : now_page_number == max_page_number-1 }"
+                                        @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a></li>
+                                    <li :class="{'active' : now_page_number == max_page_number }"
+                                        @click="turn_page(max_page_number)"><a>{{max_page_number}}</a></li>
+                                    <li :class="haveNext"
+                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="modal fade" id="edit_jigInfo" tabindex="-1" role="dialog"
+                                 aria-labelledby="checkLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-hidden="true">&times;
+                                            </button>
+                                            <h4 class="modal-title" id="checkLabel">工夹具明细</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-horizontal" v-if="jig != null">
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">工夹具代码</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" v-model="jig.code">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">工夹具名字</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" v-model="jig.name">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">所属部门</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" v-model="jig.workcell">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">类别</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" v-model="jig.family">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">工夹具模组</label>
+                                                    <div class="col-sm-8">
+                                                        <select class="form-control">
+                                                            <option v-for="item in jig.model">{{item}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">工夹具料号</label>
+                                                    <div class="col-sm-8">
+                                                        <select class="form-control">
+                                                            <option v-for="item in jig.part_no">{{item}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">用途</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{jig.user_for}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">每条产线所需</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{jig.upl}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">责任人</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{jig.owner_name}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">录入人</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{jig.rec_by_name}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">录入时间</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{jig.rec_time}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">修改人</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{jig.edit_by_name}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">修改时间</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{jig.edit_time}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">保养点检周期</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{jig.pm_period}}天
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default"
+                                                    data-dismiss="modal">关闭
+                                            </button>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal -->
+                            </div>
+                        </div><!-- /工夹具信息 -->
                     </div>
-
-
                 </div>
 
                 <div class="panel-footer">
@@ -657,6 +1011,7 @@
         </div>
     </div>
 </div>
+
 <script src="js/manager.js"></script>
 </body>
 </html>
