@@ -40,6 +40,9 @@ const search_jig = new Vue({
         },
         search: function () {
             this.now_page_number = 1;
+            if (this.code === '' && this.name === '' && this.workcell === '' && this.family === '' && this.user_for === '') {
+                return false;
+            }
             this.getData();
         },
         check_detail: function (index) {
@@ -92,7 +95,9 @@ const return_jig = new Vue({
         check1: false,
         check2: false,
         check3: false,
-        id: ""
+        id: "",
+        now_page_number: 1,
+        max_page_number: 0
     },
     created: function () {
         this.getData();
@@ -102,11 +107,15 @@ const return_jig = new Vue({
             const that = this;
             $.ajax({
                 url: "get_outgoing_jig",
+                data: {
+                    page_number: this.now_page_number
+                },
                 success: function (res) {
-                    that.outgoing_jig_list = res;
-                    $.each(that.outgoing_jig_list, function (i, v) {
+                    $.each(res.data, function (i, v) {
                         v.position = position(v);
-                    })
+                    });
+                    that.outgoing_jig_list = res.data;
+                    that.max_page_number = res.max;
                 }
             });
         },
@@ -190,7 +199,9 @@ const jig_outgoing = new Vue({
         position: "",
         check1: false,
         check2: false,
-        id: ""
+        id: "",
+        now_page_number: 1,
+        max_page_number: 0
     },
     created: function () {
         this.getData();
@@ -200,8 +211,12 @@ const jig_outgoing = new Vue({
             const that = this;
             $.ajax({
                 url: "get_outgoing_submit",
+                data: {
+                    page_number: this.now_page_number
+                },
                 success: function (res) {
-                    that.outgoing_submit_list = res
+                    that.outgoing_submit_list = res.data;
+                    that.max_page_number = res.max;
                 }
             })
         },

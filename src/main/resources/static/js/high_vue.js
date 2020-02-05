@@ -191,13 +191,65 @@ const add_myshoplist = new Vue({
     }
 });
 const historyShop = new Vue({
-    el:"#historyShop",
-    data:{
-        bill_no:"",
-        user_name:"",
-        code:"",
-        production_line_id:"",
-        status:"",
-        date_range:'',
+    el: "#historyShop",
+    data: {
+        bill_no: "",
+        submit_name: "",
+        code: "",
+        production_line_id: "",
+        status: "",
+        date_range: '',
+        history_list: [],
+        now_page_number: 1,
+        max_page_number: 0
     },
+    methods: {
+        clean: function () {
+            this.bill_no = "";
+            this.submit_name = "";
+            this.code = "";
+            this.production_line_id = "";
+            this.status = "";
+            this.history_list = [];
+            this.date_range = "";
+            this.now_page_number = 1;
+            this.max_page_number = 0;
+        },
+        getData: function () {
+            let that = this;
+            let splits = this.date_range.split(" - ");
+            if (splits.length === 1) {
+                splits = ['', ''];
+            }
+            $.ajax({
+                url: "search_purchase_income_history",
+                data: {
+                    bill_no: this.bill_no,
+                    submit_name: this.submit_name,
+                    code: this.code,
+                    production_line_id: this.production_line_id,
+                    status: this.status,
+                    start_date: splits[0],
+                    end_date: splits[1],
+                    page_number: this.now_page_number
+                },
+                success: function (res) {
+                    if (res.data.length === 0) {
+                        alert("没有结果！")
+                    } else {
+                        $.each(res.data, function (index, value) {
+                            value.code = value.code.split("|");
+                            value.count = value.count.split("|");
+                        });
+                        that.history_list = res.data;
+                        that.max_page_number = res.max;
+                    }
+                }
+            });
+        },
+        search: function (page_number) {
+            this.now_page_number = 1;
+            this.getData();
+        }
+    }
 });

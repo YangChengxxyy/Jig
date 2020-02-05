@@ -48,19 +48,19 @@
     <select id="searchJigDefinition" resultType="com.jig.entity.JigDefinition">
         select * from jig_definition_entity_view
         <where>
-            <if test="code != null">
+            <if test="code != null and code != ''">
                 and code like concat('%',#{code},'%')
             </if>
-            <if test="name != null">
+            <if test="name != null and name != ''">
                 and name like concat('%',#{name},'%')
             </if>
-            <if test="workcell != null">
+            <if test="workcell != null and workcell != ''">
                 and workcell like concat('%',#{workcell},'%')
             </if>
-            <if test="family != null">
+            <if test="family != null and family != ''">
                 and family like concat('%',#{family},'%')
             </if>
-            <if test="userFor != null">
+            <if test="userFor != null and userFor != ''">
                 and user_for like concat('%',#{userFor},'%')
             </if>
         </where>
@@ -70,19 +70,19 @@
         SELECT count(*)
         FROM jig_definition_entity_view
         <where>
-            <if test="code != null">
+            <if test="code != null and code != ''">
                 and code like concat('%',#{code},'%')
             </if>
-            <if test="name != null">
+            <if test="name != null and name != ''">
                 and name like concat('%',#{name},'%')
             </if>
-            <if test="workcell != null">
+            <if test="workcell != null and workcell != ''">
                 and workcell like concat('%',#{workcell},'%')
             </if>
-            <if test="family != null">
+            <if test="family != null and family != ''">
                 and family like concat('%',#{family},'%')
             </if>
-            <if test="userFor != null">
+            <if test="userFor != null and userFor != ''">
                 and user_for like concat('%',#{userFor},'%')
             </if>
         </where>
@@ -115,6 +115,11 @@
     <select id="getOutgoSubmit" resultType="com.jig.entity.OutgoSubmit">
         select *
         from outgo_submit_entity_view
+        limit #{page_number},5
+    </select>
+    <select id="getOutgoSubmitPage" resultType="java.lang.Integer">
+        select count(*)
+        from outgo_submit_entity_view
     </select>
     <select id="getPosition" resultType="com.jig.entity.Position">
         select jig_cabinet_id, location_id, bin, status
@@ -124,6 +129,11 @@
     </select>
     <select id="getOutgoingJig" resultType="com.jig.entity.OutgoingJig">
         select *
+        from outgoing_jig_entity_view
+        limit #{page_number},5
+    </select>
+    <select id="getOutgoingJigPage" resultType="java.lang.Integer">
+        select count(*)
         from outgoing_jig_entity_view
     </select>
     <select id="getProductionLineList" resultType="com.jig.entity.ProductionLine">
@@ -148,7 +158,61 @@
         from purchase_income_submit,
              user,
              production_line
-        where user.id = purchase_income_submit.submit_id
+        where purchase_income_submit.submit_id = user.id
           and purchase_income_submit.production_line_id = production_line.id
     </select>
+    <select id="searchPurchaseIncomeHistory" resultType="com.jig.entity.PurchaseIncomeHistory">
+        select purchase_income_submit_history.*, production_line.name production_line_name, user.name submit_name
+        from purchase_income_submit_history,
+        user,
+        production_line
+        where purchase_income_submit_history.submit_id = user.id
+        and purchase_income_submit_history.production_line_id = production_line.id
+        <if test="bill_no != null and bill_no != ''">
+            and purchase_income_submit_history.bill_no like concat('%',#{bill_no},'%')
+        </if>
+        <if test="submit_name != null and submit_name != ''">
+            and user.name like concat('%',#{submit_name},'%')
+        </if>
+        <if test="code != null and code != ''">
+            and purchase_income_submit_history.code like concat('%',#{code},'%');
+        </if>
+        <if test="production_line_id != null and production_line_id != ''">
+            and purchase_income_submit_history.production_line_id = #{production_line_id}
+        </if>
+        <if test="status != null and status != ''">
+            and purchase_income_submit_history.status = #{status}
+        </if>
+        <if test="start_date != end_date">
+            and purchase_income_submit_history.submit_time between #{start_date} and #{end_date}
+        </if>
+        limit #{page_number},5
+    </select>
+    <select id="searchPurchaseIncomeHistoryPage" resultType="java.lang.Integer">
+        select count(*)
+        from purchase_income_submit_history,
+        user,
+        production_line
+        where purchase_income_submit_history.submit_id = user.id
+        and purchase_income_submit_history.production_line_id = production_line.id
+        <if test="bill_no != null and bill_no != ''">
+            and purchase_income_submit_history.bill_no like concat('%',#{bill_no},'%')
+        </if>
+        <if test="submit_name != null and submit_name != ''">
+            and user.name like concat('%',#{submit_name},'%')
+        </if>
+        <if test="code != null and code != ''">
+            and purchase_income_submit_history.code like concat('%',#{code},'%')
+        </if>
+        <if test="production_line_id != null and production_line_id != ''">
+            and purchase_income_submit_history.production_line_id = #{production_line_id}
+        </if>
+        <if test="status != null and status != ''">
+            and purchase_income_submit_history.status = #{status}
+        </if>
+        <if test="start_date != end_date">
+            and purchase_income_submit_history.submit_time between #{start_date} and #{end_date}
+        </if>
+    </select>
+
 </mapper>

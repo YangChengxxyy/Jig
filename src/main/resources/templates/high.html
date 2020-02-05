@@ -50,7 +50,8 @@
                 autoclose: true
             });
             $(".date-range").daterangepicker({
-                "opens": "center",
+                opens: "center",
+                autoUpdateInput:false,
                 locale: { //汉化
                     format: "YYYY-MM-DD", //设置显示格式
                     applyLabel: '确定', //确定按钮文本
@@ -58,11 +59,17 @@
                     daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
                     monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
                         '七月', '八月', '九月', '十月', '十一月', '十二月'],
-                    firstDay: 1
+                    firstDay: 1,
                 }
             }).on("hide.daterangepicker",function (ev) {
                 //触发DOM对象上的原生input事件
                 this.dispatchEvent(new Event('input'))
+            }).on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('YYYY-MM-DD') +' - '+picker.endDate.format('YYYY-MM-DD'));
+                $(this).children().val(picker.startDate.format('YYYY-MM-DD') +' - '+picker.endDate.format('YYYY-MM-DD'));
+            }).on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+                $(this).children().val(picker.startDate.format('YYYY-MM-DD') +' - '+picker.endDate.format('YYYY-MM-DD'));
             });
             // $("#bt_addshoplist").click(function () {
             //     var aData = new Date();
@@ -90,19 +97,19 @@
             })*/
 
 
-            // $('#bt_sideleft').click(function () {
-            //     if (navis_side == 0) {
-            //         $('#navbar_left').hide(1000);
-            //         setTimeout(function () {
-            //             $('#navbar_right').attr('class', 'col-lg-12 column');
-            //         }, 1000);
-            //         navis_side = 1;
-            //     } else {
-            //         $('#navbar_left').show(1000);
-            //         $('#navbar_right').attr('class', 'col-lg-9 column');
-            //         navis_side = 0;
-            //     }
-            // })
+            $('#bt_sideleft').click(function () {
+                if (navis_side == 0) {
+                    $('#navbar_left').hide(1000);
+                    setTimeout(function () {
+                        $('#navbar_right').attr('class', 'col-lg-12 column');
+                    }, 1000);
+                    navis_side = 1;
+                } else {
+                    $('#navbar_left').show(1000);
+                    $('#navbar_right').attr('class', 'col-lg-9 column');
+                    navis_side = 0;
+                }
+            })
         })
     </script>
     <style>
@@ -309,9 +316,7 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                                <div class="text-center row" v-if="max_page_number != 0">
-                                    <my-pagination :max_page_number="max_page_number" :now_page_number="now_page_number"></my-pagination>
-                                </div>
+                                <my-pagination :max_page_number="max_page_number" :now_page_number="now_page_number"></my-pagination>
                                 <div class="modal fade" id="myshoplist_detail" tabindex="-1"
                                      role="dialog"
                                      aria-labelledby="chukuLabel" aria-hidden="true">
@@ -495,11 +500,11 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">单据号</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" v-model="bill_no">
+                                            <input type="text" class="form-control" v-model.trim="bill_no">
                                         </div>
                                         <label class="col-sm-2 control-label">采购人</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" v-model="user_name">
+                                            <input type="text" class="form-control" v-model.trim="submit_name">
                                         </div>
                                         <div class="col-sm-2">
                                         </div>
@@ -507,11 +512,11 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">工夹具代码</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" v-model="code">
+                                            <input type="text" class="form-control" v-model.trim="code">
                                         </div>
                                         <label class="col-sm-2 control-label">产线</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" v-model="production_line_id">
+                                            <input type="text" class="form-control" v-model.trim="production_line_id">
                                         </div>
                                         <div class="col-sm-2">
                                         </div>
@@ -537,12 +542,10 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-sm-8"></div>
-                                        <div class="col-sm-1">
-                                            <button type="button" class="btn btn-default">清空</button>
-                                        </div>
-                                        <div class="col-sm-1">
-                                            <button type="button" class="btn btn-primary">查询</button>
+                                        <div class="col-sm-7"></div>
+                                        <div class="col-sm-3">
+                                            <button type="button" class="btn btn-default" @click="clean">清空</button>
+                                            <button type="button" class="btn btn-primary" @click="search">查询</button>
                                         </div>
                                     </div>
                                 </div>
@@ -553,32 +556,40 @@
                                     <tr>
                                         <th>采购单据号</th>
                                         <th>采购人</th>
-                                        <th>产线id</th>
-                                        <th>工夹具代码</th>
+                                        <th>产线</th>
+                                        <th>工夹具代码及数量</th>
                                         <th>申请时间</th>
                                         <th>状态</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>EF07897897892</td>
-                                        <td>张三</td>
-                                        <td>BLKA10-L2</td>
-                                        <td>EF0789</td>
-                                        <td>2019-12-31 12:39</td>
-                                        <td>待初审</td>
+                                    <tr v-for="history in history_list">
+                                        <td>{{history.bill_no}}</td>
+                                        <td>{{history.submit_name}}</td>
+                                        <td>{{history.production_line_name}}</td>
+                                        <td>
+                                            <select class="btn btn-default">
+                                                <option v-for="(value,index) in history.code">{{value+" — "}}{{history.count[index]}}件</option>
+                                            </select>
+                                        </td>
+                                        <td>{{history.submit_time}}</td>
+                                        <td v-if="history.status == 0">待初审</td>
+                                        <td v-else-if="history.status == 1">初审未通过</td>
+                                        <td v-else-if="history.status == 2">初审通过</td>
+                                        <td v-else-if="history.status == 3">终审未通过</td>
+                                        <td v-else>终审通过</td>
                                         <td>
                                             <button type="button" class="btn btn-primary">查看</button>
                                         </td>
                                     </tr>
                                     </tbody>
                                 </table>
+                                <my-pagination :max_page_number="max_page_number" :now_page_number="now_page_number"></my-pagination>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div id="main2" class="panel-body tab-content tab-pane fade">
                     <ul class="nav nav-tabs">
                         <li class="active" data-toggle="tab" href="#myrepair"><a>我的报修</a></li>
@@ -727,7 +738,7 @@
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control" name="sel_repair_reason">
                                         </div>
-                                        <label for="sel_status" class="col-sm-2 control-label">审批状态</label>
+                                        <label class="col-sm-2 control-label">审批状态</label>
                                         <div class="col-sm-3">
                                             <select class="form-control">
                                                 <option>初审通过</option>
@@ -932,7 +943,7 @@
                             <div style="margin-bottom: 3%">
                                 <form role="form" class="form-horizontal">
                                     <div class="form-group row">
-                                        <label for="sel_shoplist_id" class="col-sm-2 control-label">工夹具代码</label>
+                                        <label class="col-sm-2 control-label">工夹具代码</label>
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control" name="sel_repair_seq_code">
                                         </div>
@@ -948,7 +959,7 @@
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control" name="sel_repair_reason">
                                         </div>
-                                        <label for="sel_status" class="col-sm-2 control-label">审批状态</label>
+                                        <label class="col-sm-2 control-label">审批状态</label>
                                         <div class="col-sm-3">
                                             <select class="form-control">
                                                 <option>初审通过</option>

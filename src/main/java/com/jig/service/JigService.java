@@ -34,8 +34,14 @@ public class JigService {
         return jigMapper.searchAllJigDefinition(code, name, workcell, family, userFor);
     }
 
-    public List<OutgoSubmit> getOutgoingSubmit() {
-        return jigMapper.getOutgoSubmit();
+    public List<OutgoSubmit> getOutgoingSubmit(int page_number) {
+        page_number = (page_number - 1) * 5;
+        return jigMapper.getOutgoSubmit(page_number);
+    }
+
+    public int getgetOutgoingSubmitPage() {
+        int a = jigMapper.getOutgoSubmitPage();
+        return (int) Math.ceil(a / 5.0);
     }
 
     public Position getPosition(String code, String seq_id) {
@@ -47,10 +53,13 @@ public class JigService {
         jigMapper.deleteOutgoSubmit(id);
     }
 
-    public List<OutgoingJig> getOutgoingJig() {
-        return jigMapper.getOutgoingJig();
+    public List<OutgoingJig> getOutgoingJig(int page_number) {
+        page_number = (page_number - 1) * 5;
+        return jigMapper.getOutgoingJig(page_number);
     }
-
+    public int getOutgoingJigPage(){
+        return jigMapper.getOutgoingJigPage();
+    }
     public void returnJig(String id, String code, String seq_id, String rec_id) {
         jigMapper.returnJig(id, code, seq_id, rec_id);
         jigMapper.deleteOutgoingJig(id);
@@ -81,4 +90,16 @@ public class JigService {
         int a = jigMapper.getPurchaseIncomeSubmitListPage(page_number);
         return (int) Math.ceil(a / 5.0);
     }
+
+    public List<PurchaseIncomeHistory> searchPurchaseIncomeHistory(String bill_no, String submit_name, String code, String production_line_id, String status, String start_date, String end_date, int page_number) {
+        page_number = (page_number - 1) * 5;
+        return jigMapper.searchPurchaseIncomeHistory(bill_no, submit_name, code, production_line_id, status, start_date, end_date, page_number);
+    }
+
+    public int searchPurchaseIncomeHistoryPage(String bill_no, String submit_name, String code, String production_line_id, String status, String start_date, String end_date) {
+        int a = jigMapper.searchPurchaseIncomeHistoryPage(bill_no, submit_name, code, production_line_id, status, start_date, end_date);
+        return (int) Math.ceil(a / 5.0);
+    }
+
+
 }

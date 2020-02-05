@@ -61,7 +61,14 @@ public interface JigMapper {
      *
      * @return 出库申请集合
      */
-    List<OutgoSubmit> getOutgoSubmit();
+    List<OutgoSubmit> getOutgoSubmit(@Param("page_number") int page_number);
+
+    /**
+     * 获取出库记录条数
+     *
+     * @return 出库记录条数
+     */
+    int getOutgoSubmitPage();
 
     /**
      * 获取工夹具位置
@@ -94,8 +101,14 @@ public interface JigMapper {
      *
      * @return 已出库工夹具OutgoingJig对象
      */
-    List<OutgoingJig> getOutgoingJig();
+    List<OutgoingJig> getOutgoingJig(@Param("page_number") int page_number);
 
+    /**
+     * 获得已出库工夹具记录数
+     *
+     * @return 已出库工夹具记录数
+     */
+    int getOutgoingJigPage();
     /**
      * 工夹具入库
      *
@@ -148,4 +161,13 @@ public interface JigMapper {
     void updatePurchaseIncomeSubmit(@Param("id") String id, @Param("code") String code, @Param("count") String count, @Param("production_line_id") String production_line_id);
 
     int getPurchaseIncomeSubmitListPage(@Param("page_number") int page_number);
+
+    List<PurchaseIncomeHistory> searchPurchaseIncomeHistory(@Param("bill_no") String bill_no, @Param("submit_name") String user_name,
+                                                            @Param("code") String code, @Param("production_line_id") String production_line_id,
+                                                            @Param("status") String status, @Param("start_date") String start_date,
+                                                            @Param("end_date") String end_date, @Param("page_number") int page_number);
+
+    int searchPurchaseIncomeHistoryPage(@Param("bill_no") String bill_no, @Param("submit_name") String submit_name,
+                                        @Param("code") String code, @Param("production_line_id") String production_line_id,
+                                        @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date);
 }

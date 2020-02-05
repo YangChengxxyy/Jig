@@ -71,8 +71,11 @@ public class JigJson {
      * @return 出库申请
      */
     @RequestMapping("get_outgoing_submit")
-    public List<OutgoSubmit> getOutgoingSubmit() {
-        return jigService.getOutgoingSubmit();
+    public Map<String, Object> getOutgoingSubmit(@RequestParam(value = "page_number")int page_number) {
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("data",jigService.getOutgoingSubmit(page_number));
+        map.put("max", jigService.getgetOutgoingSubmitPage());
+        return map;
     }
 
     /**
@@ -108,8 +111,11 @@ public class JigJson {
      * @return 需要入库的工夹具信息
      */
     @RequestMapping("get_outgoing_jig")
-    public List<OutgoingJig> getOutgoingJig() {
-        return jigService.getOutgoingJig();
+    public Map<String,Object> getOutgoingJig(@RequestParam(value = "page_number")int page_number) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("data",jigService.getOutgoingJig(page_number));
+        map.put("max",jigService.getOutgoingJigPage());
+        return map;
     }
 
     /**
@@ -175,21 +181,33 @@ public class JigJson {
      * @return 采购入库申请列表
      */
     @RequestMapping("get_purchase_income_submit_list")
-    public Map<String, Object> getPurchaseIncomeSubmitList(@RequestParam(value = "page_number")int page_number) {
+    public Map<String, Object> getPurchaseIncomeSubmitList(@RequestParam(value = "page_number") int page_number) {
         Map<String, Object> map = new HashMap<>();
-        map.put("data",jigService.getPurchaseIncomeSubmitList(page_number));
+        map.put("data", jigService.getPurchaseIncomeSubmitList(page_number));
         map.put("max", jigService.getPurchaseIncomeSubmitListPage(page_number));
         return map;
     }
+
     @RequestMapping("update_purchase_income_submit")
-    public String updatePurchaseIncomeSubmit(@RequestParam(value = "id")String id,@RequestParam(value = "code")String code,
+    public String updatePurchaseIncomeSubmit(@RequestParam(value = "id") String id, @RequestParam(value = "code") String code,
                                              @RequestParam(value = "count") String count,
-                                             @RequestParam("production_line_id")String  production_line_id){
-        try{
-            jigService.updatePurchaseIncomeSubmit(id,code,count,production_line_id);
-        }catch (Exception e){
+                                             @RequestParam("production_line_id") String production_line_id) {
+        try {
+            jigService.updatePurchaseIncomeSubmit(id, code, count, production_line_id);
+        } catch (Exception e) {
             return "服务器错误";
         }
         return "修改成功";
+    }
+
+    @RequestMapping("search_purchase_income_history")
+    public Map<String, Object> searchPurchaseIncomeHistory(@RequestParam(value = "bill_no") String bill_no, @RequestParam(value = "submit_name") String submit_name,
+                                                           @RequestParam(value = "code") String code, @RequestParam(value = "production_line_id") String production_line_id,
+                                                           @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
+                                                           @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number) {
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("data", jigService.searchPurchaseIncomeHistory(bill_no, submit_name, code, production_line_id, status, start_date, end_date, page_number));
+        map.put("max", jigService.searchPurchaseIncomeHistoryPage(bill_no, submit_name, code, production_line_id, status, start_date, end_date));
+        return map;
     }
 }
