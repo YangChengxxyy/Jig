@@ -60,16 +60,16 @@ const search_jig = new Vue({
         }
     },
     computed: {
-        havePrevious: function () {
-            return {
-                disabled: this.now_page_number === 1
-            }
-        },
-        haveNext: function () {
-            return {
-                disabled: this.now_page_number === this.max_page_number
-            }
-        },
+        // havePrevious: function () {
+        //     return {
+        //         disabled: this.now_page_number === 1
+        //     }
+        // },
+        // haveNext: function () {
+        //     return {
+        //         disabled: this.now_page_number === this.max_page_number
+        //     }
+        // },
         onePageUrl: function () {
             return "naive_download_search_one_excel?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&page_number=" + this.now_page_number + "&file_name=onePage" + this.now_page_number + ".xls";
         },
