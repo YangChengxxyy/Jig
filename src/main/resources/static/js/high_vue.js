@@ -101,14 +101,6 @@ const show_myshoplist = new Vue({
                     }
                 })
             }
-        },
-        turn_page: function (page_number) {
-            const that = this;
-            if (page_number === this.now_page_number) {
-                return false;
-            }
-            this.now_page_number = page_number;
-            this.getData();
         }
     },
     watch: {
@@ -120,21 +112,6 @@ const show_myshoplist = new Vue({
                     return item !== v;
                 })
             });
-        }
-    },
-    /**
-     * 分页所需
-     */
-    computed: {
-        havePrevious: function () {
-            return {
-                disabled: this.now_page_number === 1
-            }
-        },
-        haveNext: function () {
-            return {
-                disabled: this.now_page_number === this.max_page_number
-            }
         }
     }
 });
@@ -216,6 +193,11 @@ const add_myshoplist = new Vue({
 const historyShop = new Vue({
     el:"#historyShop",
     data:{
-
+        bill_no:"",
+        user_name:"",
+        code:"",
+        production_line_id:"",
+        status:"",
+        date_range:'',
     },
 });
