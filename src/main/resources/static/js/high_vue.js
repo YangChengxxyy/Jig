@@ -15,83 +15,9 @@ $.ajax({
         code_list = res;
     }
 });
-var add_myshoplist = new Vue({
-    el: "#add_myshoplist",
-    data: {
-        bill_no: "",
-        submit_id: "",
-        production_line_id: "",
-        max: 1,
-        code: [""],
-        count: [1],
-        production_line_list: production_line_list,
-        code_list: code_list,
-    },
-    watch: {
-        code: function (n) {
-            let that = this;
-            that.code_list = code_list;
-            $.each(n, function (i, v) {
-                that.code_list = that.code_list.filter(function (item) {
-                    return item !== v;
-                })
-            });
-        }
-    },
-    methods: {
-        addMax: function () {
-            if (this.max !== 4) {
-                this.max++;
-                this.code.push("");
-                this.count.push(1);
-            }
-        },
-        add_shoplist: function () {
-            const a = $("#add_myshoplist [style*='border-color: rgb(201, 48, 44);']");
-            if (a.length > 0) {
-                $("#add_myshoplist [style*='border-color: rgb(201, 48, 44);']:eq(0)").focus();
-                a.shake(2, 10, 200);
-                return false;
-            } else {
-                var that = this;
-                $.ajax({
-                    url: "add_shoplist",
-                    data: {
-                        bill_no: this.bill_no,
-                        submit_id: this.submit_id,
-                        production_line_id: this.production_line_id,
-                        code: this.code.join("|"),
-                        count: this.count.join("|")
-                    },
-                    success: function (res) {
-                        if (res === "添加成功") {
-                            alert(res);
-                            $("#add_myshoplist").modal("hide");
-                            that.clean();
-                            show_myshoplist.getData();
-                        } else {
-                            alert(res);
-                        }
-                    }
-                })
-            }
-        },
-        clean: function () {
-            this.code = [""];
-            this.count = [""];
-            this.max = 1;
-        },
-        del: function (index) {
-            if (this.max > 1) {
-                this.code.splice(index, 1);
-                this.count.splice(index, 1);
-                this.max -= 1;
-            }
-        }
-    }
-});
+
 //我的采购单数据的显示
-var show_myshoplist = new Vue({
+const show_myshoplist = new Vue({
     el: "#myShopList",
     data: {
         purchase_income_submit_list: [],
@@ -211,4 +137,85 @@ var show_myshoplist = new Vue({
             }
         }
     }
+});
+const add_myshoplist = new Vue({
+    el: "#add_myshoplist",
+    data: {
+        bill_no: "",
+        submit_id: "",
+        production_line_id: "",
+        max: 1,
+        code: [""],
+        count: [1],
+        production_line_list: production_line_list,
+        code_list: code_list,
+    },
+    watch: {
+        code: function (n) {
+            let that = this;
+            that.code_list = code_list;
+            $.each(n, function (i, v) {
+                that.code_list = that.code_list.filter(function (item) {
+                    return item !== v;
+                })
+            });
+        }
+    },
+    methods: {
+        addMax: function () {
+            if (this.max !== 4) {
+                this.max++;
+                this.code.push("");
+                this.count.push(1);
+            }
+        },
+        add_shoplist: function () {
+            const a = $("#add_myshoplist [style*='border-color: rgb(201, 48, 44);']");
+            if (a.length > 0) {
+                $("#add_myshoplist [style*='border-color: rgb(201, 48, 44);']:eq(0)").focus();
+                a.shake(2, 10, 200);
+                return false;
+            } else {
+                const that = this;
+                $.ajax({
+                    url: "add_shoplist",
+                    data: {
+                        bill_no: this.bill_no,
+                        submit_id: this.submit_id,
+                        production_line_id: this.production_line_id,
+                        code: this.code.join("|"),
+                        count: this.count.join("|")
+                    },
+                    success: function (res) {
+                        if (res === "添加成功") {
+                            alert(res);
+                            $("#add_myshoplist").modal("hide");
+                            that.clean();
+                            show_myshoplist.getData();
+                        } else {
+                            alert(res);
+                        }
+                    }
+                })
+            }
+        },
+        clean: function () {
+            this.code = [""];
+            this.count = [""];
+            this.max = 1;
+        },
+        del: function (index) {
+            if (this.max > 1) {
+                this.code.splice(index, 1);
+                this.count.splice(index, 1);
+                this.max -= 1;
+            }
+        }
+    }
+});
+const historyShop = new Vue({
+    el:"#historyShop",
+    data:{
+
+    },
 });

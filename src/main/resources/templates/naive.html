@@ -656,78 +656,79 @@
                                 </table>
                             </div>
                             <div class="text-center row" v-if="max_page_number != 0">
-                                <div v-if="max_page_number >5">
-                                <ul v-if="now_page_number <= 3 && now_page_number < max_page_number-1"
-                                    class="pagination">
-                                    <li :class="havePrevious"
-                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
-                                        <a>&laquo;</a></li>
-                                    <li :class="{'active': now_page_number == 1}"
-                                        @click="turn_page(1)"><a>1</a></li>
-                                    <li :class="{'active': now_page_number == 2}"
-                                        @click="turn_page(2)"><a>2</a></li>
-                                    <li :class="{'active': now_page_number == 3}"
-                                        @click="turn_page(3)"><a>3</a></li>
-                                    <li class="disabled"><a>...</a></li>
-                                    <li @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a>
-                                    </li>
-                                    <li @click="turn_page(max_page_number)"><a>{{max_page_number}}</a>
-                                    </li>
-                                    <li :class="haveNext"
-                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)">
-                                        <a>&raquo;</a>
-                                    </li>
-                                </ul>
-                                <ul v-else-if="now_page_number > 3 && now_page_number+1 <= max_page_number-2"
-                                    class="pagination">
-                                    <li :class="havePrevious"
-                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
-                                        <a>&laquo;</a></li>
-                                    <li @click="turn_page(1)"><a>1</a></li>
-                                    <li @click="turn_page(2)"><a>2</a></li>
-                                    <li class="disabled"><a>...</a></li>
-                                    <li @click="turn_page(now_page_number-1)"><a>{{now_page_number-1}}</a></li>
-                                    <li class="active" @click="turn_page(now_page_number)"><a>{{now_page_number}}</a>
-                                    </li>
-                                    <li @click="turn_page(now_page_number+1)"><a>{{now_page_number+1}}</a></li>
-                                    <li class="disabled"><a>...</a></li>
-                                    <li @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a></li>
-                                    <li @click="turn_page(max_page_number)"><a>{{max_page_number}}</a></li>
-                                    <li :class="haveNext"
-                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>
-                                    </li>
-                                </ul>
-                                <ul v-else-if="now_page_number>=4 && now_page_number >= max_page_number-2"
-                                    class="pagination">
-                                    <li :class="havePrevious"
-                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
-                                        <a>&laquo;</a></li>
-                                    <li @click="turn_page(1)"><a>1</a></li>
-                                    <li @click="turn_page(2)"><a>2</a></li>
-                                    <li class="disabled"><a>...</a></li>
-                                    <li :class="{'active' : now_page_number == max_page_number-2 }"
-                                        @click="turn_page(max_page_number-2)"><a>{{max_page_number-2}}</a></li>
-                                    <li :class="{'active' : now_page_number == max_page_number-1 }"
-                                        @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a></li>
-                                    <li :class="{'active' : now_page_number == max_page_number }"
-                                        @click="turn_page(max_page_number)"><a>{{max_page_number}}</a></li>
-                                    <li :class="haveNext"
-                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>
-                                    </li>
-                                </ul>
-                                </div>
-                                <div v-else>
-                                    <ul class="pagination">
-                                        <li :class="havePrevious"
-                                            @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
-                                            <a>&laquo;</a></li>
-                                        <li v-for="n in max_page_number" :class="{'active': n == now_page_number }" @click="turn_page(n)"><a>{{n}}</a></li>
-                                        <li :class="haveNext"
-                                            @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)">
-                                            <a>&raquo;</a>
-                                        </li>
-                                    </ul>
-                                </div>
+<!--                                <div v-if="max_page_number >5">-->
+<!--                                <ul v-if="now_page_number <= 3 && now_page_number < max_page_number-1"-->
+<!--                                    class="pagination">-->
+<!--                                    <li :class="havePrevious"-->
+<!--                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">-->
+<!--                                        <a>&laquo;</a></li>-->
+<!--                                    <li :class="{'active': now_page_number == 1}"-->
+<!--                                        @click="turn_page(1)"><a>1</a></li>-->
+<!--                                    <li :class="{'active': now_page_number == 2}"-->
+<!--                                        @click="turn_page(2)"><a>2</a></li>-->
+<!--                                    <li :class="{'active': now_page_number == 3}"-->
+<!--                                        @click="turn_page(3)"><a>3</a></li>-->
+<!--                                    <li class="disabled"><a>...</a></li>-->
+<!--                                    <li @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a>-->
+<!--                                    </li>-->
+<!--                                    <li @click="turn_page(max_page_number)"><a>{{max_page_number}}</a>-->
+<!--                                    </li>-->
+<!--                                    <li :class="haveNext"-->
+<!--                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)">-->
+<!--                                        <a>&raquo;</a>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+<!--                                <ul v-else-if="now_page_number > 3 && now_page_number+1 <= max_page_number-2"-->
+<!--                                    class="pagination">-->
+<!--                                    <li :class="havePrevious"-->
+<!--                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">-->
+<!--                                        <a>&laquo;</a></li>-->
+<!--                                    <li @click="turn_page(1)"><a>1</a></li>-->
+<!--                                    <li @click="turn_page(2)"><a>2</a></li>-->
+<!--                                    <li class="disabled"><a>...</a></li>-->
+<!--                                    <li @click="turn_page(now_page_number-1)"><a>{{now_page_number-1}}</a></li>-->
+<!--                                    <li class="active" @click="turn_page(now_page_number)"><a>{{now_page_number}}</a>-->
+<!--                                    </li>-->
+<!--                                    <li @click="turn_page(now_page_number+1)"><a>{{now_page_number+1}}</a></li>-->
+<!--                                    <li class="disabled"><a>...</a></li>-->
+<!--                                    <li @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a></li>-->
+<!--                                    <li @click="turn_page(max_page_number)"><a>{{max_page_number}}</a></li>-->
+<!--                                    <li :class="haveNext"-->
+<!--                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+<!--                                <ul v-else-if="now_page_number>=4 && now_page_number >= max_page_number-2"-->
+<!--                                    class="pagination">-->
+<!--                                    <li :class="havePrevious"-->
+<!--                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">-->
+<!--                                        <a>&laquo;</a></li>-->
+<!--                                    <li @click="turn_page(1)"><a>1</a></li>-->
+<!--                                    <li @click="turn_page(2)"><a>2</a></li>-->
+<!--                                    <li class="disabled"><a>...</a></li>-->
+<!--                                    <li :class="{'active' : now_page_number == max_page_number-2 }"-->
+<!--                                        @click="turn_page(max_page_number-2)"><a>{{max_page_number-2}}</a></li>-->
+<!--                                    <li :class="{'active' : now_page_number == max_page_number-1 }"-->
+<!--                                        @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a></li>-->
+<!--                                    <li :class="{'active' : now_page_number == max_page_number }"-->
+<!--                                        @click="turn_page(max_page_number)"><a>{{max_page_number}}</a></li>-->
+<!--                                    <li :class="haveNext"-->
+<!--                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+<!--                                </div>-->
+<!--                                <div v-else>-->
+<!--                                    <ul class="pagination">-->
+<!--                                        <li :class="havePrevious"-->
+<!--                                            @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">-->
+<!--                                            <a>&laquo;</a></li>-->
+<!--                                        <li v-for="n in max_page_number" :class="{'active': n == now_page_number }" @click="turn_page(n)"><a>{{n}}</a></li>-->
+<!--                                        <li :class="haveNext"-->
+<!--                                            @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)">-->
+<!--                                            <a>&raquo;</a>-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+<!--                                </div>-->
+                                <my-pagination :max_page_number="max_page_number" :now_page_number="now_page_number"></my-pagination>
                             </div>
                             <div class="modal fade" id="check" tabindex="-1" role="dialog"
                                  aria-labelledby="checkLabel" aria-hidden="true">
@@ -867,5 +868,6 @@
     </div>
 </div>
 </body>
+<script src="js/pagination.js"></script>
 <script src="/js/naive_vue.js"></script>
 </html>

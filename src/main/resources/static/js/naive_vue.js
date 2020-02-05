@@ -1,6 +1,7 @@
 function position(res) {
     return (res.jig_cabinet_id == null ? "" : ("" + res.jig_cabinet_id)) + (res.location_id == null ? "" : ("-" + res.location_id)) + (res.bin == null ? "" : ("-" + res.bin));
 }
+
 const search_jig = new Vue({
     el: "#search_jig",
     data: {
@@ -15,7 +16,7 @@ const search_jig = new Vue({
         max_page_number: 0
     },
     methods: {
-        getData() {
+        getData: function () {
             const that = this;
             $.ajax({
                 url: "search_jig_definition",
@@ -25,7 +26,7 @@ const search_jig = new Vue({
                     workcell: this.workcell,
                     family: this.family,
                     user_for: this.user_for,
-                    page_number: 1
+                    page_number: this.now_page_number
                 },
                 success: function (res) {
                     if (res.data.length === 0) {
@@ -56,34 +57,6 @@ const search_jig = new Vue({
             this.workcell = "";
             this.family = "";
             this.user_for = "";
-        },
-        turn_page: function (page_number) {
-            const that = this;
-            if (page_number === this.now_page_number) {
-                return false;
-            }
-            this.now_page_number = page_number;
-            this.getData();
-            // $.ajax({
-            //     url: "search_jig_definition",
-            //     data: {
-            //         code: this.code,
-            //         name: this.name,
-            //         workcell: this.workcell,
-            //         family: this.family,
-            //         user_for: this.user_for,
-            //         page_number: page_number
-            //     },
-            //     success: function (res) {
-            //         if (res.data.length === 0) {
-            //             alert("没有结果！")
-            //         } else {
-            //             that.now_page_number = page_number;
-            //             that.jig_list = res.data;
-            //             that.max_page_number = res.max;
-            //         }
-            //     }
-            // })
         }
     },
     computed: {

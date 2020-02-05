@@ -9,25 +9,25 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/vue.js"></script>
     <script src="js/shake.js"></script>
-    <!--<script src="js/moment-with-locales.js"></script>
+    <script src="js/moment-with-locales.js"></script>
     <script src="js/bootstrap-datetimepicker.min.js"></script>
-    <script src="js/locales/bootstrap-datetimepicker.zh-CN.js"></script>-->
+    <script src="js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="text/javascript" src="js/dateRange.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/dateRange.css"/>
+<!--    <script type="text/javascript" src="js/dateRange.js"></script>-->
+<!--    <link rel="stylesheet" type="text/css" href="css/dateRange.css"/>-->
     <script>
         $(function () {
-            var dateRange1 = new pickerDateRange('date1', {
-                stopToday: false,
-                isTodayValid: true,
-                startDate: '2020-2-01',
-                endDate: '2020-2-02',
-                needCompare: false,
-                defaultText: ' 到 ',
-                autoSubmit: false,
-                inputTrigger: 'input_trigger1',
-                theme: 'ta'
-            });
+            // var dateRange1 = new pickerDateRange('date1', {
+            //     stopToday: false,
+            //     isTodayValid: true,
+            //     startDate: '2020-2-01',
+            //     endDate: '2020-2-02',
+            //     needCompare: false,
+            //     defaultText: ' 到 ',
+            //     autoSubmit: false,
+            //     inputTrigger: 'input_trigger1',
+            //     theme: 'ta'
+            // });
 
             var seq_number = 0;
             var navis_side = 0;
@@ -38,7 +38,12 @@
                 $(".nav li[href='" + href + "']").siblings().removeClass("active");
                 $(".nav li[href='" + href + "']").addClass("active");
             })
-
+            $(".date").datetimepicker({
+                format: 'yyyy-mm-dd',
+                language: 'zh-CN',
+                minView: 'month',
+                autoclose: true
+            });
             // $("#bt_addshoplist").click(function () {
             //     var aData = new Date();
             //     var submit_time =
@@ -65,19 +70,19 @@
             })*/
 
 
-            $('#bt_sideleft').click(function () {
-                if (navis_side == 0) {
-                    $('#navbar_left').hide(1000);
-                    setTimeout(function () {
-                        $('#navbar_right').attr('class', 'col-lg-12 column');
-                    }, 1000);
-                    navis_side = 1;
-                } else {
-                    $('#navbar_left').show(1000);
-                    $('#navbar_right').attr('class', 'col-lg-9 column');
-                    navis_side = 0;
-                }
-            })
+            // $('#bt_sideleft').click(function () {
+            //     if (navis_side == 0) {
+            //         $('#navbar_left').hide(1000);
+            //         setTimeout(function () {
+            //             $('#navbar_right').attr('class', 'col-lg-12 column');
+            //         }, 1000);
+            //         navis_side = 1;
+            //     } else {
+            //         $('#navbar_left').show(1000);
+            //         $('#navbar_right').attr('class', 'col-lg-9 column');
+            //         navis_side = 0;
+            //     }
+            // })
         })
     </script>
     <style>
@@ -537,42 +542,59 @@
                         <div id="historyShop" class="tab-pane fade">
                             <!--历史采购记录-->
                             <div style="margin-bottom: 3%">
-                                <form role="form" class="form-horizontal">
+                                <div class="form-horizontal">
                                     <div class="form-group row">
-                                        <label for="sel_shoplist_id" class="col-sm-2 control-label">单据号</label>
+                                        <label class="col-sm-2 control-label">单据号</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" id="sel_shoplist_id">
+                                            <input type="text" class="form-control" v-model="bill_no">
                                         </div>
-                                        <label for="sel_shopman_name" class="col-sm-2 control-label">采购人</label>
+                                        <label class="col-sm-2 control-label" v-model="user_name">采购人</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" id="sel_shopman_name">
+                                            <input type="text" class="form-control">
                                         </div>
                                         <div class="col-sm-2">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="div_date1" class="col-sm-2 control-label">选择时间</label>
+                                        <label class="col-sm-2 control-label">工夹具代码</label>
                                         <div class="col-sm-3">
-                                            <div class='input-group ta_date' id='div_date1'>
-                                                <span id="date1" class="form-control"></span>
-                                                <span class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                </span>
-                                            </div>
+                                            <input type="text" class="form-control" v-model="code">
                                         </div>
-                                        <label for="sel_status" class="col-sm-2 control-label">审批状态</label>
+                                        <label class="col-sm-2 control-label">产线</label>
                                         <div class="col-sm-3">
-                                            <select class="form-control" id="sel_status">
-                                                <option>待初审</option>
-                                                <option>初审通过</option>
-                                                <option>初审不通过</option>
-                                                <option>终审通过</option>
-                                                <option>终审不通过</option>
-                                            </select>
+                                            <input type="text" class="form-control" v-model="production_line_id">
+                                        </div>
+                                        <div class="col-sm-2">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-sm-5"></div>
+                                        <label class="col-sm-2 control-label">开始时间</label>
+                                        <div class="col-sm-3">
+                                            <div class="input-group date">
+                                                <input class="form-control" v-model="start_time">
+                                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                            </div>
+                                        </div>
+                                        <label class="col-sm-2 control-label">结束时间</label>
+                                        <div class="col-sm-3">
+                                            <div class="input-group date">
+                                            <input class="form-control" v-model="end_time">
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">审批状态</label>
+                                        <div class="col-sm-3">
+                                            <select class="form-control" v-model="status">
+                                                <option value=""></option>
+                                                <option value="0">待初审</option>
+                                                <option value="1">初审未通过</option>
+                                                <option value="2">初审通过</option>
+                                                <option value="3">终审未通过</option>
+                                                <option value="4">终审通过</option>
+                                            </select>
+                                        </div>
                                         <div class="col-sm-2"></div>
                                         <div class="col-sm-1">
                                             <button type="button" class="btn btn-default">清空</button>
@@ -581,7 +603,7 @@
                                             <button type="button" class="btn btn-primary">查询</button>
                                         </div>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover table-responsive" role="table">
@@ -610,17 +632,6 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                            </div>
-                            <div class="row text-center">
-                                <ul class="pagination">
-                                    <li><a href="#">&laquo;</a></li>
-                                    <li class="active"><a href="#">1</a></li>
-                                    <li><a href="#">2</a></li>
-                                    <li><a href="#">3</a></li>
-                                    <li><a href="#">4</a></li>
-                                    <li><a href="#">5</a></li>
-                                    <li><a href="#">&raquo;</a></li>
-                                </ul>
                             </div>
                         </div>
                     </div>
