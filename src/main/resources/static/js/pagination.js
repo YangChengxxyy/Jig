@@ -66,18 +66,18 @@ Vue.component('my-pagination', {
         "                  @click=\"turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)\"><a>&raquo;</a>\n" +
         "              </li>\n" +
         "          </ul>\n" +
-        "          </div>\n" +
-        "          <div v-else>\n" +
-        "              <ul class=\"pagination\">\n" +
-        "                  <li :class=\"havePrevious\"\n" +
-        "                      @click=\"turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)\">\n" +
-        "                      <a>&laquo;</a></li>\n" +
-        "                  <li v-for=\"n in max_page_number\" :class=\"{'active': n == now_page_number }\" @click=\"turn_page(n)\"><a>{{n}}</a></li>\n" +
-        "                  <li :class=\"haveNext\"\n" +
-        "                      @click=\"turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)\">\n" +
-        "                      <a>&raquo;</a>\n" +
-        "                  </li>\n" +
-        "              </ul>\n" +
+        "      </div>\n" +
+        "      <div v-else>\n" +
+        "          <ul class=\"pagination\">\n" +
+        "              <li :class=\"havePrevious\"\n" +
+        "                  @click=\"turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)\">\n" +
+        "                  <a>&laquo;</a></li>\n" +
+        "              <li v-for=\"n in max_page_number\" :class=\"{'active': n == now_page_number }\" @click=\"turn_page(n)\"><a>{{n}}</a></li>\n" +
+        "              <li :class=\"haveNext\"\n" +
+        "                  @click=\"turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)\">\n" +
+        "                  <a>&raquo;</a>\n" +
+        "              </li>\n" +
+        "          </ul>\n" +
         "      </div>",
     methods: {
         turn_page: function (page_number) {
