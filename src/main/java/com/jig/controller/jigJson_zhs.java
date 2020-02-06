@@ -86,7 +86,7 @@ public class jigJson_zhs {
 
     @RequestMapping(value = "get_manager_purchase_detail",method = {RequestMethod.GET,RequestMethod.POST})
     public PurchaseIncomeSubmit getManagerPurchaseDetail(@RequestParam(value = "id") String id){
-        System.out.println(jigService.get_manager_purchase_detail(id).getSubmit_name());
+        //System.out.println(jigService.get_manager_purchase_detail(id).getSubmit_name());
         return jigService.get_manager_purchase_detail(id);
     }
 
@@ -100,7 +100,7 @@ public class jigJson_zhs {
     }
 
     @RequestMapping(value = "get_manager_jig_info_list",method = {RequestMethod.GET,RequestMethod.POST})
-    public Map<Object,Object> getManagerJigInfoList(@RequestParam(value = "page_number") int page_number){
+    public Map<Object,Object> getManagerJigInfoList(@RequestParam(value = "now_page_number") int page_number){
         page_number = (page_number-1)*5;
         Map<Object, Object> map = new HashMap<>(2);
         List<JigDefinition> list =  jigService.get_manager_jig_info_list(page_number);

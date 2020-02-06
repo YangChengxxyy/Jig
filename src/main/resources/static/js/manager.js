@@ -2,8 +2,16 @@
 var purchase_check = new Vue({
     el:"#shopCheck",
     data:{
-        purchaseCheck_list:[],
-        purchaselist:"",
+        purchase_submit_list:[],
+        purchase_submit:{
+            bill_no:"",
+            code:"",
+            count: "",
+            submit_name:"",
+            production_line_id:"",
+            submit_time:"",
+            status:0,
+        },
         now_page_number: 1,
         max_page_number: 0
     },
@@ -16,26 +24,21 @@ var purchase_check = new Vue({
             $.ajax({
                 url:"get_manager_purchaseCheck_list",
                 data: {
+                    now_page_number:this.now_page_number,
                     user_id:"111111"
                 },
                 success:function (res) {
-                    that.purchaseCheck_list = res;
+                    that.purchase_submit_list = res;
                 }
             })
         },
         get_purchaselist_detail:function (id) {
             const that = this;
-            $.ajax({
-                url:"get_manager_purchase_detail",
-                data:{
-                    id:id
-                },
-                success:function (res) {
-                    that.purchaselist = res;
-                    that.purchaselist.code = res.code.split("|");
-                    that.purchaselist.count = res.count.split("|");
-                }
-            })
+            if(this.purchase_submit_list.length!=0) {
+                this.purchase_submit = this.purchase_submit_list[id];
+            }else{
+                alert("服务器异常!")
+            }
         },
         pass_submit:function (id,pass) {
             const that = this;
@@ -58,7 +61,7 @@ var purchase_check = new Vue({
 var purchase_submit_history = new Vue({
     el:"#historyShop",
     data:{
-        purchaselist: [],
+        purchase_submit_list: [],
         purchase_submit:null,
         submit_name:"",
         submit_time:"",
@@ -92,45 +95,18 @@ var purchase_submit_history = new Vue({
                     if(res.data.length === 0){
                         alert("没有结果!")
                     }
-                    that.purchaselist = res.data;
+                    that.purchase_submit_list = res.data;
                     that.max_page_number = res.max;
                 }
             })
         },
-        turn_page: function (page_number) {
+        get_purchase_submit_detail:function (id) {
             const that = this;
-            if (page_number === this.now_page_number) {
-                return false;
+            if(this.purchase_submit_list.length!=0) {
+                this.purchase_submit = this.purchase_submit_list[id];
+            }else{
+                alert("服务器异常!")
             }
-            $.ajax({
-                url: "get_manager_purchaselist",
-                data: {
-                    page_number: page_number
-                },
-                success: function (res) {
-                    if (res.data.length === 0) {
-                        alert("没有结果！")
-                    } else {
-                        that.now_page_number = page_number;
-                        that.jig_list = res.data;
-                        that.max_page_number = res.max;
-                    }
-                }
-            })
-        },
-        get_purchaselist_detail:function (id) {
-            const that = this;
-            $.ajax({
-                url:"get_manager_purchase_detail",
-                data:{
-                    id:id
-                },
-                success:function (res) {
-                    that.purchase_submit = res;
-                    that.purchase_submit.code = res.code.split("|");
-                    that.purchase_submit.count = res.count.split("|");
-                }
-            })
         },
         clear_date:function () {
             this.submit_time = "";
@@ -148,40 +124,19 @@ var jig_info = new Vue({
         max_page_number: 0
     },
     created:function(){
-        this.get_jig_info_list();
+        this.getData();
     },
     methods: {
-        get_jig_info_list:function () {
+        getData:function () {
             const that = this;
             $.ajax({
                 url:"get_manager_jig_info_list",
                 data:{
-                    page_number:1
+                    now_page_number:this.now_page_number
                 },
                 success:function (res) {
                     that.jig_list = res.data;
                     that.max_page_number = res.max;
-                }
-            })
-        },
-        turn_page: function (page_number) {
-            const that = this;
-            if (page_number === this.now_page_number) {
-                return false;
-            }
-            $.ajax({
-                url: "get_manager_jig_info_list",
-                data: {
-                    page_number: page_number
-                },
-                success: function (res) {
-                    if (res.data.length === 0) {
-                        alert("没有结果！")
-                    } else {
-                        that.now_page_number = page_number;
-                        that.jig_list = res.data;
-                        that.max_page_number = res.max;
-                    }
                 }
             })
         },

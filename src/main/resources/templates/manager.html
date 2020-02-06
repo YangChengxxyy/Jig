@@ -203,7 +203,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="item in purchaseCheck_list">
+                                        <tr v-for="(item,list_index) in purchase_submit_list">
                                             <td>{{item.bill_no}}</td>
                                             <td>{{item.submit_name}}</td>
                                             <td>{{item.production_line_id}}</td>
@@ -222,7 +222,7 @@
                                             <td v-if="item.status==4">终审通过</td>
                                             <td>
                                                 <button class="btn btn-success" data-toggle="modal"
-                                                        data-target="#myshoplist_detail" @click="get_purchaselist_detail(item.id)">查看
+                                                        data-target="#myshoplist_detail" @click="get_purchaselist_detail(list_index)">查看
                                                 </button>
                                                 <button class="btn btn-primary" @click="pass_submit(item.id,4)" >终审通过</button>
                                                 <button class="btn btn-danger" @click="pass_submit(item.id,3)">终审不通过</button>
@@ -230,6 +230,9 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="text-center row" v-if="max_page_number != 0">
+                                <my-pagination :max_page_number="max_page_number" :now_page_number="now_page_number"></my-pagination>
                             </div>
                             <div class="modal fade" id="myshoplist_detail" tabindex="-1"
                                  role="dialog"
@@ -242,30 +245,30 @@
                                             </button>
                                             <h4 class="modal-title" id="myModalLabel">我的采购单</h4>
                                         </div>
-                                        <div class="modal-body">
+                                        <div class="modal-body" v-if="purchase_submit !=null">
                                             <form role="form" class="form-horizontal">
                                                 <div class="form-group">
                                                     <label class="col-sm-3 control-label">采购单据号</label>
                                                     <div class="col-sm-8">
-                                                        <div class="form-control">{{purchaselist.bill_no}}</div>
+                                                        <div class="form-control">{{purchase_submit.bill_no}}</div>
                                                     </div>
                                                     <div class="col-sm-1"></div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="col-sm-3 control-label">采购人</label>
                                                     <div class="col-sm-8">
-                                                        <div class="form-control">{{purchaselist.submit_name}}</div>
+                                                        <div class="form-control">{{purchase_submit.submit_name}}</div>
                                                     </div>
                                                     <div class="col-sm-1"></div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="col-sm-3 control-label">产线id</label>
                                                     <div class="col-sm-8">
-                                                        <div class="form-control">{{purchaselist.production_line_id}}</div>
+                                                        <div class="form-control">{{purchase_submit.production_line_id}}</div>
                                                     </div>
                                                     <div class="col-sm-1"></div>
                                                 </div>
-                                                <div v-for="(item,index) in purchaselist.code">
+                                                <div v-for="(item,index) in purchase_submit.code.split('|')">
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 control-label">工夹具代码</label>
                                                         <div class="col-sm-3">
@@ -273,7 +276,7 @@
                                                         </div>
                                                         <label class="col-sm-3 control-label">采购数量</label>
                                                         <div class="col-sm-2">
-                                                            <div class="form-control">{{purchaselist.count[index]}}</div>
+                                                            <div class="form-control">{{purchase_submit.count.split('|')[index]}}</div>
                                                         </div>
                                                         <div class="col-sm-1"></div>
                                                     </div>
@@ -281,18 +284,18 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-3 control-label">申请时间</label>
                                                     <div class="col-sm-8">
-                                                        <div class="form-control">{{purchaselist.submit_time}}</div>
+                                                        <div class="form-control">{{purchase_submit.submit_time}}</div>
                                                     </div>
                                                     <div class="col-sm-1"></div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="col-sm-3 control-label">审批状态</label>
                                                     <div class="col-sm-8">
-                                                        <div class="form-control" v-if="purchaselist.status==0">待审批</div>
-                                                        <div class="form-control" v-if="purchaselist.status==1">初审未通过</div>
-                                                        <div class="form-control" v-if="purchaselist.status==2">初审通过</div>
-                                                        <div class="form-control" v-if="purchaselist.status==3">终审未通过</div>
-                                                        <div class="form-control" v-if="purchaselist.status==4">终审通过</div>
+                                                        <div class="form-control" v-if="purchase_submit.status==0">待审批</div>
+                                                        <div class="form-control" v-if="purchase_submit.status==1">初审未通过</div>
+                                                        <div class="form-control" v-if="purchase_submit.status==2">初审通过</div>
+                                                        <div class="form-control" v-if="purchase_submit.status==3">终审未通过</div>
+                                                        <div class="form-control" v-if="purchase_submit.status==4">终审通过</div>
                                                     </div>
                                                     <div class="col-sm-1"></div>
                                                 </div>
@@ -358,7 +361,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr v-for="item in purchaselist">
+                                    <tr v-for="item in purchase_submit_list">
                                         <td>{{item.bill_no}}</td>
                                         <td>{{item.submit_name}}</td>
                                         <td>{{item.production_line_id}}</td>
@@ -377,7 +380,7 @@
                                         <td v-if="item.status==4">终审通过</td>
                                         <td>
                                             <button type="button" data-target="#myshoplist_history_detail"
-                                                    data-toggle="modal" class="btn btn-primary" @click="get_purchaselist_detail(item.id)">查看</button>
+                                                    data-toggle="modal" class="btn btn-primary" @click="get_purchase_submit_detail(item.id)">查看</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -397,7 +400,7 @@
                                             </button>
                                             <h4 class="modal-title">我的采购单</h4>
                                         </div>
-                                        <div class="modal-body">
+                                        <div class="modal-body" v-if="purchase_submit!=null">
                                             <form role="form" class="form-horizontal">
                                                 <div class="form-group">
                                                     <label class="col-sm-3 control-label">采购单据号</label>
@@ -409,7 +412,7 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-3 control-label">采购人</label>
                                                     <div class="col-sm-8">
-                                                        <div class="form-control">{{purchase_submit.name}}</div>
+                                                        <div class="form-control">{{purchase_submit.submit_name}}</div>
                                                     </div>
                                                     <div class="col-sm-1"></div>
                                                 </div>
@@ -420,7 +423,7 @@
                                                     </div>
                                                     <div class="col-sm-1"></div>
                                                 </div>
-                                                <div v-for="(item,index) in purchase_submit.code">
+                                                <div v-for="(item,index) in purchase_submit.code.split('|')">
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 control-label">工夹具代码</label>
                                                         <div class="col-sm-3">
@@ -428,7 +431,7 @@
                                                         </div>
                                                         <label class="col-sm-3 control-label">采购数量</label>
                                                         <div class="col-sm-2">
-                                                            <div class="form-control">{{purchase_submit.count[index]}}</div>
+                                                            <div class="form-control">{{purchase_submit.count.split('|')[index]}}</div>
                                                         </div>
                                                         <div class="col-sm-1"></div>
                                                     </div>
@@ -609,8 +612,8 @@
                                                             <div class="form-group">
                                                                 <label class="col-sm-3 control-label">故障照片</label>
                                                                 <div class="col-sm-6">
-                                                                    <img src="/wp-content/uploads/2014/06/download.png"
-                                                                         class="img-rounded">
+                                                                    <!--<img src="/wp-content/uploads/2014/06/download.png"
+                                                                         class="img-rounded">-->
                                                                 </div>
                                                                 <div class="col-sm-1"></div>
                                                             </div>
@@ -667,11 +670,11 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="sel_applytime" class="col-sm-2 control-label">申请时间</label>
+                                        <label for="sel_scrap_submit_date" class="col-sm-2 control-label">申请时间</label>
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control" id="sel_scrap_submit_date">
                                         </div>
-                                        <label for="shop_number" class="col-sm-2 control-label">审批状态</label>
+                                        <label class="col-sm-2 control-label">审批状态</label>
                                         <div class="col-sm-3">
                                             <select class="form-control">
                                                 <option>待初审</option>
@@ -764,64 +767,7 @@
                                 </tbody>
                             </table>
                             <div class="text-center row" v-if="max_page_number != 0">
-                                <ul v-if="now_page_number <= 3 && now_page_number < max_page_number-1"
-                                    class="pagination">
-                                    <li :class="havePrevious"
-                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
-                                        <a>&laquo;</a></li>
-                                    <li :class="{'active': now_page_number == 1}"
-                                        @click="turn_page(1)"><a>1</a></li>
-                                    <li :class="{'active': now_page_number == 2}"
-                                        @click="turn_page(2)"><a>2</a></li>
-                                    <li :class="{'active': now_page_number == 3}"
-                                        @click="turn_page(3)"><a>3</a></li>
-                                    <li class="disabled"><a>...</a></li>
-                                    <li @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a>
-                                    </li>
-                                    <li @click="turn_page(max_page_number)"><a>{{max_page_number}}</a>
-                                    </li>
-                                    <li :class="haveNext"
-                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)">
-                                        <a>&raquo;</a>
-                                    </li>
-                                </ul>
-                                <ul v-else-if="now_page_number > 3 && now_page_number+1 <= max_page_number-2"
-                                    class="pagination">
-                                    <li :class="havePrevious"
-                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
-                                        <a>&laquo;</a></li>
-                                    <li @click="turn_page(1)"><a>1</a></li>
-                                    <li @click="turn_page(2)"><a>2</a></li>
-                                    <li class="disabled"><a>...</a></li>
-                                    <li @click="turn_page(now_page_number-1)"><a>{{now_page_number-1}}</a></li>
-                                    <li class="active" @click="turn_page(now_page_number)"><a>{{now_page_number}}</a>
-                                    </li>
-                                    <li @click="turn_page(now_page_number+1)"><a>{{now_page_number+1}}</a></li>
-                                    <li class="disabled"><a>...</a></li>
-                                    <li @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a></li>
-                                    <li @click="turn_page(max_page_number)"><a>{{max_page_number}}</a></li>
-                                    <li :class="haveNext"
-                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>
-                                    </li>
-                                </ul>
-                                <ul v-else-if="now_page_number>=4 && now_page_number >= max_page_number-2"
-                                    class="pagination">
-                                    <li :class="havePrevious"
-                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
-                                        <a>&laquo;</a></li>
-                                    <li @click="turn_page(1)"><a>1</a></li>
-                                    <li @click="turn_page(2)"><a>2</a></li>
-                                    <li class="disabled"><a>...</a></li>
-                                    <li :class="{'active' : now_page_number == max_page_number-2 }"
-                                        @click="turn_page(max_page_number-2)"><a>{{max_page_number-2}}</a></li>
-                                    <li :class="{'active' : now_page_number == max_page_number-1 }"
-                                        @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a></li>
-                                    <li :class="{'active' : now_page_number == max_page_number }"
-                                        @click="turn_page(max_page_number)"><a>{{max_page_number}}</a></li>
-                                    <li :class="haveNext"
-                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>
-                                    </li>
-                                </ul>
+                                <my-pagination :max_page_number="max_page_number" :now_page_number="now_page_number"></my-pagination>
                             </div>
                             <div class="modal fade" id="edit_jigInfo" tabindex="-1" role="dialog"
                                  aria-labelledby="checkLabel" aria-hidden="true">
@@ -960,7 +906,7 @@
         </div>
     </div>
 </div>
-
+<script src="js/pagination.js"></script>
 <script src="js/manager.js"></script>
 </body>
 </html>
