@@ -19,7 +19,7 @@ const search_jig = new Vue({
         getData: function () {
             const that = this;
             $.ajax({
-                url: "search_jig_definition",
+                url: "naive_search_jig_definition",
                 data: {
                     code: this.code,
                     name: this.name,
@@ -106,7 +106,7 @@ const return_jig = new Vue({
         getData: function () {
             const that = this;
             $.ajax({
-                url: "get_outgoing_jig",
+                url: "naive_get_outgoing_jig",
                 data: {
                     page_number: this.now_page_number
                 },
@@ -210,7 +210,7 @@ const jig_outgoing = new Vue({
         getData: function () {
             const that = this;
             $.ajax({
-                url: "get_outgoing_submit",
+                url: "naive_get_outgoing_submit",
                 data: {
                     page_number: this.now_page_number
                 },
@@ -236,7 +236,7 @@ const jig_outgoing = new Vue({
                 const splits = this.code_seq_id.split("-");
                 var that = this;
                 $.ajax({
-                    url: "outgo_jig",
+                    url: "naive_outgo_jig",
                     data: {
                         id: this.id,
                         code: splits[0],

@@ -2,7 +2,7 @@
 let production_line_list = [];
 let code_list = [];
 $.ajax({
-    url: "get_production_line_list",
+    url: "high_get_production_line_list",
     async: false,
     success: function (res) {
         production_line_list = res;
@@ -39,7 +39,7 @@ const show_myshoplist = new Vue({
         getData() {
             const that = this;
             $.ajax({
-                url: "get_purchase_income_submit_list",
+                url: "high_get_purchase_income_submit_list",
                 data: {
                     page_number: this.now_page_number
                 },
@@ -85,7 +85,7 @@ const show_myshoplist = new Vue({
             } else {
                 var that = this;
                 $.ajax({
-                    url: "update_purchase_income_submit",
+                    url: "high_update_purchase_income_submit",
                     data: {
                         id: this.change_id,
                         production_line_id: this.change_production_line_id,
@@ -155,7 +155,7 @@ const add_myshoplist = new Vue({
             } else {
                 const that = this;
                 $.ajax({
-                    url: "add_shoplist",
+                    url: "high_add_shoplist",
                     data: {
                         bill_no: this.bill_no,
                         submit_id: this.submit_id,
@@ -222,7 +222,7 @@ const historyShop = new Vue({
                 splits = ['', ''];
             }
             $.ajax({
-                url: "search_purchase_income_history",
+                url: "high_search_purchase_income_history",
                 data: {
                     bill_no: this.bill_no,
                     submit_name: this.submit_name,
