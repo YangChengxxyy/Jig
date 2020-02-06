@@ -86,8 +86,8 @@ public class JigService {
         jigMapper.updatePurchaseIncomeSubmit(id, code, count, production_line_id);
     }
 
-    public int getPurchaseIncomeSubmitListPage(int page_number) {
-        int a = jigMapper.getPurchaseIncomeSubmitListPage(page_number);
+    public int getPurchaseIncomeSubmitListPage() {
+        int a = jigMapper.getPurchaseIncomeSubmitListPage();
         return (int) Math.ceil(a / 5.0);
     }
 

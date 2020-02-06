@@ -109,6 +109,7 @@ public interface JigMapper {
      * @return 已出库工夹具记录数
      */
     int getOutgoingJigPage();
+
     /**
      * 工夹具入库
      *
@@ -158,15 +159,53 @@ public interface JigMapper {
      */
     List<PurchaseIncomeSubmit> getPurchaseIncomeSubmitList(@Param("page_number") int page_number);
 
+    /**
+     * 修改入库申请单
+     *
+     * @param id                 purchase_income_submit表id
+     * @param code               工家具代码
+     * @param count              数量
+     * @param production_line_id 产线id
+     */
     void updatePurchaseIncomeSubmit(@Param("id") String id, @Param("code") String code, @Param("count") String count, @Param("production_line_id") String production_line_id);
 
-    int getPurchaseIncomeSubmitListPage(@Param("page_number") int page_number);
+    /**
+     * 获得入库申请单页数页数
+     *
+     * @return 入库申请单页数页数
+     */
+    int getPurchaseIncomeSubmitListPage();
 
-    List<PurchaseIncomeHistory> searchPurchaseIncomeHistory(@Param("bill_no") String bill_no, @Param("submit_name") String user_name,
+    /**
+     * 获取查询到的入库申请历史
+     *
+     * @param bill_no            单据号
+     * @param submit_name        申请人
+     * @param code               工夹具代码
+     * @param production_line_id 产线id
+     * @param status             状态
+     * @param start_date         最早日期
+     * @param end_date           最晚日期
+     * @param page_number        页码
+     * @return 查询到的入库申请历史
+     */
+    List<PurchaseIncomeHistory> searchPurchaseIncomeHistory(@Param("bill_no") String bill_no, @Param("submit_name") String submit_name,
                                                             @Param("code") String code, @Param("production_line_id") String production_line_id,
                                                             @Param("status") String status, @Param("start_date") String start_date,
                                                             @Param("end_date") String end_date, @Param("page_number") int page_number);
 
+    /**
+     * 获取查询到的入库申请历史总页数
+     *
+     * @param bill_no            单据号
+     * @param submit_name        申请人
+     * @param code               工夹具代码
+     * @param production_line_id 产线id
+     * @param status             状态
+     * @param start_date         最早日期
+     * @param end_date           最晚日期
+     * @return 查询到的入库申请历史总页数
+     */
     int searchPurchaseIncomeHistoryPage(@Param("bill_no") String bill_no, @Param("submit_name") String submit_name,
                                         @Param("code") String code, @Param("production_line_id") String production_line_id,
                                         @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date);

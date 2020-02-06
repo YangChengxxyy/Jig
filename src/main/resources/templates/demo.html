@@ -8,6 +8,21 @@
     <script src="js/vue.js"></script>
     <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <style>
+        .input-pagination{
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #337ab7;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            display: inline-block;
+            border-radius: 4px;
+        }
+    </style>
     <script th:inline="javascript">
         $(function () {
             //为页码添加点击事件
@@ -167,16 +182,14 @@
                     </div>
                 </div>
                 <div class="panel-footer">
-                    <ul class="pagination">
-                        <li><a><input type="number"></a></li>
-                    </ul>
+                    <input class="input-pagination form-control">
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script th:inline="javascript">
+<script>
     // vue代码部分
     // el表示作用域哪个元素内，#表示通过id查找，.表示类查找
     // data表示放在这个元素内的数据，这和小程序类似
@@ -187,7 +200,6 @@
     const demoVue = new Vue({
         el: "#demo",
         data: {
-            stu: [[${peoples}]],//获取后台model传来的值
             isList: false,
             now_page_number: 1,
             max_page_number: 10
