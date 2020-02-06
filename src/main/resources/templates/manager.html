@@ -9,7 +9,7 @@
     <script src="js/bootstrap.min.js"></script>
 
 
-    <script src="js/moment.js"></script>
+    <script src="js/moment.min.js"></script>
     <script src="js/daterangepicker.js"></script>
     <script src="js/vue.js"></script>
     <!--<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
@@ -18,7 +18,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
         $(function () {
-            $(".nav li").on('click',function (e) {
+            $(".nav li:not('.dropdown')").on('click',function (e) {
                 const href = $(this).attr("href");
                 $(this).siblings().removeClass("active");
                 $(this).addClass("active");
@@ -51,68 +51,74 @@
     </script>
 </head>
 <body>
-<div class="page-header" style="text-align: center">
-    <h3>
-        工夹具管理系统
-
-    </h3>
-</div>
-<div style="text-align: right;padding-right: 7%">
-    <div class="dropdown">
-        <button type="button" class="btn dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">----经理
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
-            <li role="presentation" class="dropdown-header">欢迎您，经理小张！</li>
-            <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-user"></span>个人信息</a>
-            </li>
-            <li role="presentation">
-                <a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#changePassword"><span
-                        class="glyphicon glyphicon-wrench"></span>修改密码</a>
-            </li>
-            <li role="menuitem" class="divider"></li>
-            <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-off"></span>安全退出</a>
-            </li>
-        </ul>
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle show pull-left" href="#sidebar" id="bt_sideleft">
+                <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+            </button>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                       aria-expanded="false"><span class="glyphicon glyphicon-user"></span>&nbsp;小张同学&nbsp;<span class="caret"></span></a>
+                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-user"></span>个人信息</a>
+                        </li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#changePassword"><span
+                                    class="glyphicon glyphicon-wrench"></span>修改密码</a>
+                        </li>
+                        <li role="menuitem" class="divider"></li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-off"></span>安全退出</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </div>
-    <div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="label" aria-hidden="true"
-         style="text-align: left">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="label">修改密码</h4>
-                </div>
-                <div class="modal-body">
-                    <form role="form" class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">原密码：</label>
-                            <div class="col-md-8">
-                                <input class="form-control">
-                            </div>
+</nav>
+<div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="label" aria-hidden="true"
+     style="text-align: left">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="label">修改密码</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">原密码：</label>
+                        <div class="col-md-8">
+                            <input class="form-control">
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">新密码：</label>
-                            <div class="col-md-8">
-                                <input class="form-control">
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">新密码：</label>
+                        <div class="col-md-8">
+                            <input class="form-control">
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">重复密码：</label>
-                            <div class="col-md-8">
-                                <input class="form-control">
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">重复密码：</label>
+                        <div class="col-md-8">
+                            <input class="form-control">
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary">确认修改</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">确认修改</button>
+            </div>
+        </div>
     </div>
 </div>
 <div class="container-fluid">
@@ -333,7 +339,7 @@
                                             </select>
                                         </div>
                                         <div class="col-sm-2">
-                                            <button class="btn btn-primary" type="button" @click="get_purchaselist">查询</button>
+                                            <button class="btn btn-primary" type="button" @click="getData">查询</button>
                                         </div>
                                     </div>
                                 </form>
@@ -378,64 +384,7 @@
                                 </table>
                             </div>
                             <div class="text-center row" v-if="max_page_number != 0">
-                                <ul v-if="now_page_number <= 3 && now_page_number < max_page_number-1"
-                                    class="pagination">
-                                    <li :class="havePrevious"
-                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
-                                        <a>&laquo;</a></li>
-                                    <li :class="{'active': now_page_number == 1}"
-                                        @click="turn_page(1)"><a>1</a></li>
-                                    <li :class="{'active': now_page_number == 2}"
-                                        @click="turn_page(2)"><a>2</a></li>
-                                    <li :class="{'active': now_page_number == 3}"
-                                        @click="turn_page(3)"><a>3</a></li>
-                                    <li class="disabled"><a>...</a></li>
-                                    <li @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a>
-                                    </li>
-                                    <li @click="turn_page(max_page_number)"><a>{{max_page_number}}</a>
-                                    </li>
-                                    <li :class="haveNext"
-                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)">
-                                        <a>&raquo;</a>
-                                    </li>
-                                </ul>
-                                <ul v-else-if="now_page_number > 3 && now_page_number+1 <= max_page_number-2"
-                                    class="pagination">
-                                    <li :class="havePrevious"
-                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
-                                        <a>&laquo;</a></li>
-                                    <li @click="turn_page(1)"><a>1</a></li>
-                                    <li @click="turn_page(2)"><a>2</a></li>
-                                    <li class="disabled"><a>...</a></li>
-                                    <li @click="turn_page(now_page_number-1)"><a>{{now_page_number-1}}</a></li>
-                                    <li class="active" @click="turn_page(now_page_number)"><a>{{now_page_number}}</a>
-                                    </li>
-                                    <li @click="turn_page(now_page_number+1)"><a>{{now_page_number+1}}</a></li>
-                                    <li class="disabled"><a>...</a></li>
-                                    <li @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a></li>
-                                    <li @click="turn_page(max_page_number)"><a>{{max_page_number}}</a></li>
-                                    <li :class="haveNext"
-                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>
-                                    </li>
-                                </ul>
-                                <ul v-else-if="now_page_number>=4 && now_page_number >= max_page_number-2"
-                                    class="pagination">
-                                    <li :class="havePrevious"
-                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
-                                        <a>&laquo;</a></li>
-                                    <li @click="turn_page(1)"><a>1</a></li>
-                                    <li @click="turn_page(2)"><a>2</a></li>
-                                    <li class="disabled"><a>...</a></li>
-                                    <li :class="{'active' : now_page_number == max_page_number-2 }"
-                                        @click="turn_page(max_page_number-2)"><a>{{max_page_number-2}}</a></li>
-                                    <li :class="{'active' : now_page_number == max_page_number-1 }"
-                                        @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a></li>
-                                    <li :class="{'active' : now_page_number == max_page_number }"
-                                        @click="turn_page(max_page_number)"><a>{{max_page_number}}</a></li>
-                                    <li :class="haveNext"
-                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>
-                                    </li>
-                                </ul>
+                                <my-pagination :max_page_number="max_page_number" :now_page_number="now_page_number"></my-pagination>
                             </div>
                             <div class="modal fade" id="myshoplist_history_detail" tabindex="-1"
                                  role="dialog"

@@ -87,10 +87,10 @@ var purchase_submit_history = new Vue({
         max_page_number: 0
     },
     created:function () {
-        this.get_purchaselist();
+        this.getData();
     },
     methods:{
-        get_purchaselist:function () {
+        getData:function () {
             const that = this;
             $.ajax({
                 url:"get_manager_purchaselist_history",
@@ -99,7 +99,7 @@ var purchase_submit_history = new Vue({
                     submit_time:this.submit_time,
                     bill_no:this.bill_no,
                     status:this.status,
-                    page_number:1
+                    page_number:this.now_page_number
                 },
                 success:function (res) {
                     if(res.data.length === 0){
