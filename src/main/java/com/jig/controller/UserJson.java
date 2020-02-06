@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserJson {
     @Autowired
     private UserService userService;
+
     @RequestMapping("get_user_name")
-    public String getUserName(@RequestParam( value = "user_id")String user_id){
+    public String getUserName(@RequestParam(value = "user_id") String user_id) {
         return userService.getUserName(user_id);
     }
 }

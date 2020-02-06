@@ -43,15 +43,26 @@ public class JigWeb {
         return "login";
     }
 
-    @RequestMapping("test")
-    public String showSu(HttpServletRequest request) {
+    @RequestMapping("test_naive")
+    public String naive(HttpServletRequest request) {
         PoiUtil.getIpAddress(request);
         User user = new User();
         user.setName("Xianghai Zhang");
         user.setId("1215072");
         HttpSession httpSession = request.getSession();
-        httpSession.setAttribute("user",user);
+        httpSession.setAttribute("user", user);
         return "naive";
+    }
+
+    @RequestMapping("test_high")
+    public String high(HttpServletRequest request) {
+        PoiUtil.getIpAddress(request);
+        User user = new User();
+        user.setName("Xianghai Zhang");
+        user.setId("1215072");
+        HttpSession httpSession = request.getSession();
+        httpSession.setAttribute("user", user);
+        return "high";
     }
 
     @RequestMapping("naive_download_search_one_excel")

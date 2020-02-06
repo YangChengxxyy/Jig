@@ -32,7 +32,9 @@
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="userMenu">
-            <li role="presentation" class="dropdown-header" id="user" th:inline="text">欢迎您，[[${session.get('user').getName()}]]！</li>
+            <li role="presentation" class="dropdown-header" id="user" th:inline="text">
+                欢迎您，[[${session.get('user').getName()}]]！
+            </li>
             <input style="display: none" th:value="${session.get('user').getId()}" id="id">
             <li role="presentation">
                 <a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-user"></span>个人信息</a>
@@ -192,6 +194,7 @@
                                 </tr>
                                 </tbody>
                             </table>
+                            <my-pagination :now_page_number="now_page_number" :max_page_number="max_page_number"></my-pagination>
                             <div class="modal fade" id="chuku" tabindex="-1" role="dialog"
                                  aria-labelledby="chukuLabel" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -308,12 +311,14 @@
                                         {{item.position}}
                                     </td>
                                     <td>
-                                        <button class="btn btn-primary" data-toggle="modal" data-target="#ruku" @click="changeCheck(item.user_id,item.code,item.position,item.id)">入库
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#ruku"
+                                                @click="changeCheck(item.user_id,item.code,item.position,item.id)">入库
                                         </button>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
+                            <my-pagination :now_page_number="now_page_number" :max_page_number="max_page_number"></my-pagination>
                             <div class="modal fade" id="ruku" tabindex="-1" role="dialog"
                                  aria-labelledby="rukuLabel" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -332,7 +337,8 @@
                                                     <div class="col-sm-6">
                                                         <div class="input-group">
                                                             <input type="text" class="form-control"
-                                                                   id="no2" v-model.trim="check_user_id" @change="getUsername">
+                                                                   id="no2" v-model.trim="check_user_id"
+                                                                   @change="getUsername">
                                                             <span class="input-group-addon"><span
                                                                     class="glyphicon glyphicon-qrcode"></span></span>
                                                         </div>
@@ -351,7 +357,8 @@
                                                     <div class="col-sm-6">
                                                         <div class="input-group">
                                                             <input type="text" class="form-control"
-                                                                   id="seq_id2" v-model.trim="code_seq_id" @change="getPosition">
+                                                                   id="seq_id2" v-model.trim="code_seq_id"
+                                                                   @change="getPosition">
                                                             <span class="input-group-addon"><span
                                                                     class="glyphicon glyphicon-qrcode"></span></span>
                                                         </div>
@@ -385,7 +392,10 @@
                                             <button type="button" class="btn btn-default"
                                                     data-dismiss="modal">关闭
                                             </button>
-                                            <button type="button" class="btn btn-primary" :class="{'disabled': !(user_id != null && check1 && check2 && check3)}" @click="returnJig">提交更改</button>
+                                            <button type="button" class="btn btn-primary"
+                                                    :class="{'disabled': !(user_id != null && check1 && check2 && check3)}"
+                                                    @click="returnJig">提交更改
+                                            </button>
                                         </div>
                                     </div><!-- /.modal-content -->
                                 </div><!-- /.modal -->
@@ -583,27 +593,27 @@
                                 <div class="form-group row">
                                     <label for="jig_code" class="col-sm-2 control-label">工夹具代码</label>
                                     <div class="col-sm-3">
-                                        <input type="text" class="form-control" id="jig_code" v-model="code">
+                                        <input type="text" class="form-control" id="jig_code" v-model.trim="code">
                                     </div>
                                     <label class="col-sm-2 control-label" for="jig_name">工夹具名字</label>
                                     <div class="col-sm-3">
-                                        <input type="text" class="form-control" id="jig_name" v-model="name">
+                                        <input type="text" class="form-control" id="jig_name" v-model.trim="name">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label" for="jig_workcell">部门</label>
                                     <div class="col-sm-3">
-                                        <input type="text" class="form-control" id="jig_workcell" v-model="workcell">
+                                        <input type="text" class="form-control" id="jig_workcell" v-model.trim="workcell">
                                     </div>
                                     <label for="jig_family" class="col-sm-2 control-label">类别</label>
                                     <div class="col-sm-3">
-                                        <input type="text" class="form-control" id="jig_family" v-model="family">
+                                        <input type="text" class="form-control" id="jig_family" v-model.trim="family">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label" for="jig_userfor">用途</label>
                                     <div class="col-sm-3">
-                                        <input type="text" class="form-control" id="jig_userfor" v-model="user_for">
+                                        <input type="text" class="form-control" id="jig_userfor" v-model.trim="user_for">
                                     </div>
                                     <div class="col-sm-2"></div>
                                     <div class="col-sm-5">
@@ -630,7 +640,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr v-for="item in jig_list">
+                                    <tr v-for="(item,index) in jig_list">
                                         <td>{{item.code}}</td>
                                         <td>{{item.name}}</td>
                                         <td>{{item.workcell}}</td>
@@ -639,7 +649,7 @@
                                         <td>{{item.user_for}}</td>
                                         <td>
                                             <button class="btn btn-primary" data-toggle="modal" data-target="#check"
-                                                    @click="check_detail($event,item.id)">
+                                                    @click="check_detail(index)">
                                                 查看明细
                                             </button>
                                         </td>
@@ -647,66 +657,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="text-center row" v-if="max_page_number != 0">
-                                <ul v-if="now_page_number <= 3 && now_page_number < max_page_number-1"
-                                    class="pagination">
-                                    <li :class="havePrevious"
-                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
-                                        <a>&laquo;</a></li>
-                                    <li :class="{'active': now_page_number == 1}"
-                                        @click="turn_page(1)"><a>1</a></li>
-                                    <li :class="{'active': now_page_number == 2}"
-                                        @click="turn_page(2)"><a>2</a></li>
-                                    <li :class="{'active': now_page_number == 3}"
-                                        @click="turn_page(3)"><a>3</a></li>
-                                    <li class="disabled"><a>...</a></li>
-                                    <li @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a>
-                                    </li>
-                                    <li @click="turn_page(max_page_number)"><a>{{max_page_number}}</a>
-                                    </li>
-                                    <li :class="haveNext"
-                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)">
-                                        <a>&raquo;</a>
-                                    </li>
-                                </ul>
-                                <ul v-else-if="now_page_number > 3 && now_page_number+1 <= max_page_number-2"
-                                    class="pagination">
-                                    <li :class="havePrevious"
-                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
-                                        <a>&laquo;</a></li>
-                                    <li @click="turn_page(1)"><a>1</a></li>
-                                    <li @click="turn_page(2)"><a>2</a></li>
-                                    <li class="disabled"><a>...</a></li>
-                                    <li @click="turn_page(now_page_number-1)"><a>{{now_page_number-1}}</a></li>
-                                    <li class="active" @click="turn_page(now_page_number)"><a>{{now_page_number}}</a>
-                                    </li>
-                                    <li @click="turn_page(now_page_number+1)"><a>{{now_page_number+1}}</a></li>
-                                    <li class="disabled"><a>...</a></li>
-                                    <li @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a></li>
-                                    <li @click="turn_page(max_page_number)"><a>{{max_page_number}}</a></li>
-                                    <li :class="haveNext"
-                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>
-                                    </li>
-                                </ul>
-                                <ul v-else-if="now_page_number>=4 && now_page_number >= max_page_number-2"
-                                    class="pagination">
-                                    <li :class="havePrevious"
-                                        @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
-                                        <a>&laquo;</a></li>
-                                    <li @click="turn_page(1)"><a>1</a></li>
-                                    <li @click="turn_page(2)"><a>2</a></li>
-                                    <li class="disabled"><a>...</a></li>
-                                    <li :class="{'active' : now_page_number == max_page_number-2 }"
-                                        @click="turn_page(max_page_number-2)"><a>{{max_page_number-2}}</a></li>
-                                    <li :class="{'active' : now_page_number == max_page_number-1 }"
-                                        @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a></li>
-                                    <li :class="{'active' : now_page_number == max_page_number }"
-                                        @click="turn_page(max_page_number)"><a>{{max_page_number}}</a></li>
-                                    <li :class="haveNext"
-                                        @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>
-                                    </li>
-                                </ul>
-                            </div>
+                            <my-pagination :max_page_number="max_page_number" :now_page_number="now_page_number"></my-pagination>
                             <div class="modal fade" id="check" tabindex="-1" role="dialog"
                                  aria-labelledby="checkLabel" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -845,5 +796,6 @@
     </div>
 </div>
 </body>
-<script src="/js/naive.js"></script>
+<script src="js/pagination.js"></script>
+<script src="/js/naive_vue.js"></script>
 </html>

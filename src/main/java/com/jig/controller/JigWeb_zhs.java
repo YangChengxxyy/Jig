@@ -12,8 +12,8 @@ import java.util.List;
 @Controller
 public class JigWeb_zhs {
 
-    @RequestMapping(value = "show_high_main",method = {RequestMethod.GET,RequestMethod.POST})
-    public String showHighMain(){
+    @RequestMapping(value = "show_high_main", method = {RequestMethod.GET, RequestMethod.POST})
+    public String showHighMain() {
         return "high";
     }
 
