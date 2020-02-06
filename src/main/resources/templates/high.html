@@ -309,9 +309,9 @@
                                         <td v-else>终审通过</td>
                                         <td>
                                             <button class="btn btn-primary" data-toggle="modal"
-                                                    data-target="#myshoplist_detail" :class="{'disabled':item.status != 0 }" @click="change(item.id,index)">修改
+                                                    data-target="#myshoplist_detail" :class="{'disabled':item.status != 0 }" @click="change(item.id,index,item.status)">修改
                                             </button>
-                                            <button class="btn btn-primary" :class="{'disabled':item.status != 0 }">删除</button>
+                                            <button class="btn btn-danger" :class="{'disabled':item.status != 0 }" @click="delSubmit(item.id,item.status)">删除</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -543,9 +543,13 @@
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-7"></div>
-                                        <div class="col-sm-3">
-                                            <button type="button" class="btn btn-default" @click="clean">清空</button>
+                                        <div class="col-sm-5">
+                                            <button type="button" class="btn btn-default" @click="clear">清空</button>
                                             <button type="button" class="btn btn-primary" @click="search">查询</button>
+                                            <a class="btn btn-default" :href="onePageUrl"
+                                               :class="{'disabled': history_list.length === 0}">导出本页</a>
+                                            <a class="btn btn-primary" :href="allPageUrl"
+                                               :class="{'disabled': history_list.length === 0}">导出全部</a>
                                         </div>
                                     </div>
                                 </div>
@@ -560,28 +564,130 @@
                                         <th>工夹具代码及数量</th>
                                         <th>申请时间</th>
                                         <th>状态</th>
+                                        <th>查看</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr v-for="history in history_list">
-                                        <td>{{history.bill_no}}</td>
-                                        <td>{{history.submit_name}}</td>
-                                        <td>{{history.production_line_name}}</td>
+                                    <tr v-for="(item,index) in history_list">
+                                        <td>{{item.bill_no}}</td>
+                                        <td>{{item.submit_name}}</td>
+                                        <td>{{item.production_line_name}}</td>
                                         <td>
                                             <select class="btn btn-default">
-                                                <option v-for="(value,index) in history.code">{{value+" — "}}{{history.count[index]}}件</option>
+                                                <option v-for="(value,index) in item.code">{{value+" — "}}{{item.count[index]}}件</option>
                                             </select>
                                         </td>
-                                        <td>{{history.submit_time}}</td>
-                                        <td v-if="history.status == 0">待初审</td>
-                                        <td v-else-if="history.status == 1">初审未通过</td>
-                                        <td v-else-if="history.status == 2">初审通过</td>
-                                        <td v-else-if="history.status == 3">终审未通过</td>
+                                        <td>{{item.submit_time}}</td>
+                                        <td v-if="item.status == 0">待初审</td>
+                                        <td v-else-if="item.status == 1">初审未通过</td>
+                                        <td v-else-if="item.status == 2">初审通过</td>
+                                        <td v-else-if="item.status == 3">终审未通过</td>
                                         <td v-else>终审通过</td>
+                                        <td>
+                                            <button type="button" class="btn btn-info"  data-toggle="modal" data-target="#history_detail" @click="checkDetail(index)">查看明细</button>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
                                 <my-pagination :max_page_number="max_page_number" :now_page_number="now_page_number"></my-pagination>
+                            </div>
+                            <div class="modal fade" id="history_detail" tabindex="-1" role="dialog" aria-labelledby="history_detailLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="history_detailLabel">明细</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form role="form" class="form-horizontal" v-if="history != null">
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">采购单据号</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{history.bill_no}}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label
+                                                           class="col-sm-3 control-label">采购人</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{history.submit_name}}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">产线id</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{history.production_line_name}}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row" v-for="(item,index) in history.code">
+                                                    <label class="col-sm-3 control-label">工夹具代码</label>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-control">{{item}}</div>
+                                                    </div>
+                                                    <label class="col-sm-2 control-label">采购数量</label>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-control">{{history.count[index]}}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">申请时间</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{history.submit_time}}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">审批状态</label>
+                                                    <div class="col-sm-8">
+                                                        <div v-if="history.status == 0" class="form-control">待初审</div>
+                                                        <div v-else-if="history.status == 1" class="form-control">初审未通过</div>
+                                                        <div v-else-if="history.status == 2" class="form-control">初审通过</div>
+                                                        <div v-else-if="history.status == 3" class="form-control">终审未通过</div>
+                                                        <div v-else class="form-control">终审通过</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" v-if="history.first_acceptor_name != null">
+                                                    <label class="col-sm-3 control-label">初审人</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{history.first_acceptor_name}}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" v-if="history.first_time !=null">
+                                                    <label class="col-sm-3 control-label">初审时间</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{history.first_time}}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" v-if="history.status == 1">
+                                                    <label class="col-sm-3 control-label text-danger">初审不通过原因</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{history.first_reason}}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" v-if="history.final_acceptor_name != null">
+                                                    <label class="col-sm-3 control-label">终审人</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{history.final_acceptor_name}}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" v-if="history.final_time !=null">
+                                                    <label class="col-sm-3 control-label">终审时间</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{history.final_time}}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" v-if="history.status == 3">
+                                                    <label class="col-sm-3 control-label text-danger">终审不通过原因</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{history.final_reason}}</div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal -->
                             </div>
                         </div>
                     </div>

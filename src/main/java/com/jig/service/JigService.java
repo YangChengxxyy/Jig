@@ -98,6 +98,11 @@ public class JigService {
         int a = jigMapper.highSearchPurchaseIncomeHistoryPage(bill_no, submit_name, code, production_line_id, status, start_date, end_date);
         return (int) Math.ceil(a / 5.0);
     }
+    public List<PurchaseIncomeHistory> highSearchAllPurchaseIncomeHistory(String bill_no, String submit_name, String code, String production_line_id, String status, String start_date, String end_date) {
+        return jigMapper.highSearchAllPurchaseIncomeHistory(bill_no,submit_name,code,production_line_id,status,start_date,end_date);
+    }
 
-
+    public void highDeletePurchaseSubmit(String id) {
+        jigMapper.highDeletePurchaseSubmit(id);
+    }
 }

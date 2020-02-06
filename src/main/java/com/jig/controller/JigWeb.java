@@ -2,6 +2,7 @@ package com.jig.controller;
 
 import com.jig.entity.DemoEntity;
 import com.jig.entity.JigDefinition;
+import com.jig.entity.PurchaseIncomeHistory;
 import com.jig.entity.User;
 import com.jig.service.JigService;
 import com.jig.util.PoiUtil;
@@ -65,19 +66,44 @@ public class JigWeb {
         return "high";
     }
 
-    @RequestMapping("naive_download_search_one_excel")
-    public void naiveDownloadSearchOneExcel(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor, @RequestParam(value = "page_number") int pageNumber, @RequestParam(value = "file_name") String fileName) throws Exception {
+    @RequestMapping("naive_download_one_search")
+    public void naiveDownloadOneSearch(HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor, @RequestParam(value = "page_number") int pageNumber, @RequestParam(value = "file_name") String fileName) throws Exception {
         List<JigDefinition> list = jigService.naiveSearchJigDefinition(code, name, workcell, family, userFor, pageNumber);
+        if (list.size() == 0) {
+            return;
+        }
         outputFile(response, fileName, list);
     }
 
-    @RequestMapping("naive_download_search_all_excel")
-    public void naiveDownloadSearchAllExcel(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor, @RequestParam(value = "file_name") String fileName) throws Exception {
+    @RequestMapping("naive_download_all_search")
+    public void naiveDownloadAllSearch(HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor, @RequestParam(value = "file_name") String fileName) throws Exception {
         List<JigDefinition> list = jigService.searchAllJigDefinition(code, name, workcell, family, userFor);
         outputFile(response, fileName, list);
     }
 
-    private void outputFile(HttpServletResponse response, String fileName, List<JigDefinition> list) throws Exception {
+    @RequestMapping("high_download_one_purchase_history")
+    public void highDownloadOnePurchaseHistory(HttpServletResponse response, @RequestParam(value = "bill_no") String bill_no, @RequestParam(value = "submit_name") String submit_name,
+                                               @RequestParam(value = "code") String code, @RequestParam(value = "production_line_id") String production_line_id,
+                                               @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
+                                               @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number, @RequestParam(value = "file_name") String file_name) throws Exception {
+        List<PurchaseIncomeHistory> list = jigService.highSearchPurchaseIncomeHistory(bill_no, submit_name, code, production_line_id, status, start_date, end_date, page_number);
+        outputFile(response, file_name, list);
+    }
+
+    @RequestMapping("high_download_all_purchase_history")
+    public void highDownloadAllPurchaseHistory(HttpServletResponse response, @RequestParam(value = "bill_no") String bill_no, @RequestParam(value = "submit_name") String submit_name,
+                                               @RequestParam(value = "code") String code, @RequestParam(value = "production_line_id") String production_line_id,
+                                               @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
+                                               @RequestParam(value = "end_date") String end_date, @RequestParam(value = "file_name") String file_name) throws Exception {
+        List<PurchaseIncomeHistory> list = jigService.highSearchAllPurchaseIncomeHistory(bill_no, submit_name, code, production_line_id, status, start_date, end_date);
+        outputFile(response, file_name, list);
+    }
+
+
+    private void outputFile(HttpServletResponse response, String fileName, List<?> list) throws Exception {
+        if (list.size() == 0) {
+            return;
+        }
         HSSFWorkbook excel = PoiUtil.getExcel(list);
         response.setHeader("content-type", "application/octet-stream");
         response.setContentType("application/octet-stream;charset=utf-8");

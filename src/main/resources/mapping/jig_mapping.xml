@@ -145,74 +145,96 @@
         from jig_definition;
     </select>
     <select id="highGetPurchaseIncomeSubmitList" resultType="com.jig.entity.PurchaseIncomeSubmit">
-        select purchase_income_submit.*, production_line.name production_line_name, user.name submit_name
-        from purchase_income_submit,
-             user,
-             production_line
-        where user.id = purchase_income_submit.submit_id
-          and purchase_income_submit.production_line_id = production_line.id
+        select ps.*, production_line.name production_line_name, u1.name submit_name , u2.name first_acceptor_name,u3.name final_acceptor_name
+        from purchase_income_submit ps left join user u1 on ps.submit_id = u1.id LEFT JOIN user u2 on
+            ps.first_acceptor = u2.id LEFT JOIN `user` u3 on ps.final_acceptor = u3.id,production_line
+        where ps.production_line_id = production_line.id
         limit #{page_number},5
     </select>
     <select id="highGetPurchaseIncomeSubmitListPage" resultType="java.lang.Integer">
         select count(*)
-        from purchase_income_submit,
-             user,
-             production_line
-        where purchase_income_submit.submit_id = user.id
-          and purchase_income_submit.production_line_id = production_line.id
+        from purchase_income_submit ps left join user u1 on ps.submit_id = u1.id LEFT JOIN user u2 on
+            ps.first_acceptor = u2.id LEFT JOIN `user` u3 on ps.final_acceptor = u3.id,production_line
+        where ps.production_line_id = production_line.id
     </select>
     <select id="highSearchPurchaseIncomeHistory" resultType="com.jig.entity.PurchaseIncomeHistory">
-        select purchase_income_submit_history.*, production_line.name production_line_name, user.name submit_name
-        from purchase_income_submit_history,
-        user,
-        production_line
-        where purchase_income_submit_history.submit_id = user.id
-        and purchase_income_submit_history.production_line_id = production_line.id
+        select ph.*, production_line.name production_line_name, u1.name submit_name,u2.name first_acceptor_name,u3.name
+        final_acceptor_name
+        from purchase_income_submit_history ph left join user u1 on ph.submit_id = u1.id LEFT JOIN user u2 on
+        ph.first_acceptor = u2.id LEFT JOIN `user` u3 on ph.final_acceptor = u3.id,production_line
+        WHERE ph.production_line_id = production_line.id
         <if test="bill_no != null and bill_no != ''">
-            and purchase_income_submit_history.bill_no like concat('%',#{bill_no},'%')
+            and ph.bill_no like concat('%',#{bill_no},'%')
         </if>
         <if test="submit_name != null and submit_name != ''">
-            and user.name like concat('%',#{submit_name},'%')
+            and u1.name like concat('%',#{submit_name},'%')
         </if>
         <if test="code != null and code != ''">
-            and purchase_income_submit_history.code like concat('%',#{code},'%');
+            and ph.code like concat('%',#{code},'%');
         </if>
         <if test="production_line_id != null and production_line_id != ''">
-            and purchase_income_submit_history.production_line_id = #{production_line_id}
+            and ph.production_line_id = #{production_line_id}
         </if>
         <if test="status != null and status != ''">
-            and purchase_income_submit_history.status = #{status}
+            and ph.status = #{status}
         </if>
         <if test="start_date != end_date">
-            and purchase_income_submit_history.submit_time between #{start_date} and #{end_date}
+            and ph.submit_time between #{start_date} and #{end_date}
         </if>
         limit #{page_number},5
     </select>
     <select id="highSearchPurchaseIncomeHistoryPage" resultType="java.lang.Integer">
         select count(*)
-        from purchase_income_submit_history,
-        user,
-        production_line
-        where purchase_income_submit_history.submit_id = user.id
-        and purchase_income_submit_history.production_line_id = production_line.id
+        from purchase_income_submit_history ph left join user u1 on ph.submit_id = u1.id LEFT JOIN user u2 on
+        ph.first_acceptor = u2.id LEFT JOIN `user` u3 on ph.final_acceptor = u3.id,production_line
+        WHERE ph.production_line_id = production_line.id
         <if test="bill_no != null and bill_no != ''">
-            and purchase_income_submit_history.bill_no like concat('%',#{bill_no},'%')
+            and ph.bill_no like concat('%',#{bill_no},'%')
         </if>
         <if test="submit_name != null and submit_name != ''">
-            and user.name like concat('%',#{submit_name},'%')
+            and u1.name like concat('%',#{submit_name},'%')
         </if>
         <if test="code != null and code != ''">
-            and purchase_income_submit_history.code like concat('%',#{code},'%')
+            and ph.code like concat('%',#{code},'%');
         </if>
         <if test="production_line_id != null and production_line_id != ''">
-            and purchase_income_submit_history.production_line_id = #{production_line_id}
+            and ph.production_line_id = #{production_line_id}
         </if>
         <if test="status != null and status != ''">
-            and purchase_income_submit_history.status = #{status}
+            and ph.status = #{status}
         </if>
         <if test="start_date != end_date">
-            and purchase_income_submit_history.submit_time between #{start_date} and #{end_date}
+            and ph.submit_time between #{start_date} and #{end_date}
         </if>
     </select>
-
+    <select id="highSearchAllPurchaseIncomeHistory" resultType="com.jig.entity.PurchaseIncomeHistory">
+        select ph.*, production_line.name production_line_name, u1.name submit_name,u2.name first_acceptor_name,u3.name
+        final_acceptor_name
+        from purchase_income_submit_history ph left join user u1 on ph.submit_id = u1.id LEFT JOIN user u2 on
+        ph.first_acceptor = u2.id LEFT JOIN `user` u3 on ph.final_acceptor = u3.id,production_line
+        WHERE ph.production_line_id = production_line.id
+        <if test="bill_no != null and bill_no != ''">
+            and ph.bill_no like concat('%',#{bill_no},'%')
+        </if>
+        <if test="submit_name != null and submit_name != ''">
+            and u1.name like concat('%',#{submit_name},'%')
+        </if>
+        <if test="code != null and code != ''">
+            and ph.code like concat('%',#{code},'%');
+        </if>
+        <if test="production_line_id != null and production_line_id != ''">
+            and ph.production_line_id = #{production_line_id}
+        </if>
+        <if test="status != null and status != ''">
+            and ph.status = #{status}
+        </if>
+        <if test="start_date != end_date">
+            and ph.submit_time between #{start_date} and #{end_date}
+        </if>
+    </select>
+    <delete id="highDeletePurchaseSubmit">
+        delete
+        from purchase_income_submit
+        where id = #{id}
+    </delete>
 </mapper>

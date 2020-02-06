@@ -53,7 +53,7 @@ var purchase_check = new Vue({
         }
 
     }
-})
+});
 //历史采购记录
 var purchase_submit_history = new Vue({
     el:"#historyShop",

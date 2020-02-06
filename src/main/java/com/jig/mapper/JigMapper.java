@@ -209,4 +209,20 @@ public interface JigMapper {
     int highSearchPurchaseIncomeHistoryPage(@Param("bill_no") String bill_no, @Param("submit_name") String submit_name,
                                             @Param("code") String code, @Param("production_line_id") String production_line_id,
                                             @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date);
+
+    /**
+     * 所有的入库申请历史
+     *
+     * @param bill_no            单据号
+     * @param submit_name        申请人
+     * @param code               工夹具代码
+     * @param production_line_id 产线id
+     * @param status             状态
+     * @param start_date         最早日期
+     * @param end_date           最晚日期
+     * @return 查询到的所有的入库申请历史
+     */
+    List<PurchaseIncomeHistory> highSearchAllPurchaseIncomeHistory(@Param("bill_no") String bill_no, @Param("submit_name") String submit_name, @Param("code") String code, @Param("production_line_id") String production_line_id, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date);
+
+    void highDeletePurchaseSubmit(@Param("id") String id);
 }

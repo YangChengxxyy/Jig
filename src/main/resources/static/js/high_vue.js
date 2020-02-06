@@ -2,7 +2,7 @@
 let production_line_list = [];
 let code_list = [];
 $.ajax({
-    url: "high_get_production_line_list",
+    url: "get_production_line_list",
     async: false,
     success: function (res) {
         production_line_list = res;
@@ -53,12 +53,14 @@ const show_myshoplist = new Vue({
                 }
             })
         },
-        change: function (id, index) {
-            this.change_id = id;
-            this.purchase_income_submit = this.purchase_income_submit_list[index];
-            this.change_production_line_id = this.purchase_income_submit.production_line_id;
-            this.change_code = this.purchase_income_submit.code.concat([]);
-            this.change_count = this.purchase_income_submit.count.concat([]);
+        change: function (id, index, status) {
+            if (status === '0') {
+                this.change_id = id;
+                this.purchase_income_submit = this.purchase_income_submit_list[index];
+                this.change_production_line_id = this.purchase_income_submit.production_line_id;
+                this.change_code = this.purchase_income_submit.code.concat([]);
+                this.change_count = this.purchase_income_submit.count.concat([]);
+            }
         },
         add: function () {
             if (this.change_code.length < 4) {
@@ -93,13 +95,36 @@ const show_myshoplist = new Vue({
                         count: this.change_count.join("|")
                     },
                     success: function (res) {
-                        alert(res);
-                        if (res !== "服务器错误") {
+                        if (res) {
+                            alert("修改成功！");
                             $("#myshoplist_detail").modal("hide");
                             that.getData();
+                        } else {
+                            alert("服务器错误！");
                         }
                     }
                 })
+            }
+        },
+        delSubmit: function (id, status) {
+            if (status === '0') {
+                if (confirm("确认删除此申请单！！！")) {
+                    $.ajax({
+                        url: "high_delete_purchase_submit",
+                        data: {
+                            id: id
+                        },
+                        success: function (res) {
+                            if (res) {
+                                alert("删除成功！");
+                                that.getData();
+                            } else {
+                                alert("服务器错误");
+                                that.getData();
+                            }
+                        }
+                    });
+                }
             }
         }
     },
@@ -164,13 +189,13 @@ const add_myshoplist = new Vue({
                         count: this.count.join("|")
                     },
                     success: function (res) {
-                        if (res === "添加成功") {
-                            alert(res);
+                        if (res) {
+                            alert("添加成功！");
                             $("#add_myshoplist").modal("hide");
                             that.clean();
                             show_myshoplist.getData();
                         } else {
-                            alert(res);
+                            alert("服务器错误！");
                         }
                     }
                 })
@@ -201,10 +226,11 @@ const historyShop = new Vue({
         date_range: '',
         history_list: [],
         now_page_number: 1,
-        max_page_number: 0
+        max_page_number: 0,
+        history:null
     },
     methods: {
-        clean: function () {
+        clear: function () {
             this.bill_no = "";
             this.submit_name = "";
             this.code = "";
@@ -250,6 +276,25 @@ const historyShop = new Vue({
         search: function (page_number) {
             this.now_page_number = 1;
             this.getData();
+        },
+        checkDetail:function (index) {
+            this.history = this.history_list[index];
+        }
+    },
+    computed: {
+        onePageUrl: function () {
+            let splits = this.date_range.split(" - ");
+            if (splits.length === 1) {
+                splits = ['', ''];
+            }
+            return "high_download_one_purchase_history?code=" + this.code + "&submit_name=" + this.submit_name + "&bill_no=" + this.bill_no + "&production_line_id=" + this.production_line_id + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls";
+        },
+        allPageUrl: function () {
+            let splits = this.date_range.split(" - ");
+            if (splits.length === 1) {
+                splits = ['', ''];
+            }
+            return "high_download_all_purchase_history?code=" + this.code + "&submit_name=" + this.submit_name + "&bill_no=" + this.bill_no + "&production_line_id=" + this.production_line_id + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&file_name=page-all.xls";
         }
     }
 });

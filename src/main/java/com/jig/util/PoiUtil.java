@@ -38,7 +38,26 @@ public class PoiUtil {
             "workcell_id",
             "workcell",
             "remark",
-            "JigDefinition"
+            "JigDefinition",
+
+            "submit_id",
+            "submit_name",
+            "count",
+            "submit_time",
+            "first_time",
+            "first_acceptor",
+            "first_acceptor_name",
+            "first_reason",
+            "final_time",
+            "final_acceptor",
+            "final_acceptor_name",
+            "final_reason",
+            "status",
+            "production_line_id",
+            "production_line_name",
+            "bill_no",
+            "tool_photo_url",
+            "PurchaseIncomeHistory"
     };
     private static final String[] CHINESE = {
             "id",
@@ -62,11 +81,30 @@ public class PoiUtil {
             "工作部门id",
             "工作部门",
             "备注",
-            "工夹具定义"
+            "工夹具定义",
+
+            "采购人id",
+            "采购人",
+            "数量",
+            "申请时间",
+            "初审时间",
+            "初审人id",
+            "初审人",
+            "初审未通过原因",
+            "终审时间",
+            "终审人id",
+            "终审人",
+            "终审未通过原因",
+            "状态",
+            "产线id",
+            "产线",
+            "单据号",
+            "故障图片路径",
+            "历史采购"
     };
 
     static {
-        COMPARISONTABLE = new HashMap<>(25);
+        COMPARISONTABLE = new HashMap<>(40);
         for (int i = 0; i < ENGLISH.length; i++) {
             COMPARISONTABLE.put(ENGLISH[i], CHINESE[i]);
         }
