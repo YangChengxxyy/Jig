@@ -3,6 +3,7 @@ package com.jig.controller;
 import com.jig.entity.DemoEntity;
 import com.jig.entity.JigDefinition;
 import com.jig.entity.PurchaseIncomeSubmit;
+import com.jig.service.JigService;
 import com.jig.service.JigService_zhs;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +86,7 @@ public class jigJson_zhs {
 
     @RequestMapping(value = "get_manager_purchase_detail",method = {RequestMethod.GET,RequestMethod.POST})
     public PurchaseIncomeSubmit getManagerPurchaseDetail(@RequestParam(value = "id") String id){
+        System.out.println(jigService.get_manager_purchase_detail(id).getSubmit_name());
         return jigService.get_manager_purchase_detail(id);
     }
 

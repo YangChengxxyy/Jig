@@ -8,11 +8,11 @@
         #{bill_no})
     </insert>
     <select id="get_manager_purchaseCheck_list" resultType="com.jig.entity.PurchaseIncomeSubmit">
-        select * from purchase_incoming_submit p inner join user u on p.submit_id = u.id
+        select p.*,u.name submit_name from purchase_incoming_submit p inner join user u on p.submit_id = u.id
         where p.status = 2
     </select>
     <select id="get_manager_purchase_detail" resultType="com.jig.entity.PurchaseIncomeSubmit">
-        select * from purchase_incoming_submit p inner join user u on p.submit_id = u.id
+        select p.*,u.name submit_name from purchase_incoming_submit p inner join user u on p.submit_id = u.id
         where p.id = #{id}
     </select>
     <update id="manager_first_pass_purchase_submit">
@@ -26,14 +26,14 @@
         where id = #{id}
     </update>
     <select id="get_manager_jig_info_list" resultType="com.jig.entity.JigDefinition">
-        select * from jig_definition j inner join jig_family f on j.family_id = f.id
+        select *  from jig_definition j inner join jig_family f on j.family_id = f.id
         limit #{page_number},5
     </select>
     <select id="get_manager_jig_info_list_pages" resultType="java.lang.Integer">
         SELECT count(*) from jig_definition
     </select>
     <select id="get_manager_purchaselist_history" resultType="com.jig.entity.PurchaseIncomeSubmit">
-        select * from purchase_incoming_submit p inner join user u on p.submit_id = u.id
+        select p.*,u.name submit_name from purchase_incoming_submit p inner join user u on p.submit_id = u.id
         <where>
             <if test="bill_no!=''">
                 and p.bill_no like concat('%',#{bill_no},'%')

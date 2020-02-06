@@ -3,16 +3,7 @@ var purchase_check = new Vue({
     el:"#shopCheck",
     data:{
         purchaseCheck_list:[],
-        purchaselist:{
-            bill_no:"",
-            submit_name:"",
-            production_line_id:"",
-            code:[],
-            count:[],
-            status:0,
-            submit_time:"",
-            len:1
-        },
+        purchaselist:"",
         now_page_number: 1,
         max_page_number: 0
     },
@@ -40,11 +31,7 @@ var purchase_check = new Vue({
                     id:id
                 },
                 success:function (res) {
-                    that.purchaselist.bill_no = res.bill_no;
-                    that.purchaselist.submit_name = res.name;
-                    that.purchaselist.production_line_id = res.production_line_id;
-                    that.purchaselist.submit_time = res.submit_time;
-                    that.purchaselist.status = res.status;
+                    that.purchaselist = res;
                     that.purchaselist.code = res.code.split("|");
                     that.purchaselist.count = res.count.split("|");
                 }
@@ -72,7 +59,7 @@ var purchase_submit_history = new Vue({
     el:"#historyShop",
     data:{
         purchaselist: [],
-        purchase_submit:"",
+        purchase_submit:null,
         submit_name:"",
         submit_time:"",
         bill_no:"",
