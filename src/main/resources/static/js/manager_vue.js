@@ -1,3 +1,35 @@
+//左侧菜单显示未读审批
+var left_panel = new Vue({
+    el:"#left",
+    data:{
+        purchase_submit_count:0,
+        purchase_submit_is_show:1
+    },
+    created:function(){
+        this.get_purchase_submit_count();
+    },
+    methods:{
+        get_purchase_submit_count:function () {
+            const that = this;
+            $.ajax({
+                url:"get_manager_purchase_submit_count",
+                data:{
+
+                },
+                success:function (res) {
+                    if(res==0){
+                        that.purchase_submit_is_show = 0;
+                    }
+                    that.purchase_submit_count = res;
+                }
+            })
+        },
+        hide_purchase_submit_message(){
+            this.purchase_submit_is_show = 0;
+        }
+    }
+})
+
 //显示采购审批list
 var purchase_check = new Vue({
     el:"#shopCheck",
@@ -22,7 +54,7 @@ var purchase_check = new Vue({
         getData:function () {
             const that = this;
             $.ajax({
-                url:"get_manager_purchaseCheck_list",
+                url:"get_manager_purchase_submit_list",
                 data: {
                     now_page_number:this.now_page_number,
                     user_id:"111111"
@@ -43,7 +75,7 @@ var purchase_check = new Vue({
         pass_submit:function (id,pass) {
             const that = this;
             $.ajax({
-                url: "manager_first_pass_purchase_submit",
+                url: "manager_check_purchase_submit",
                 data: {
                     id: id,
                     pass:pass
@@ -83,7 +115,7 @@ var purchase_submit_history = new Vue({
         getData:function () {
             const that = this;
             $.ajax({
-                url:"get_manager_purchaselist_history",
+                url:"get_manager_purchase_submit_list_history",
                 data:{
                     submit_name:this.submit_name,
                     submit_time:this.submit_time,

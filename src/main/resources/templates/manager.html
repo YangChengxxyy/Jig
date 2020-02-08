@@ -32,7 +32,7 @@
                 $("#submit_time_hidden").val(s);
             })
 
-            $("#purchase_submit_date").daterangepicker({
+            $(".submit_date").daterangepicker({
                 "opens": "center",
                 locale: { //汉化
                     format: "YYYY-MM-DD", //设置显示格式
@@ -130,7 +130,6 @@
                 </div>
                 <div class="panel-body">
                     <div class="panel-group" id="left">
-
                         <div class="panel panel-default">
                             <div class="panel-heading" data-toggle="collapse" data-parent="#left" href="#1">
                                 <h4 class="panel-title" data-toggle="tab" href="#main1">
@@ -139,7 +138,7 @@
                             </div>
                             <div class="panel-collapse collapse in" id="1">
                                 <ul class="nav nav-pills nav-stacked">
-                                    <li class="active" data-toggle="tab" href="#shopCheck"><a>采购审批</a></li>
+                                    <li class="active" data-toggle="tab" href="#shopCheck" @click="hide_purchase_submit_message"><a>采购审批<span class="badge" v-if="purchase_submit_is_show===1">{{purchase_submit_count}}</span></a></li>
                                     <li data-toggle="tab" href="#historyShop"><a>历史采购记录</a></li>
                                     <li data-toggle="tab" href="#storehouse"><a>仓库余量</a></li>
                                 </ul>
@@ -329,7 +328,7 @@
                                         <label for="div_date1" class="col-sm-2 control-label">选择时间</label>
                                         <div class="col-sm-3">
                                             <div class='input-group' id='div_date1'>
-                                                <input id="purchase_submit_date" class="form-control" v-model="submit_time"></input>
+                                                <input class="form-control submit_date" v-model="submit_time"></input>
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-remove" @click="clear_date"></span>
                                                 </span>
@@ -361,7 +360,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr v-for="item in purchase_submit_list">
+                                    <tr v-for="(item,list_index) in purchase_submit_list">
                                         <td>{{item.bill_no}}</td>
                                         <td>{{item.submit_name}}</td>
                                         <td>{{item.production_line_id}}</td>
@@ -380,7 +379,7 @@
                                         <td v-if="item.status==4">终审通过</td>
                                         <td>
                                             <button type="button" data-target="#myshoplist_history_detail"
-                                                    data-toggle="modal" class="btn btn-primary" @click="get_purchase_submit_detail(item.id)">查看</button>
+                                                    data-toggle="modal" class="btn btn-primary" @click="get_purchase_submit_detail(list_index)">查看</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -907,6 +906,6 @@
     </div>
 </div>
 <script src="js/pagination.js"></script>
-<script src="js/manager.js"></script>
+<script src="js/manager_vue.js"></script>
 </body>
 </html>

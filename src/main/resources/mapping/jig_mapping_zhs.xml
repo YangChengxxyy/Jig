@@ -7,7 +7,7 @@
         (select id from production_line where name = #{production_line_id}),
         #{bill_no})
     </insert>
-    <select id="get_manager_purchaseCheck_list" resultType="com.jig.entity.PurchaseIncomeSubmit">
+    <select id="get_manager_purchase_submit_list" resultType="com.jig.entity.PurchaseIncomeSubmit">
         select p.*,u.name submit_name from purchase_incoming_submit p inner join user u on p.submit_id = u.id
         where p.status = 2
     </select>
@@ -15,7 +15,7 @@
         select p.*,u.name submit_name from purchase_incoming_submit p inner join user u on p.submit_id = u.id
         where p.id = #{id}
     </select>
-    <update id="manager_first_pass_purchase_submit">
+    <update id="manager_check_purchase_submit">
         update purchase_incoming_submit
         <if test="pass==3">
             set status = 3
@@ -32,8 +32,9 @@
     <select id="get_manager_jig_info_list_pages" resultType="java.lang.Integer">
         SELECT count(*) from jig_definition
     </select>
-    <select id="get_manager_purchaselist_history" resultType="com.jig.entity.PurchaseIncomeSubmit">
-        select p.*,u.name submit_name from purchase_incoming_submit p inner join user u on p.submit_id = u.id
+    <select id="get_manager_purchase_submit_list_history" resultType="com.jig.entity.PurchaseIncomeSubmit">
+        select *,u.name submit_name,pl.name production_line_name from purchase_incoming_submit p inner join user u on p.submit_id = u.id
+                                                                    inner join production_line pl on pl.id = p.production_line_id
         <where>
             <if test="bill_no!=''">
                 and p.bill_no like concat('%',#{bill_no},'%')
@@ -49,7 +50,7 @@
             </if>
         </where>
     </select>
-    <select id="get_manager_purchaselist_history_pages" resultType="java.lang.Integer">
+    <select id="get_manager_purchase_submit_list_history_pages" resultType="java.lang.Integer">
         select count(*) from purchase_incoming_submit p inner join user u on p.submit_id = u.id
         <where>
             <if test="bill_no!=''">
@@ -65,5 +66,9 @@
                 and (STR_TO_DATE(p.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
             </if>
         </where>
+    </select>
+    <select id="get_manager_purchase_submit_count" resultType="java.lang.Integer">
+        select count(*) from purchase_incoming_submit
+        where status = 2
     </select>
 </mapper>
