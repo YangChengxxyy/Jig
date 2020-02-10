@@ -145,16 +145,28 @@
         from jig_definition;
     </select>
     <select id="highGetPurchaseIncomeSubmitList" resultType="com.jig.entity.PurchaseIncomeSubmit">
-        select ps.*, production_line.name production_line_name, u1.name submit_name , u2.name first_acceptor_name,u3.name final_acceptor_name
-        from purchase_income_submit ps left join user u1 on ps.submit_id = u1.id LEFT JOIN user u2 on
-            ps.first_acceptor = u2.id LEFT JOIN `user` u3 on ps.final_acceptor = u3.id,production_line
+        select ps.*,
+               production_line.name production_line_name,
+               u1.name              submit_name,
+               u2.name              first_acceptor_name,
+               u3.name              final_acceptor_name
+        from purchase_income_submit ps
+                 left join user u1 on ps.submit_id = u1.id
+                 LEFT JOIN user u2 on
+            ps.first_acceptor = u2.id
+                 LEFT JOIN `user` u3 on ps.final_acceptor = u3.id,
+             production_line
         where ps.production_line_id = production_line.id
         limit #{page_number},5
     </select>
     <select id="highGetPurchaseIncomeSubmitListPage" resultType="java.lang.Integer">
         select count(*)
-        from purchase_income_submit ps left join user u1 on ps.submit_id = u1.id LEFT JOIN user u2 on
-            ps.first_acceptor = u2.id LEFT JOIN `user` u3 on ps.final_acceptor = u3.id,production_line
+        from purchase_income_submit ps
+                 left join user u1 on ps.submit_id = u1.id
+                 LEFT JOIN user u2 on
+            ps.first_acceptor = u2.id
+                 LEFT JOIN `user` u3 on ps.final_acceptor = u3.id,
+             production_line
         where ps.production_line_id = production_line.id
     </select>
     <select id="highSearchPurchaseIncomeHistory" resultType="com.jig.entity.PurchaseIncomeHistory">
@@ -237,4 +249,11 @@
         from purchase_income_submit
         where id = #{id}
     </delete>
+    <select id="highGetRepairJig" resultType="com.jig.entity.RepairJig">
+        select rs.*, u1.name submit_name, u2.name acceptor_name
+        from repair_submit rs
+                 right join `user` u1 on rs.submit_id = u1.id
+                 right join `user` u2 on rs.acceptor_id = u2.id
+        where rs.submit_id = #{submit_id}
+    </select>
 </mapper>

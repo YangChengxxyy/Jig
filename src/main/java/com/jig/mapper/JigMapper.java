@@ -224,5 +224,16 @@ public interface JigMapper {
      */
     List<PurchaseIncomeHistory> highSearchAllPurchaseIncomeHistory(@Param("bill_no") String bill_no, @Param("submit_name") String submit_name, @Param("code") String code, @Param("production_line_id") String production_line_id, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date);
 
+    /**
+     * high删除入库申请单
+     * @param id
+     */
     void highDeletePurchaseSubmit(@Param("id") String id);
+
+    /**
+     * high获取报修申请记录
+     * @param submit_id 申请人id
+     * @return 获取报修申请记录
+     */
+    List<RepairJig> highGetRepairJig(String submit_id);
 }

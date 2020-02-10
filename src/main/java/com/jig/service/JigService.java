@@ -105,4 +105,8 @@ public class JigService {
     public void highDeletePurchaseSubmit(String id) {
         jigMapper.highDeletePurchaseSubmit(id);
     }
+
+    public List<RepairJig> highGetRepairJig(String submit_id) {
+        return jigMapper.highGetRepairJig(submit_id);
+    }
 }

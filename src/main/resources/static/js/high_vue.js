@@ -227,7 +227,7 @@ const historyShop = new Vue({
         history_list: [],
         now_page_number: 1,
         max_page_number: 0,
-        history:null
+        history: null
     },
     methods: {
         clear: function () {
@@ -277,7 +277,7 @@ const historyShop = new Vue({
             this.now_page_number = 1;
             this.getData();
         },
-        checkDetail:function (index) {
+        checkDetail: function (index) {
             this.history = this.history_list[index];
         }
     },
@@ -295,6 +295,40 @@ const historyShop = new Vue({
                 splits = ['', ''];
             }
             return "high_download_all_purchase_history?code=" + this.code + "&submit_name=" + this.submit_name + "&bill_no=" + this.bill_no + "&production_line_id=" + this.production_line_id + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&file_name=page-all.xls";
+        }
+    }
+});
+const myrepair = new Vue({
+    el: "#myrepair",
+    data: {
+        submit_code: "",
+        submit_seq_id: "",
+        submit_trouble_reason: "",
+        submit_trouble_photo: "点击上传图片",
+        code_list: code_list
+    },
+    methods:{
+        file:function () {
+            this.submit_trouble_photo = $("input[type=file]")[0].files[0].name;
+        },
+        submit_repair(){
+            const formData = new FormData();
+            formData.append("file",$("input[type=file]")[0]);
+            formData.append("submit_id",$("#id").val());
+            formData.append("code",this.submit_code);
+            formData.append("seq_id",this.submit_seq_id);
+            formData.append("trouble_reason",this.submit_trouble_reason);
+            console.log(formData);
+            $.ajax({
+                url:"high_submit_repair",
+                type:"post",
+                processData:false,
+                contentType:false,
+                data:formData,
+                success:function (res) {
+                    alert("success");
+                }
+            })
         }
     }
 });
