@@ -255,5 +255,13 @@
                  right join `user` u1 on rs.submit_id = u1.id
                  right join `user` u2 on rs.acceptor_id = u2.id
         where rs.submit_id = #{submit_id}
+        limit #{page_number},5
+    </select>
+    <select id="highGetRepairJigPage" resultType="java.lang.Integer">
+        select count(*)
+        from repair_submit rs
+                 right join `user` u1 on rs.submit_id = u1.id
+                 right join `user` u2 on rs.acceptor_id = u2.id
+        where rs.submit_id = #{submit_id}
     </select>
 </mapper>

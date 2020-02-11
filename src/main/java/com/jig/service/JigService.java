@@ -106,7 +106,13 @@ public class JigService {
         jigMapper.highDeletePurchaseSubmit(id);
     }
 
-    public List<RepairJig> highGetRepairJig(String submit_id) {
-        return jigMapper.highGetRepairJig(submit_id);
+    public List<RepairJig> highGetRepairJig(String submit_id,int page_number) {
+        page_number = (page_number-1)*5;
+        return jigMapper.highGetRepairJig(submit_id,page_number);
+    }
+
+    public int highGetRepairJigPage(String submit_id) {
+        int a = jigMapper.highGetRepairJigPage(submit_id);
+        return (int) Math.ceil(a / 5.0);
     }
 }

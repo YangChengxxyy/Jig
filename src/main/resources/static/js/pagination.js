@@ -18,8 +18,8 @@
                     if (res.data.length === 0) {
                         alert("没有结果！")
                     } else {
-                        that.需要赋值的变量 = res.data;
-                        that.max_page_number = res.max;
+                        that.需要赋值的变量 = res['data'];
+                        that.max_page_number = res['max'];
                     }
                 }
             })

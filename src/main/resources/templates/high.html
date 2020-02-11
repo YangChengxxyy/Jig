@@ -753,40 +753,38 @@
                                 </div>
                             </div>
                             <div class="table-responsive" style="margin-top: 2%">
-                            <table class="table table-striped table-hover table-bordered" role="table">
-                                <thead>
-                                <tr>
-                                    <th>工夹具代码</th>
-                                    <th>工夹具序列号</th>
-                                    <th>申请人</th>
-                                    <th>故障原因</th>
-                                    <th>申请时间</th>
-                                    <th>审批状态</th>
-                                    <th>操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>{{item.code}}</td>
-                                    <td>{{item.seq_id}}</td>
-                                    <td>{{item.submit_name}}</td>
-                                    <td>{{item.trouble_reason}}</td>
-                                    <td>{{item.submit_time}}</td>
-                                    <td>待处理</td>
-                                    <td>已处理</td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                data-target="#repairDetail">查看
-                                        </button>
-                                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                data-target="#repairHistory">查看报修历史
-                                        </button>
-                                        <button type="button" class="btn btn-success">通过</button>
-                                        <button type="button" class="btn btn-danger">不通过</button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                <table class="table table-striped table-hover table-bordered" role="table">
+                                    <thead>
+                                    <tr>
+                                        <th>工夹具代码</th>
+                                        <th>工夹具序列号</th>
+                                        <th>申请人</th>
+                                        <th>故障原因</th>
+                                        <th>申请时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="(item,index) in repair_list">
+                                        <td>{{item.code}}</td>
+                                        <td>{{item.seq_id}}</td>
+                                        <td>{{item.submit_name}}</td>
+                                        <td>{{item.trouble_reason}}</td>
+                                        <td>{{item.submit_time}}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                    data-target="#repairDetail">查看
+                                            </button>
+                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                    data-target="#repairHistory">查看报修历史
+                                            </button>
+                                            <button type="button" class="btn btn-success">通过</button>
+                                            <button type="button" class="btn btn-danger">不通过</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <my-pagination :max_page_number="max_page_number" :now_page_number="now_page_number"></my-pagination>
                             </div>
                         </div>
                         <div id="historyMyrepair" class="tab-pane fade">

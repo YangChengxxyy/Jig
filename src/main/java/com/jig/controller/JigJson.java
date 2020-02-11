@@ -246,7 +246,7 @@ public class JigJson {
      * high删除出库申请
      *
      * @param id purchase_income_submit表id
-     * @return
+     * @return 是否成功
      */
     @RequestMapping("high_delete_purchase_submit")
     public boolean highDeletePurchaseSubmit(@RequestParam(value = "id") String id) {
@@ -265,8 +265,11 @@ public class JigJson {
      * @return 获取报修申请记录
      */
     @RequestMapping("high_get_repair_jig")
-    public List<RepairJig> highGetRepairJig(@RequestParam(value = "submit_id") String submit_id) {
-        return jigService.highGetRepairJig(submit_id);
+    public Map<String,Object> highGetRepairJig(@RequestParam(value = "submit_id") String submit_id,@RequestParam(value = "page_number")int page_number) {
+        Map<String,Object> map = new HashMap<>(2);
+        map.put("data",jigService.highGetRepairJig(submit_id, page_number));
+        map.put("max", jigService.highGetRepairJigPage(submit_id));
+        return map;
     }
 
     @RequestMapping("high_search_repair_history")

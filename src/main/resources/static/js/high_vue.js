@@ -305,9 +305,29 @@ const myrepair = new Vue({
         submit_seq_id: "",
         submit_trouble_reason: "",
         submit_trouble_photo: "点击上传图片",
-        code_list: code_list
+        code_list: code_list,
+        now_page_number:1,
+        max_page_number:0,
+        repair_list:[]
+    },
+    created:function () {
+        this.getData();
     },
     methods:{
+        getData:function(){
+            let that = this;
+            $.ajax({
+                url:"",
+                data:{
+                    page_number:this.now_page_number,
+                    submit_id:$("#id").val()
+                },
+                success:function (res) {
+                    that.repair_list = res['data'];
+                    that.max_page_number = res['max'];
+                }
+            })
+        },
         file:function () {
             this.submit_trouble_photo = $("input[type=file]")[0].files[0].name;
         },

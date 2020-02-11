@@ -226,14 +226,25 @@ public interface JigMapper {
 
     /**
      * high删除入库申请单
+     *
      * @param id
      */
     void highDeletePurchaseSubmit(@Param("id") String id);
 
     /**
      * high获取报修申请记录
-     * @param submit_id 申请人id
+     *
+     * @param submit_id   申请人id
+     * @param page_number 处理后页码
      * @return 获取报修申请记录
      */
-    List<RepairJig> highGetRepairJig(String submit_id);
+    List<RepairJig> highGetRepairJig(@Param("submit_id") String submit_id, @Param("page_number") int page_number);
+
+    /**
+     * high获取报修申请记录条数
+     *
+     * @param submit_id 申请人id
+     * @return 获取报修申请记录条数
+     */
+    int highGetRepairJigPage(@Param("submit_id") String submit_id);
 }
