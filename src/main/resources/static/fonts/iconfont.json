@@ -1,0 +1,51 @@
+{
+  "id": "1632794",
+  "name": "jigDemo",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "jig",
+  "glyphs": [
+    {
+      "icon_id": "681195",
+      "name": "上升",
+      "font_class": "shangsheng",
+      "unicode": "e750",
+      "unicode_decimal": 59216
+    },
+    {
+      "icon_id": "681201",
+      "name": "下降",
+      "font_class": "xiajiang",
+      "unicode": "e755",
+      "unicode_decimal": 59221
+    },
+    {
+      "icon_id": "4954933",
+      "name": "购物车",
+      "font_class": "gouwuche",
+      "unicode": "e657",
+      "unicode_decimal": 58967
+    },
+    {
+      "icon_id": "6707968",
+      "name": "工具",
+      "font_class": "gongju",
+      "unicode": "e6d0",
+      "unicode_decimal": 59088
+    },
+    {
+      "icon_id": "12981912",
+      "name": "上升",
+      "font_class": "shangsheng-copy",
+      "unicode": "e756",
+      "unicode_decimal": 59222
+    },
+    {
+      "icon_id": "12981913",
+      "name": "下降",
+      "font_class": "xiajiang-copy",
+      "unicode": "e757",
+      "unicode_decimal": 59223
+    }
+  ]
+}

@@ -51,4 +51,8 @@ public class JigService_zhs {
     public int get_manager_purchase_submit_count(){
         return jigMapper.get_manager_purchase_submit_count();
     }
+
+    public int get_manager_purchase_submit_total_count(String bill_no,String submit_name,String start_date,String end_date,String status){
+        return jigMapper.get_manager_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status);
+    }
 }

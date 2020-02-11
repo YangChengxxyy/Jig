@@ -5,6 +5,8 @@
     <title>经理</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/daterangepicker.css"/>
+    <link rel="stylesheet" href="css/manager.css">
+    <link rel="stylesheet" href="css/iconfont.css">
     <script src="js/jquery-3.4.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
 
@@ -140,6 +142,7 @@
                                 <ul class="nav nav-pills nav-stacked">
                                     <li class="active" data-toggle="tab" href="#shopCheck" @click="hide_purchase_submit_message"><a>采购审批<span class="badge" v-if="purchase_submit_is_show===1">{{purchase_submit_count}}</span></a></li>
                                     <li data-toggle="tab" href="#historyShop"><a>历史采购记录</a></li>
+                                    <li data-toggle="tab" href="#purchaseTotal"><a>采购统计</a></li>
                                     <li data-toggle="tab" href="#storehouse"><a>仓库余量</a></li>
                                 </ul>
                             </div>
@@ -183,6 +186,7 @@
                     <ul class="nav nav-tabs">
                         <li class="active" data-toggle="tab" href="#shopCheck"><a>采购审批</a></li>
                         <li data-toggle="tab" href="#historyShop"><a>历史采购记录</a></li>
+                        <li data-toggle="tab" href="#purchaseTotal"><a>采购统计</a></li>
                         <li data-toggle="tab" href="#storehouse"><a>仓库余量</a></li>
                     </ul>
                     <div class="panel-body tab-content">
@@ -464,6 +468,124 @@
                                 </div><!-- /.modal -->
                             </div>
                         </div><!-- /历史采购记录-->
+
+                        <!--采购统计-->
+                        <div id="purchaseTotal" class="tab-pane fade">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="row">
+                                        <div class="col-lg-5">
+                                            <div class="small-box">
+                                                <div class="small-box-icon bg-lightskyblue">
+                                                    <i class="iconfont icongouwuche"></i>
+                                                </div>
+                                                <div class="small-box-inner">
+                                                    <h1 class="data fg-lightskyblue">{{purchase_submit_count}}</h1>
+                                                    <p>新增采购单</p>
+                                                    <a class="more" href="#" title="查看更多">查看更多</a>
+                                                    <span class="status arrow-down">95.9%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-5 col-lg-push-1">
+                                            <div class="small-box">
+                                                <div class="small-box-icon bg-green">
+                                                    <i class="iconfont icongongju"></i>
+                                                </div>
+                                                <div class="small-box-inner">
+                                                    <h1 class="data fg-green">{{jig_count}}</h1>
+                                                    <p>新增工夹具</p>
+                                                    <a class="more" href="#" title="查看更多">查看更多</a>
+                                                    <span class="status arrow-up">50%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-5">
+                                            <div class="small-box">
+                                                <div class="small-box-icon bg-green">
+                                                    <i class="iconfont icongouwuche"></i>
+                                                </div>
+                                                <div class="small-box-inner">
+                                                    <h1 class="data fg-lightskyblue">100</h1>
+                                                    <p>新采购单</p>
+                                                    <a class="more" href="#" title="查看更多">查看更多</a>
+                                                    <span class="status arrow-down">95.9%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-5 col-lg-push-1">
+                                            <div class="small-box">
+                                                <div class="small-box-icon bg-lightskyblue">
+                                                    <i class="iconfont icongongju"></i>
+                                                </div>
+                                                <div class="small-box-inner">
+                                                    <h1 class="data fg-lightskyblue">100</h1>
+                                                    <p>新采购单</p>
+                                                    <a class="more" href="#" title="查看更多">查看更多</a>
+                                                    <span class="status arrow-down">15.5%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" data-toggle="collapse" data-target="#purchaseTotal_select">
+                                            搜索
+                                        </div>
+                                        <div class="panel-body collapse in" id="purchaseTotal_select">
+                                            <form role="form" class="form-horizontal">
+                                                <div class="form-group row">
+                                                    <label for="sel_shoplist_id" class="col-sm-3 control-label">单据号</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control"  v-model="bill_no">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="sel_shoplist_id" class="col-sm-3 control-label">采购人</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control"  v-model="submit_name">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 control-label">申请日期</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control submit_date" v-model="submit_time"></input>
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-remove" @click="clear_date">
+                                                        </span>
+                                                </span>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div class="col-sm-3">
+                                                        <button class="btn btn-primary" type="button" @click="getData">查询</button>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <button class="btn btn-primary" type="button">查询</button>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <button class="btn btn-primary" type="button">查询</button>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <button class="btn btn-primary" type="button">查询</button>
+                                                    </div>
+
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="panel-footer">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                </div>
+                            </div>
+
                         <div id="storehouse" class="tab-pane fade">
                             <!--仓库余量-->
                             <div style="margin-top: 2%;margin-bottom: 3%">

@@ -90,8 +90,36 @@ public class jigJson_zhs {
         return map;
     }
 
-    @RequestMapping(value = "get_manager_purchase_submit_count")
+    @RequestMapping(value = "get_manager_purchase_submit_count",method = {RequestMethod.GET,RequestMethod.POST})
     public int getManagerPurchaseSubmitCount(){
         return jigService.get_manager_purchase_submit_count();
+    }
+
+    @RequestMapping(value = "get_manager_purchase_total_data",method = {RequestMethod.GET,RequestMethod.POST})
+    public Map<Object,Object> getManagerPurchaseTotalData(@RequestParam(value = "user_id") String user_id,
+                                                          @RequestParam(value = "bill_no") String bill_no,
+                                                          @RequestParam(value = "submit_name") String submit_name,
+                                                          @RequestParam(value = "submit_time") String submit_time){
+        Map<Object, Object> map = new HashMap<>();
+        String start_date = "";
+        String end_date = "";
+        if(submit_time!="") {
+            start_date = submit_time.substring(0,10);
+            end_date = submit_time.substring(13);
+        }
+        List<PurchaseIncomeSubmit> list = jigService.get_manager_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,"4",-1);
+        int purchase_submit_count = jigService.get_manager_purchase_submit_total_count(bill_no,submit_name,start_date,end_date,"4");
+        int jig_count = 0;
+
+        for(PurchaseIncomeSubmit submit : list){
+            System.out.println(submit.getCount());
+            String[] count = submit.getCount().split("\\|");
+            for(String c:count){
+                jig_count+=Integer.valueOf(c);
+            }
+        }
+        map.put("jig_count",jig_count);
+        map.put("purchase_submit_count",purchase_submit_count);
+        return map;
     }
 }

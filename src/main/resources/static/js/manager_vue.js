@@ -142,6 +142,48 @@ var purchase_submit_history = new Vue({
         },
         clear_date:function () {
             this.submit_time = "";
+        },
+        clear:function () {
+            this.bill_no = "";
+            this.submit_name = "";
+            this.submit_time = "";
+            this.status = "";
+        }
+    }
+})
+//采购统计显示
+var purchase_total = new Vue({
+    el:"#purchaseTotal",
+    data:{
+        purchase_submit_count:0,
+        jig_count:0,
+        submit_name:"",
+        submit_time:"",
+        bill_no:""
+    },
+    created:function () {
+        this.getData();
+    },
+    methods:{
+        getData:function () {
+            const that = this;
+            $.ajax({
+                url:"get_manager_purchase_total_data",
+                data:{
+                    submit_name:this.submit_name,
+                    submit_time:this.submit_time,
+                    bill_no:this.bill_no,
+                    user_id:""
+
+                },
+                success:function (res) {
+                    that.purchase_submit_count = res.purchase_submit_count;
+                    that.jig_count = res.jig_count;
+                }
+            })
+        },
+        clear_date:function () {
+            this.submit_time="";
         }
     }
 })
