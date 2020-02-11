@@ -1,15 +1,13 @@
 //添加采购单
 let production_line_list = [];
 let code_list = [];
-$.ajax({
-    url: "get_production_line_list",
+$.ajax("get_production_line_list", {
     async: false,
     success: function (res) {
         production_line_list = res;
     }
 });
-$.ajax({
-    url: "get_code_list",
+$.ajax("get_code_list", {
     async: false,
     success: function (res) {
         code_list = res;
@@ -38,8 +36,7 @@ const show_myshoplist = new Vue({
     methods: {
         getData() {
             const that = this;
-            $.ajax({
-                url: "high_get_purchase_income_submit_list",
+            $.ajax("high_get_purchase_income_submit_list", {
                 data: {
                     page_number: this.now_page_number
                 },
@@ -86,8 +83,7 @@ const show_myshoplist = new Vue({
                 return false;
             } else {
                 var that = this;
-                $.ajax({
-                    url: "high_update_purchase_income_submit",
+                $.ajax("high_update_purchase_income_submit", {
                     data: {
                         id: this.change_id,
                         production_line_id: this.change_production_line_id,
@@ -109,8 +105,7 @@ const show_myshoplist = new Vue({
         delSubmit: function (id, status) {
             if (status === '0') {
                 if (confirm("确认删除此申请单！！！")) {
-                    $.ajax({
-                        url: "high_delete_purchase_submit",
+                    $.ajax("high_delete_purchase_submit", {
                         data: {
                             id: id
                         },
@@ -179,8 +174,7 @@ const add_myshoplist = new Vue({
                 return false;
             } else {
                 const that = this;
-                $.ajax({
-                    url: "high_add_shoplist",
+                $.ajax("high_add_shoplist", {
                     data: {
                         bill_no: this.bill_no,
                         submit_id: this.submit_id,
@@ -247,8 +241,7 @@ const historyShop = new Vue({
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            $.ajax({
-                url: "high_search_purchase_income_history",
+            $.ajax("high_search_purchase_income_history", {
                 data: {
                     bill_no: this.bill_no,
                     submit_name: this.submit_name,
@@ -306,49 +299,109 @@ const myrepair = new Vue({
         submit_trouble_reason: "",
         submit_trouble_photo: "点击上传图片",
         code_list: code_list,
-        now_page_number:1,
-        max_page_number:0,
-        repair_list:[]
+        now_page_number: 1,
+        max_page_number: 0,
+        repair_list: []
     },
-    created:function () {
+    created: function () {
         this.getData();
     },
-    methods:{
-        getData:function(){
+    methods: {
+        getData: function () {
             let that = this;
-            $.ajax({
-                url:"",
-                data:{
-                    page_number:this.now_page_number,
-                    submit_id:$("#id").val()
+            $.ajax("high_get_repair_jig", {
+                data: {
+                    page_number: this.now_page_number,
                 },
-                success:function (res) {
+                success: function (res) {
                     that.repair_list = res['data'];
                     that.max_page_number = res['max'];
                 }
             })
         },
-        file:function () {
+        file: function () {
             this.submit_trouble_photo = $("input[type=file]")[0].files[0].name;
         },
-        submit_repair(){
+        submit_repair() {
             const formData = new FormData();
-            formData.append("file",$("input[type=file]")[0]);
-            formData.append("submit_id",$("#id").val());
-            formData.append("code",this.submit_code);
-            formData.append("seq_id",this.submit_seq_id);
-            formData.append("trouble_reason",this.submit_trouble_reason);
+            formData.append("file", $("input[type=file]")[0]);
+            formData.append("submit_id", $("#id").val());
+            formData.append("code", this.submit_code);
+            formData.append("seq_id", this.submit_seq_id);
+            formData.append("trouble_reason", this.submit_trouble_reason);
             console.log(formData);
-            $.ajax({
-                url:"high_submit_repair",
-                type:"post",
-                processData:false,
-                contentType:false,
-                data:formData,
-                success:function (res) {
+            $.ajax("high_submit_repair", {
+                type: "post",
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (res) {
                     alert("success");
                 }
             })
+        }
+    }
+});
+const historyMyrepair = new Vue({
+    el: "#historyMyrepair",
+    data: {
+        code: "",
+        seq_id: "",
+        submit_name: "",
+        trouble_reason: "",
+        status: "",
+        date_range: "",
+        history_list: [],
+        history: null,
+        now_page_number: 1,
+        max_page_number: 0
+    },
+    methods: {
+        getData: function () {
+            let that = this;
+            let splits = this.date_range.split(" - ");
+            if (splits.length === 1) {
+                splits = ['', ''];
+            }
+            $.ajax("high_search_repair_history", {
+                data: {
+                    code: this.code,
+                    seq_id: this.seq_id,
+                    submit_name: this.submit_name,
+                    status: this.status,
+                    start_date: splits[0],
+                    end_date: splits[1],
+                    page_number: this.now_page_number
+                },
+                success: function (res) {
+                    if (res['data'].length === 0) {
+                        alert("没有结果");
+                        return false;
+                    }
+                    that.history_list = res['data'];
+                    that.max_page_number = res['max'];
+                }
+            })
+        },
+        check_detail: function (index) {
+            this.history = this.history_list[index];
+        },
+        clear: function () {
+            this.code = "";
+            this.seq_id = "";
+            this.submit_name = "";
+            this.trouble_reason = "";
+            this.status = "";
+            this.date_range = "";
+            this.now_page_number = 1;
+            this.max_page_number = 0;
+            this.history_list = [];
+            this.history = null;
+        },
+        search: function () {
+            this.now_page_number = 1;
+            this.max_page_number = 0;
+            this.getData();
         }
     }
 });

@@ -16,7 +16,7 @@
     </insert>
     <insert id="highAddShoplist">
         insert into purchase_income_submit(submit_id, code, count, submit_time, status, production_line_id, bill_no)
-        values (#{submit_id}, #{code}, #{count}, now(), 0, #{production_line_id}, #{bill_no});
+        values (#{submit_id}, #{code}, #{count}, now(), 0, #{production_line_id}, #{bill_no})
     </insert>
     <update id="naiveReturnJig">
         update jig_position
@@ -26,7 +26,7 @@
         insert into outgo_income_history(submit_time, user_id, status, rec_id, rec_time, code, seq_id)
         values ((select submit_time from outgoing_jig where outgoing_jig.id = #{id}),
                 (select user_id from outgoing_jig where outgoing_jig.id = #{id}),
-                1, #{rec_id}, now(), #{code}, #{seq_id});
+                1, #{rec_id}, now(), #{code}, #{seq_id})
     </update>
     <update id="highUpdatePurchaseIncomeSubmit">
         update purchase_income_submit
@@ -138,11 +138,11 @@
     </select>
     <select id="getProductionLineList" resultType="com.jig.entity.ProductionLine">
         select *
-        from production_line;
+        from production_line
     </select>
     <select id="getCodeList" resultType="java.lang.String">
         select code
-        from jig_definition;
+        from jig_definition
     </select>
     <select id="highGetPurchaseIncomeSubmitList" resultType="com.jig.entity.PurchaseIncomeSubmit">
         select ps.*,
@@ -152,9 +152,9 @@
                u3.name              final_acceptor_name
         from purchase_income_submit ps
                  left join user u1 on ps.submit_id = u1.id
-                 LEFT JOIN user u2 on
+                 left join user u2 on
             ps.first_acceptor = u2.id
-                 LEFT JOIN `user` u3 on ps.final_acceptor = u3.id,
+                 left join `user` u3 on ps.final_acceptor = u3.id,
              production_line
         where ps.production_line_id = production_line.id
         limit #{page_number},5
@@ -163,17 +163,17 @@
         select count(*)
         from purchase_income_submit ps
                  left join user u1 on ps.submit_id = u1.id
-                 LEFT JOIN user u2 on
+                 left join user u2 on
             ps.first_acceptor = u2.id
-                 LEFT JOIN `user` u3 on ps.final_acceptor = u3.id,
+                 left join `user` u3 on ps.final_acceptor = u3.id,
              production_line
         where ps.production_line_id = production_line.id
     </select>
     <select id="highSearchPurchaseIncomeHistory" resultType="com.jig.entity.PurchaseIncomeHistory">
         select ph.*, production_line.name production_line_name, u1.name submit_name,u2.name first_acceptor_name,u3.name
         final_acceptor_name
-        from purchase_income_submit_history ph left join user u1 on ph.submit_id = u1.id LEFT JOIN user u2 on
-        ph.first_acceptor = u2.id LEFT JOIN `user` u3 on ph.final_acceptor = u3.id,production_line
+        from purchase_income_submit_history ph left join user u1 on ph.submit_id = u1.id left join user u2 on
+        ph.first_acceptor = u2.id left join `user` u3 on ph.final_acceptor = u3.id,production_line
         WHERE ph.production_line_id = production_line.id
         <if test="bill_no != null and bill_no != ''">
             and ph.bill_no like concat('%',#{bill_no},'%')
@@ -182,7 +182,7 @@
             and u1.name like concat('%',#{submit_name},'%')
         </if>
         <if test="code != null and code != ''">
-            and ph.code like concat('%',#{code},'%');
+            and ph.code like concat('%',#{code},'%')
         </if>
         <if test="production_line_id != null and production_line_id != ''">
             and ph.production_line_id = #{production_line_id}
@@ -197,8 +197,8 @@
     </select>
     <select id="highSearchPurchaseIncomeHistoryPage" resultType="java.lang.Integer">
         select count(*)
-        from purchase_income_submit_history ph left join user u1 on ph.submit_id = u1.id LEFT JOIN user u2 on
-        ph.first_acceptor = u2.id LEFT JOIN `user` u3 on ph.final_acceptor = u3.id,production_line
+        from purchase_income_submit_history ph left join user u1 on ph.submit_id = u1.id left join user u2 on
+        ph.first_acceptor = u2.id left join `user` u3 on ph.final_acceptor = u3.id,production_line
         WHERE ph.production_line_id = production_line.id
         <if test="bill_no != null and bill_no != ''">
             and ph.bill_no like concat('%',#{bill_no},'%')
@@ -207,7 +207,7 @@
             and u1.name like concat('%',#{submit_name},'%')
         </if>
         <if test="code != null and code != ''">
-            and ph.code like concat('%',#{code},'%');
+            and ph.code like concat('%',#{code},'%')
         </if>
         <if test="production_line_id != null and production_line_id != ''">
             and ph.production_line_id = #{production_line_id}
@@ -222,8 +222,8 @@
     <select id="highSearchAllPurchaseIncomeHistory" resultType="com.jig.entity.PurchaseIncomeHistory">
         select ph.*, production_line.name production_line_name, u1.name submit_name,u2.name first_acceptor_name,u3.name
         final_acceptor_name
-        from purchase_income_submit_history ph left join user u1 on ph.submit_id = u1.id LEFT JOIN user u2 on
-        ph.first_acceptor = u2.id LEFT JOIN `user` u3 on ph.final_acceptor = u3.id,production_line
+        from purchase_income_submit_history ph left join user u1 on ph.submit_id = u1.id left join user u2 on
+        ph.first_acceptor = u2.id left join `user` u3 on ph.final_acceptor = u3.id,production_line
         WHERE ph.production_line_id = production_line.id
         <if test="bill_no != null and bill_no != ''">
             and ph.bill_no like concat('%',#{bill_no},'%')
@@ -232,7 +232,7 @@
             and u1.name like concat('%',#{submit_name},'%')
         </if>
         <if test="code != null and code != ''">
-            and ph.code like concat('%',#{code},'%');
+            and ph.code like concat('%',#{code},'%')
         </if>
         <if test="production_line_id != null and production_line_id != ''">
             and ph.production_line_id = #{production_line_id}
@@ -252,16 +252,61 @@
     <select id="highGetRepairJig" resultType="com.jig.entity.RepairJig">
         select rs.*, u1.name submit_name, u2.name acceptor_name
         from repair_submit rs
-                 right join `user` u1 on rs.submit_id = u1.id
-                 right join `user` u2 on rs.acceptor_id = u2.id
-        where rs.submit_id = #{submit_id}
+                 left join `user` u1 on rs.submit_id = u1.id
+                 left join `user` u2 on rs.acceptor_id = u2.id
         limit #{page_number},5
     </select>
     <select id="highGetRepairJigPage" resultType="java.lang.Integer">
         select count(*)
         from repair_submit rs
-                 right join `user` u1 on rs.submit_id = u1.id
-                 right join `user` u2 on rs.acceptor_id = u2.id
-        where rs.submit_id = #{submit_id}
+                 left join `user` u1 on rs.submit_id = u1.id
+                 left join `user` u2 on rs.acceptor_id = u2.id
+    </select>
+    <select id="highSearchRepairHistory" resultType="com.jig.entity.RepairJig">
+        select rh.*,u1.name submit_name,u2.name acceptor_name
+        from repair_submit_history rh
+                 left join user u1 on rh.submit_id = u1.id
+                 left join user u2 on rh.acceptor_id = u2.id
+        <where>
+            <if test="code != null and code != ''">
+                and rh.code like concat('%',#{code},'%')
+            </if>
+            <if test="seq_id != null and seq_id !=''">
+                and rh.seq_id = #{seq_id}
+            </if>
+            <if test="submit_name != null and submit_name != ''">
+                and u1.name like concat('%',#{submit_name},'%')
+            </if>
+            <if test="status != null and status != ''">
+                and rh.status = #{status}
+            </if>
+            <if test="start_date != end_date">
+                and rh.submit_time between #{start_date} and #{end_date}
+            </if>
+        </where>
+        limit #{page_number},5
+    </select>
+    <select id="highSearchRepairHistoryPage" resultType="java.lang.Integer">
+        select count(*)
+        from repair_submit_history rh
+        left join user u1 on rh.submit_id = u1.id
+        left join user u2 on rh.acceptor_id = u2.id
+        <where>
+            <if test="code != null and code != ''">
+                and rh.code like concat('%',#{code},'%')
+            </if>
+            <if test="seq_id != null and seq_id !=''">
+                and rh.seq_id = #{seq_id}
+            </if>
+            <if test="submit_name != null and submit_name != ''">
+                and u1.name like concat('%',#{submit_name},'%')
+            </if>
+            <if test="status != null and status != ''">
+                and rh.status = #{status}
+            </if>
+            <if test="start_date != end_date">
+                and rh.submit_time between #{start_date} and #{end_date}
+            </if>
+        </where>
     </select>
 </mapper>

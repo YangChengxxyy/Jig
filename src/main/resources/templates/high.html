@@ -790,52 +790,39 @@
                         <div id="historyMyrepair" class="tab-pane fade">
                             <!--历史报修记录-->
                             <div style="margin-bottom: 3%">
-                                <form role="form" class="form-horizontal">
+                                <div class="form-horizontal">
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">工夹具代码</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" v-model="code">
                                         </div>
+                                        <label class="col-sm-2 control-label">工夹具序列号</label>
+                                        <div class="col-sm-3">
+                                            <input type="number" class="form-control" v-model="seq_id" min="1" max="99">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
                                         <label class="col-sm-2 control-label">申请人</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" v-model="submit_name">
                                         </div>
-                                        <div class="col-sm-2">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
                                         <label class="col-sm-2 control-label">故障原因</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" name="sel_repair_reason">
+                                            <input type="text" class="form-control" v-model="trouble_reason">
                                         </div>
+                                    </div>
+                                    <div class="form-group row">
                                         <label class="col-sm-2 control-label">审批状态</label>
                                         <div class="col-sm-3">
-                                            <select class="form-control">
-                                                <option>初审通过</option>
-                                                <option>初审不通过</option>
-                                                <option>终审不通过</option>
-                                                <option>终审通过</option>
+                                            <select class="form-control" v-model="status">
+                                                <option value="0">未处理</option>
+                                                <option value="1">已处理</option>
                                             </select>
                                         </div>
-                                        <div class="col-sm-2">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="sel_repair_start_applytime"
-                                               class="col-sm-2 control-label">起始日期</label>
+                                        <label class="col-sm-2 control-label">时间范围</label>
                                         <div class="col-sm-3">
-                                            <div class='input-group date' id='sel_repair_start_applytime'>
-                                                <input type='text' class="form-control"/>
-                                                <span class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <label for="sel_repair_end_applytime"
-                                               class="col-sm-2 control-label">结束日期</label>
-                                        <div class="col-sm-3">
-                                            <div class='input-group date' id='sel_repair_end_applytime'>
-                                                <input type='text' class="form-control"/>
+                                            <div class='input-group date-range'>
+                                                <input type='text' class="form-control" v-model="date_range"/>
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                 </span>
@@ -843,15 +830,12 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-sm-7"></div>
-                                        <div class="col-sm-1">
-                                            <button type="button" class="btn btn-default">清空</button>
-                                        </div>
-                                        <div class="col-sm-1">
-                                            <button type="button" class="btn btn-primary">查询</button>
+                                        <div class="col-sm-3 col-sm-push-7">
+                                            <button type="button" class="btn btn-default" @click="clear">清空</button>
+                                            <button type="button" class="btn btn-primary" @click="search">查询</button>
                                         </div>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                             <table class="table table-striped table-hover table-responsive" role="table">
                                 <thead>
@@ -861,113 +845,84 @@
                                     <th>申请人</th>
                                     <th>故障原因</th>
                                     <th>申请时间</th>
-                                    <th>审批状态</th>
+                                    <th>处理状态</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>EF2189</td>
-                                    <td>1</td>
-                                    <td>小张</td>
-                                    <td>有不正常的响声</td>
-                                    <td>2019-12-31 12:39</td>
-                                    <td>待审批</td>
+                                <tr v-for="(item,index) in history_list">
+                                    <td>{{item.code}}</td>
+                                    <td>{{item.seq_id}}</td>
+                                    <td>{{item.submit_name}}</td>
+                                    <td>{{item.trouble_reason}}</td>
+                                    <td>{{item.submit_time}}</td>
+                                    <td v-if="item.status == 0">待处理</td>
+                                    <td v-else>已处理</td>
                                     <td>
                                         <button class="btn btn-primary" data-toggle="modal"
-                                                data-target="#history_repair_detail">查看
+                                                data-target="#history_repair_detail" @click="check_detail(index)">查看
                                         </button>
-                                        <div>
-                                            <div class="modal fade" id="history_repair_detail" tabindex="-1"
-                                                 role="dialog"
-                                                 aria-labelledby="myModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-hidden="true">&times;
-                                                            </button>
-                                                            <h4 class="modal-title">报修申请审批</h4>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div>
-                                                                <form role="form" class="form-horizontal">
-                                                                    <div class="form-group">
-                                                                        <div class="col-sm-1"></div>
-                                                                        <label
-                                                                                class="col-sm-3 control-label">工夹具代码</label>
-                                                                        <div class="col-sm-6">
-                                                                            <div class="form-control">EF2189</div>
-                                                                        </div>
-                                                                        <div class="col-sm-2"></div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <div class="col-sm-1"></div>
-                                                                        <label class="col-sm-3 control-label">工夹具序列号</label>
-                                                                        <div class="col-sm-6">
-                                                                            <div class="form-control">1</div>
-                                                                        </div>
-                                                                        <div class="col-sm-2"></div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <div class="col-sm-1"></div>
-                                                                        <label class="col-sm-3 control-label">申请人</label>
-                                                                        <div class="col-sm-6">
-                                                                            <div class="form-control">小张</div>
-                                                                        </div>
-                                                                        <div class="col-sm-2"></div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <div class="col-sm-1"></div>
-                                                                        <label class="col-sm-3 control-label">申请时间</label>
-                                                                        <div class="col-sm-6">
-                                                                            <div class="form-control">2019-12-31 12:39
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-sm-2"></div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <div class="col-sm-1"></div>
-                                                                        <label class="col-sm-3 control-label">故障原因</label>
-                                                                        <div class="col-sm-6">
-                                                                            <div class="form-control">有不正常的响声</div>
-                                                                        </div>
-                                                                        <div class="col-sm-2"></div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <div class="col-sm-1"></div>
-                                                                        <label class="col-sm-3 control-label">故障照片</label>
-                                                                        <div class="col-sm-6">
-                                                                            <img src="/wp-content/uploads/2014/06/download.png"
-                                                                                 class="img-rounded">
-                                                                        </div>
-                                                                        <div class="col-sm-2"></div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <div class="col-sm-1"></div>
-                                                                        <label class="col-sm-3 control-label">审批状态</label>
-                                                                        <div class="col-sm-6">
-                                                                            <div class="form-control">待审批</div>
-
-                                                                        </div>
-                                                                        <div class="col-sm-2"></div>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default"
-                                                                    data-dismiss="modal">关闭
-                                                            </button>
-                                                        </div>
-                                                    </div><!-- /.modal-content -->
-                                                </div><!-- /.modal -->
-                                            </div>
-                                        </div>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
+                            <my-pagination :now_page_number="now_page_number" :max_page_number="max_page_number"></my-pagination>
+                            <div class="modal fade" id="history_repair_detail" tabindex="-1" role="dialog" aria-labelledby="history_repair_detailLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="history_repair_detailLabel">报修明细</h4>
+                                        </div>
+                                        <div class="modal-body" v-if="history !=null">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">工夹具代码</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{history.code}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">工夹具序列号</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{history.seq_id}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">申请人id</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{history.submit_id}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">申请人</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{history.submit_name}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                            <button type="button" class="btn btn-primary">提交更改</button>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal -->
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -261,19 +261,25 @@ public class JigJson {
     /**
      * high获取报修申请记录
      *
-     * @param submit_id 申请人id
      * @return 获取报修申请记录
      */
     @RequestMapping("high_get_repair_jig")
-    public Map<String,Object> highGetRepairJig(@RequestParam(value = "submit_id") String submit_id,@RequestParam(value = "page_number")int page_number) {
-        Map<String,Object> map = new HashMap<>(2);
-        map.put("data",jigService.highGetRepairJig(submit_id, page_number));
-        map.put("max", jigService.highGetRepairJigPage(submit_id));
+    public Map<String, Object> highGetRepairJig(@RequestParam(value = "page_number") int page_number) {
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("data", jigService.highGetRepairJig(page_number));
+        map.put("max", jigService.highGetRepairJigPage());
         return map;
     }
 
     @RequestMapping("high_search_repair_history")
-    public List<RepairJig> high_search_repair_history(){
-        return null;
+    public Map<String, Object> highSearchRepairHistory(@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id,
+                                                       @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
+                                                       @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number) {
+        Map<String, Object> map = new HashMap<>(2);
+        List<RepairJig> list = jigService.highSearchRepairHistory(code, seq_id, submit_name, status, start_date, end_date, page_number);
+        int a = jigService.highSearchRepairHistoryPage(code, seq_id, submit_name, status, start_date, end_date);
+        map.put("data", list);
+        map.put("max", a);
+        return map;
     }
 }

@@ -234,17 +234,42 @@ public interface JigMapper {
     /**
      * high获取报修申请记录
      *
-     * @param submit_id   申请人id
      * @param page_number 处理后页码
      * @return 获取报修申请记录
      */
-    List<RepairJig> highGetRepairJig(@Param("submit_id") String submit_id, @Param("page_number") int page_number);
+    List<RepairJig> highGetRepairJig(@Param("page_number") int page_number);
 
     /**
      * high获取报修申请记录条数
      *
-     * @param submit_id 申请人id
      * @return 获取报修申请记录条数
      */
-    int highGetRepairJigPage(@Param("submit_id") String submit_id);
+    int highGetRepairJigPage();
+
+    /**
+     * high搜索历史报修记录
+     *
+     * @param code        工夹具代码
+     * @param seq_id      工夹具序列号
+     * @param submit_name 申请时间
+     * @param status      状态
+     * @param start_date  最早时间
+     * @param end_date    最晚时间
+     * @param page_number 页码
+     * @return 搜索到历史报修记录
+     */
+    List<RepairJig> highSearchRepairHistory(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_name") String submit_name, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date, @Param("page_number") int page_number);
+
+    /**
+     * high搜索历史报修记录条数
+     *
+     * @param code        工夹具代码
+     * @param seq_id      工夹具序列号
+     * @param submit_name 申请时间
+     * @param status      状态
+     * @param start_date  最早时间
+     * @param end_date    最晚时间
+     * @return 搜索到历史报修记录条数
+     */
+    int highSearchRepairHistoryPage(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_name") String submit_name, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date);
 }
