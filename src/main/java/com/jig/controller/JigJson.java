@@ -271,6 +271,7 @@ public class JigJson {
         return map;
     }
 
+
     @RequestMapping("high_search_repair_history")
     public Map<String, Object> highSearchRepairHistory(@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id,
                                                        @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
