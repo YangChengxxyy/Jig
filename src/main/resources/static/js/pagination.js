@@ -8,8 +8,7 @@
 /*  getData模板
     getData: function () {
             const that = this;
-            $.ajax({
-                url: 自己的url,
+            $.ajax("url",{
                 data: {
                     now_page_number:this.now_page_number
                     ,以及自己data

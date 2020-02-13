@@ -59,13 +59,13 @@ public class JigWeb {
 
     @RequestMapping("test_high")
     public String high(HttpServletRequest request) {
-//        System.out.println("test_high");
-//        PoiUtil.getIpAddress(request);
-//        User user = new User();
-//        user.setName("Xianghai Zhang");
-//        user.setId("1215072");
-//        HttpSession httpSession = request.getSession();
-//        httpSession.setAttribute("user", user);
+        System.out.println("test_high");
+        PoiUtil.getIpAddress(request);
+        User user = new User();
+        user.setName("Xianghai Zhang");
+        user.setId("1215072");
+        HttpSession httpSession = request.getSession();
+        httpSession.setAttribute("user", user);
         return "high";
     }
 
@@ -121,7 +121,8 @@ public class JigWeb {
     }
 
     @RequestMapping(value = "high_submit_repair", method = RequestMethod.POST)
-    public @ResponseBody String high_submit_repair(HttpServletRequest request, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id) throws IOException, ServletException {
+    public @ResponseBody
+    String high_submit_repair(HttpServletRequest request, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id) throws IOException, ServletException {
 
         return "success";
     }

@@ -31,16 +31,16 @@ public interface JigMapper_zhs {
     int get_manager_jig_info_list_pages();
 
     List<PurchaseIncomeSubmit> get_manager_purchaselist_history(@Param("bill_no") String bill_no,
-                                                        @Param("submit_name") String submit_name,
-                                                        @Param("start_date") String start_date,
-                                                        @Param("end_date") String end_date,
-                                                        @Param("status") String status,
-                                                        @Param("page_number") int page_number);
+                                                                @Param("submit_name") String submit_name,
+                                                                @Param("start_date") String start_date,
+                                                                @Param("end_date") String end_date,
+                                                                @Param("status") String status,
+                                                                @Param("page_number") int page_number);
 
     int get_manager_purchaselist_history_pages(@Param("bill_no") String bill_no,
-                                       @Param("submit_name") String submit_name,
-                                       @Param("start_date") String start_date,
-                                       @Param("end_date") String end_date,
-                                       @Param("status") String status);
+                                               @Param("submit_name") String submit_name,
+                                               @Param("start_date") String start_date,
+                                               @Param("end_date") String end_date,
+                                               @Param("status") String status);
 
 }

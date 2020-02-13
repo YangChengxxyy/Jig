@@ -130,8 +130,8 @@ public class JigService {
     }
 
     public List<ScrapSubmit> highGetScrap(String submit_id, int page_number) {
-        page_number = (page_number-1)*5;
-        return jigMapper.highGetScrap(submit_id,page_number);
+        page_number = (page_number - 1) * 5;
+        return jigMapper.highGetScrap(submit_id, page_number);
     }
 
     public int highGetScrapPage(String submit_id) {

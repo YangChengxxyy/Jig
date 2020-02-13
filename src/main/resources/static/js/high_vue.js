@@ -412,14 +412,18 @@ const myscrap = new Vue({
         max_page_number: 0,
         scrap_list: [],
         script: null,
-        code_list:code_list
+        code_list: code_list,
+        submit_code: "",
+        submit_seq_id: "",
+        submit_trouble_reason: "",
+        submit_trouble_photo: "点击上传图片"
     },
     methods: {
         getData: function () {
             const that = this;
             $.ajax("high_get_scrap", {
                 data: {
-                    submit_id:$("#id").val(),
+                    submit_id: $("#id").val(),
                     page_number: this.now_page_number
                 },
                 success: function (res) {
@@ -433,13 +437,92 @@ const myscrap = new Vue({
         },
         del: function (id) {
             $.ajax("high_del_scrap", {
-                data:{
-                    id:id
+                data: {
+                    id: id
                 },
-                success:function (res) {
+                success: function (res) {
 
                 }
             });
+        },
+        submit_scrap() {
+            const formData = new FormData();
+            formData.append("file", $("input[type=file]")[0]);
+            formData.append("submit_id", $("#id").val());
+            formData.append("code", this.submit_code);
+            formData.append("seq_id", this.submit_seq_id);
+            formData.append("trouble_reason", this.submit_trouble_reason);
+            console.log(formData);
+            $.ajax("high_submit_repair", {
+                type: "post",
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (res) {
+                    alert("success");
+                }
+            })
+        },
+        file: function () {
+            this.submit_trouble_photo = $("input[type=file]")[0].files[0].name;
         }
+    }
+});
+const historyMyscrap = new Vue({
+    el: "#historyMyscrap",
+    data: {
+        scarp_history_list: [],
+        scarp_history: null,
+        code: "",
+        seq_id: "",
+        submit_name: "",
+        trouble_reason: "",
+        status: "",
+        date_range: "",
+        now_page_number: 1,
+        max_page_number: 0
+    },
+    getData: function () {
+        let that = this;
+        let splits = this.date_range.split(" - ");
+        if (splits.length === 1) {
+            splits = ['', ''];
+        }
+        $.ajax("high_search_scrap_history", {
+            data: {
+                code: this.code,
+                seq_id: this.seq_id,
+                submit_name: this.submit_name,
+                status: this.status,
+                start_date: splits[0],
+                end_date: splits[1],
+                now_page_number: this.now_page_number
+            },
+            success: function (res) {
+                if (res.data.length === 0) {
+                    alert("没有结果！")
+                } else {
+                    that.scarp_history = res['data'];
+                    that.max_page_number = res['max'];
+                }
+            }
+        })
+    },
+    clear: function () {
+        this.code = "";
+        this.seq_id = "";
+        this.submit_name = "";
+        this.trouble_reason = "";
+        this.status = "";
+        this.date_range = "";
+        this.now_page_number = 1;
+        this.max_page_number = 0;
+        this.history_list = [];
+        this.history = null;
+    },
+    search: function () {
+        this.now_page_number = 1;
+        this.max_page_number = 0;
+        this.getData();
     }
 });
