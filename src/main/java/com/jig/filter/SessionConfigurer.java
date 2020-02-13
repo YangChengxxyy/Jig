@@ -1,6 +1,5 @@
-package com.jig.configurer;
+package com.jig.filter;
 
-import com.jig.interceptor.SessionInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

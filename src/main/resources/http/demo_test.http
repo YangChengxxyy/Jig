@@ -1,4 +1,4 @@
-GET http://localhost:8080/high_search_repair_history?code=EF&seq_id=1&submit_name=&start_date=2020-02-11&end_date=2020-02-13&page_number=1&status=
+GET http://localhost:8080/get_production_line_list
 Accept: application/json
 
 ###
