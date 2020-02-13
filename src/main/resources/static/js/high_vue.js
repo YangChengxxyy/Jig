@@ -405,3 +405,41 @@ const historyMyrepair = new Vue({
         }
     }
 });
+const myscrap = new Vue({
+    el: "#myscrap",
+    data: {
+        now_page_number: 1,
+        max_page_number: 0,
+        scrap_list: [],
+        script: null,
+        code_list:code_list
+    },
+    methods: {
+        getData: function () {
+            const that = this;
+            $.ajax("high_get_scrap", {
+                data: {
+                    submit_id:$("#id").val(),
+                    page_number: this.now_page_number
+                },
+                success: function (res) {
+                    that.scrap_list = res['data'];
+                    that.max_page_number = res['max'];
+                }
+            });
+        },
+        scrap_detail: function (index) {
+            this.script = this.scrap_list[index];
+        },
+        del: function (id) {
+            $.ajax("high_del_scrap", {
+                data:{
+                    id:id
+                },
+                success:function (res) {
+
+                }
+            });
+        }
+    }
+});

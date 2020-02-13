@@ -2,6 +2,7 @@ package com.jig.controller;
 
 import com.jig.entity.*;
 import com.jig.service.JigService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,8 +19,16 @@ public class JigJson {
     @Autowired
     private JigService jigService;
 
+    @NotNull
+    private Map<String, Object> getStringObjectMap(List<?> data, int max) {
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("data", data);
+        map.put("max", max);
+        return map;
+    }
+
     @RequestMapping(value = "get_demo_list", method = {RequestMethod.POST, RequestMethod.GET})
-    public Map<Object, Object> getDemoList(@RequestParam(value = "page_number") int pageNumber) {
+    public Map<String, Object> getDemoList(@RequestParam(value = "page_number") int pageNumber) {
         List<DemoEntity> a = new ArrayList<>();
         DemoEntity people = new DemoEntity();
         people.setName("yc");
@@ -28,10 +37,7 @@ public class JigJson {
         for (int i = 0; i < pageNumber; i++) {
             a.add(people);
         }
-        Map<Object, Object> map = new HashMap<>(2);
-        map.put("data", a);
-        map.put("max", 11);
-        return map;
+        return getStringObjectMap(a, 11);
     }
 
     /**
@@ -46,12 +52,8 @@ public class JigJson {
      * @return 查询到的对应页数的Map对象 { data:数据 ,max:最大页数 }
      */
     @RequestMapping("naive_search_jig_definition")
-    public Map<Object, Object> naiveSearchJigDefinition(@RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor, @RequestParam(value = "page_number") int pageNumber) throws Exception {
-        Map<Object, Object> map = new HashMap<>(2);
-        List<JigDefinition> list = jigService.naiveSearchJigDefinition(code, name, workcell, family, userFor, pageNumber);
-        map.put("data", list);
-        map.put("max", jigService.naiveSearchJigDefinitionPage(code, name, workcell, family, userFor));
-        return map;
+    public Map<String, Object> naiveSearchJigDefinition(@RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor, @RequestParam(value = "page_number") int pageNumber) throws Exception {
+        return getStringObjectMap(jigService.naiveSearchJigDefinition(code, name, workcell, family, userFor, pageNumber), jigService.naiveSearchJigDefinitionPage(code, name, workcell, family, userFor));
     }
 
     /**
@@ -72,10 +74,7 @@ public class JigJson {
      */
     @RequestMapping("naive_get_outgoing_submit")
     public Map<String, Object> getOutgoingSubmit(@RequestParam(value = "page_number") int page_number) {
-        Map<String, Object> map = new HashMap<>(2);
-        map.put("data", jigService.naiveGetOutgoingSubmit(page_number));
-        map.put("max", jigService.naiveGetOutgoingSubmitPage());
-        return map;
+        return getStringObjectMap(jigService.naiveGetOutgoingSubmit(page_number), jigService.naiveGetOutgoingSubmitPage());
     }
 
     /**
@@ -116,10 +115,7 @@ public class JigJson {
      */
     @RequestMapping("naive_get_outgoing_jig")
     public Map<String, Object> naiveGetOutgoingJig(@RequestParam(value = "page_number") int page_number) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("data", jigService.naiveGetOutgoingJig(page_number));
-        map.put("max", jigService.naiveGetOutgoingJigPage());
-        return map;
+        return getStringObjectMap(jigService.naiveGetOutgoingJig(page_number), jigService.naiveGetOutgoingJigPage());
     }
 
     /**
@@ -191,10 +187,7 @@ public class JigJson {
      */
     @RequestMapping("high_get_purchase_income_submit_list")
     public Map<String, Object> highGetPurchaseIncomeSubmitList(@RequestParam(value = "page_number") int page_number) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("data", jigService.highGetPurchaseIncomeSubmitList(page_number));
-        map.put("max", jigService.highGetPurchaseIncomeSubmitListPage());
-        return map;
+        return getStringObjectMap(jigService.highGetPurchaseIncomeSubmitList(page_number), jigService.highGetPurchaseIncomeSubmitListPage());
     }
 
     /**
@@ -236,10 +229,8 @@ public class JigJson {
                                                                @RequestParam(value = "code") String code, @RequestParam(value = "production_line_id") String production_line_id,
                                                                @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
                                                                @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number) {
-        Map<String, Object> map = new HashMap<>(2);
-        map.put("data", jigService.highSearchPurchaseIncomeHistory(bill_no, submit_name, code, production_line_id, status, start_date, end_date, page_number));
-        map.put("max", jigService.highSearchPurchaseIncomeHistoryPage(bill_no, submit_name, code, production_line_id, status, start_date, end_date));
-        return map;
+        return getStringObjectMap(jigService.highSearchPurchaseIncomeHistory(bill_no, submit_name, code, production_line_id, status, start_date, end_date, page_number),
+                jigService.highSearchPurchaseIncomeHistoryPage(bill_no, submit_name, code, production_line_id, status, start_date, end_date));
     }
 
     /**
@@ -265,22 +256,34 @@ public class JigJson {
      */
     @RequestMapping("high_get_repair_jig")
     public Map<String, Object> highGetRepairJig(@RequestParam(value = "page_number") int page_number) {
-        Map<String, Object> map = new HashMap<>(2);
-        map.put("data", jigService.highGetRepairJig(page_number));
-        map.put("max", jigService.highGetRepairJigPage());
-        return map;
+        return getStringObjectMap(jigService.highGetRepairJig(page_number), jigService.highGetRepairJigPage());
     }
 
-
+    /**
+     * high搜索历史报修记录
+     *
+     * @param code        工夹具代码
+     * @param seq_id      工夹具序列号
+     * @param submit_name 申请时间
+     * @param status      状态
+     * @param start_date  最早时间
+     * @param end_date    最晚时间
+     * @param page_number 页码
+     * @return 搜索到历史报修记录
+     */
     @RequestMapping("high_search_repair_history")
     public Map<String, Object> highSearchRepairHistory(@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id,
                                                        @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
                                                        @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number) {
-        Map<String, Object> map = new HashMap<>(2);
-        List<RepairJig> list = jigService.highSearchRepairHistory(code, seq_id, submit_name, status, start_date, end_date, page_number);
-        int a = jigService.highSearchRepairHistoryPage(code, seq_id, submit_name, status, start_date, end_date);
-        map.put("data", list);
-        map.put("max", a);
-        return map;
+        return getStringObjectMap(jigService.highSearchRepairHistory(code, seq_id, submit_name, status, start_date, end_date, page_number),
+                jigService.highSearchRepairHistoryPage(code, seq_id, submit_name, status, start_date, end_date));
+    }
+
+
+    @RequestMapping("high_get_scrap")
+    public Map<String, Object> highGetScrap(@RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "page_number") int page_number) {
+        List<ScrapSubmit> list = jigService.highGetScrap(submit_id, page_number);
+        int a = jigService.highGetScrapPage(submit_id);
+        return getStringObjectMap(list, a);
     }
 }

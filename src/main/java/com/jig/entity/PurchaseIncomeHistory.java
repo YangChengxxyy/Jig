@@ -10,11 +10,9 @@ public class PurchaseIncomeHistory {
     private String first_time;
     private String first_acceptor;
     private String first_acceptor_name;
-    private String first_result;
     private String final_time;
     private String final_acceptor;
     private String final_acceptor_name;
-    private String final_reason;
     private String status;
     private int production_line_id;
     private String production_line_name;
@@ -93,14 +91,6 @@ public class PurchaseIncomeHistory {
         this.first_acceptor_name = first_acceptor_name;
     }
 
-    public String getFirst_result() {
-        return first_result;
-    }
-
-    public void setFirst_result(String first_result) {
-        this.first_result = first_result;
-    }
-
     public String getFinal_time() {
         return final_time;
     }
@@ -123,14 +113,6 @@ public class PurchaseIncomeHistory {
 
     public void setFinal_acceptor_name(String final_acceptor_name) {
         this.final_acceptor_name = final_acceptor_name;
-    }
-
-    public String getFinal_reason() {
-        return final_reason;
-    }
-
-    public void setFinal_reason(String final_reason) {
-        this.final_reason = final_reason;
     }
 
     public String getStatus() {

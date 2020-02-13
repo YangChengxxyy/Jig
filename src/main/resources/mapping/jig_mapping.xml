@@ -265,8 +265,8 @@
     <select id="highSearchRepairHistory" resultType="com.jig.entity.RepairJig">
         select rh.*,u1.name submit_name,u2.name acceptor_name
         from repair_submit_history rh
-                 left join user u1 on rh.submit_id = u1.id
-                 left join user u2 on rh.acceptor_id = u2.id
+        left join user u1 on rh.submit_id = u1.id
+        left join user u2 on rh.acceptor_id = u2.id
         <where>
             <if test="code != null and code != ''">
                 and rh.code like concat('%',#{code},'%')
@@ -308,5 +308,22 @@
                 and rh.submit_time between #{start_date} and #{end_date}
             </if>
         </where>
+    </select>
+    <select id="highGetScrap" resultType="com.jig.entity.ScrapSubmit">
+        select ss.*,u1.name submit_name,u2.name first_acceptor_name
+        from scrap_submit ss
+                 left join `user` u1 on ss.submit_id = u1.id
+                 left join `user` u2 on ss.first_acceptor = u2.id
+                 left join `user` u3 on ss.final_acceptor = u3.id
+        where ss.submit_id = #{submit_id}
+        limit #{page_number},5
+    </select>
+    <select id="highGetScrapPage" resultType="java.lang.Integer">
+        select count(*)
+        from scrap_submit ss
+                 left join `user` u1 on ss.submit_id = u1.id
+                 left join `user` u2 on ss.first_acceptor = u2.id
+                 left join `user` u3 on ss.final_acceptor = u3.id
+        where ss.submit_id = #{submit_id}
     </select>
 </mapper>

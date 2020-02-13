@@ -1,12 +1,14 @@
 package com.jig.entity;
 
-public class PurchaseIncomeSubmit {
+public class ScrapSubmit {
     private String id;
+    private String code;
+    private String seq_id;
     private String submit_id;
     private String submit_name;
     private String submit_time;
-    private String code;//多个用 | 分开
-    private String count;//多个用 | 分开
+    private int user_count;
+    private String scrap_reason;
     private String first_time;//初审时间
     private String first_acceptor;//初审人id
     private String first_acceptor_name;
@@ -14,10 +16,6 @@ public class PurchaseIncomeSubmit {
     private String final_acceptor;//终审人id
     private String final_acceptor_name;//终审人
     private String status;//审核状态 :0待审核 1初审未通过 2初审通过 3终审未通过 4终审通过
-    private int production_line_id;//产线id
-    private String production_line_name;
-    private String bill_no;//单据号
-    private String tool_photo_url;//工夹具照片路径
 
     public String getId() {
         return id;
@@ -25,6 +23,22 @@ public class PurchaseIncomeSubmit {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getSeq_id() {
+        return seq_id;
+    }
+
+    public void setSeq_id(String seq_id) {
+        this.seq_id = seq_id;
     }
 
     public String getSubmit_id() {
@@ -51,20 +65,20 @@ public class PurchaseIncomeSubmit {
         this.submit_time = submit_time;
     }
 
-    public String getCode() {
-        return code;
+    public int getUser_count() {
+        return user_count;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setUser_count(int user_count) {
+        this.user_count = user_count;
     }
 
-    public String getCount() {
-        return count;
+    public String getScrap_reason() {
+        return scrap_reason;
     }
 
-    public void setCount(String count) {
-        this.count = count;
+    public void setScrap_reason(String scrap_reason) {
+        this.scrap_reason = scrap_reason;
     }
 
     public String getFirst_time() {
@@ -121,37 +135,5 @@ public class PurchaseIncomeSubmit {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public int getProduction_line_id() {
-        return production_line_id;
-    }
-
-    public void setProduction_line_id(int production_line_id) {
-        this.production_line_id = production_line_id;
-    }
-
-    public String getProduction_line_name() {
-        return production_line_name;
-    }
-
-    public void setProduction_line_name(String production_line_name) {
-        this.production_line_name = production_line_name;
-    }
-
-    public String getBill_no() {
-        return bill_no;
-    }
-
-    public void setBill_no(String bill_no) {
-        this.bill_no = bill_no;
-    }
-
-    public String getTool_photo_url() {
-        return tool_photo_url;
-    }
-
-    public void setTool_photo_url(String tool_photo_url) {
-        this.tool_photo_url = tool_photo_url;
     }
 }

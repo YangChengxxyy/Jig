@@ -128,4 +128,14 @@ public class JigService {
     public int highSearchRepairHistoryPage(String code, String seq_id, String submit_name, String status, String start_date, String end_date) {
         return jigMapper.highSearchRepairHistoryPage(code, seq_id, submit_name, status, start_date, end_date);
     }
+
+    public List<ScrapSubmit> highGetScrap(String submit_id, int page_number) {
+        page_number = (page_number-1)*5;
+        return jigMapper.highGetScrap(submit_id,page_number);
+    }
+
+    public int highGetScrapPage(String submit_id) {
+        int a = jigMapper.highGetScrapPage(submit_id);
+        return a;
+    }
 }

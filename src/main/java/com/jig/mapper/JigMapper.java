@@ -272,4 +272,8 @@ public interface JigMapper {
      * @return 搜索到历史报修记录条数
      */
     int highSearchRepairHistoryPage(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_name") String submit_name, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date);
+
+    List<ScrapSubmit> highGetScrap(@Param("submit_id") String submit_id, @Param("page_number") int page_number);
+
+    int highGetScrapPage(@Param("submit_id") String submit_id);
 }
