@@ -1,6 +1,9 @@
 package com.jig.controller;
 
-import com.jig.entity.*;
+import com.jig.entity.DemoEntity;
+import com.jig.entity.JigDefinition;
+import com.jig.entity.Position;
+import com.jig.entity.ProductionLine;
 import com.jig.service.JigService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -277,12 +280,31 @@ public class JigJson {
                 , jigService.highSearchRepairHistoryPage(code, seq_id, submit_name, status, start_date, end_date));
     }
 
+    /**
+     * high获取报废申请
+     *
+     * @param submit_id   申请人id
+     * @param page_number 页码
+     * @return 报废申请
+     */
     @RequestMapping("high_get_scrap")
     public Map<String, Object> highGetScrap(@RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "page_number") int page_number) {
         return getStringObjectMap(jigService.highGetScrap(submit_id, page_number)
                 , jigService.highGetScrapPage(submit_id));
     }
 
+    /**
+     * high搜索报废历史
+     *
+     * @param code        工夹具代码
+     * @param seq_id      工夹具序列号
+     * @param submit_name 申请人id
+     * @param status      状态
+     * @param start_date  最早日期
+     * @param end_date    最晚日期
+     * @param page_number 页码
+     * @return 搜索到的报废历史
+     */
     @RequestMapping("high_search_scrap_history")
     public Map<String, Object> highSearchScrapHistory(@RequestParam(value = "code") String code,
                                                       @RequestParam(value = "seq_id") String seq_id,
@@ -291,7 +313,7 @@ public class JigJson {
                                                       @RequestParam(value = "start_date") String start_date,
                                                       @RequestParam(value = "end_date") String end_date,
                                                       @RequestParam(value = "page_number") int page_number) {
-        return getStringObjectMap(jigService.highSearchScrapHistory(code,  seq_id, submit_name, status, start_date, end_date, page_number)
+        return getStringObjectMap(jigService.highSearchScrapHistory(code, seq_id, submit_name, status, start_date, end_date, page_number)
                 , jigService.highSearchScrapHistoryPage(code, seq_id, submit_name, status, start_date, end_date));
     }
 }
