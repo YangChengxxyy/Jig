@@ -403,6 +403,22 @@ const historyMyrepair = new Vue({
             this.max_page_number = 0;
             this.getData();
         }
+    },
+    computed:{
+        onePageUrl: function () {
+            let splits = this.date_range.split(" - ");
+            if (splits.length === 1) {
+                splits = ['', ''];
+            }
+            return "high_download_one_repair_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_name=" + this.submit_name + "&status=" + this.status +  "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls";
+        },
+        allPageUrl: function () {
+            let splits = this.date_range.split(" - ");
+            if (splits.length === 1) {
+                splits = ['', ''];
+            }
+            return "high_download_all_repair_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_name=" + this.submit_name + "&status=" + this.status +  "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&file_name=page-all.xls";
+        }
     }
 });
 const myscrap = new Vue({
@@ -482,47 +498,68 @@ const historyMyscrap = new Vue({
         now_page_number: 1,
         max_page_number: 0
     },
-    getData: function () {
-        let that = this;
-        let splits = this.date_range.split(" - ");
-        if (splits.length === 1) {
-            splits = ['', ''];
-        }
-        $.ajax("high_search_scrap_history", {
-            data: {
-                code: this.code,
-                seq_id: this.seq_id,
-                submit_name: this.submit_name,
-                status: this.status,
-                start_date: splits[0],
-                end_date: splits[1],
-                now_page_number: this.now_page_number
-            },
-            success: function (res) {
-                if (res.data.length === 0) {
-                    alert("没有结果！")
-                } else {
-                    that.scarp_history = res['data'];
-                    that.max_page_number = res['max'];
-                }
+    methods: {
+        getData: function () {
+            let that = this;
+            let splits = this.date_range.split(" - ");
+            if (splits.length === 1) {
+                splits = ['', ''];
             }
-        })
+            $.ajax("high_search_scrap_history", {
+                data: {
+                    code: this.code,
+                    seq_id: this.seq_id,
+                    submit_name: this.submit_name,
+                    status: this.status,
+                    start_date: splits[0],
+                    end_date: splits[1],
+                    now_page_number: this.now_page_number
+                },
+                success: function (res) {
+                    if (res.data.length === 0) {
+                        alert("没有结果！")
+                    } else {
+                        that.scarp_history = res['data'];
+                        that.max_page_number = res['max'];
+                    }
+                }
+            })
+        },
+        check_detail:function(index){
+            this.scarp_history = this.scarp_history_list[index];
+        },
+        clean: function () {
+            this.code = "";
+            this.seq_id = "";
+            this.submit_name = "";
+            this.trouble_reason = "";
+            this.status = "";
+            this.date_range = "";
+            this.now_page_number = 1;
+            this.max_page_number = 0;
+            this.history_list = [];
+            this.history = null;
+        },
+        search: function () {
+            this.now_page_number = 1;
+            this.max_page_number = 0;
+            this.getData();
+        }
     },
-    clear: function () {
-        this.code = "";
-        this.seq_id = "";
-        this.submit_name = "";
-        this.trouble_reason = "";
-        this.status = "";
-        this.date_range = "";
-        this.now_page_number = 1;
-        this.max_page_number = 0;
-        this.history_list = [];
-        this.history = null;
-    },
-    search: function () {
-        this.now_page_number = 1;
-        this.max_page_number = 0;
-        this.getData();
+    computed:{
+        onePageUrl: function () {
+            let splits = this.date_range.split(" - ");
+            if (splits.length === 1) {
+                splits = ['', ''];
+            }
+            return "high_download_one_scrap_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_name=" + this.submit_name + "&status=" + this.status +  "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls";
+        },
+        allPageUrl: function () {
+            let splits = this.date_range.split(" - ");
+            if (splits.length === 1) {
+                splits = ['', ''];
+            }
+            return "high_download_all_scrap_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_name=" + this.submit_name + "&status=" + this.status +  "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&file_name=page-all.xls";
+        }
     }
 });

@@ -135,7 +135,24 @@ public class JigService {
     }
 
     public int highGetScrapPage(String submit_id) {
-        int a = jigMapper.highGetScrapPage(submit_id);
-        return a;
+        return jigMapper.highGetScrapPage(submit_id);
+    }
+
+    public List<ScrapHistory> highSearchScrapHistory(String code,  String seq_id, String submit_name, String status, String start_date, String end_date, int page_number) {
+        page_number = (page_number - 1) * 5;
+        return jigMapper.highSearchScrapHistory(code, seq_id, submit_name, status, start_date, end_date, page_number);
+    }
+
+    public int highSearchScrapHistoryPage(String code, String seq_id, String submit_name, String status, String start_date, String end_date) {
+        int a = jigMapper.highSearchScrapHistoryPage(code, seq_id, submit_name, status, start_date, end_date);
+        return (int) Math.ceil(a / 5.0);
+    }
+
+    public List<ScrapHistory> highSearchAllScrapHistory(String code, String seq_id, String submit_name, String status, String start_date, String end_date) {
+        return jigMapper.highSearchAllScrapHistory(code, seq_id, submit_name, status, start_date, end_date);
+    }
+
+    public List<RepairJig> highSearchAllRepairHistory(String code, String code1, String seq_id, String submit_name, String status, String start_date, String end_date) {
+        return jigMapper.highSearchAllRepairHistory(code,code, seq_id, submit_name, status, start_date, end_date);
     }
 }

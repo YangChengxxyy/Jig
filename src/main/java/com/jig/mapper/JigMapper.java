@@ -259,6 +259,7 @@ public interface JigMapper {
      * @return 搜索到历史报修记录
      */
     List<RepairJig> highSearchRepairHistory(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_name") String submit_name, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date, @Param("page_number") int page_number);
+    List<RepairJig> highSearchAllRepairHistory(String code, String code1, String seq_id, String submit_name, String status, String start_date, String end_date);
 
     /**
      * high搜索历史报修记录条数
@@ -276,4 +277,10 @@ public interface JigMapper {
     List<ScrapSubmit> highGetScrap(@Param("submit_id") String submit_id, @Param("page_number") int page_number);
 
     int highGetScrapPage(@Param("submit_id") String submit_id);
+
+    List<ScrapHistory> highSearchScrapHistory(String code, String seq_id, String submit_name, String status, String start_date, String end_date, int page_number);
+
+    List<ScrapHistory> highSearchAllScrapHistory(String code, String seq_id, String submit_name, String status, String start_date, String end_date);
+
+    int highSearchScrapHistoryPage(String code, String seq_id, String submit_name, String status, String start_date, String end_date);
 }

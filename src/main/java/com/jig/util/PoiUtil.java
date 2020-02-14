@@ -57,7 +57,11 @@ public class PoiUtil {
             "production_line_name",
             "bill_no",
             "tool_photo_url",
-            "PurchaseIncomeHistory"
+            "PurchaseIncomeHistory",
+
+            "user_count",
+            "ScrapSubmit",
+            "ScrapHistory"
     };
     private static final String[] CHINESE = {
             "id",
@@ -100,7 +104,11 @@ public class PoiUtil {
             "产线",
             "单据号",
             "故障图片路径",
-            "历史采购"
+            "历史采购",
+
+            "寿命计数",
+            "报废申请",
+            "报废历史"
     };
 
     static {

@@ -1,9 +1,6 @@
 package com.jig.controller;
 
-import com.jig.entity.DemoEntity;
-import com.jig.entity.JigDefinition;
-import com.jig.entity.PurchaseIncomeHistory;
-import com.jig.entity.User;
+import com.jig.entity.*;
 import com.jig.service.JigService;
 import com.jig.util.PoiUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -28,6 +25,24 @@ import java.util.List;
 public class JigWeb {
     @Autowired
     private JigService jigService;
+
+
+    private void outputFile(HttpServletResponse response, String fileName, List<?> list) throws Exception {
+        if (list.size() == 0) {
+            return;
+        }
+        HSSFWorkbook excel = PoiUtil.getExcel(list);
+        response.setHeader("content-type", "application/octet-stream");
+        response.setContentType("application/octet-stream;charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+        OutputStream os = null;
+        try {
+            os = response.getOutputStream();
+            excel.write(os);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @RequestMapping(value = "show_demo", method = {RequestMethod.POST, RequestMethod.GET})
     public String showDemo(Model model) {
@@ -102,28 +117,41 @@ public class JigWeb {
         outputFile(response, file_name, list);
     }
 
-
-    private void outputFile(HttpServletResponse response, String fileName, List<?> list) throws Exception {
-        if (list.size() == 0) {
-            return;
-        }
-        HSSFWorkbook excel = PoiUtil.getExcel(list);
-        response.setHeader("content-type", "application/octet-stream");
-        response.setContentType("application/octet-stream;charset=utf-8");
-        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
-        OutputStream os = null;
-        try {
-            os = response.getOutputStream();
-            excel.write(os);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @RequestMapping(value = "high_submit_repair", method = RequestMethod.POST)
     public @ResponseBody
     String high_submit_repair(HttpServletRequest request, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id) throws IOException, ServletException {
-
+        //TODO:文件上传功能
         return "success";
+    }
+
+    @RequestMapping("high_download_one_repair_history")
+    public void highDownloadOneRepairHistory(HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number, @RequestParam(value = "file_name") String file_name) throws Exception {
+        List<RepairJig> list = jigService.highSearchRepairHistory(code, seq_id, submit_name, status, start_date, end_date, page_number);
+        outputFile(response, file_name, list);
+    }
+
+    @RequestMapping("high_download_all_repair_history")
+    public void highDownloadAllRepairHistory(HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date, @RequestParam(value = "file_name") String file_name) throws Exception {
+        List<RepairJig> list = jigService.highSearchAllRepairHistory(code,code, seq_id, submit_name, status, start_date, end_date);
+        outputFile(response,file_name,list);
+    }
+
+    @RequestMapping("high_download_one_scrap_history")
+    public void highDownloadOneScrapHistory(HttpServletResponse response, @RequestParam(value = "code") String code,
+                                            @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name,
+                                            @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
+                                            @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number,
+                                            @RequestParam(value = "file_name") String file_name) throws Exception {
+        List<ScrapHistory> list = jigService.highSearchScrapHistory(code, seq_id, submit_name, status, start_date, end_date, page_number);
+        outputFile(response, file_name, list);
+    }
+
+    @RequestMapping("high_download_all_scrap_history")
+    public void highDownloadAllScrapHistory(HttpServletResponse response, @RequestParam(value = "code") String code,
+                                            @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name,
+                                            @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
+                                            @RequestParam(value = "end_date") String end_date, @RequestParam(value = "file_name") String file_name) throws Exception {
+        List<ScrapHistory> list = jigService.highSearchAllScrapHistory(code, seq_id, submit_name, status, start_date, end_date);
+        outputFile(response, file_name, list);
     }
 }
