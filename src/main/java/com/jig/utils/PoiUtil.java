@@ -1,4 +1,4 @@
-package com.jig.util;
+package com.jig.utils;
 
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.VerticalAlignment;

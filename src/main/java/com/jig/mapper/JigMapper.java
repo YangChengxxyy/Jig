@@ -227,7 +227,7 @@ public interface JigMapper {
     /**
      * high删除入库申请单
      *
-     * @param id
+     * @param id purchase_submit表id
      */
     void highDeletePurchaseSubmit(@Param("id") String id);
 

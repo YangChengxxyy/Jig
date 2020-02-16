@@ -563,3 +563,76 @@ const historyMyscrap = new Vue({
         }
     }
 });
+function position(res) {
+    return (res.jig_cabinet_id == null ? "" : ("" + res.jig_cabinet_id)) + (res.location_id == null ? "" : ("-" + res.location_id)) + (res.bin == null ? "" : ("-" + res.bin));
+}
+
+const seqInfo = new Vue({
+    el: "#seqInfo",
+    data: {
+        jig_list: [],
+        jig: "",
+        name: "",
+        workcell: "",
+        family: "",
+        user_for: "",
+        code: "",
+        now_page_number: 1,
+        max_page_number: 0
+    },
+    methods: {
+        getData: function () {
+            const that = this;
+            $.ajax({
+                url: "naive_search_jig_definition",
+                data: {
+                    code: this.code,
+                    name: this.name,
+                    workcell: this.workcell,
+                    family: this.family,
+                    user_for: this.user_for,
+                    page_number: this.now_page_number
+                },
+                success: function (res) {
+                    if (res.data.length === 0) {
+                        alert("没有结果！")
+                    } else {
+                        that.jig_list = res.data;
+                        that.max_page_number = res.max;
+                    }
+                }
+            })
+        },
+        search: function () {
+            this.now_page_number = 1;
+            if (this.code === '' && this.name === '' && this.workcell === '' && this.family === '' && this.user_for === '') {
+                return false;
+            }
+            this.getData();
+        },
+        check_detail: function (index) {
+            this.jig = this.jig_list[index];
+            this.jig.part_no = this.jig.part_no.split("|");
+            this.jig.model = this.jig.model.split("|");
+        },
+        clear: function () {
+            this.jig = null;
+            this.max_page_number = 0;
+            this.now_page_number = 1;
+            this.jig_list = [];
+            this.code = "";
+            this.name = "";
+            this.workcell = "";
+            this.family = "";
+            this.user_for = "";
+        }
+    },
+    computed: {
+        onePageUrl: function () {
+            return "naive_download_one_search?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&page_number=" + this.now_page_number + "&file_name=page" + this.now_page_number + ".xls";
+        },
+        allPageUrl: function () {
+            return "naive_download_all_search?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&file_name=page-all.xls";
+        }
+    }
+});

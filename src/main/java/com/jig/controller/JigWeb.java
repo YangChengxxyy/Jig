@@ -2,7 +2,7 @@ package com.jig.controller;
 
 import com.jig.entity.*;
 import com.jig.service.JigService;
-import com.jig.util.PoiUtil;
+import com.jig.utils.PoiUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -132,8 +132,8 @@ public class JigWeb {
 
     @RequestMapping("high_download_all_repair_history")
     public void highDownloadAllRepairHistory(HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date, @RequestParam(value = "file_name") String file_name) throws Exception {
-        List<RepairJig> list = jigService.highSearchAllRepairHistory(code,code, seq_id, submit_name, status, start_date, end_date);
-        outputFile(response,file_name,list);
+        List<RepairJig> list = jigService.highSearchAllRepairHistory(code, code, seq_id, submit_name, status, start_date, end_date);
+        outputFile(response, file_name, list);
     }
 
     @RequestMapping("high_download_one_scrap_history")

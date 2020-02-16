@@ -1,4 +1,4 @@
-package com.jig.util;
+package com.jig.utils;
 
 import org.springframework.context.ApplicationContext;
 
@@ -17,9 +17,5 @@ public class SpringUtil {
         for (String beanName : beanNames) {
             System.out.println(beanName);
         }
-    }
-
-    public static void main(String[] args) {
-        System.out.println((int) Math.ceil(1 / 5.0));
     }
 }
