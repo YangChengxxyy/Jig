@@ -3,6 +3,7 @@ package com.jig.controller;
 import com.jig.entity.DemoEntity;
 import com.jig.entity.JigDefinition;
 import com.jig.entity.PurchaseIncomeSubmit;
+import com.jig.entity.ScrapSubmit;
 import com.jig.service.JigService;
 import com.jig.service.JigService_zhs;
 import org.apache.ibatis.annotations.Param;
@@ -95,6 +96,7 @@ public class jigJson_zhs {
         return jigService.get_manager_purchase_submit_count();
     }
 
+    //获取经理采购管理模块下的采购统计的显示数据
     @RequestMapping(value = "get_manager_purchase_total_data",method = {RequestMethod.GET,RequestMethod.POST})
     public Map<Object,Object> getManagerPurchaseTotalData(@RequestParam(value = "user_id") String user_id,
                                                           @RequestParam(value = "bill_no") String bill_no,
@@ -112,7 +114,6 @@ public class jigJson_zhs {
         int jig_count = 0;
 
         for(PurchaseIncomeSubmit submit : list){
-            System.out.println(submit.getCount());
             String[] count = submit.getCount().split("\\|");
             for(String c:count){
                 jig_count+=Integer.valueOf(c);
@@ -122,4 +123,49 @@ public class jigJson_zhs {
         map.put("purchase_submit_count",purchase_submit_count);
         return map;
     }
+
+    //获取经理报废管理模块下的报废审批list
+    @RequestMapping(value = "get_manager_scrap_submit_list",method = {RequestMethod.GET,RequestMethod.POST})
+    public Map<Object,Object> getManagerScrapSubmitList(@RequestParam(value = "page_number") int page_number){
+        List<ScrapSubmit> list = jigService.get_manager_scrap_submit_list(page_number);
+        int scrap_submit_max_page = jigService.get_manager_scrap_submit_list_pages();
+        Map<Object,Object> map = new HashMap<>(2);
+        map.put("data",list);
+        map.put("max",scrap_submit_max_page);
+        return map;
+    }
+
+    @RequestMapping(value = "check_manager_scrap_submit",method = {RequestMethod.GET,RequestMethod.POST})
+    public String checkManagerScrapSubmit(@RequestParam(value = "submit_id") String submit_id,@RequestParam("status") String status){
+        int flag = jigService.check_manager_scrap_submit(submit_id,status);
+        if(flag<0){
+            return "服务器异常!";
+        }
+        return "审批成功！";
+    }
+
+    @RequestMapping(value = "get_manager_scrap_submit_list_history",method = {RequestMethod.GET,RequestMethod.POST})
+    public Map<Object,Object> getManagerScrapSubmitListHistory(@RequestParam("code") String code,
+                                                               @RequestParam("submit_name") String submit_name,
+                                                               @RequestParam("submit_time") String submit_time,
+                                                               @RequestParam("status") String status,
+                                                               @RequestParam("scrap_reason") String scrap_reason,
+                                                               @RequestParam("page_number") int page_number){
+        Map<Object,Object> map = new HashMap<>(2);
+        page_number = (page_number-1)*5;
+        String start_date = "";
+        String end_date = "";
+        if(submit_time!="") {
+            start_date = submit_time.substring(0,10);
+            end_date = submit_time.substring(13);
+        }
+        List<ScrapSubmit> list = jigService.get_manager_scrap_submit_list_history(code,submit_name,start_date,end_date,status,scrap_reason,page_number);
+        int max_page = jigService.get_manager_scrap_submit_list_history_pages(code,submit_name,start_date,end_date,status,scrap_reason);
+
+        map.put("data",list);
+        map.put("max",max_page);
+        return map;
+    }
+
 }
+

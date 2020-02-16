@@ -2,6 +2,7 @@ package com.jig.service;
 
 import com.jig.entity.JigDefinition;
 import com.jig.entity.PurchaseIncomeSubmit;
+import com.jig.entity.ScrapSubmit;
 import com.jig.mapper.JigMapper_zhs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,5 +55,31 @@ public class JigService_zhs {
 
     public int get_manager_purchase_submit_total_count(String bill_no,String submit_name,String start_date,String end_date,String status){
         return jigMapper.get_manager_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status);
+    }
+
+    //获取经理模块下的报废审批记录
+    public List<ScrapSubmit> get_manager_scrap_submit_list(int page_number){
+        return jigMapper.get_manager_scrap_submit_list(page_number);
+    }
+    //获取经理模块下的报废审批记录的最大页数
+    public int get_manager_scrap_submit_list_pages(){
+        int max_page = jigMapper.get_manager_scrap_submit_list_pages();
+        return (int)Math.ceil(max_page/5.0);
+    }
+
+    //经理模式审批的报废申请,status表示审批之后该scrap_submit的最终状态
+    public int check_manager_scrap_submit(String submit_id,String status){
+        int flag = jigMapper.check_manager_scrap_submit(submit_id,status);
+        return flag;
+    }
+
+    //经理模式，历史审批记录list的查询显示及其页数查询
+    public List<ScrapSubmit> get_manager_scrap_submit_list_history(String code,String submit_name,String start_date,String end_date,String status,String scrap_reason,int page_number){
+        return jigMapper.get_manager_scrap_submit_list_history(code,submit_name,start_date,end_date,status,scrap_reason,page_number);
+    }
+
+    public int get_manager_scrap_submit_list_history_pages(String code,String submit_name,String start_date,String end_date,String status,String scrap_reason){
+        int max_page = jigMapper.get_manager_scrap_submit_list_history_pages(code,submit_name,start_date,end_date,status,scrap_reason);
+        return (int)Math.ceil(max_page/5.0);
     }
 }

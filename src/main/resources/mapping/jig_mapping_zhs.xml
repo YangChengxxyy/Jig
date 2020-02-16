@@ -75,4 +75,64 @@
         select count(*) from purchase_income_submit
         where status = 2
     </select>
+    <select id="get_manager_scrap_submit_list" resultType="com.jig.entity.ScrapSubmit">
+        select s.*,u1.name submit_name,u2.name first_acceptor_name from scrap_submit s
+        INNER JOIN user u1 on u1.id = s.submit_id
+        INNER JOIN user u2 on u2.id = s.first_acceptor
+    </select>
+    <select id="get_manager_scrap_submit_list_pages" resultType="java.lang.Integer">
+        select count(*) from scrap_submit
+    </select>
+    <update id="check_manager_scrap_submit">
+        insert into scrap_submit_history select * from scrap_submit where id = #{submit_id};
+        delete from scrap_submit where id = #{submit_id};
+        update scrap_submit_history
+        set status = #{status},final_time = now(),final_acceptor = '123096'
+        where id = #{submit_id}
+    </update>
+    <select id="get_manager_scrap_submit_list_history" resultType="com.jig.entity.ScrapSubmit">
+        select s.*,u1.name submit_name,u2.name first_acceptor_name from scrap_submit_history s
+        INNER JOIN user u1 on u1.id = s.submit_id
+        INNER JOIN user u2 on u2.id = s.first_acceptor
+        <where>
+            <if test="code!=''">
+                and s.code like concat('%',#{code},'%')
+            </if>
+            <if test="submit_name!=''">
+                and s.submit_name like concat('%',#{submit_name},'%')
+            </if>
+            <if test="status!=''">
+                and s.status = #{status}
+            </if>
+            <if test="scrap_reason!=''">
+                and s.scrap_reason like concat('%',#{scrap_reason},'%')
+            </if>
+            <if test="start_date!='' and end_date !=''">
+                and (STR_TO_DATE(s.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
+            </if>
+        </where>
+        limit #{page_number},5
+    </select>
+    <select id="get_manager_scrap_submit_list_history_pages" resultType="java.lang.Integer">
+        select count(*) from scrap_submit_history s
+        INNER JOIN user u1 on u1.id = s.submit_id
+        INNER JOIN user u2 on u2.id = s.first_acceptor
+        <where>
+            <if test="code!=''">
+                and s.code like concat('%',#{code},'%')
+            </if>
+            <if test="submit_name!=''">
+                and s.submit_name like concat('%',#{submit_name},'%')
+            </if>
+            <if test="status!=''">
+                and s.status = #{status}
+            </if>
+            <if test="scrap_reason!=''">
+                and s.scrap_reason like concat('%',#{scrap_reason},'%')
+            </if>
+            <if test="start_date!='' and end_date !=''">
+                and (STR_TO_DATE(s.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
+            </if>
+        </where>
+    </select>
 </mapper>
