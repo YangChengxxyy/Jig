@@ -155,4 +155,8 @@ public class JigService {
     public List<RepairJig> highSearchAllRepairHistory(String code, String code1, String seq_id, String submit_name, String status, String start_date, String end_date) {
         return jigMapper.highSearchAllRepairHistory(code,code, seq_id, submit_name, status, start_date, end_date);
     }
+
+    public void highSubmitScrap(String code, String seq_id, String submit_id, String scrap_reason, String pathName) {
+        jigMapper.highSubmitScrap(code,seq_id, submit_id,scrap_reason,pathName);
+    }
 }

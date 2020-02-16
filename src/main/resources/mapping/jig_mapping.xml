@@ -18,6 +18,13 @@
         insert into purchase_income_submit(submit_id, code, count, submit_time, status, production_line_id, bill_no)
         values (#{submit_id}, #{code}, #{count}, now(), 0, #{production_line_id}, #{bill_no})
     </insert>
+    <insert id="highSubmitScrap">
+        insert into scrap_submit(code, seq_id, submit_time, submit_id, used_count, scrap_reason, scrap_photo_url,
+                                 status)
+            value (#{code}, #{seq_id}, now(), #{submit_id},
+                   (select used_count from jig_entity where code = #{code} and seq_id = #{seq_id}), #{scrap_reason},
+                   #{pathName}, 0);
+    </insert>
     <update id="naiveReturnJig">
         update jig_position
         set status = 1

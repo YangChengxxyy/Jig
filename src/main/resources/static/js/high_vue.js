@@ -321,24 +321,6 @@ const myrepair = new Vue({
         },
         file: function () {
             this.submit_trouble_photo = $("input[type=file]")[0].files[0].name;
-        },
-        submit_repair() {
-            const formData = new FormData();
-            formData.append("file", $("input[type=file]")[0]);
-            formData.append("submit_id", $("#id").val());
-            formData.append("code", this.submit_code);
-            formData.append("seq_id", this.submit_seq_id);
-            formData.append("trouble_reason", this.submit_trouble_reason);
-            console.log(formData);
-            $.ajax("high_submit_repair", {
-                type: "post",
-                processData: false,
-                contentType: false,
-                data: formData,
-                success: function (res) {
-                    alert("success");
-                }
-            })
         }
     }
 });
@@ -404,20 +386,20 @@ const historyMyrepair = new Vue({
             this.getData();
         }
     },
-    computed:{
+    computed: {
         onePageUrl: function () {
             let splits = this.date_range.split(" - ");
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            return "high_download_one_repair_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_name=" + this.submit_name + "&status=" + this.status +  "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls";
+            return "high_download_one_repair_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_name=" + this.submit_name + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls";
         },
         allPageUrl: function () {
             let splits = this.date_range.split(" - ");
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            return "high_download_all_repair_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_name=" + this.submit_name + "&status=" + this.status +  "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&file_name=page-all.xls";
+            return "high_download_all_repair_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_name=" + this.submit_name + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&file_name=page-all.xls";
         }
     }
 });
@@ -431,8 +413,11 @@ const myscrap = new Vue({
         code_list: code_list,
         submit_code: "",
         submit_seq_id: "",
-        submit_trouble_reason: "",
-        submit_trouble_photo: "点击上传图片"
+        submit_scrap_reason: "",
+        submit_scrap_photo: "点击上传图片"
+    },
+    created: function () {
+        this.getData();
     },
     methods: {
         getData: function () {
@@ -463,24 +448,35 @@ const myscrap = new Vue({
         },
         submit_scrap() {
             const formData = new FormData();
-            formData.append("file", $("input[type=file]")[0]);
+            formData.append("file", $("#scrap_photo")[0].files[0]);
             formData.append("submit_id", $("#id").val());
             formData.append("code", this.submit_code);
             formData.append("seq_id", this.submit_seq_id);
-            formData.append("trouble_reason", this.submit_trouble_reason);
-            console.log(formData);
-            $.ajax("high_submit_repair", {
+            formData.append("scrap_reason", this.submit_scrap_reason);
+            let that = this;
+            $.ajax("high_submit_scrap", {
                 type: "post",
                 processData: false,
                 contentType: false,
                 data: formData,
                 success: function (res) {
-                    alert("success");
+                    if (res) {
+                        alert("提交成功！");
+                        that.submit_code = "";
+                        that.submit_seq_id = "";
+                        that.submit_scrap_reason = "";
+                        $("#scrap_photo")[0].files = null;
+                        that.submit_scrap_photo = "点击上传图片";
+                        that.getData();
+                        $("#submit_repair").modal("hide");
+                    } else {
+                        alert("服务器错误！");
+                    }
                 }
             })
         },
         file: function () {
-            this.submit_trouble_photo = $("input[type=file]")[0].files[0].name;
+            this.submit_scrap_photo = $("#scrap_photo")[0].files[0].name;
         }
     }
 });
@@ -513,7 +509,7 @@ const historyMyscrap = new Vue({
                     status: this.status,
                     start_date: splits[0],
                     end_date: splits[1],
-                    now_page_number: this.now_page_number
+                    page_number: this.now_page_number
                 },
                 success: function (res) {
                     if (res.data.length === 0) {
@@ -525,7 +521,7 @@ const historyMyscrap = new Vue({
                 }
             })
         },
-        check_detail:function(index){
+        check_detail: function (index) {
             this.scarp_history = this.scarp_history_list[index];
         },
         clean: function () {
@@ -546,23 +542,24 @@ const historyMyscrap = new Vue({
             this.getData();
         }
     },
-    computed:{
+    computed: {
         onePageUrl: function () {
             let splits = this.date_range.split(" - ");
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            return "high_download_one_scrap_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_name=" + this.submit_name + "&status=" + this.status +  "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls";
+            return "high_download_one_scrap_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_name=" + this.submit_name + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls";
         },
         allPageUrl: function () {
             let splits = this.date_range.split(" - ");
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            return "high_download_all_scrap_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_name=" + this.submit_name + "&status=" + this.status +  "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&file_name=page-all.xls";
+            return "high_download_all_scrap_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_name=" + this.submit_name + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&file_name=page-all.xls";
         }
     }
 });
+
 function position(res) {
     return (res.jig_cabinet_id == null ? "" : ("" + res.jig_cabinet_id)) + (res.location_id == null ? "" : ("-" + res.location_id)) + (res.bin == null ? "" : ("-" + res.bin));
 }

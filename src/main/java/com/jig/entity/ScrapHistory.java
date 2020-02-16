@@ -7,7 +7,7 @@ public class ScrapHistory {
     private String submit_id;
     private String submit_name;
     private String submit_time;
-    private int user_count;
+    private int used_count;
     private String scrap_reason;
     private String first_time;//初审时间
     private String first_acceptor;//初审人id
@@ -65,12 +65,12 @@ public class ScrapHistory {
         this.submit_time = submit_time;
     }
 
-    public int getUser_count() {
-        return user_count;
+    public int getUsed_count() {
+        return used_count;
     }
 
-    public void setUser_count(int user_count) {
-        this.user_count = user_count;
+    public void setUsed_count(int used_count) {
+        this.used_count = used_count;
     }
 
     public String getScrap_reason() {

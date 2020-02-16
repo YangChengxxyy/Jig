@@ -7,8 +7,9 @@ public class ScrapSubmit {
     private String submit_id;
     private String submit_name;
     private String submit_time;
-    private int user_count;
+    private int used_count;
     private String scrap_reason;
+    private String scrap_photo_url;
     private String first_time;//初审时间
     private String first_acceptor;//初审人id
     private String first_acceptor_name;
@@ -65,12 +66,12 @@ public class ScrapSubmit {
         this.submit_time = submit_time;
     }
 
-    public int getUser_count() {
-        return user_count;
+    public int getUsed_count() {
+        return used_count;
     }
 
-    public void setUser_count(int user_count) {
-        this.user_count = user_count;
+    public void setUsed_count(int used_count) {
+        this.used_count = used_count;
     }
 
     public String getScrap_reason() {
@@ -135,5 +136,13 @@ public class ScrapSubmit {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getScrap_photo_url() {
+        return scrap_photo_url;
+    }
+
+    public void setScrap_photo_url(String scrap_photo_url) {
+        this.scrap_photo_url = scrap_photo_url;
     }
 }

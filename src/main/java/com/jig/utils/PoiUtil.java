@@ -15,7 +15,7 @@ import java.util.Map;
  * @author YC
  */
 public class PoiUtil {
-    private static final Map<String, String> COMPARISONTABLE;
+    private static final Map<String, String> COMPARISON_TABLE;
     private static final String[] ENGLISH = {
             "id",
             "name",
@@ -59,7 +59,7 @@ public class PoiUtil {
             "tool_photo_url",
             "PurchaseIncomeHistory",
 
-            "user_count",
+            "used_count",
             "ScrapSubmit",
             "ScrapHistory"
     };
@@ -112,9 +112,9 @@ public class PoiUtil {
     };
 
     static {
-        COMPARISONTABLE = new HashMap<>(40);
+        COMPARISON_TABLE = new HashMap<>(40);
         for (int i = 0; i < ENGLISH.length; i++) {
-            COMPARISONTABLE.put(ENGLISH[i], CHINESE[i]);
+            COMPARISON_TABLE.put(ENGLISH[i], CHINESE[i]);
         }
     }
 
@@ -133,13 +133,13 @@ public class PoiUtil {
             methodNameList.add(getMethodName);
         }
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet(COMPARISONTABLE.get(aClass.getSimpleName()));
+        HSSFSheet sheet = workbook.createSheet(COMPARISON_TABLE.get(aClass.getSimpleName()));
         HSSFRow row = sheet.createRow(0);
         HSSFCell cell = null;
         int[] maxs = new int[declaredFields.length];
         for (int i = 0; i < declaredFields.length; i++) {
             cell = row.createCell(i);
-            cell.setCellValue(COMPARISONTABLE.get(declaredFields[i].getName()));
+            cell.setCellValue(COMPARISON_TABLE.get(declaredFields[i].getName()));
             HSSFCellStyle cellStyle = workbook.createCellStyle();
             //设置垂直居中
             cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);

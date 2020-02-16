@@ -304,7 +304,7 @@ public interface JigMapper {
      * @param page_number 页码
      * @return 历史报废记录
      */
-    List<ScrapHistory> highSearchScrapHistory(String code, String seq_id, String submit_name, String status, String start_date, String end_date, int page_number);
+    List<ScrapHistory> highSearchScrapHistory(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_name") String submit_name, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date, @Param("page_number") int page_number);
 
     /**
      * high搜索全部历史报废
@@ -317,7 +317,7 @@ public interface JigMapper {
      * @param end_date    最晚日期
      * @return 搜索到的全部报废历史
      */
-    List<ScrapHistory> highSearchAllScrapHistory(String code, String seq_id, String submit_name, String status, String start_date, String end_date);
+    List<ScrapHistory> highSearchAllScrapHistory(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_name") String submit_name, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date);
 
     /**
      * high搜索历史报废
@@ -330,5 +330,7 @@ public interface JigMapper {
      * @param end_date    最晚日期
      * @return 历史报废记录
      */
-    int highSearchScrapHistoryPage(String code, String seq_id, String submit_name, String status, String start_date, String end_date);
+    int highSearchScrapHistoryPage(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_name") String submit_name, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date);
+
+    void highSubmitScrap(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_id") String submit_id, @Param("scrap_reason") String scrap_reason, @Param("pathName") String pathName);
 }

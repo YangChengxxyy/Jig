@@ -3,6 +3,7 @@ package com.jig.controller;
 import com.jig.entity.*;
 import com.jig.service.JigService;
 import com.jig.utils.PoiUtil;
+import org.apache.commons.io.FileUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,21 +12,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class JigWeb {
     @Autowired
     private JigService jigService;
-
+    private static final String SCRAP_IMAGES_URL = "E:\\YC\\Documents\\IdeaProjects\\JIG\\src\\main\\resources\\static\\";
+    private static final String IMAGE_NAME = "images\\scrap_images\\SCRAP";
 
     private void outputFile(HttpServletResponse response, String fileName, List<?> list) throws Exception {
         if (list.size() == 0) {
@@ -43,7 +50,15 @@ public class JigWeb {
             e.printStackTrace();
         }
     }
-
+    private String getPathName(String fileName){
+        UUID uuid = UUID.randomUUID();
+        String uuidString = uuid.toString();
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");//设置日期格式
+        String nowTime = LocalDateTime.now().format(fmt);
+        assert fileName != null;
+        String after = fileName.substring(fileName.lastIndexOf('.'));
+        return IMAGE_NAME + "-" + nowTime + "-" + uuidString + after;
+    }
     @RequestMapping(value = "show_demo", method = {RequestMethod.POST, RequestMethod.GET})
     public String showDemo(Model model) {
         List<DemoEntity> a = new ArrayList<>();
@@ -117,11 +132,23 @@ public class JigWeb {
         outputFile(response, file_name, list);
     }
 
-    @RequestMapping(value = "high_submit_repair", method = RequestMethod.POST)
+    @RequestMapping(value = "high_submit_scrap", method = RequestMethod.POST)
     public @ResponseBody
-    String high_submit_repair(HttpServletRequest request, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id) throws IOException, ServletException {
+    boolean highSubmitRepair(HttpServletRequest request, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "scrap_reason") String scrap_reason, @RequestParam(value = "file") MultipartFile file) {
         //TODO:文件上传功能
-        return "success";
+        String fileName = file.getOriginalFilename();
+        try {
+            assert fileName != null;
+            String pathName = getPathName(fileName);
+            System.out.println(pathName);//pathName存入数据库
+            FileUtils.writeByteArrayToFile
+                    (new File(SCRAP_IMAGES_URL + pathName), file.getBytes());
+            jigService.highSubmitScrap(code,seq_id,submit_id,scrap_reason,pathName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     @RequestMapping("high_download_one_repair_history")
