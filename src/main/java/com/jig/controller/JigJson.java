@@ -309,6 +309,7 @@ public class JigJson {
     public Map<String, Object> highSearchScrapHistory(@RequestParam(value = "code") String code,
                                                       @RequestParam(value = "seq_id") String seq_id,
                                                       @RequestParam(value = "submit_name") String submit_name,
+                                                      //TODO:缺少一条件
                                                       @RequestParam(value = "status") String status,
                                                       @RequestParam(value = "start_date") String start_date,
                                                       @RequestParam(value = "end_date") String end_date,

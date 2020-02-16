@@ -1216,7 +1216,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">报废原因</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" v-model="trouble_reason">
+                                            <input type="text" class="form-control" v-model="scrap_reason">
                                         </div>
                                         <label class="col-sm-2 control-label">审批状态</label>
                                         <div class="col-sm-3">
@@ -1317,14 +1317,14 @@
                                                     <label class="control-label col-sm-3">故障原因</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{scarp_history.trouble_reason}}
+                                                            {{scarp_history.scrap_reason}}
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-3">故障图片</label>
                                                     <div class="col-sm-8">
-                                                        <img :src="scarp_history.trouble_photo_url" alt="故障图片"/>
+                                                        <img :src="scarp_history.scrap_photo_url" alt="故障图片"/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -1351,7 +1351,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" v-if="scarp_history.first_acceptor_id != null">
                                                     <label class="control-label col-sm-3">初审人</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
@@ -1359,7 +1359,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" v-if="scarp_history.first_time != null">
                                                     <label class="control-label col-sm-3">初审时间</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
@@ -1373,7 +1373,7 @@
                                                         <div class="form-control">{{scarp_history.first_reason}}</div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" v-if="scarp_history.final_acceptor_name != null">
                                                     <label class="control-label col-sm-3">终审人</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
@@ -1381,7 +1381,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" v-if="scarp_history.final_time != null">
                                                     <label class="control-label col-sm-3">终审时间</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
