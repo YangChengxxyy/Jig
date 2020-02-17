@@ -30,7 +30,7 @@ import java.util.UUID;
 public class JigWeb {
     @Autowired
     private JigService jigService;
-    public static final String IMAGES_URL = "E:\\YC\\Documents\\IdeaProjects\\JIG\\src\\main\\resources\\static\\";
+    public static final String RESOURCE_URL = "E:\\YC\\Documents\\IdeaProjects\\JIG\\src\\main\\resources\\static\\";
     public static final String SCRAP_IMAGE_NAME = "images\\scrap_images\\SCRAP";
 
     private void outputFile(HttpServletResponse response, String fileName, List<?> list) throws Exception {
@@ -49,7 +49,8 @@ public class JigWeb {
             e.printStackTrace();
         }
     }
-    private String getPathName(String fileName){
+
+    private String getPathName(String fileName) {
         UUID uuid = UUID.randomUUID();
         String uuidString = uuid.toString();
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");//设置日期格式
@@ -58,6 +59,7 @@ public class JigWeb {
         String after = fileName.substring(fileName.lastIndexOf('.'));
         return SCRAP_IMAGE_NAME + "-" + nowTime + "-" + uuidString + after;
     }
+
     @RequestMapping(value = "show_demo", method = {RequestMethod.POST, RequestMethod.GET})
     public String showDemo(Model model) {
         List<DemoEntity> a = new ArrayList<>();
@@ -141,8 +143,8 @@ public class JigWeb {
             String pathName = getPathName(fileName);
             System.out.println(pathName);//pathName存入数据库
             FileUtils.writeByteArrayToFile
-                    (new File(IMAGES_URL + pathName), file.getBytes());
-            jigService.highSubmitScrap(code,seq_id,submit_id,scrap_reason,pathName);
+                    (new File(RESOURCE_URL + pathName), file.getBytes());
+            jigService.highSubmitScrap(code, seq_id, submit_id, scrap_reason, pathName);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -167,9 +169,9 @@ public class JigWeb {
                                             @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id,
                                             @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
                                             @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number,
-                                            @RequestParam(value = "scrap_reason")String scrap_reason,
+                                            @RequestParam(value = "scrap_reason") String scrap_reason,
                                             @RequestParam(value = "file_name") String file_name) throws Exception {
-        List<ScrapHistory> list = jigService.highSearchScrapHistory(code, seq_id, submit_id,scrap_reason, status, start_date, end_date, page_number);
+        List<ScrapHistory> list = jigService.highSearchScrapHistory(code, seq_id, submit_id, scrap_reason, status, start_date, end_date, page_number);
         outputFile(response, file_name, list);
     }
 
@@ -177,9 +179,9 @@ public class JigWeb {
     public void highDownloadAllScrapHistory(HttpServletResponse response, @RequestParam(value = "code") String code,
                                             @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id,
                                             @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
-                                            @RequestParam(value = "scrap_reason")String scrap_reason,
+                                            @RequestParam(value = "scrap_reason") String scrap_reason,
                                             @RequestParam(value = "end_date") String end_date, @RequestParam(value = "file_name") String file_name) throws Exception {
-        List<ScrapHistory> list = jigService.highSearchAllScrapHistory(code, seq_id, submit_id, scrap_reason,status, start_date, end_date);
+        List<ScrapHistory> list = jigService.highSearchAllScrapHistory(code, seq_id, submit_id, scrap_reason, status, start_date, end_date);
         outputFile(response, file_name, list);
     }
 }

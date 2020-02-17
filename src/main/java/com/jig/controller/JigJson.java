@@ -320,7 +320,7 @@ public class JigJson {
     }
     @RequestMapping("high_delete_scrap")
     public boolean highDeleteScrap(@RequestParam(value = "id")String id,@RequestParam(value = "scrap_photo_url")String scrap_photo_url){
-        String fileName = JigWeb.IMAGES_URL + scrap_photo_url;
+        String fileName = JigWeb.RESOURCE_URL + scrap_photo_url;
         File file = new File(fileName);
         return jigService.highDeleteScrap(id) && file.delete();
     }
