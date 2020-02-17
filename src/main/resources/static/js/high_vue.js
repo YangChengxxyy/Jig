@@ -103,6 +103,7 @@ const show_myshoplist = new Vue({
             }
         },
         delSubmit: function (id, status) {
+            let that = this;
             if (status === '0') {
                 if (confirm("确认删除此申请单！！！")) {
                     $.ajax("high_delete_purchase_submit", {
@@ -437,14 +438,23 @@ const myscrap = new Vue({
             this.script = this.scrap_list[index];
         },
         del: function (id) {
-            $.ajax("high_del_scrap", {
-                data: {
-                    id: id
-                },
-                success: function (res) {
-
-                }
-            });
+            const that = this;
+            if (confirm("确认删除此申请！")) {
+                $.ajax("high_delete_scrap", {
+                    data: {
+                        id: id
+                    },
+                    success: function (res) {
+                        if (res) {
+                            alert("删除成功！");
+                            that.now_page_number = 1;
+                            that.getData();
+                        } else {
+                            alert("服务器错误！");
+                        }
+                    }
+                });
+            }
         },
         submit_scrap() {
             const formData = new FormData();
@@ -467,6 +477,7 @@ const myscrap = new Vue({
                         that.submit_scrap_reason = "";
                         $("#scrap_photo")[0].files = null;
                         that.submit_scrap_photo = "点击上传图片";
+                        that.now_page_number=1;
                         that.getData();
                         $("#submit_repair").modal("hide");
                     } else {
@@ -487,7 +498,6 @@ const historyMyscrap = new Vue({
         scarp_history: null,
         code: "",
         seq_id: "",
-        submit_name: "",
         scrap_reason: "",
         status: "",
         date_range: "",
@@ -503,10 +513,10 @@ const historyMyscrap = new Vue({
             }
             $.ajax("high_search_scrap_history", {
                 data: {
+                    submit_id: $("#id").val(),
                     code: this.code,
                     seq_id: this.seq_id,
-                    submit_name: this.submit_name,
-                    scrap_reason:this.scrap_reason,
+                    scrap_reason: this.scrap_reason,
                     status: this.status,
                     start_date: splits[0],
                     end_date: splits[1],
@@ -528,7 +538,6 @@ const historyMyscrap = new Vue({
         clean: function () {
             this.code = "";
             this.seq_id = "";
-            this.submit_name = "";
             this.trouble_reason = "";
             this.status = "";
             this.date_range = "";
@@ -549,14 +558,14 @@ const historyMyscrap = new Vue({
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            return "high_download_one_scrap_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_name=" + this.submit_name + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls";
+            return "high_download_one_scrap_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_id=" + $("#id").val() + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls";
         },
         allPageUrl: function () {
             let splits = this.date_range.split(" - ");
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            return "high_download_all_scrap_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_name=" + this.submit_name + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&file_name=page-all.xls";
+            return "high_download_all_scrap_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_id=" + $("#id").val() + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&file_name=page-all.xls";
         }
     }
 });
@@ -580,9 +589,8 @@ const seqInfo = new Vue({
     },
     methods: {
         getData: function () {
-            const that = this;
-            $.ajax({
-                url: "naive_search_jig_definition",
+            let that = this;
+            $.ajax("naive_search_jig_definition",{
                 data: {
                     code: this.code,
                     name: this.name,

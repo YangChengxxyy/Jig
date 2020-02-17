@@ -18,8 +18,7 @@ const search_jig = new Vue({
     methods: {
         getData: function () {
             const that = this;
-            $.ajax({
-                url: "naive_search_jig_definition",
+            $.ajax("naive_search_jig_definition",{
                 data: {
                     code: this.code,
                     name: this.name,
@@ -105,8 +104,7 @@ const return_jig = new Vue({
     methods: {
         getData: function () {
             const that = this;
-            $.ajax({
-                url: "naive_get_outgoing_jig",
+            $.ajax("naive_get_outgoing_jig",{
                 data: {
                     page_number: this.now_page_number
                 },
@@ -133,8 +131,7 @@ const return_jig = new Vue({
         },
         getUsername: function () {
             const that = this;
-            $.ajax({
-                url: "get_user_name",
+            $.ajax("get_user_name",{
                 data: {
                     user_id: this.check_user_id
                 },
@@ -151,8 +148,7 @@ const return_jig = new Vue({
                 return false;
             }
             const splits = that.code_seq_id.split("-");
-            $.ajax({
-                url: "get_position",
+            $.ajax("get_position",{
                 data: {
                     code: splits[0],
                     seq_id: splits[1]
@@ -167,8 +163,7 @@ const return_jig = new Vue({
             const that = this;
             const splits = this.code_seq_id.split("-");
             if (this.check1 && this.check2 && this.check3) {
-                $.ajax({
-                    url: "return_jig",
+                $.ajax("return_jig",{
                     data: {
                         code: splits[0],
                         seq_id: splits[1],
@@ -214,8 +209,7 @@ const jig_outgoing = new Vue({
     methods: {
         getData: function () {
             const that = this;
-            $.ajax({
-                url: "naive_get_outgoing_submit",
+            $.ajax("naive_get_outgoing_submit",{
                 data: {
                     page_number: this.now_page_number
                 },
@@ -240,8 +234,7 @@ const jig_outgoing = new Vue({
             if (this.check1 && this.check2) {
                 const splits = this.code_seq_id.split("-");
                 var that = this;
-                $.ajax({
-                    url: "naive_outgo_jig",
+                $.ajax("naive_outgo_jig",{
                     data: {
                         id: this.id,
                         code: splits[0],
@@ -263,8 +256,7 @@ const jig_outgoing = new Vue({
         },
         getUsername: function () {
             const that = this;
-            $.ajax({
-                url: "get_user_name",
+            $.ajax("get_user_name",{
                 data: {
                     user_id: this.check_user_id
                 },
@@ -281,8 +273,7 @@ const jig_outgoing = new Vue({
                 return false;
             }
             const splits = that.code_seq_id.split("-");
-            $.ajax({
-                url: "get_position",
+            $.ajax( "get_position",{
                 data: {
                     code: splits[0],
                     seq_id: splits[1]

@@ -139,18 +139,18 @@ public class JigService {
         return (int) Math.ceil(a / 5.0);
     }
 
-    public List<ScrapHistory> highSearchScrapHistory(String code, String seq_id, String submit_name, String status, String start_date, String end_date, int page_number) {
+    public List<ScrapHistory> highSearchScrapHistory(String code, String seq_id, String submit_id,String scrap_reason, String status, String start_date, String end_date, int page_number) {
         page_number = (page_number - 1) * 5;
-        return jigMapper.highSearchScrapHistory(code, seq_id, submit_name, status, start_date, end_date, page_number);
+        return jigMapper.highSearchScrapHistory(code, seq_id, submit_id,scrap_reason, status, start_date, end_date, page_number);
     }
 
-    public int highSearchScrapHistoryPage(String code, String seq_id, String submit_name, String status, String start_date, String end_date) {
-        int a = jigMapper.highSearchScrapHistoryPage(code, seq_id, submit_name, status, start_date, end_date);
+    public int highSearchScrapHistoryPage(String code, String seq_id, String submit_id,String scrap_reason ,String status, String start_date, String end_date) {
+        int a = jigMapper.highSearchScrapHistoryPage(code, seq_id, submit_id,scrap_reason, status, start_date, end_date);
         return (int) Math.ceil(a / 5.0);
     }
 
-    public List<ScrapHistory> highSearchAllScrapHistory(String code, String seq_id, String submit_name, String status, String start_date, String end_date) {
-        return jigMapper.highSearchAllScrapHistory(code, seq_id, submit_name, status, start_date, end_date);
+    public List<ScrapHistory> highSearchAllScrapHistory(String code, String seq_id, String submit_name,String scrap_reason, String status, String start_date, String end_date) {
+        return jigMapper.highSearchAllScrapHistory(code, seq_id, submit_name,scrap_reason, status, start_date, end_date);
     }
 
     public List<RepairJig> highSearchAllRepairHistory(String code, String code1, String seq_id, String submit_name, String status, String start_date, String end_date) {
@@ -159,5 +159,13 @@ public class JigService {
 
     public void highSubmitScrap(String code, String seq_id, String submit_id, String scrap_reason, String pathName) {
         jigMapper.highSubmitScrap(code, seq_id, submit_id, scrap_reason, pathName);
+    }
+
+    public boolean highDeleteScrap(String id) {
+        return jigMapper.highDeleteScrap(id) > 0;
+    }
+
+    public String highGetScrapUrl(String id) {
+        return jigMapper.highGetScrapUrl(id);
     }
 }

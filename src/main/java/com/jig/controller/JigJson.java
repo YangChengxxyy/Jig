@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -298,7 +299,7 @@ public class JigJson {
      *
      * @param code        工夹具代码
      * @param seq_id      工夹具序列号
-     * @param submit_name 申请人id
+     * @param submit_id 申请人id
      * @param status      状态
      * @param start_date  最早日期
      * @param end_date    最晚日期
@@ -308,13 +309,20 @@ public class JigJson {
     @RequestMapping("high_search_scrap_history")
     public Map<String, Object> highSearchScrapHistory(@RequestParam(value = "code") String code,
                                                       @RequestParam(value = "seq_id") String seq_id,
-                                                      @RequestParam(value = "submit_name") String submit_name,
-                                                      //TODO:缺少一条件
+                                                      @RequestParam(value = "submit_id") String submit_id,
+                                                      @RequestParam(value = "scrap_reason") String scrap_reason,
                                                       @RequestParam(value = "status") String status,
                                                       @RequestParam(value = "start_date") String start_date,
                                                       @RequestParam(value = "end_date") String end_date,
                                                       @RequestParam(value = "page_number") int page_number) {
-        return getStringObjectMap(jigService.highSearchScrapHistory(code, seq_id, submit_name, status, start_date, end_date, page_number)
-                , jigService.highSearchScrapHistoryPage(code, seq_id, submit_name, status, start_date, end_date));
+        return getStringObjectMap(jigService.highSearchScrapHistory(code, seq_id, submit_id,scrap_reason ,status, start_date, end_date, page_number)
+                , jigService.highSearchScrapHistoryPage(code, seq_id, submit_id,scrap_reason, status, start_date, end_date));
+    }
+    @RequestMapping("high_delete_scrap")
+    public boolean highDeleteScrap(@RequestParam(value = "id")String id){
+        String pathName = jigService.highGetScrapUrl(id);
+        String fileName = JigWeb.IMAGES_URL + pathName;
+        File file = new File(fileName);
+        return jigService.highDeleteScrap(id) && file.delete();
     }
 }

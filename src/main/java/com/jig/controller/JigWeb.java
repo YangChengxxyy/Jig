@@ -30,8 +30,8 @@ import java.util.UUID;
 public class JigWeb {
     @Autowired
     private JigService jigService;
-    private static final String IMAGES_URL = "E:\\YC\\Documents\\IdeaProjects\\JIG\\src\\main\\resources\\static\\";
-    private static final String SCRAP_IMAGE_NAME = "images\\scrap_images\\SCRAP";
+    public static final String IMAGES_URL = "E:\\YC\\Documents\\IdeaProjects\\JIG\\src\\main\\resources\\static\\";
+    public static final String SCRAP_IMAGE_NAME = "images\\scrap_images\\SCRAP";
 
     private void outputFile(HttpServletResponse response, String fileName, List<?> list) throws Exception {
         if (list.size() == 0) {
@@ -164,21 +164,22 @@ public class JigWeb {
 
     @RequestMapping("high_download_one_scrap_history")
     public void highDownloadOneScrapHistory(HttpServletResponse response, @RequestParam(value = "code") String code,
-                                            @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name,
+                                            @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id,
                                             @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
                                             @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number,
-                                            //TODO:缺少一条件
+                                            @RequestParam(value = "scrap_reason")String scrap_reason,
                                             @RequestParam(value = "file_name") String file_name) throws Exception {
-        List<ScrapHistory> list = jigService.highSearchScrapHistory(code, seq_id, submit_name, status, start_date, end_date, page_number);
+        List<ScrapHistory> list = jigService.highSearchScrapHistory(code, seq_id, submit_id,scrap_reason, status, start_date, end_date, page_number);
         outputFile(response, file_name, list);
     }
 
     @RequestMapping("high_download_all_scrap_history")
     public void highDownloadAllScrapHistory(HttpServletResponse response, @RequestParam(value = "code") String code,
-                                            @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name,
+                                            @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id,
                                             @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
+                                            @RequestParam(value = "scrap_reason")String scrap_reason,
                                             @RequestParam(value = "end_date") String end_date, @RequestParam(value = "file_name") String file_name) throws Exception {
-        List<ScrapHistory> list = jigService.highSearchAllScrapHistory(code, seq_id, submit_name, status, start_date, end_date);
+        List<ScrapHistory> list = jigService.highSearchAllScrapHistory(code, seq_id, submit_id, scrap_reason,status, start_date, end_date);
         outputFile(response, file_name, list);
     }
 }
