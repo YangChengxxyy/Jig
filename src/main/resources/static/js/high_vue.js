@@ -437,12 +437,13 @@ const myscrap = new Vue({
         scrap_detail: function (index) {
             this.script = this.scrap_list[index];
         },
-        del: function (id) {
+        del: function (id, scrap_photo_url) {
             const that = this;
             if (confirm("确认删除此申请！")) {
                 $.ajax("high_delete_scrap", {
                     data: {
-                        id: id
+                        id: id,
+                        scrap_photo_url: scrap_photo_url
                     },
                     success: function (res) {
                         if (res) {
@@ -477,7 +478,7 @@ const myscrap = new Vue({
                         that.submit_scrap_reason = "";
                         $("#scrap_photo")[0].files = null;
                         that.submit_scrap_photo = "点击上传图片";
-                        that.now_page_number=1;
+                        that.now_page_number = 1;
                         that.getData();
                         $("#submit_repair").modal("hide");
                     } else {
@@ -590,7 +591,7 @@ const seqInfo = new Vue({
     methods: {
         getData: function () {
             let that = this;
-            $.ajax("naive_search_jig_definition",{
+            $.ajax("naive_search_jig_definition", {
                 data: {
                     code: this.code,
                     name: this.name,

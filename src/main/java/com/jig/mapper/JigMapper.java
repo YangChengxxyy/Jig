@@ -338,5 +338,4 @@ public interface JigMapper {
 
     int highDeleteScrap(@Param("id") String id);
 
-    String highGetScrapUrl(@Param("id") String id);
 }

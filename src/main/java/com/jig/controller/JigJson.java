@@ -319,9 +319,8 @@ public class JigJson {
                 , jigService.highSearchScrapHistoryPage(code, seq_id, submit_id,scrap_reason, status, start_date, end_date));
     }
     @RequestMapping("high_delete_scrap")
-    public boolean highDeleteScrap(@RequestParam(value = "id")String id){
-        String pathName = jigService.highGetScrapUrl(id);
-        String fileName = JigWeb.IMAGES_URL + pathName;
+    public boolean highDeleteScrap(@RequestParam(value = "id")String id,@RequestParam(value = "scrap_photo_url")String scrap_photo_url){
+        String fileName = JigWeb.IMAGES_URL + scrap_photo_url;
         File file = new File(fileName);
         return jigService.highDeleteScrap(id) && file.delete();
     }

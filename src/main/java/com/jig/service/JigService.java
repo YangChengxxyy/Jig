@@ -165,7 +165,4 @@ public class JigService {
         return jigMapper.highDeleteScrap(id) > 0;
     }
 
-    public String highGetScrapUrl(String id) {
-        return jigMapper.highGetScrapUrl(id);
-    }
 }

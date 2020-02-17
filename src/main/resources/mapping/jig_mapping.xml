@@ -426,9 +426,6 @@
             and ss.submit_time between #{start_date} and #{end_date}
         </if>
     </select>
-    <select id="highGetScrapUrl" resultType="java.lang.String">
-        select scrap_photo_url from scrap_submit where id = #{id}
-    </select>
     <delete id="highDeleteScrap">
         delete from scrap_submit where id = #{id}
     </delete>
