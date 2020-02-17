@@ -552,11 +552,12 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 control-label">申请日期</label>
                                                     <div class="col-sm-9">
-                                                        <input class="form-control submit_date" v-model="submit_time"></input>
-                                                        <span class="input-group-addon">
-                                                            <span class="glyphicon glyphicon-remove" @click="clear_date">
-                                                        </span>
-                                                </span>
+                                                        <div class="input-group">
+                                                            <input class="form-control submit_date" v-model="submit_time"></input>
+                                                            <span class="input-group-addon">
+                                                                <span class="glyphicon glyphicon-remove" @click="clear_date"></span>
+                                                             </span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div>
@@ -564,7 +565,7 @@
                                                         <button class="btn btn-primary" type="button" @click="getData">查询</button>
                                                     </div>
                                                     <div class="col-sm-3">
-                                                        <button class="btn btn-primary" type="button">查询</button>
+                                                        <button class="btn btn-default" type="button" @click="clear_all">清空</button>
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <button class="btn btn-primary" type="button">查询</button>
@@ -572,7 +573,6 @@
                                                     <div class="col-sm-3">
                                                         <button class="btn btn-primary" type="button">查询</button>
                                                     </div>
-
                                                 </div>
                                             </form>
                                         </div>
@@ -838,7 +838,7 @@
                                         <td v-if="item.status==4">终审通过</td>
                                         <td>
                                             <button data-toggle="modal" data-target="#scrap_submit_history_detail"
-                                                    type="button" class="btn btn-primary" @click="get_scrap_submit_detail">查看</button>
+                                                    type="button" class="btn btn-primary" @click="get_scrap_submit_detail(index)">查看</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -906,17 +906,19 @@
                                                     <label class="col-sm-3 control-label">审批状态</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control" v-if="scrap_submit.status==0">待审批</div>
-                                                        <div class="form-control" v-if="scrap_submit.status==0">初审未通过</div>
-                                                        <div class="form-control" v-if="scrap_submit.status==0">初审通过</div>
-                                                        <div class="form-control" v-if="scrap_submit.status==0">终审通过</div>
-                                                        <div class="form-control" v-if="scrap_submit.status==0">终审未通过</div>
+                                                        <div class="form-control" v-if="scrap_submit.status==1">初审未通过</div>
+                                                        <div class="form-control" v-if="scrap_submit.status==2">初审通过</div>
+                                                        <div class="form-control" v-if="scrap_submit.status==3">终审未通过</div>
+                                                        <div class="form-control" v-if="scrap_submit.status==4">终审通过</div>
                                                     </div>
                                                     <div class="col-sm-1"></div>
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label class="col-sm-3 control-label">初审人</label>
-                                                    <div class="col-sm-8">{{scrap_submit.first_acceptor}}</div>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{scrap_submit.first_acceptor_name}}</div>
+                                                    </div>
                                                     <div class="col-sm-1"></div>
                                                 </div>
                                             </div>

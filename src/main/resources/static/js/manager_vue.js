@@ -183,6 +183,11 @@ var purchase_total = new Vue({
         },
         clear_date:function () {
             this.submit_time="";
+        },
+        clear_all:function () {
+            this.submit_time="";
+            this.submit_name="";
+            this.bill_no="";
         }
     }
 })
