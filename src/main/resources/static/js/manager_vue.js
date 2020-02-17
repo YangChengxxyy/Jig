@@ -3,7 +3,9 @@ var left_panel = new Vue({
     el:"#left",
     data:{
         purchase_submit_count:0,
-        purchase_submit_is_show:1
+        purchase_submit_is_show:1,
+        scrap_submit_count:0,
+        scrap_submit_is_show:1
     },
     created:function(){
         this.get_purchase_submit_count();
@@ -17,10 +19,13 @@ var left_panel = new Vue({
 
                 },
                 success:function (res) {
-                    if(res==0){
+                    if(res.purchase_submit_count==0){
                         that.purchase_submit_is_show = 0;
+                    }else if (res.scrap_submit_count==0){
+                        that.scrap_submit_is_show = 0;
                     }
-                    that.purchase_submit_count = res;
+                    that.purchase_submit_count = res.purchase_submit_count;
+                    that.scrap_submit_count = res.scrap_submit_count;
                 }
             })
         },
@@ -156,6 +161,7 @@ var purchase_total = new Vue({
     el:"#purchaseTotal",
     data:{
         purchase_submit_count:0,
+        jig_detail_list:[],
         jig_count:0,
         submit_name:"",
         submit_time:"",
@@ -177,6 +183,7 @@ var purchase_total = new Vue({
                 },
                 success:function (res) {
                     that.purchase_submit_count = res.purchase_submit_count;
+                    that.jig_detail_list = res.jig_detail_list;
                     that.jig_count = res.jig_count;
                 }
             })

@@ -1,22 +1,15 @@
 package com.jig.controller;
 
-import com.jig.entity.DemoEntity;
-import com.jig.entity.JigDefinition;
-import com.jig.entity.PurchaseIncomeSubmit;
-import com.jig.entity.ScrapSubmit;
-import com.jig.service.JigService;
+import com.jig.entity.*;
 import com.jig.service.JigService_zhs;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.swing.*;
+import java.util.*;
 
 @RestController
 public class jigJson_zhs {
@@ -38,17 +31,20 @@ public class jigJson_zhs {
         return map;
     }
 
+    //获取经理模块下的采购审批记录
     @RequestMapping(value = "get_manager_purchase_submit_list",method = {RequestMethod.GET,RequestMethod.POST})
     public List<PurchaseIncomeSubmit> getManagerPurchaseSubmitList(@RequestParam(value = "user_id") String user_id){
         return jigService.get_manager_purchase_submit_list(user_id);
     }
 
+    //查看经理模块下的采购审批细节
     @RequestMapping(value = "get_manager_purchase_detail",method = {RequestMethod.GET,RequestMethod.POST})
     public PurchaseIncomeSubmit getManagerPurchaseDetail(@RequestParam(value = "id") String id){
         //System.out.println(jigService.get_manager_purchase_detail(id).getSubmit_name());
         return jigService.get_manager_purchase_detail(id);
     }
 
+    //经理模块下的终审审批，@RequestParam pass 相当于经过终审审批后的采购审批单的状态
     @RequestMapping(value = "manager_check_purchase_submit",method = {RequestMethod.GET,RequestMethod.POST})
     public String  managerCheckPurchase(@RequestParam(value = "id") String id,@RequestParam(value = "pass") String pass){
         int flag = jigService.manager_check_purchase_submit(id,pass);
@@ -69,6 +65,7 @@ public class jigJson_zhs {
         return map;
     }
 
+    //获取经理模块下的历史采购记录显示
     @RequestMapping(value = "get_manager_purchase_submit_list_history",method = {RequestMethod.GET,RequestMethod.POST})
     public Map<Object,Object> getManagerPurchaseSubmitListHistory(@RequestParam(value = "bill_no") String bill_no,
                                                      @RequestParam(value = "submit_name") String submit_name,
@@ -91,9 +88,13 @@ public class jigJson_zhs {
         return map;
     }
 
+    //获取经理模块的采购统计功能中的各大板块数据显示
     @RequestMapping(value = "get_manager_purchase_submit_count",method = {RequestMethod.GET,RequestMethod.POST})
-    public int getManagerPurchaseSubmitCount(){
-        return jigService.get_manager_purchase_submit_count();
+    public Map<Object, Object> getManagerPurchaseSubmitCount(){
+        Map<Object,Object> map = new HashMap<>();
+        int purchase_submit_count = jigService.get_manager_purchase_submit_count();
+        map.put("purchase_submit_count",purchase_submit_count);
+        return map;
     }
 
     //获取经理采购管理模块下的采购统计的显示数据
@@ -111,14 +112,31 @@ public class jigJson_zhs {
         }
         List<PurchaseIncomeSubmit> list = jigService.get_manager_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,"4",-1);
         int purchase_submit_count = jigService.get_manager_purchase_submit_total_count(bill_no,submit_name,start_date,end_date,"4");
+        Map<String,Integer> jig_map = new HashMap<>();
+        List<PurchaseTotalJigDetail> jig_list = new ArrayList<>();//显示采购统计中新增工夹具板块查看更多工夹具的细节
         int jig_count = 0;
 
         for(PurchaseIncomeSubmit submit : list){
+            String[] code = submit.getCode().split("\\|");
             String[] count = submit.getCount().split("\\|");
-            for(String c:count){
-                jig_count+=Integer.valueOf(c);
+            for(int i=0;i<code.length;i++){
+                if(jig_map.containsKey(code[i])){
+                    jig_map.put(code[i],jig_map.get(code[i])+Integer.valueOf(count[i]));
+                }else {
+                    jig_map.put(code[i], Integer.valueOf(count[i]));
+                }
+                jig_count+=Integer.valueOf(count[i]);
             }
         }
+        Iterator iter = jig_map.entrySet().iterator();
+        while (iter.hasNext()){
+            PurchaseTotalJigDetail pj = new PurchaseTotalJigDetail();
+            Map.Entry entry = (Map.Entry)iter.next();
+            pj.setCode(entry.getKey().toString());
+            pj.setCount(Integer.valueOf(entry.getValue().toString()));
+            jig_list.add(pj);
+        }
+        map.put("jig_detail_list",jig_list);
         map.put("jig_count",jig_count);
         map.put("purchase_submit_count",purchase_submit_count);
         return map;
