@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -31,8 +30,8 @@ import java.util.UUID;
 public class JigWeb {
     @Autowired
     private JigService jigService;
-    private static final String SCRAP_IMAGES_URL = "E:\\YC\\Documents\\IdeaProjects\\JIG\\src\\main\\resources\\static\\";
-    private static final String IMAGE_NAME = "images\\scrap_images\\SCRAP";
+    private static final String IMAGES_URL = "E:\\YC\\Documents\\IdeaProjects\\JIG\\src\\main\\resources\\static\\";
+    private static final String SCRAP_IMAGE_NAME = "images\\scrap_images\\SCRAP";
 
     private void outputFile(HttpServletResponse response, String fileName, List<?> list) throws Exception {
         if (list.size() == 0) {
@@ -57,7 +56,7 @@ public class JigWeb {
         String nowTime = LocalDateTime.now().format(fmt);
         assert fileName != null;
         String after = fileName.substring(fileName.lastIndexOf('.'));
-        return IMAGE_NAME + "-" + nowTime + "-" + uuidString + after;
+        return SCRAP_IMAGE_NAME + "-" + nowTime + "-" + uuidString + after;
     }
     @RequestMapping(value = "show_demo", method = {RequestMethod.POST, RequestMethod.GET})
     public String showDemo(Model model) {
@@ -142,7 +141,7 @@ public class JigWeb {
             String pathName = getPathName(fileName);
             System.out.println(pathName);//pathName存入数据库
             FileUtils.writeByteArrayToFile
-                    (new File(SCRAP_IMAGES_URL + pathName), file.getBytes());
+                    (new File(IMAGES_URL + pathName), file.getBytes());
             jigService.highSubmitScrap(code,seq_id,submit_id,scrap_reason,pathName);
         } catch (IOException e) {
             e.printStackTrace();
