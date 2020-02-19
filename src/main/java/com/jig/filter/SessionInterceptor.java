@@ -11,7 +11,7 @@ public class SessionInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
-        System.out.println("url=" + request.getRequestURI());
+//        System.out.println("url=" + request.getRequestURI());
         //验证session是否存在
         Object obj = request.getSession().getAttribute("user");
         if (obj == null) {
@@ -19,14 +19,14 @@ public class SessionInterceptor implements HandlerInterceptor {
             String checkKey = request.getParameter("key") == null ? "" : request.getParameter("key");
             if (!checkKey.equals(key)) {
                 response.sendRedirect("/show_login");
-                System.out.println("请先登录！");
+//                System.out.println("请先登录！");
                 return false;
             } else {
-                System.out.println("小程序！");
+//                System.out.println("小程序！");
                 return true;
             }
         }
-        System.out.println("WEB！");
+//        System.out.println("WEB！");
         return true;
     }
 
