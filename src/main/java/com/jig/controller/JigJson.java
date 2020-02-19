@@ -7,6 +7,7 @@ import com.jig.utils.QrCodeUtils;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,9 +27,11 @@ import java.util.Base64.Encoder;
 public class JigJson {
     @Autowired
     private JigService jigService;
-    public static final String RESOURCE_URL = "E:\\YC\\Documents\\IdeaProjects\\JIG\\src\\main\\resources\\static\\";
-    public static final String SCRAP_IMAGE_NAME = "images\\scrap_images\\";
-    public static final String REPAIR_IMAGE_NAME = "images\\repair_images\\";
+    @Value("${file.resource-url}")
+    public String RESOURCE_URL;
+
+    public static final String SCRAP_IMAGE_NAME = "images/scrap_images/";
+    public static final String REPAIR_IMAGE_NAME = "images/repair_images/";
     public static final String SCRAP = "SCRAP";
     public static final String REPAIR = "REPAIR";
     public static Map<String, PhoneUpload> phoneUploadMap = new HashMap<>();
