@@ -109,10 +109,23 @@
                     $('#navbar_right').attr('class', 'col-lg-9 column');
                     navis_side = 0;
                 }
+            });
+            $(function (){
+                $("[data-toggle='popover']").popover({
+
+                });
             })
         })
     </script>
-    <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css">
+    <style>
+        .my-form-alert{
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-default navbar-static-top" role="navigation">
@@ -993,8 +1006,7 @@
                                                     <div class="form-group">
                                                         <label class="col-sm-3 control-label">工夹具代码</label>
                                                         <div class="col-sm-8">
-                                                            <select type="text" class="form-control"
-                                                                    v-model="submit_code"
+                                                            <select  class="form-control" v-model="submit_code" @change="getSeqId"
                                                                     :style="{'borderColor': submit_code == ''? '#c9302c':'#ccc'}">
                                                                 <option v-for="item in code_list" :value="item">
                                                                     {{item}}
@@ -1005,10 +1017,9 @@
                                                     <div class="form-group">
                                                         <label class="col-sm-3 control-label">工夹具序列号</label>
                                                         <div class="col-sm-8">
-                                                            <input type="number" class="form-control"
-                                                                   v-model="submit_seq_id"
-                                                                   :style="{'borderColor': submit_seq_id == ''? '#c9302c':'#ccc'}"
-                                                                   min="1" max="10">
+                                                            <select v-model="submit_seq_id" class="form-control" :style="{'borderColor': submit_seq_id == ''? '#c9302c':'#ccc'}">
+                                                                <option v-for="item in seq_list" :value="item">{{item}}</option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -1022,12 +1033,37 @@
                                                     <div class="form-group">
                                                         <label class="col-sm-3 control-label">故障照片</label>
                                                         <div class="col-sm-8">
+                                                            <div class="input-group">
                                                             <div class="form-control"
                                                                  :style="{'borderColor': submit_scrap_photo == '点击上传图片'? '#c9302c':'#ccc'}">
                                                                 {{submit_scrap_photo}}
-                                                                <input type="file" class="form-control" id="scrap_photo"
-                                                                       style="opacity: 0;position: absolute;top: 0px"
+                                                                <input type="file" class="form-control" id="scrap_photo" v-if="phone_status == -1"
+                                                                       style="opacity: 0;position: absolute;top: 0px;left: 0px"
                                                                        @change="file" name="file" accept="image/jpeg,image/jpg,image/png">
+                                                            </div>
+                                                                <span class="input-group-addon" data-trigger="hover"
+                                                                      data-container="body" data-toggle="popover" data-placement="top"
+                                                                      data-content="点击扫码上传,双击取消二维码" @click="showQRCode" @dblclick="cancelQR">
+                                                                    <span class="glyphicon glyphicon-qrcode"></span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" v-if="phone_status != -1">
+                                                        <div class="col-sm-8 col-sm-push-3">
+                                                            <img :src="QR_url" class="img-thumbnail">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" v-if="phone_status != -1">
+                                                        <div class="col-sm-8 col-sm-push-3">
+                                                            <div class="control-label" v-if="phone_status == 1" style="text-align: center">
+                                                                <span class="glyphicon glyphicon-ok-circle text-success"></span>扫描成功!
+                                                            </div>
+                                                            <div class="control-label" v-else-if="phone_status == 2" style="text-align: center">
+                                                                <span class="glyphicon glyphicon-ok-circle text-success"></span>上传成功！
+                                                            </div>
+                                                            <div class="control-label" v-else-if="phone_status == 3" style="text-align: center">
+                                                                <span class="glyphicon glyphicon-remove-circle text-danger"></span>二维码过期！
                                                             </div>
                                                         </div>
                                                     </div>

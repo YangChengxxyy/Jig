@@ -426,6 +426,9 @@
             and ss.submit_time between #{start_date} and #{end_date}
         </if>
     </select>
+    <select id="codeGetSeqId" resultType="java.lang.String">
+        select seq_id from jig_entity where code = #{code}
+    </select>
     <delete id="highDeleteScrap">
         delete from scrap_submit where id = #{id}
     </delete>

@@ -16,7 +16,8 @@ public class SessionConfigurer implements WebMvcConfigurer {
                 .excludePathPatterns("/css/**")
                 .excludePathPatterns("/js/**")
                 .excludePathPatterns("/font/**")
-                .excludePathPatterns("/images/**");
+                .excludePathPatterns("/images/**")
+                .excludePathPatterns("/phone_upload_success");
     }
 
     @Bean

@@ -338,4 +338,5 @@ public interface JigMapper {
 
     int highDeleteScrap(@Param("id") String id);
 
+    List<String> codeGetSeqId(@Param("code") String code);
 }

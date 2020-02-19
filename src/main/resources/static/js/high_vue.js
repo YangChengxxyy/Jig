@@ -1,6 +1,7 @@
 //添加采购单
 let production_line_list = [];
 let code_list = [];
+let id = $("#id").val();
 $.ajax("get_production_line_list", {
     async: false,
     success: function (res) {
@@ -414,8 +415,14 @@ const myscrap = new Vue({
         code_list: code_list,
         submit_code: "",
         submit_seq_id: "",
+        seq_list: [],
         submit_scrap_reason: "",
-        submit_scrap_photo: "点击上传图片"
+        submit_scrap_photo: "点击上传图片",
+        isQRCode: false,
+        QR_url: "",
+        interval: "",
+        phone_status: -1,
+        phone_token: ""
     },
     created: function () {
         this.getData();
@@ -425,7 +432,7 @@ const myscrap = new Vue({
             const that = this;
             $.ajax("high_get_scrap", {
                 data: {
-                    submit_id: $("#id").val(),
+                    submit_id: id,
                     page_number: this.now_page_number
                 },
                 success: function (res) {
@@ -433,6 +440,16 @@ const myscrap = new Vue({
                     that.max_page_number = res['max'];
                 }
             });
+        },
+        getSeqId: function () {
+            let that = this;
+            $.ajax("code_get_seq_id", {
+                data: {
+                    code: this.submit_code
+                }, success: function (res) {
+                    that.seq_list = res;
+                }
+            })
         },
         scrap_detail: function (index) {
             this.script = this.scrap_list[index];
@@ -458,37 +475,121 @@ const myscrap = new Vue({
             }
         },
         submit_scrap() {
-            const formData = new FormData();
-            formData.append("file", $("#scrap_photo")[0].files[0]);
-            formData.append("submit_id", $("#id").val());
-            formData.append("code", this.submit_code);
-            formData.append("seq_id", this.submit_seq_id);
-            formData.append("scrap_reason", this.submit_scrap_reason);
-            let that = this;
-            $.ajax("high_submit_scrap", {
-                type: "post",
-                processData: false,
-                contentType: false,
-                data: formData,
-                success: function (res) {
-                    if (res) {
-                        alert("提交成功！");
-                        that.submit_code = "";
-                        that.submit_seq_id = "";
-                        that.submit_scrap_reason = "";
-                        $("#scrap_photo")[0].files = null;
-                        that.submit_scrap_photo = "点击上传图片";
-                        that.now_page_number = 1;
-                        that.getData();
-                        $("#submit_repair").modal("hide");
-                    } else {
-                        alert("服务器错误！");
-                    }
+            const a = $("#submit_repair [style*='border-color: rgb(201, 48, 44);']");
+            if (a.length > 0) {
+                alert("表单填写不完全");
+                $("#submit_repair [style*='border-color: rgb(201, 48, 44);']:eq(0)").focus();
+                a.shake(2, 10, 200);
+                return false;
+            } else {
+                if (this.phone_status === -1) {
+                    const formData = new FormData();
+                    formData.append("file", $("#scrap_photo")[0].files[0]);
+                    formData.append("submit_id", id);
+                    formData.append("code", this.submit_code);
+                    formData.append("seq_id", this.submit_seq_id);
+                    formData.append("scrap_reason", this.submit_scrap_reason);
+                    let that = this;
+                    $.ajax("high_submit_scrap", {
+                        type: "post",
+                        processData: false,
+                        contentType: false,
+                        data: formData,
+                        success: function (res) {
+                            if (res) {
+                                alert("提交成功！");
+                                that.submit_code = "";
+                                that.submit_seq_id = "";
+                                that.submit_scrap_reason = "";
+                                $("#scrap_photo").files = null;
+                                that.submit_scrap_photo = "点击上传图片";
+                                that.now_page_number = 1;
+                                that.getData();
+                                $("#submit_repair").modal("hide");
+                            } else {
+                                alert("服务器错误！");
+                            }
+                        }
+                    })
+                } else {
+                    let that = this;
+                    $.ajax("high_phone_submit_scrap", {
+                        data: {
+                            submit_id: id,
+                            code: that.submit_code,
+                            seq_id: that.submit_seq_id,
+                            scrap_reason: that.submit_scrap_reason,
+                            token: that.phone_token
+                        },
+                        success: function (res) {
+                            if (res) {
+                                alert("提交成功！");
+                                that.submit_code = "";
+                                that.submit_seq_id = "";
+                                that.submit_scrap_reason = "";
+                                $("#scrap_photo").files = null;
+                                that.submit_scrap_photo = "点击上传图片";
+                                that.now_page_number = 1;
+                                that.phone_status = -1;
+                                that.getData();
+                                $("#submit_repair").modal("hide");
+                            } else {
+                                alert("服务器错误！");
+                            }
+                        }
+                    })
                 }
-            })
+            }
         },
         file: function () {
             this.submit_scrap_photo = $("#scrap_photo")[0].files[0].name;
+        },
+        showQRCode: function () {
+            let that = this;
+            clearInterval(this.interval);
+            this.QR_url = "/get_phone_qr_code?type=scrap&submit_id=" + id + "&id=" + Math.random();
+            var session;
+            let count = 0;
+            that.phone_status = 0;
+            console.log("scrap-" + id);
+            setTimeout(() => {
+                $.ajax("get_phone_upload_token", {
+                    data: {
+                        token: "scrap-" + id
+                    },
+                    async: false,
+                    success: function (res) {
+                        that.phone_token = res;
+                    }
+                });
+                that.interval = setInterval(() => {
+                    $.ajax("get_phone_upload_map", {
+                        async: false,
+                        data: {
+                            token: that.phone_token
+                        },
+                        success: function (res) {
+                            session = res;
+                            if (res.scan && that.phone_status !== 1) {
+                                that.phone_status = 1;
+                            }
+                            if (res.hadFile && that.phone_status !== 2) {
+                                that.phone_status = 2;
+                                that.submit_scrap_photo = session.uploadFileName;
+                                clearInterval(that.interval);
+                            }
+                        }
+                    });
+                    count++;
+                    if (count === 242) {//2分钟
+                        that.phone_status = 3;
+                        clearInterval(that.interval);
+                    }
+                }, 500);
+            }, 1000)
+        },
+        cancelQR:function () {
+            this.phone_status = -1;
         }
     }
 });
@@ -514,7 +615,7 @@ const historyMyscrap = new Vue({
             }
             $.ajax("high_search_scrap_history", {
                 data: {
-                    submit_id: $("#id").val(),
+                    submit_id: id,
                     code: this.code,
                     seq_id: this.seq_id,
                     scrap_reason: this.scrap_reason,
@@ -559,14 +660,14 @@ const historyMyscrap = new Vue({
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            return "high_download_one_scrap_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_id=" + $("#id").val() + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls";
+            return "high_download_one_scrap_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_id=" + id + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls";
         },
         allPageUrl: function () {
             let splits = this.date_range.split(" - ");
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            return "high_download_all_scrap_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_id=" + $("#id").val() + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&file_name=page-all.xls";
+            return "high_download_all_scrap_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_id=" + id + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&file_name=page-all.xls";
         }
     }
 });
@@ -604,8 +705,8 @@ const seqInfo = new Vue({
                     if (res.data.length === 0) {
                         alert("没有结果！")
                     } else {
-                        that.jig_list = res.data;
-                        that.max_page_number = res.max;
+                        that.jig_list = res['data'];
+                        that.max_page_number = res['max'];
                     }
                 }
             })

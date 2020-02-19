@@ -165,4 +165,7 @@ public class JigService {
         return jigMapper.highDeleteScrap(id) > 0;
     }
 
+    public List<String> codeGetSeqId(String code) {
+        return jigMapper.codeGetSeqId(code);
+    }
 }

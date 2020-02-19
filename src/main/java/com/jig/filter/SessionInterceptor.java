@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class SessionInterceptor implements HandlerInterceptor {
-    private static final String key = "wx6e26d78ff8614da2";
+    public static final String key = "wx6e26d78ff8614da2";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {

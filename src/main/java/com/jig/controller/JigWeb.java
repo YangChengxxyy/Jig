@@ -3,7 +3,6 @@ package com.jig.controller;
 import com.jig.entity.*;
 import com.jig.service.JigService;
 import com.jig.utils.PoiUtil;
-import org.apache.commons.io.FileUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,27 +10,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Controller
 public class JigWeb {
     @Autowired
     private JigService jigService;
-    public static final String RESOURCE_URL = "E:\\YC\\Documents\\IdeaProjects\\JIG\\src\\main\\resources\\static\\";
-    public static final String SCRAP_IMAGE_NAME = "images\\scrap_images\\SCRAP";
+
 
     private void outputFile(HttpServletResponse response, String fileName, List<?> list) throws Exception {
         if (list.size() == 0) {
@@ -50,15 +42,6 @@ public class JigWeb {
         }
     }
 
-    private String getPathName(String fileName) {
-        UUID uuid = UUID.randomUUID();
-        String uuidString = uuid.toString();
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");//设置日期格式
-        String nowTime = LocalDateTime.now().format(fmt);
-        assert fileName != null;
-        String after = fileName.substring(fileName.lastIndexOf('.'));
-        return SCRAP_IMAGE_NAME + "-" + nowTime + "-" + uuidString + after;
-    }
 
     @RequestMapping(value = "show_demo", method = {RequestMethod.POST, RequestMethod.GET})
     public String showDemo(Model model) {
@@ -133,24 +116,6 @@ public class JigWeb {
         outputFile(response, file_name, list);
     }
 
-    @RequestMapping(value = "high_submit_scrap", method = RequestMethod.POST)
-    public @ResponseBody
-    boolean highSubmitRepair(HttpServletRequest request, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "scrap_reason") String scrap_reason, @RequestParam(value = "file") MultipartFile file) {
-        //TODO:文件上传功能
-        String fileName = file.getOriginalFilename();
-        try {
-            assert fileName != null;
-            String pathName = getPathName(fileName);
-            System.out.println(pathName);//pathName存入数据库
-            FileUtils.writeByteArrayToFile
-                    (new File(RESOURCE_URL + pathName), file.getBytes());
-            jigService.highSubmitScrap(code, seq_id, submit_id, scrap_reason, pathName);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
 
     @RequestMapping("high_download_one_repair_history")
     public void highDownloadOneRepairHistory(HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number, @RequestParam(value = "file_name") String file_name) throws Exception {
@@ -183,5 +148,17 @@ public class JigWeb {
                                             @RequestParam(value = "end_date") String end_date, @RequestParam(value = "file_name") String file_name) throws Exception {
         List<ScrapHistory> list = jigService.highSearchAllScrapHistory(code, seq_id, submit_id, scrap_reason, status, start_date, end_date);
         outputFile(response, file_name, list);
+    }
+
+    @RequestMapping("show_phone_upload_file")
+    public String showPhoneUploadFile(@RequestParam(value = "token") String token, Model model) {
+        model.addAttribute("token", token);
+        JigJson.phoneUploadMap.get(token).setScan(true);
+        return "phone_upload_file";
+    }
+
+    @RequestMapping("phone_upload_success")
+    public String phoneUploadSuccess() {
+        return "phone_upload_success";
     }
 }

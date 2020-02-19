@@ -1,27 +1,37 @@
 package com.jig.controller;
 
-import com.jig.entity.DemoEntity;
-import com.jig.entity.JigDefinition;
-import com.jig.entity.Position;
-import com.jig.entity.ProductionLine;
+import com.jig.entity.*;
+import com.jig.filter.SessionInterceptor;
 import com.jig.service.JigService;
+import com.jig.utils.QrCodeUtils;
+import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.Base64.Encoder;
 
 @RestController
 public class JigJson {
     @Autowired
     private JigService jigService;
+    public static final String RESOURCE_URL = "E:\\YC\\Documents\\IdeaProjects\\JIG\\src\\main\\resources\\static\\";
+    public static final String SCRAP_IMAGE_NAME = "images\\scrap_images\\";
+    public static final String REPAIR_IMAGE_NAME = "images\\repair_images\\";
+    public static final String SCRAP = "SCRAP";
+    public static final String REPAIR = "REPAIR";
+    public static Map<String, PhoneUpload> phoneUploadMap = new HashMap<>();
 
     @NotNull
     private Map<String, Object> getStringObjectMap(List<?> data, int max) {
@@ -29,6 +39,16 @@ public class JigJson {
         map.put("data", data);
         map.put("max", max);
         return map;
+    }
+
+    private String getScrapPathName(String fileName) {
+        UUID uuid = UUID.randomUUID();
+        String uuidString = uuid.toString();
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");//设置日期格式
+        String nowTime = LocalDateTime.now().format(fmt);
+        assert fileName != null;
+        String after = fileName.substring(fileName.lastIndexOf('.'));
+        return SCRAP_IMAGE_NAME + SCRAP + "-" + nowTime + "-" + uuidString + after;
     }
 
     @RequestMapping(value = "get_demo_list", method = {RequestMethod.POST, RequestMethod.GET})
@@ -299,7 +319,7 @@ public class JigJson {
      *
      * @param code        工夹具代码
      * @param seq_id      工夹具序列号
-     * @param submit_id 申请人id
+     * @param submit_id   申请人id
      * @param status      状态
      * @param start_date  最早日期
      * @param end_date    最晚日期
@@ -315,13 +335,164 @@ public class JigJson {
                                                       @RequestParam(value = "start_date") String start_date,
                                                       @RequestParam(value = "end_date") String end_date,
                                                       @RequestParam(value = "page_number") int page_number) {
-        return getStringObjectMap(jigService.highSearchScrapHistory(code, seq_id, submit_id,scrap_reason ,status, start_date, end_date, page_number)
-                , jigService.highSearchScrapHistoryPage(code, seq_id, submit_id,scrap_reason, status, start_date, end_date));
+        return getStringObjectMap(jigService.highSearchScrapHistory(code, seq_id, submit_id, scrap_reason, status, start_date, end_date, page_number)
+                , jigService.highSearchScrapHistoryPage(code, seq_id, submit_id, scrap_reason, status, start_date, end_date));
     }
+
+    @RequestMapping(value = "high_submit_scrap", method = RequestMethod.POST)
+    public boolean highSubmitRepair(@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "scrap_reason") String scrap_reason, @RequestParam(value = "file") MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        try {
+            assert fileName != null;
+            String pathName = getScrapPathName(fileName);
+            System.out.println(pathName);//pathName存入数据库
+            FileUtils.writeByteArrayToFile
+                    (new File(RESOURCE_URL + pathName), file.getBytes());
+            System.out.println(RESOURCE_URL + pathName);
+            jigService.highSubmitScrap(code, seq_id, submit_id, scrap_reason, pathName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @RequestMapping("high_phone_submit_scrap")
+    public boolean high_phone_submit_scrap(@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "scrap_reason") String scrap_reason, @RequestParam(value = "token") String token, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        try {
+            session = request.getSession();
+            session.removeAttribute("scrap-" + submit_id);
+            PhoneUpload phoneUpload = phoneUploadMap.get(token);
+            String pathName = phoneUpload.getFileName();
+            pathName = SCRAP_IMAGE_NAME + pathName + phoneUpload.getUploadFileName().substring(phoneUpload.getUploadFileName().lastIndexOf('.'));
+            jigService.highSubmitScrap(code, seq_id, submit_id, scrap_reason, pathName);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
     @RequestMapping("high_delete_scrap")
-    public boolean highDeleteScrap(@RequestParam(value = "id")String id,@RequestParam(value = "scrap_photo_url")String scrap_photo_url){
-        String fileName = JigWeb.RESOURCE_URL + scrap_photo_url;
+    public boolean highDeleteScrap(@RequestParam(value = "id") String id, @RequestParam(value = "scrap_photo_url") String scrap_photo_url) {
+        String fileName = RESOURCE_URL + scrap_photo_url;
         File file = new File(fileName);
         return jigService.highDeleteScrap(id) && file.delete();
+    }
+
+    @RequestMapping("code_get_seq_id")
+    public List<String> codeGetSeqId(@RequestParam(value = "code") String code) {
+        return jigService.codeGetSeqId(code);
+    }
+
+    /**
+     * base64传图片 测试
+     *
+     * @return base64
+     * @throws IOException 异常
+     */
+    @RequestMapping(value = "get_images")
+    public Map<String, Object> getImage() throws IOException {
+        File file = new File("E:\\YC\\Documents\\IdeaProjects\\JIG\\src\\main\\resources\\static\\images\\scrap_images\\SCRAP-20200217144611867-695b6dcb-f5cb-453d-a7e0-66e70fb2aecc.JPG");
+        FileInputStream inputStream = new FileInputStream(file);
+        byte[] bytes = new byte[inputStream.available()];
+        inputStream.read(bytes, 0, inputStream.available());
+        inputStream.close();
+        Encoder encoder = Base64.getEncoder();
+        String results = encoder.encodeToString(bytes);
+        Map<String, Object> map = new HashMap<>();
+        map.put("data", results);
+        return map;
+    }
+
+    /*
+        测试
+     */
+    @RequestMapping("generate_qr_code")
+    public void generateQrCode(HttpServletRequest request, HttpServletResponse response) {
+        StringBuffer url = request.getRequestURL();
+        // 域名
+        String tempContextUrl = url.delete(url.length() - request.getRequestURI().length(), url.length()).append("/").toString();
+        // 再加上请求链接
+        String requestUrl = tempContextUrl + "test_high?key=wx6e26d78ff8614da2";
+        System.out.println(requestUrl);
+        try {
+            OutputStream os = response.getOutputStream();
+            QrCodeUtils.encode(requestUrl, os);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping("get_phone_qr_code")
+    public void getPhoneQrCode(@RequestParam(value = "type") String type, @RequestParam(value = "submit_id") String submit_id, HttpServletRequest request, HttpServletResponse response) {
+        //设置session
+        HttpSession session = request.getSession();
+        if (session.getAttribute(type + "-" + submit_id) != null) {
+            PhoneUpload phoneUpload = phoneUploadMap.get(session.getAttribute(type + "-" + submit_id));
+            if (phoneUpload.isHadFile()) {
+                String fileName = phoneUpload.getFileName();
+                fileName += phoneUpload.getUploadFileName().substring(phoneUpload.getUploadFileName().lastIndexOf("."));
+                File file = new File(RESOURCE_URL + "images\\" + type.toUpperCase() + "_images\\" + fileName);
+                if (file.exists()) {
+                    file.delete();
+                }
+                phoneUploadMap.remove(session.getAttribute(type + "-" + submit_id));
+            }
+            session.removeAttribute(type + '-' + submit_id);
+        }
+        UUID uuid = UUID.randomUUID();
+        UUID uuid1 = UUID.randomUUID();
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");//设置日期格式
+        String nowTime = LocalDateTime.now().format(fmt);
+        String fileName = type.toUpperCase() + "-" + nowTime + "-" + uuid1.toString();
+        String token = uuid.toString();
+        PhoneUpload phoneUpload = new PhoneUpload();
+        phoneUpload.setFileName(fileName);
+        phoneUpload.setType(type);
+        phoneUploadMap.put(token, phoneUpload);
+        session.setAttribute(type + "-" + submit_id, token);
+        //生成二维码
+        //域名
+        StringBuffer url = request.getRequestURL();
+        // 再加上请求链接
+        String tempContextUrl = url.delete(url.length() - request.getRequestURI().length(), url.length()).append("/").toString();
+        String requestUrl = tempContextUrl + "show_phone_upload_file?key=" + SessionInterceptor.key + "&token=" + token;
+        System.out.println(requestUrl);
+        try {
+            OutputStream os = response.getOutputStream();
+            QrCodeUtils.encode(requestUrl, os);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping(value = "phone_upload_file", method = RequestMethod.POST)
+    public void phoneUploadFile(@RequestParam(value = "file") MultipartFile file, @RequestParam(value = "token") String token, HttpServletRequest request) {
+        assert file.getOriginalFilename() != null;
+        String after = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+        PhoneUpload phoneUpload = phoneUploadMap.get(token);
+        String type = phoneUpload.getType();
+        String fileName = phoneUpload.getFileName();
+        phoneUpload.setUploadFileName(file.getOriginalFilename());
+        phoneUpload.setHadFile(true);
+        fileName += after;
+        try {
+            FileUtils.writeByteArrayToFile
+                    (new File(RESOURCE_URL + "images\\" + type.toUpperCase() + "_images\\" + fileName), file.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping("get_phone_upload_token")
+    public String getToken(@RequestParam(value = "token") String token, HttpServletRequest request) {
+        System.out.println("token:" + token);
+        return request.getSession().getAttribute(token).toString();
+    }
+
+    @RequestMapping("get_phone_upload_map")
+    public PhoneUpload getPhoneUploadMap(@RequestParam(value = "token") String token) {
+        return phoneUploadMap.get(token);
     }
 }
