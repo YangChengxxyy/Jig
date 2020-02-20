@@ -32,7 +32,7 @@ public class JigJson {
     @Autowired
     private JigService jigService;
     @Value("${file.resource-url}")
-    public String RESOURCE_URL;
+    public static String RESOURCE_URL;
 
     public static final String SCRAP_IMAGE_NAME = "images/scrap_images/";
     public static final String REPAIR_IMAGE_NAME = "images/repair_images/";

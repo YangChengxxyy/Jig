@@ -1,5 +1,6 @@
 package com.jig.filter;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -7,7 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class SessionInterceptor implements HandlerInterceptor {
-    public static final String key = "wx6e26d78ff8614da2";
+    @Value("${h5.key}")
+    public static String key;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
