@@ -143,4 +143,7 @@
             </if>
         </where>
     </select>
+    <select id="get_manager_store_jig_list" resultType="com.jig.entity.JigEntity">
+        select *,count(code) as 'count' from jig_position group by code
+    </select>
 </mapper>

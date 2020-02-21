@@ -1,8 +1,6 @@
 package com.jig.mapper;
 
-import com.jig.entity.JigDefinition;
-import com.jig.entity.PurchaseIncomeSubmit;
-import com.jig.entity.ScrapSubmit;
+import com.jig.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -56,6 +54,7 @@ public interface JigMapper_zhs {
      * @return
      */
     int get_manager_purchase_submit_count();
+
     int get_manager_scrap_submit_count();
     /**
      *
@@ -89,5 +88,11 @@ public interface JigMapper_zhs {
                                                     @Param("end_date") String end_date,
                                                     @Param("status") String status,
                                                     @Param("scrap_reason") String scrap_reason);
+
+    /**经理模式,获取仓库工夹具余量
+     *
+     * @return 工夹具实体数组
+     */
+    List<JigEntity> get_manager_store_jig_list();
 
 }

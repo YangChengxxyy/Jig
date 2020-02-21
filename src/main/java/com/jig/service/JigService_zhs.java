@@ -1,14 +1,11 @@
 package com.jig.service;
 
-import com.jig.entity.JigDefinition;
-import com.jig.entity.PurchaseIncomeSubmit;
-import com.jig.entity.ScrapSubmit;
+import com.jig.entity.*;
 import com.jig.mapper.JigMapper_zhs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class JigService_zhs {
@@ -59,8 +56,14 @@ public class JigService_zhs {
     }
     public int get_manager_scrap_submit_count(){return jigMapper.get_manager_scrap_submit_count();}
 
+    //获取经理模式下采购统计模块下的新增采购单数量
     public int get_manager_purchase_submit_total_count(String bill_no,String submit_name,String start_date,String end_date,String status){
         return jigMapper.get_manager_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status);
+    }
+
+    //经理模式，仓库工夹具余量; 返回类型-->
+    public List<JigEntity> get_manager_store_jig_list(){
+        return jigMapper.get_manager_store_jig_list();
     }
 
     //获取经理模块下的报废审批记录

@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.swing.*;
 import java.util.*;
 
 @RestController
@@ -123,8 +122,11 @@ public class jigJson_zhs {
         }
         List<PurchaseIncomeSubmit> list = jigService.get_manager_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,"4",-1);
         int purchase_submit_count = jigService.get_manager_purchase_submit_total_count(bill_no,submit_name,start_date,end_date,"4");
+        List<JigEntity> jig_entity_list = jigService.get_manager_store_jig_list();
+
         Map<String,Integer> jig_map = new HashMap<>();
         List<PurchaseTotalJigDetail> jig_list = new ArrayList<>();//显示采购统计中新增工夹具板块查看更多工夹具的细节
+        List<PurchaseTotalJigDetail> store_jig_list = new ArrayList<>();
         int jig_count = 0;
 
         for(PurchaseIncomeSubmit submit : list){
@@ -149,10 +151,17 @@ public class jigJson_zhs {
         }
         List<String> jig_code_list = new ArrayList<>();
         List<Integer> jig_count_list = new ArrayList<>();
+        List<Integer> store_jig_count_list = new ArrayList<>();
         for(PurchaseTotalJigDetail p :jig_list){
             jig_code_list.add(p.getCode());
             jig_count_list.add(p.getCount());
+            for(JigEntity j:jig_entity_list){//算法可优化
+                if(p.getCode().equals(j.getCode())){
+                    store_jig_count_list.add(j.getCount());
+                }
+            }
         }
+        map.put("echart_store_jig_count_list",store_jig_count_list);
         map.put("echart_jig_code_list",jig_code_list);
         map.put("echart_jig_count_list",jig_count_list);
         map.put("jig_detail_list",jig_list);

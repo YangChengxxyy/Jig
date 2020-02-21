@@ -182,14 +182,15 @@ var purchase_total = new Vue({
         bill_no:"",
         echart_jig_code_list:[],
         echart_jig_count_list:[],
+        echart_store_jig_count_list:[],
         myChart:'',
-        option:{
+        option_new_jig:{
             title: {
                 text: '新增工夹具'
             },
             tooltip: {},
             legend: {
-                data:['新增工夹具数量']
+                data:['新增工夹具数量','库存工夹具数量']
             },
             xAxis: {
                 data:[]
@@ -197,6 +198,10 @@ var purchase_total = new Vue({
             yAxis: {},
             series: [{
                 name: '新增工夹具数量',
+                type: 'bar',
+                data: []
+            },{
+                name: '库存工夹具数量',
                 type: 'bar',
                 data: []
             }]
@@ -207,7 +212,7 @@ var purchase_total = new Vue({
     },
     mounted:function(){
         this.myChart = echarts.init(document.getElementById('echart_total_jig'));
-        this.myChart.setOption(this.option);
+        this.myChart.setOption(this.option_new_jig);
     },
     methods:{
         getData:function () {
@@ -226,6 +231,7 @@ var purchase_total = new Vue({
                     that.jig_count = res.jig_count;
                     that.echart_jig_code_list = res.echart_jig_code_list;
                     that.echart_jig_count_list = res.echart_jig_count_list;
+                    that.echart_store_jig_count_list = res.echart_store_jig_count_list;
                 }
             })
         },
@@ -238,8 +244,9 @@ var purchase_total = new Vue({
             this.bill_no="";
         },
         change:function(){
-            var temp = this.option;
-            temp.series[0].data=this.echart_jig_count_list;
+            var temp = this.option_new_jig;
+            temp.series[0].data = this.echart_jig_count_list;
+            temp.series[1].data = this.echart_store_jig_count_list;
             temp.xAxis.data = this.echart_jig_code_list;
             this.myChart.setOption(temp);
         }
