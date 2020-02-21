@@ -1,3 +1,4 @@
+
 //左侧菜单显示未读审批
 var left_panel = new Vue({
     el:"#left",
@@ -8,20 +9,21 @@ var left_panel = new Vue({
         scrap_submit_is_show:1
     },
     created:function(){
-        this.get_purchase_submit_count();
+        this.get_manager_left_message_submit_count();
     },
     methods:{
-        get_purchase_submit_count:function () {
+        get_manager_left_message_submit_count:function () {
             const that = this;
             $.ajax({
-                url:"get_manager_purchase_submit_count",
+                url:"get_manager_left_message_submit_count",
                 data:{
 
                 },
                 success:function (res) {
                     if(res.purchase_submit_count==0){
                         that.purchase_submit_is_show = 0;
-                    }else if (res.scrap_submit_count==0){
+                    }
+                    if (res.scrap_submit_count==0){
                         that.scrap_submit_is_show = 0;
                     }
                     that.purchase_submit_count = res.purchase_submit_count;
@@ -31,6 +33,9 @@ var left_panel = new Vue({
         },
         hide_purchase_submit_message(){
             this.purchase_submit_is_show = 0;
+        },
+        hide_scrap_submit_message(){
+            this.scrap_submit_is_show = 0;
         }
     }
 })
@@ -61,11 +66,12 @@ var purchase_check = new Vue({
             $.ajax({
                 url:"get_manager_purchase_submit_list",
                 data: {
-                    now_page_number:this.now_page_number,
+                    page_number:this.now_page_number,
                     user_id:"111111"
                 },
                 success:function (res) {
-                    that.purchase_submit_list = res;
+                    that.purchase_submit_list = res.data;
+                    that.max_page_number = res.max;
                 }
             })
         },
@@ -153,7 +159,15 @@ var purchase_submit_history = new Vue({
             this.submit_name = "";
             this.submit_time = "";
             this.status = "";
-        }
+        },
+        /*timer(){
+            return setTimeout(()=>(this.getData(),5000));
+        }*/
+    },
+    watch:{
+        /*purchase_submit_list(){
+            this.timer();
+        }*/
     }
 })
 //采购统计显示
@@ -165,10 +179,35 @@ var purchase_total = new Vue({
         jig_count:0,
         submit_name:"",
         submit_time:"",
-        bill_no:""
+        bill_no:"",
+        echart_jig_code_list:[],
+        echart_jig_count_list:[],
+        myChart:'',
+        option:{
+            title: {
+                text: '新增工夹具'
+            },
+            tooltip: {},
+            legend: {
+                data:['新增工夹具数量']
+            },
+            xAxis: {
+                data:[]
+            },
+            yAxis: {},
+            series: [{
+                name: '新增工夹具数量',
+                type: 'bar',
+                data: []
+            }]
+        }
     },
     created:function () {
         this.getData();
+    },
+    mounted:function(){
+        this.myChart = echarts.init(document.getElementById('echart_total_jig'));
+        this.myChart.setOption(this.option);
     },
     methods:{
         getData:function () {
@@ -185,6 +224,8 @@ var purchase_total = new Vue({
                     that.purchase_submit_count = res.purchase_submit_count;
                     that.jig_detail_list = res.jig_detail_list;
                     that.jig_count = res.jig_count;
+                    that.echart_jig_code_list = res.echart_jig_code_list;
+                    that.echart_jig_count_list = res.echart_jig_count_list;
                 }
             })
         },
@@ -195,6 +236,12 @@ var purchase_total = new Vue({
             this.submit_time="";
             this.submit_name="";
             this.bill_no="";
+        },
+        change:function(){
+            var temp = this.option;
+            temp.series[0].data=this.echart_jig_count_list;
+            temp.xAxis.data = this.echart_jig_code_list;
+            this.myChart.setOption(temp);
         }
     }
 })

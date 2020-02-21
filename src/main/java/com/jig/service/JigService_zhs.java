@@ -18,9 +18,14 @@ public class JigService_zhs {
     public int addShoplist(String submit_id, String bill_no, String production_line_id, String code, String number, String submit_time) {
         return jigMapper.addShoplist(submit_id, bill_no, production_line_id, code, number, submit_time);
     }
+    //获取经理模块下的采购管理下的采购审批清单
+    public List<PurchaseIncomeSubmit> get_manager_purchase_submit_list(String user_id,int page_number){
+        return jigMapper.get_manager_purchase_submit_list(user_id,page_number);
+    }
 
-    public List<PurchaseIncomeSubmit> get_manager_purchase_submit_list(String user_id){
-        return jigMapper.get_manager_purchase_submit_list(user_id);
+    public int get_manager_purchase_submit_list_pages(){
+        int max = jigMapper.get_manager_purchase_submit_list_pages();
+        return (int)Math.ceil(max/5.0);
     }
 
     public PurchaseIncomeSubmit get_manager_purchase_detail(String id){
@@ -48,10 +53,11 @@ public class JigService_zhs {
         int max =  jigMapper.get_manager_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status);
         return (int)Math.ceil(max/5.0);
     }
-
+    //获取左侧菜单栏的通知消息数量
     public int get_manager_purchase_submit_count(){
         return jigMapper.get_manager_purchase_submit_count();
     }
+    public int get_manager_scrap_submit_count(){return jigMapper.get_manager_scrap_submit_count();}
 
     public int get_manager_purchase_submit_total_count(String bill_no,String submit_name,String start_date,String end_date,String status){
         return jigMapper.get_manager_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status);

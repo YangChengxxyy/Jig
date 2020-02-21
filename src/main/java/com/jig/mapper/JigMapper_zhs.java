@@ -19,13 +19,20 @@ public interface JigMapper_zhs {
                     @Param("count") String number,
                     @Param("submit_time") String submit_time);
 
+    /**获取经理模块下的采购管理菜单下的采购审批
+     *
+     * @param user_id
+     * @return
+     */
+    List<PurchaseIncomeSubmit> get_manager_purchase_submit_list(@Param("user_id") String user_id,
+                                                                @Param("page_number") int page_number);
 
-    List<PurchaseIncomeSubmit> get_manager_purchase_submit_list(@Param("user_id") String user_id);
+    int get_manager_purchase_submit_list_pages();
 
     PurchaseIncomeSubmit get_manager_purchase_detail(@Param("id") String id);
 
     int manager_check_purchase_submit(@Param("id") String id,
-                                           @Param("pass") String pass);
+                                      @Param("pass") String pass);
 
     List<JigDefinition> get_manager_jig_info_list(@Param("page_number") int page_number);
 
@@ -44,8 +51,12 @@ public interface JigMapper_zhs {
                                        @Param("end_date") String end_date,
                                        @Param("status") String status);
 
+    /**获取左侧菜单栏的通知消息数量
+     *
+     * @return
+     */
     int get_manager_purchase_submit_count();
-
+    int get_manager_scrap_submit_count();
     /**
      *
      */

@@ -33,8 +33,15 @@ public class jigJson_zhs {
 
     //获取经理模块下的采购审批记录
     @RequestMapping(value = "get_manager_purchase_submit_list",method = {RequestMethod.GET,RequestMethod.POST})
-    public List<PurchaseIncomeSubmit> getManagerPurchaseSubmitList(@RequestParam(value = "user_id") String user_id){
-        return jigService.get_manager_purchase_submit_list(user_id);
+    public Map<Object,Object> getManagerPurchaseSubmitList(@RequestParam(value = "user_id") String user_id,
+                                                           @RequestParam(value = "page_number") int page_number){
+        page_number = (page_number-1)*5;
+        List<PurchaseIncomeSubmit> list = jigService.get_manager_purchase_submit_list(user_id,page_number);
+        int pages = jigService.get_manager_purchase_submit_list_pages();
+        Map<Object,Object> map = new HashMap<>();
+        map.put("data",list);
+        map.put("max",pages);
+        return map;
     }
 
     //查看经理模块下的采购审批细节
@@ -88,12 +95,16 @@ public class jigJson_zhs {
         return map;
     }
 
-    //获取经理模块的采购统计功能中的各大板块数据显示
-    @RequestMapping(value = "get_manager_purchase_submit_count",method = {RequestMethod.GET,RequestMethod.POST})
+    //获取左侧菜单栏的通知消息数量
+    @RequestMapping(value = "get_manager_left_message_submit_count",method = {RequestMethod.GET,RequestMethod.POST})
     public Map<Object, Object> getManagerPurchaseSubmitCount(){
         Map<Object,Object> map = new HashMap<>();
+
         int purchase_submit_count = jigService.get_manager_purchase_submit_count();
+        int scrap_submit_count = jigService.get_manager_scrap_submit_count();
+
         map.put("purchase_submit_count",purchase_submit_count);
+        map.put("scrap_submit_count",scrap_submit_count);
         return map;
     }
 
@@ -136,6 +147,14 @@ public class jigJson_zhs {
             pj.setCount(Integer.valueOf(entry.getValue().toString()));
             jig_list.add(pj);
         }
+        List<String> jig_code_list = new ArrayList<>();
+        List<Integer> jig_count_list = new ArrayList<>();
+        for(PurchaseTotalJigDetail p :jig_list){
+            jig_code_list.add(p.getCode());
+            jig_count_list.add(p.getCount());
+        }
+        map.put("echart_jig_code_list",jig_code_list);
+        map.put("echart_jig_count_list",jig_count_list);
         map.put("jig_detail_list",jig_list);
         map.put("jig_count",jig_count);
         map.put("purchase_submit_count",purchase_submit_count);
