@@ -120,16 +120,21 @@ public class jigJson_zhs {
             start_date = submit_time.substring(0,10);
             end_date = submit_time.substring(13);
         }
-        List<PurchaseIncomeSubmit> list = jigService.get_manager_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,"4",-1);
+        List<PurchaseIncomeSubmit> jig_list = jigService.get_manager_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,"4",-1);
         int purchase_submit_count = jigService.get_manager_purchase_submit_total_count(bill_no,submit_name,start_date,end_date,"4");
         List<JigEntity> jig_entity_list = jigService.get_manager_store_jig_list();
+        int store_jig_count = 0;//库存共夹具数量
+
+        for(JigEntity jigEntity:jig_entity_list){
+            store_jig_count+=jigEntity.getCount();
+        }
+
 
         Map<String,Integer> jig_map = new HashMap<>();
-        List<PurchaseTotalJigDetail> jig_list = new ArrayList<>();//显示采购统计中新增工夹具板块查看更多工夹具的细节
-        List<PurchaseTotalJigDetail> store_jig_list = new ArrayList<>();
+        List<PurchaseTotalJigDetail> jig_detail_list = new ArrayList<>();//显示采购统计中新增工夹具板块查看更多工夹具的细节
         int jig_count = 0;
 
-        for(PurchaseIncomeSubmit submit : list){
+        for(PurchaseIncomeSubmit submit : jig_list){//将采购单记录按code分组，放入map中
             String[] code = submit.getCode().split("\\|");
             String[] count = submit.getCount().split("\\|");
             for(int i=0;i<code.length;i++){
@@ -142,19 +147,32 @@ public class jigJson_zhs {
             }
         }
         Iterator iter = jig_map.entrySet().iterator();
-        while (iter.hasNext()){
+        while (iter.hasNext()){//将map遍历，放入工夹具细节List中
             PurchaseTotalJigDetail pj = new PurchaseTotalJigDetail();
             Map.Entry entry = (Map.Entry)iter.next();
             pj.setCode(entry.getKey().toString());
             pj.setCount(Integer.valueOf(entry.getValue().toString()));
-            jig_list.add(pj);
+            jig_detail_list.add(pj);
         }
-        List<String> jig_code_list = new ArrayList<>();
-        List<Integer> jig_count_list = new ArrayList<>();
+
+        for(PurchaseTotalJigDetail pd:jig_detail_list){//获取jig_detail中包含该工夹具代码的相关订单
+            for(PurchaseIncomeSubmit submit:jig_list){
+                String[] code = submit.getCode().split("\\|");
+               for(int i=0;i<code.length;i++){
+                   if(code[i].equals(pd.getCode()) && !pd.getAbout_purchase_submit_list().contains(submit)){
+                       pd.getAbout_purchase_submit_list().add(submit);
+                   }
+               }
+            }
+        }
+
+        List<String> echart_jig_code_list = new ArrayList<>();
+        List<Integer> echart_jig_count_list = new ArrayList<>();
         List<Integer> store_jig_count_list = new ArrayList<>();
-        for(PurchaseTotalJigDetail p :jig_list){
-            jig_code_list.add(p.getCode());
-            jig_count_list.add(p.getCount());
+
+        for(PurchaseTotalJigDetail p :jig_detail_list){//获取与新增工夹具代码对应的库存工夹具清单
+            echart_jig_code_list.add(p.getCode());
+            echart_jig_count_list.add(p.getCount());
             for(JigEntity j:jig_entity_list){//算法可优化
                 if(p.getCode().equals(j.getCode())){
                     store_jig_count_list.add(j.getCount());
@@ -162,11 +180,12 @@ public class jigJson_zhs {
             }
         }
         map.put("echart_store_jig_count_list",store_jig_count_list);
-        map.put("echart_jig_code_list",jig_code_list);
-        map.put("echart_jig_count_list",jig_count_list);
-        map.put("jig_detail_list",jig_list);
+        map.put("echart_jig_code_list",echart_jig_code_list);
+        map.put("echart_jig_count_list",echart_jig_count_list);
+        map.put("jig_detail_list",jig_detail_list);
         map.put("jig_count",jig_count);
         map.put("purchase_submit_count",purchase_submit_count);
+        map.put("store_jig_count",store_jig_count);
         return map;
     }
 

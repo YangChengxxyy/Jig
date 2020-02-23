@@ -16,7 +16,6 @@
     <script src="js/vue.js"></script>
 
     <link rel="stylesheet" href="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.css" />
-    <script src="/assets/libs/single_file/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <!--<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
@@ -33,7 +32,6 @@
             })
 
             $(".modal").draggable({
-                revert:true,
                 handle: ".modal-header", // 只能点击头部拖动
             });
 
@@ -535,7 +533,7 @@
                                                     <h1 class="data fg-green">{{jig_count}}</h1>
                                                     <p>新增工夹具</p>
                                                     <a class="more" href="#" title="查看更多" data-toggle="modal" data-target="#purchase_total_jig_detail" @click="change">查看更多</a>
-                                                    <span class="status arrow-up">50%</span>
+                                                    <span class="status arrow-up">{{new_jig_percent}}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -559,15 +557,14 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    <tr v-for="item in jig_detail_list">
-                                                                        <td>{{item.code}}</td>
+                                                                    <tr v-for="(item,index) in jig_detail_list">
+                                                                        <td data-toggle="modal" data-target="#new_jig_about_submit" @click="get_about_submit_list(index)">{{item.code}}</td>
                                                                         <td>{{item.count}}</td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
                                                         </div>
                                                         <div style="width: 500px;height: 350px" id="echart_total_jig">
-
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
@@ -577,17 +574,55 @@
                                             </div><!-- /.modal -->
                                         </div>
                                     </div>
+                                    <div class="modal fade" id="new_jig_about_submit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                    <h4 class="modal-title">相关采购单</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped table-hover table-responsive" role="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>单据号</th>
+                                                                    <th>申请人</th>
+                                                                    <th>工夹具代码及数量</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr v-for="(item,index) in jig_detail_about_submit_list">
+                                                                    <td>{{item.bill_no}}</td>
+                                                                    <td>{{item.submit_name}}</td>
+                                                                    <td>
+                                                                        <label>
+                                                                            <select class="btn btn-default">
+                                                                                <option  v-for="(code,index) in item.code.split('|')">{{code}} -- {{item.count.split('|')[index]}}件</option>
+                                                                            </select>
+                                                                        </label>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                                </div>
+                                            </div><!-- /.modal-content -->
+                                        </div><!-- /.modal -->
+                                    </div>
                                     <div class="row">
                                         <div class="col-lg-5">
                                             <div class="small-box">
-                                                <div class="small-box-icon bg-green">
-                                                    <i class="iconfont icongouwuche"></i>
+                                                <div class="small-box-icon bg-yellow">
+                                                    <i class="iconfont iconcaigouyuan"></i>
                                                 </div>
                                                 <div class="small-box-inner">
-                                                    <h1 class="data fg-lightskyblue">100</h1>
-                                                    <p>新采购单</p>
+                                                    <h1 class="data fg-yellow">100</h1>
+                                                    <p>采购员</p>
                                                     <a class="more" href="#" title="查看更多">查看更多</a>
-                                                    <span class="status arrow-down">95.9%</span>
                                                 </div>
                                             </div>
                                         </div>

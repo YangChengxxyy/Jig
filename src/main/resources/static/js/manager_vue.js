@@ -176,7 +176,9 @@ var purchase_total = new Vue({
     data:{
         purchase_submit_count:0,
         jig_detail_list:[],
+        jig_detail_about_submit_list:[],
         jig_count:0,
+        store_jig_count:0,
         submit_name:"",
         submit_time:"",
         bill_no:"",
@@ -205,7 +207,7 @@ var purchase_total = new Vue({
                 type: 'bar',
                 data: []
             }]
-        }
+        },
     },
     created:function () {
         this.getData();
@@ -232,6 +234,7 @@ var purchase_total = new Vue({
                     that.echart_jig_code_list = res.echart_jig_code_list;
                     that.echart_jig_count_list = res.echart_jig_count_list;
                     that.echart_store_jig_count_list = res.echart_store_jig_count_list;
+                    that.store_jig_count = res.store_jig_count;
                 }
             })
         },
@@ -249,6 +252,19 @@ var purchase_total = new Vue({
             temp.series[1].data = this.echart_store_jig_count_list;
             temp.xAxis.data = this.echart_jig_code_list;
             this.myChart.setOption(temp);
+        },
+        get_about_submit_list:function (index) {
+            if(this.jig_detail_list.length!=0){
+                this.jig_detail_about_submit_list = this.jig_detail_list[index].about_purchase_submit_list;
+            }else{
+                alert("服务器异常!");
+            }
+
+        }
+    },
+    computed:{
+        new_jig_percent:function () {
+            return Math.round(this.jig_count / this.store_jig_count * 10000) / 100.0 + "%";
         }
     }
 })
