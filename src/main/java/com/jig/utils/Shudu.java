@@ -4,86 +4,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 
-class Paixu {
-    public static void main(String[] args) {
-        String[] a = {
-                "code",
-                "seq_id",
-                "submit_id",
-                "submit_name",
-                "submit_time",
-                "user_count",
-                "scrap_reason",
-                "first_time",
-                "first_acceptor",
-                "first_acceptor_name",
-                "final_time",
-                "final_acceptor",
-                "final_acceptor_name",
-                "status",
-                "ScrapHistory",
-                "ScrapSubmit",
-
-                "id",
-                "code",
-                "name",
-                "seq_id",
-                "user_id",
-                "user_name",
-                "submit_time",
-                "outgo_time",
-                "jig_cabinet_id",
-                "location_id",
-                "bin",
-                "id",
-                "name",
-                "code",
-                "model",
-                "part_no",
-                "family_id",
-                "family",
-                "upl",
-                "user_for",
-                "pm_period",
-                "owner",
-                "owner_name",
-                "rec_time",
-                "rec_by",
-                "rec_by_name",
-                "edit_time",
-                "edit_by",
-                "edit_by_name",
-                "workcell_id",
-                "workcell",
-                "remark",
-                "JigDefinition",
-
-                "submit_id",
-                "submit_name",
-                "count",
-                "submit_time",
-                "first_time",
-                "first_acceptor",
-                "first_acceptor_name",
-                "first_reason",
-                "final_time",
-                "final_acceptor",
-                "final_acceptor_name",
-                "final_reason",
-                "status",
-                "production_line_id",
-                "production_line_name",
-                "bill_no",
-                "tool_photo_url",
-                "PurchaseIncomeHistory"
-        };
-        HashSet<String> strings = new HashSet<>(Arrays.asList(a));
-        for (String as : strings) {
-            System.out.println(as);
-        }
-    }
-}
-
 public class Shudu {
     private int[][] matrix;
 
@@ -202,5 +122,84 @@ public class Shudu {
 
         }
         System.out.println();
+    }
+}
+class Paixu {
+    public static void main(String[] args) {
+        String[] a = {
+                "code",
+                "seq_id",
+                "submit_id",
+                "submit_name",
+                "submit_time",
+                "user_count",
+                "scrap_reason",
+                "first_time",
+                "first_acceptor",
+                "first_acceptor_name",
+                "final_time",
+                "final_acceptor",
+                "final_acceptor_name",
+                "status",
+                "ScrapHistory",
+                "ScrapSubmit",
+
+                "id",
+                "code",
+                "name",
+                "seq_id",
+                "user_id",
+                "user_name",
+                "submit_time",
+                "outgo_time",
+                "jig_cabinet_id",
+                "location_id",
+                "bin",
+                "id",
+                "name",
+                "code",
+                "model",
+                "part_no",
+                "family_id",
+                "family",
+                "upl",
+                "user_for",
+                "pm_period",
+                "owner",
+                "owner_name",
+                "rec_time",
+                "rec_by",
+                "rec_by_name",
+                "edit_time",
+                "edit_by",
+                "edit_by_name",
+                "workcell_id",
+                "workcell",
+                "remark",
+                "JigDefinition",
+
+                "submit_id",
+                "submit_name",
+                "count",
+                "submit_time",
+                "first_time",
+                "first_acceptor",
+                "first_acceptor_name",
+                "first_reason",
+                "final_time",
+                "final_acceptor",
+                "final_acceptor_name",
+                "final_reason",
+                "status",
+                "production_line_id",
+                "production_line_name",
+                "bill_no",
+                "tool_photo_url",
+                "PurchaseIncomeHistory"
+        };
+        HashSet<String> strings = new HashSet<>(Arrays.asList(a));
+        for (String as : strings) {
+            System.out.println(as);
+        }
     }
 }
