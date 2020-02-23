@@ -1,4 +1,4 @@
-package com.jig.utils;
+package com.jig.util;
 
 public class StringUtil {
     public static String combination(Object[] a, String delimiter) {

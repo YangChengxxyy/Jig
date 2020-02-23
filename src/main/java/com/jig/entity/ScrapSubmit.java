@@ -1,28 +1,26 @@
 package com.jig.entity;
 
 public class ScrapSubmit {
-    private String id;
+    private int id;
     private String code;
-    private String seq_id;
-    private String submit_id;
-    private String submit_name;
-    private String submit_time;
-    private int used_count;
-    private String scrap_reason;
-    private String scrap_photo_url;
-    private String first_time;//初审时间
-    private String first_acceptor;//初审人id
+    private int seq_id;
+    private String submit_id;//申请人id
+    private String submit_name;//申请人名字
+    private String submit_time;//申请时间
+    private String status;
+    private String used_count;//寿命计数
+    private String scrap_reason;//报废原因
+    private String first_acceptor;//初审接受人id
     private String first_acceptor_name;
-    private String final_time;//终审时间
-    private String final_acceptor;//终审人id
-    private String final_acceptor_name;//终审人
-    private String status;//审核状态 :0待审核 1初审未通过 2初审通过 3终审未通过 4终审通过
-
-    public String getId() {
+    private String first_time;//初审接受时间
+    private String final_acceptor;//终审接受人id
+    private String final_acceptor_name;
+    private String final_time;//终审接受时间
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -34,11 +32,11 @@ public class ScrapSubmit {
         this.code = code;
     }
 
-    public String getSeq_id() {
+    public int getSeq_id() {
         return seq_id;
     }
 
-    public void setSeq_id(String seq_id) {
+    public void setSeq_id(int seq_id) {
         this.seq_id = seq_id;
     }
 
@@ -66,11 +64,19 @@ public class ScrapSubmit {
         this.submit_time = submit_time;
     }
 
-    public int getUsed_count() {
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getUsed_count() {
         return used_count;
     }
 
-    public void setUsed_count(int used_count) {
+    public void setUsed_count(String used_count) {
         this.used_count = used_count;
     }
 
@@ -80,14 +86,6 @@ public class ScrapSubmit {
 
     public void setScrap_reason(String scrap_reason) {
         this.scrap_reason = scrap_reason;
-    }
-
-    public String getFirst_time() {
-        return first_time;
-    }
-
-    public void setFirst_time(String first_time) {
-        this.first_time = first_time;
     }
 
     public String getFirst_acceptor() {
@@ -106,12 +104,12 @@ public class ScrapSubmit {
         this.first_acceptor_name = first_acceptor_name;
     }
 
-    public String getFinal_time() {
-        return final_time;
+    public String getFirst_time() {
+        return first_time;
     }
 
-    public void setFinal_time(String final_time) {
-        this.final_time = final_time;
+    public void setFirst_time(String first_time) {
+        this.first_time = first_time;
     }
 
     public String getFinal_acceptor() {
@@ -130,19 +128,11 @@ public class ScrapSubmit {
         this.final_acceptor_name = final_acceptor_name;
     }
 
-    public String getStatus() {
-        return status;
+    public String getFinal_time() {
+        return final_time;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getScrap_photo_url() {
-        return scrap_photo_url;
-    }
-
-    public void setScrap_photo_url(String scrap_photo_url) {
-        this.scrap_photo_url = scrap_photo_url;
+    public void setFinal_time(String final_time) {
+        this.final_time = final_time;
     }
 }

@@ -2,6 +2,7 @@ package com.jig.service;
 
 import com.jig.entity.*;
 import com.jig.mapper.JigMapper;
+import com.jig.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +16,13 @@ public class JigService {
     @Autowired
     private JigMapper jigMapper;
 
-    public List<JigDefinition> naiveSearchJigDefinition(String code, String name, String workcell, String family, String userFor, int pageNumber) {
+    public List<JigDefinition> searchJigDefinition(String code, String name, String workcell, String family, String userFor, int pageNumber) {
         pageNumber = (pageNumber - 1) * 5;
-        return jigMapper.naiveSearchJigDefinition(code, name, workcell, family, userFor, pageNumber);
+        return jigMapper.searchJigDefinition(code, name, workcell, family, userFor, pageNumber);
     }
 
-    public int naiveSearchJigDefinitionPage(String code, String name, String workcell, String family, String userFor) {
-        int a = jigMapper.naiveSearchJigDefinitionPage(code, name, workcell, family, userFor);
+    public int searchJigDefinitionPage(String code, String name, String workcell, String family, String userFor) {
+        int a = jigMapper.searchJigDefinitionPage(code, name, workcell, family, userFor);
         return (int) Math.ceil(a / 5.0);
     }
 
@@ -33,13 +34,13 @@ public class JigService {
         return jigMapper.searchAllJigDefinition(code, name, workcell, family, userFor);
     }
 
-    public List<OutgoSubmit> naiveGetOutgoingSubmit(int page_number) {
+    public List<OutgoSubmit> getOutgoingSubmit(int page_number) {
         page_number = (page_number - 1) * 5;
-        return jigMapper.naiveGetOutgoingSubmit(page_number);
+        return jigMapper.getOutgoSubmit(page_number);
     }
 
-    public int naiveGetOutgoingSubmitPage() {
-        int a = jigMapper.naiveGetOutgoSubmitPage();
+    public int getgetOutgoingSubmitPage() {
+        int a = jigMapper.getOutgoSubmitPage();
         return (int) Math.ceil(a / 5.0);
     }
 
@@ -47,27 +48,25 @@ public class JigService {
         return jigMapper.getPosition(code, seq_id);
     }
 
-    public void naiveOutgoJig(String id, String code, String seq_id, String rec_id) {
-        jigMapper.naiveOutgoJig(id, code, seq_id, rec_id);
-        jigMapper.naiveDeleteOutgoSubmit(id);
+    public void outgoJig(String id, String code, String seq_id, String rec_id) {
+        jigMapper.outgoJig(id, code, seq_id, rec_id);
+        jigMapper.deleteOutgoSubmit(id);
     }
 
-    public List<OutgoingJig> naiveGetOutgoingJig(int page_number) {
+    public List<OutgoingJig> getOutgoingJig(int page_number) {
         page_number = (page_number - 1) * 5;
-        return jigMapper.naiveGetOutgoingJig(page_number);
+        return jigMapper.getOutgoingJig(page_number);
     }
-
-    public int naiveGetOutgoingJigPage() {
+    public int getOutgoingJigPage(){
         return jigMapper.getOutgoingJigPage();
     }
-
-    public void naiveReturnJig(String id, String code, String seq_id, String rec_id) {
-        jigMapper.naiveReturnJig(id, code, seq_id, rec_id);
-        jigMapper.naiveDeleteOutgoingJig(id);
+    public void returnJig(String id, String code, String seq_id, String rec_id) {
+        jigMapper.returnJig(id, code, seq_id, rec_id);
+        jigMapper.deleteOutgoingJig(id);
     }
 
-    public void highAddShoplist(String submit_id, String bill_no, String production_line_id, String code, String count) {
-        jigMapper.highAddShoplist(submit_id, bill_no, production_line_id, code, count);
+    public void addShoplist(String submit_id, String bill_no, String production_line_id, String code, String count) {
+        jigMapper.addShoplist(submit_id, bill_no, production_line_id, code, count);
     }
 
     public List<ProductionLine> getProductionLineList() {
@@ -78,94 +77,29 @@ public class JigService {
         return jigMapper.getCodeList();
     }
 
-    public List<PurchaseIncomeSubmit> highGetPurchaseIncomeSubmitList(int page_number) {
+    public List<PurchaseIncomeSubmit> getPurchaseIncomeSubmitList(int page_number) {
         page_number = (page_number - 1) * 5;
-        return jigMapper.highGetPurchaseIncomeSubmitList(page_number);
+        return jigMapper.getPurchaseIncomeSubmitList(page_number);
     }
 
-    public int highGetPurchaseIncomeSubmitListPage() {
-        int a = jigMapper.highGetPurchaseIncomeSubmitListPage();
+    public void updatePurchaseIncomeSubmit(String id, String code, String count, String production_line_id) {
+        jigMapper.updatePurchaseIncomeSubmit(id, code, count, production_line_id);
+    }
+
+    public int getPurchaseIncomeSubmitListPage() {
+        int a = jigMapper.getPurchaseIncomeSubmitListPage();
         return (int) Math.ceil(a / 5.0);
     }
 
-    public void highUpdatePurchaseIncomeSubmit(String id, String code, String count, String production_line_id) {
-        jigMapper.highUpdatePurchaseIncomeSubmit(id, code, count, production_line_id);
-    }
-
-    public List<PurchaseIncomeHistory> highSearchPurchaseIncomeHistory(String bill_no, String submit_name, String code, String production_line_id, String status, String start_date, String end_date, int page_number) {
+    public List<PurchaseIncomeHistory> searchPurchaseIncomeHistory(String bill_no, String submit_name, String code, String production_line_id, String status, String start_date, String end_date, int page_number) {
         page_number = (page_number - 1) * 5;
-        return jigMapper.highSearchPurchaseIncomeHistory(bill_no, submit_name, code, production_line_id, status, start_date, end_date, page_number);
+        return jigMapper.searchPurchaseIncomeHistory(bill_no, submit_name, code, production_line_id, status, start_date, end_date, page_number);
     }
 
-    public int highSearchPurchaseIncomeHistoryPage(String bill_no, String submit_name, String code, String production_line_id, String status, String start_date, String end_date) {
-        int a = jigMapper.highSearchPurchaseIncomeHistoryPage(bill_no, submit_name, code, production_line_id, status, start_date, end_date);
+    public int searchPurchaseIncomeHistoryPage(String bill_no, String submit_name, String code, String production_line_id, String status, String start_date, String end_date) {
+        int a = jigMapper.searchPurchaseIncomeHistoryPage(bill_no, submit_name, code, production_line_id, status, start_date, end_date);
         return (int) Math.ceil(a / 5.0);
     }
 
-    public List<PurchaseIncomeHistory> highSearchAllPurchaseIncomeHistory(String bill_no, String submit_name, String code, String production_line_id, String status, String start_date, String end_date) {
-        return jigMapper.highSearchAllPurchaseIncomeHistory(bill_no, submit_name, code, production_line_id, status, start_date, end_date);
-    }
 
-    public void highDeletePurchaseSubmit(String id) {
-        jigMapper.highDeletePurchaseSubmit(id);
-    }
-
-    public List<RepairJig> highGetRepairJig(int page_number) {
-        page_number = (page_number - 1) * 5;
-        return jigMapper.highGetRepairJig(page_number);
-    }
-
-    public int highGetRepairJigPage() {
-        int a = jigMapper.highGetRepairJigPage();
-        return (int) Math.ceil(a / 5.0);
-    }
-
-    public List<RepairJig> highSearchRepairHistory(String code, String seq_id, String submit_name, String status, String start_date, String end_date, int page_number) {
-        page_number = (page_number - 1) * 5;
-        return jigMapper.highSearchRepairHistory(code, seq_id, submit_name, status, start_date, end_date, page_number);
-    }
-
-    public int highSearchRepairHistoryPage(String code, String seq_id, String submit_name, String status, String start_date, String end_date) {
-        return jigMapper.highSearchRepairHistoryPage(code, seq_id, submit_name, status, start_date, end_date);
-    }
-
-    public List<ScrapSubmit> highGetScrap(String submit_id, int page_number) {
-        page_number = (page_number - 1) * 5;
-        return jigMapper.highGetScrap(submit_id, page_number);
-    }
-
-    public int highGetScrapPage(String submit_id) {
-        int a = jigMapper.highGetScrapPage(submit_id);
-        return (int) Math.ceil(a / 5.0);
-    }
-
-    public List<ScrapHistory> highSearchScrapHistory(String code, String seq_id, String submit_id,String scrap_reason, String status, String start_date, String end_date, int page_number) {
-        page_number = (page_number - 1) * 5;
-        return jigMapper.highSearchScrapHistory(code, seq_id, submit_id,scrap_reason, status, start_date, end_date, page_number);
-    }
-
-    public int highSearchScrapHistoryPage(String code, String seq_id, String submit_id,String scrap_reason ,String status, String start_date, String end_date) {
-        int a = jigMapper.highSearchScrapHistoryPage(code, seq_id, submit_id,scrap_reason, status, start_date, end_date);
-        return (int) Math.ceil(a / 5.0);
-    }
-
-    public List<ScrapHistory> highSearchAllScrapHistory(String code, String seq_id, String submit_name,String scrap_reason, String status, String start_date, String end_date) {
-        return jigMapper.highSearchAllScrapHistory(code, seq_id, submit_name,scrap_reason, status, start_date, end_date);
-    }
-
-    public List<RepairJig> highSearchAllRepairHistory(String code, String code1, String seq_id, String submit_name, String status, String start_date, String end_date) {
-        return jigMapper.highSearchAllRepairHistory(code, code, seq_id, submit_name, status, start_date, end_date);
-    }
-
-    public void highSubmitScrap(String code, String seq_id, String submit_id, String scrap_reason, String pathName) {
-        jigMapper.highSubmitScrap(code, seq_id, submit_id, scrap_reason, pathName);
-    }
-
-    public boolean highDeleteScrap(String id) {
-        return jigMapper.highDeleteScrap(id) > 0;
-    }
-
-    public List<String> codeGetSeqId(String code) {
-        return jigMapper.codeGetSeqId(code);
-    }
 }

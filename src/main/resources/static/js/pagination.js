@@ -8,7 +8,8 @@
 /*  getData模板
     getData: function () {
             const that = this;
-            $.ajax("url",{
+            $.ajax({
+                url: 自己的url,
                 data: {
                     now_page_number:this.now_page_number
                     ,以及自己data
@@ -17,8 +18,8 @@
                     if (res.data.length === 0) {
                         alert("没有结果！")
                     } else {
-                        that.需要赋值的变量 = res['data'];
-                        that.max_page_number = res['max'];
+                        that.需要赋值的变量 = res.data;
+                        that.max_page_number = res.max;
                     }
                 }
             })

@@ -1,4 +1,4 @@
-package com.jig.utils;
+package com.jig.util;
 
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
@@ -15,7 +15,7 @@ import java.util.Map;
  * @author YC
  */
 public class PoiUtil {
-    private static final Map<String, String> COMPARISON_TABLE;
+    private static final Map<String, String> COMPARISONTABLE;
     private static final String[] ENGLISH = {
             "id",
             "name",
@@ -38,30 +38,7 @@ public class PoiUtil {
             "workcell_id",
             "workcell",
             "remark",
-            "JigDefinition",
-
-            "submit_id",
-            "submit_name",
-            "count",
-            "submit_time",
-            "first_time",
-            "first_acceptor",
-            "first_acceptor_name",
-            "first_reason",
-            "final_time",
-            "final_acceptor",
-            "final_acceptor_name",
-            "final_reason",
-            "status",
-            "production_line_id",
-            "production_line_name",
-            "bill_no",
-            "tool_photo_url",
-            "PurchaseIncomeHistory",
-
-            "used_count",
-            "ScrapSubmit",
-            "ScrapHistory"
+            "JigDefinition"
     };
     private static final String[] CHINESE = {
             "id",
@@ -85,36 +62,13 @@ public class PoiUtil {
             "工作部门id",
             "工作部门",
             "备注",
-            "工夹具定义",
-
-            "采购人id",
-            "采购人",
-            "数量",
-            "申请时间",
-            "初审时间",
-            "初审人id",
-            "初审人",
-            "初审未通过原因",
-            "终审时间",
-            "终审人id",
-            "终审人",
-            "终审未通过原因",
-            "状态",
-            "产线id",
-            "产线",
-            "单据号",
-            "故障图片路径",
-            "历史采购",
-
-            "寿命计数",
-            "报废申请",
-            "报废历史"
+            "工夹具定义"
     };
 
     static {
-        COMPARISON_TABLE = new HashMap<>(40);
+        COMPARISONTABLE = new HashMap<>(25);
         for (int i = 0; i < ENGLISH.length; i++) {
-            COMPARISON_TABLE.put(ENGLISH[i], CHINESE[i]);
+            COMPARISONTABLE.put(ENGLISH[i], CHINESE[i]);
         }
     }
 
@@ -133,13 +87,13 @@ public class PoiUtil {
             methodNameList.add(getMethodName);
         }
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet(COMPARISON_TABLE.get(aClass.getSimpleName()));
+        HSSFSheet sheet = workbook.createSheet(COMPARISONTABLE.get(aClass.getSimpleName()));
         HSSFRow row = sheet.createRow(0);
         HSSFCell cell = null;
         int[] maxs = new int[declaredFields.length];
         for (int i = 0; i < declaredFields.length; i++) {
             cell = row.createCell(i);
-            cell.setCellValue(COMPARISON_TABLE.get(declaredFields[i].getName()));
+            cell.setCellValue(COMPARISONTABLE.get(declaredFields[i].getName()));
             HSSFCellStyle cellStyle = workbook.createCellStyle();
             //设置垂直居中
             cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);

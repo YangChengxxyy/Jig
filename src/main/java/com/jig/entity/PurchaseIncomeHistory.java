@@ -8,11 +8,13 @@ public class PurchaseIncomeHistory {
     private String count;
     private String submit_time;
     private String first_time;
+    private String first_result;
     private String first_acceptor;
-    private String first_acceptor_name;
+    private String first_reason;
     private String final_time;
+    private String final_result;
     private String final_acceptor;
-    private String final_acceptor_name;
+    private String final_reason;
     private String status;
     private int production_line_id;
     private String production_line_name;
@@ -75,6 +77,14 @@ public class PurchaseIncomeHistory {
         this.first_time = first_time;
     }
 
+    public String getFirst_result() {
+        return first_result;
+    }
+
+    public void setFirst_result(String first_result) {
+        this.first_result = first_result;
+    }
+
     public String getFirst_acceptor() {
         return first_acceptor;
     }
@@ -83,12 +93,12 @@ public class PurchaseIncomeHistory {
         this.first_acceptor = first_acceptor;
     }
 
-    public String getFirst_acceptor_name() {
-        return first_acceptor_name;
+    public String getFirst_reason() {
+        return first_reason;
     }
 
-    public void setFirst_acceptor_name(String first_acceptor_name) {
-        this.first_acceptor_name = first_acceptor_name;
+    public void setFirst_reason(String first_reason) {
+        this.first_reason = first_reason;
     }
 
     public String getFinal_time() {
@@ -99,6 +109,14 @@ public class PurchaseIncomeHistory {
         this.final_time = final_time;
     }
 
+    public String getFinal_result() {
+        return final_result;
+    }
+
+    public void setFinal_result(String final_result) {
+        this.final_result = final_result;
+    }
+
     public String getFinal_acceptor() {
         return final_acceptor;
     }
@@ -107,12 +125,12 @@ public class PurchaseIncomeHistory {
         this.final_acceptor = final_acceptor;
     }
 
-    public String getFinal_acceptor_name() {
-        return final_acceptor_name;
+    public String getFinal_reason() {
+        return final_reason;
     }
 
-    public void setFinal_acceptor_name(String final_acceptor_name) {
-        this.final_acceptor_name = final_acceptor_name;
+    public void setFinal_reason(String final_reason) {
+        this.final_reason = final_reason;
     }
 
     public String getStatus() {

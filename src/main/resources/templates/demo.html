@@ -6,82 +6,236 @@
     <script src="js/jquery-3.4.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/vue.js"></script>
-    <script src="js/echarts.js"></script>
-    <script src="js/vue-echarts@4.0.2.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <style>
-        #demo {
-            width: 600px;
-            height: 400px;
+        .input-pagination{
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #337ab7;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            display: inline-block;
+            border-radius: 4px;
         }
     </style>
+    <script th:inline="javascript">
+        $(function () {
+            //为页码添加点击事件
+            $("#list li").click(function (e) {
+                console.log(e)
+                const now = parseInt($("#list li.active").text());
+                console.log(now)
+                if ($(this).text() === '«') {
+                    if (now > 1) {
+                        demoVue.$data.now_page_number = now - 1;
+                        $.ajax({
+                            url: 'get_demo_list',
+                            data: {
+                                page_number: demoVue.$data.now_page_number
+                            },
+                            success: function (res) {
+                                demoVue.$data.stu = res.data;
+                            }
+                        })
+                    }
+                } else if ($(this).text() === '»') {
+                    if (now < demoVue.$data.max_page_number) {
+                        demoVue.$data.now_page_number = now + 1;
+                        $.ajax({
+                            url: 'get_demo_list',
+                            data: {
+                                page_number: demoVue.$data.now_page_number
+                            },
+                            success: function (res) {
+                                demoVue.$data.stu = res.data;
+                            }
+                        })
+                    }
+                } else {
+                    demoVue.now_page_number = parseInt($(this).text());
+                    $.ajax({
+                        url: 'get_demo_list',
+                        data: {
+                            page_number: $(this).text()
+                        },
+                        success: function (res) {
+                            demoVue.$data.stu = res.data;
+                        }
+                    })
+                }
+            })
+        })
+    </script>
 </head>
 <body>
-
-<v-chart id="demo" :options="options" :auto-resize="true"></v-chart>
+<div class="container-fluid" id="demo">
+    <div class="row">
+        <div class="col-md-6 col-md-push-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        测试demo
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped table-hover" role="table">
+                        <!--                        展示一个人的方法-->
+                        <thead>
+                        <tr>
+                            <th>学号</th>
+                            <th>姓名</th>
+                            <th>性别</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="item in stu">
+                            <td>{{item.stu_no}}</td>
+                            <td>{{item.name}}</td>
+                            <td>{{item.sex}}</td>
+                            <td>
+                                <button class="btn btn-default">
+                                    测试
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-center row" v-if="max_page_number != 0" id="list">
+                        <div v-if="max_page_number >5">
+                            <ul v-if="now_page_number <= 3 && now_page_number < max_page_number-1"
+                                class="pagination">
+                                <li :class="havePrevious"
+                                    @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
+                                    <a>&laquo;</a></li>
+                                <li :class="{'active': now_page_number == 1}"
+                                    @click="turn_page(1)"><a>1</a></li>
+                                <li :class="{'active': now_page_number == 2}"
+                                    @click="turn_page(2)"><a>2</a></li>
+                                <li :class="{'active': now_page_number == 3}"
+                                    @click="turn_page(3)"><a>3</a></li>
+                                <li class="disabled"><a>...</a></li>
+                                <li @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a>
+                                </li>
+                                <li @click="turn_page(max_page_number)"><a>{{max_page_number}}</a>
+                                </li>
+                                <li :class="haveNext"
+                                    @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)">
+                                    <a>&raquo;</a>
+                                </li>
+                            </ul>
+                            <ul v-else-if="now_page_number > 3 && now_page_number+1 <= max_page_number-2"
+                                class="pagination">
+                                <li :class="havePrevious"
+                                    @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
+                                    <a>&laquo;</a></li>
+                                <li @click="turn_page(1)"><a>1</a></li>
+                                <li @click="turn_page(2)"><a>2</a></li>
+                                <li class="disabled"><a>...</a></li>
+                                <li @click="turn_page(now_page_number-1)"><a>{{now_page_number-1}}</a></li>
+                                <li class="active" @click="turn_page(now_page_number)"><a>{{now_page_number}}</a>
+                                </li>
+                                <li @click="turn_page(now_page_number+1)"><a>{{now_page_number+1}}</a></li>
+                                <li class="disabled"><a>...</a></li>
+                                <li @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a></li>
+                                <li @click="turn_page(max_page_number)"><a>{{max_page_number}}</a></li>
+                                <li :class="haveNext"
+                                    @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>
+                                </li>
+                            </ul>
+                            <ul v-else-if="now_page_number>=4 && now_page_number >= max_page_number-2"
+                                class="pagination">
+                                <li :class="havePrevious"
+                                    @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
+                                    <a>&laquo;</a></li>
+                                <li @click="turn_page(1)"><a>1</a></li>
+                                <li @click="turn_page(2)"><a>2</a></li>
+                                <li class="disabled"><a>...</a></li>
+                                <li :class="{'active' : now_page_number == max_page_number-2 }"
+                                    @click="turn_page(max_page_number-2)"><a>{{max_page_number-2}}</a></li>
+                                <li :class="{'active' : now_page_number == max_page_number-1 }"
+                                    @click="turn_page(max_page_number-1)"><a>{{max_page_number-1}}</a></li>
+                                <li :class="{'active' : now_page_number == max_page_number }"
+                                    @click="turn_page(max_page_number)"><a>{{max_page_number}}</a></li>
+                                <li :class="haveNext"
+                                    @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)"><a>&raquo;</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div v-else>
+                            <ul class="pagination">
+                                <li :class="havePrevious"
+                                    @click="turn_page(!havePrevious.disabled ? now_page_number-1 : now_page_number)">
+                                    <a>&laquo;</a></li>
+                                <li v-for="n in max_page_number" :class="{'active': n == now_page_number }" @click="turn_page(n)"><a>{{n}}</a></li>
+                                <li :class="haveNext"
+                                    @click="turn_page(!haveNext.disabled ? now_page_number+1 : now_page_number)">
+                                    <a>&raquo;</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <input class="input-pagination form-control">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
-    let Vue = window.Vue;
-    Vue.component('v-chart', VueECharts);
-    const demo = new Vue({
+    // vue代码部分
+    // el表示作用域哪个元素内，#表示通过id查找，.表示类查找
+    // data表示放在这个元素内的数据，这和小程序类似
+    // 还有别的许多方法，这里用不上
+    $.ajaxSetup({
+        dataType: "json"
+    });
+    const demoVue = new Vue({
         el: "#demo",
-        data() {
-            return {
-                // options:{
-                //     xAxis: {
-                //         type: 'category',
-                //         data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                //     },
-                //     yAxis: {
-                //         type: 'value'
-                //     },
-                //     series: [{
-                //         data: [820, 932, 901, 934, 1290, 1330, 1320],
-                //         type: 'line'
-                //     }]
-                // }
-                options: {
-                    title: {
-                        text: '会员数据统计',
-                        subtext: '动态数据',
-                        x: 'center'
+        data: {
+            isList: false,
+            now_page_number: 1,
+            max_page_number: 10
+        },
+        created: function () {
+
+        },
+        methods:{
+            getData:function () {
+                var that = this;
+                $.ajax({
+                    url: 'get_demo_list',
+                    data: {
+                        page_number: this.now_page_number
                     },
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: "{a} <br/>{b} : {c} ({d}%)"
-                    },
-                    legend: {
-                        show: true,
-                        orient: 'vertical',
-                        left: 'left',
-                        data: ['微信访问', '公众号访问', '扫码进入', '分享进入', '搜索访问']
-                    },
-                    series: [
-                        {
-                            name: '访问来源',
-                            type: 'pie',
-                            radius: '55%',
-                            center: ['50%', '60%'],
-                            data: [
-                                {value: 335, name: '微信访问'},
-                                {value: 310, name: '公众号访问'},
-                                {value: 234, name: '扫码进入'},
-                                {value: 135, name: '分享进入'},
-                                {value: 1548, name: '搜索访问'}
-                            ],
-                            itemStyle: {
-                                emphasis: {
-                                    shadowBlur: 10,
-                                    shadowOffsetX: 0,
-                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                                }
-                            }
-                        }
-                    ]
+                    success: function (res) {
+                        that.stu = res.data;
+                        that.max_page_number = res.max;
+                    }
+                });
+            }
+        },
+        computed: {
+            havePrevious: function () {
+                return {
+                    disabled: this.now_page_number === 1
+                }
+            },
+            haveNext: function () {
+                return {
+                    disabled: this.now_page_number === this.max_page_number
                 }
             }
         }
-    })
+    });
+
 </script>
 </body>
 </html>

@@ -3,15 +3,15 @@
 
  Source Server         : localhost_3306
  Source Server Type    : MySQL
- Source Server Version : 50647
+ Source Server Version : 50643
  Source Host           : localhost:3306
  Source Schema         : jig
 
  Target Server Type    : MySQL
- Target Server Version : 50647
+ Target Server Version : 50643
  File Encoding         : 65001
 
- Date: 16/02/2020 22:39:30
+ Date: 21/01/2020 18:42:53
 */
 
 SET NAMES utf8mb4;
@@ -70,59 +70,6 @@ INSERT INTO `jig_definition` VALUES (1182, 'MOD 3XM2 防旋转夹具1', 'EF2240'
 INSERT INTO `jig_definition` VALUES (1183, 'MOD 3XM2 防旋转夹具2', 'EF2241', 'MOD 3XM2', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '1', 'MOD 3XM2 防旋转', '30', '1230936', '2019-10-31 10:08:44', '1215072', '2019-11-07 10:00:53', '1284663', NULL);
 
 -- ----------------------------
--- Table structure for jig_entity
--- ----------------------------
-DROP TABLE IF EXISTS `jig_entity`;
-CREATE TABLE `jig_entity`  (
-  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `seq_id` int(11) NOT NULL,
-  `bill_no` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `reg_date` datetime(0) NULL DEFAULT NULL,
-  `used_count` int(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`code`, `seq_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of jig_entity
--- ----------------------------
-INSERT INTO `jig_entity` VALUES ('EF0789', 1, 'BO19070500000002', '2019-07-05 16:42:00', 3);
-INSERT INTO `jig_entity` VALUES ('EF0789', 2, 'BO19070500000001', '2019-07-05 16:42:00', 32);
-INSERT INTO `jig_entity` VALUES ('EF0798', 1, 'BO19072900000018', '2019-07-29 08:54:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF0798', 2, 'BO19090900000002', '2019-09-11 08:45:00', 5);
-INSERT INTO `jig_entity` VALUES ('EF2184', 1, 'BO19071200000004', '2019-07-12 09:03:00', 2);
-INSERT INTO `jig_entity` VALUES ('EF2184', 2, 'BO19071200000003', '2019-07-12 09:03:00', 1);
-INSERT INTO `jig_entity` VALUES ('EF2185', 1, 'BO19070600000006', '2019-07-09 15:48:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2185', 2, 'BO19070900000003', '2019-07-10 08:50:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2186', 1, 'BO19071200000002', '2019-07-12 09:03:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2187', 1, 'BO19070500000003', '2019-07-05 16:42:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2188', 1, 'BO19070500000005', '2019-07-05 16:42:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2188', 2, 'BO19070500000004', '2019-07-05 16:42:00', 23);
-INSERT INTO `jig_entity` VALUES ('EF2189', 1, 'BO19070600000007', '2019-07-09 15:48:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2189', 2, 'BO19082700000002', '2019-08-27 09:24:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2189', 3, 'BO19082700000001', '2019-08-27 09:24:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2190', 1, 'BO19070500000006', '2019-07-05 16:42:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2190', 2, 'BO19070600000005', '2019-07-09 15:48:00', 45);
-INSERT INTO `jig_entity` VALUES ('EF2190', 3, 'BO19070600000004', '2019-07-09 15:48:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2191', 1, 'BO19070500000007', '2019-07-05 16:42:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2192', 1, 'BO19071200000005', '2019-07-12 09:03:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2203', 3, 'BO19080900000001', '2019-08-09 16:32:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2203', 4, 'BO19080900000002', '2019-08-09 16:33:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2207', 1, 'BO19071600000002', '2019-07-16 16:09:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2208', 1, 'BO19071600000003', '2019-07-16 16:09:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2209', 1, 'BO19071600000004', '2019-07-16 16:09:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2210', 1, 'BO19072900000030', '2019-07-29 08:53:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2210', 2, 'BO19080200000015', '2019-08-07 08:35:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2210', 3, 'BO19080200000014', '2019-08-07 08:35:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2234', 1, 'BO19103100000001', '2019-10-31 12:42:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2235', 1, 'BO19103100000002', '2019-10-31 12:42:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2236', 1, 'BO19103100000003', '2019-10-31 12:42:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2237', 1, 'BO19103100000004', '2019-10-31 12:42:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2238', 1, 'BO19103100000005', '2019-10-31 12:42:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2239', 1, 'BO19103100000006', '2019-10-31 12:42:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2240', 1, 'BO19103100000007', '2019-10-31 12:41:00', 0);
-INSERT INTO `jig_entity` VALUES ('EF2241', 1, 'BO19103100000008', '2019-10-31 12:41:00', 0);
-
--- ----------------------------
 -- Table structure for jig_family
 -- ----------------------------
 DROP TABLE IF EXISTS `jig_family`;
@@ -136,163 +83,6 @@ CREATE TABLE `jig_family`  (
 -- Records of jig_family
 -- ----------------------------
 INSERT INTO `jig_family` VALUES ('79', 'JABIL FU');
-
--- ----------------------------
--- Table structure for jig_position
--- ----------------------------
-DROP TABLE IF EXISTS `jig_position`;
-CREATE TABLE `jig_position`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `seq_id` int(11) NULL DEFAULT NULL,
-  `jig_cabinet_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `location_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `bin` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `status` varchar(2) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '0 未在库 1 出库 2 在维修',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of jig_position
--- ----------------------------
-INSERT INTO `jig_position` VALUES (1, 'EF0789', 1, '16', 'A2', NULL, '0');
-INSERT INTO `jig_position` VALUES (2, 'EF0789', 2, '16', 'A2', NULL, '1');
-INSERT INTO `jig_position` VALUES (3, 'EF0798', 1, '7', 'A1', NULL, '1');
-INSERT INTO `jig_position` VALUES (4, 'EF0798', 2, '7', 'A2', NULL, '1');
-INSERT INTO `jig_position` VALUES (5, 'EF2184', 1, '16', 'A2', NULL, '1');
-INSERT INTO `jig_position` VALUES (6, 'EF2184', 2, '16', 'A2', NULL, '1');
-INSERT INTO `jig_position` VALUES (7, 'EF2185', 1, '16', 'A2', NULL, '1');
-INSERT INTO `jig_position` VALUES (8, 'EF2185', 2, '16', 'A2', NULL, '1');
-INSERT INTO `jig_position` VALUES (9, 'EF2186', 1, '16', 'A1', '1', '1');
-INSERT INTO `jig_position` VALUES (10, 'EF2187', 1, '16', 'A1', '2', '1');
-INSERT INTO `jig_position` VALUES (11, 'EF2188', 1, '8', 'A2', '2', '1');
-INSERT INTO `jig_position` VALUES (12, 'EF2188', 2, '8', 'A2', '1', '1');
-INSERT INTO `jig_position` VALUES (13, 'EF2189', 1, '8', 'B2', '1', '1');
-INSERT INTO `jig_position` VALUES (14, 'EF2189', 2, '8', 'C2', '1', '1');
-INSERT INTO `jig_position` VALUES (15, 'EF2189', 3, '8', 'B2', '2', '1');
-INSERT INTO `jig_position` VALUES (16, 'EF2190', 1, '16', 'A1', '5', '1');
-INSERT INTO `jig_position` VALUES (17, 'EF2190', 2, '16', 'A1', '4', '1');
-INSERT INTO `jig_position` VALUES (18, 'EF2190', 3, '16', 'A1', '3', '1');
-INSERT INTO `jig_position` VALUES (19, 'EF2191', 1, '8', 'C2', '2', '1');
-INSERT INTO `jig_position` VALUES (20, 'EF2192', 1, '8', 'A2', '3', '1');
-INSERT INTO `jig_position` VALUES (21, 'EF2203', 3, '16', 'A2', NULL, '1');
-INSERT INTO `jig_position` VALUES (22, 'EF2203', 4, '16', 'A2', NULL, '1');
-INSERT INTO `jig_position` VALUES (23, 'EF2207', 1, '16', 'A2', NULL, '1');
-INSERT INTO `jig_position` VALUES (24, 'EF2208', 1, '16', 'A2', NULL, '1');
-INSERT INTO `jig_position` VALUES (25, 'EF2209', 1, '16', 'A2', NULL, '1');
-INSERT INTO `jig_position` VALUES (26, 'EF2210', 1, '8', 'C1', '4', '0');
-INSERT INTO `jig_position` VALUES (27, 'EF2210', 2, '8', 'C1', '6', '1');
-INSERT INTO `jig_position` VALUES (28, 'EF2210', 3, '8', 'C1', '5', '1');
-INSERT INTO `jig_position` VALUES (29, 'EF2234', 1, '16', 'A2', NULL, '1');
-INSERT INTO `jig_position` VALUES (30, 'EF2235', 1, '16', 'A2', NULL, '1');
-INSERT INTO `jig_position` VALUES (31, 'EF2236', 1, '16', 'A2', NULL, '1');
-INSERT INTO `jig_position` VALUES (32, 'EF2237', 1, '16', 'A2', NULL, '1');
-INSERT INTO `jig_position` VALUES (33, 'EF2238', 1, '16', 'A2', NULL, '1');
-INSERT INTO `jig_position` VALUES (34, 'EF2239', 1, '16', 'A2', NULL, '1');
-INSERT INTO `jig_position` VALUES (35, 'EF2240', 1, '16', 'A2', NULL, '1');
-INSERT INTO `jig_position` VALUES (36, 'EF2241', 1, '16', 'A2', NULL, '1');
-
--- ----------------------------
--- Table structure for maintenance_type
--- ----------------------------
-DROP TABLE IF EXISTS `maintenance_type`;
-CREATE TABLE `maintenance_type`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of maintenance_type
--- ----------------------------
-INSERT INTO `maintenance_type` VALUES (1, '夹具是否有螺丝松动.');
-INSERT INTO `maintenance_type` VALUES (2, '夹具是否有部件损坏.');
-INSERT INTO `maintenance_type` VALUES (3, '夹具是否有钢套损坏掉落等不良.');
-INSERT INTO `maintenance_type` VALUES (4, '夹具是否有机械部件松动.');
-INSERT INTO `maintenance_type` VALUES (5, '夹具电路是否正常工作.');
-INSERT INTO `maintenance_type` VALUES (6, '夹具是否有不正常的响声.');
-INSERT INTO `maintenance_type` VALUES (7, '夹具是否牢固的固定在对应位置.');
-INSERT INTO `maintenance_type` VALUES (8, '使用抹布或者刷子进行夹具清洁.');
-
--- ----------------------------
--- Table structure for outgo_income_history
--- ----------------------------
-DROP TABLE IF EXISTS `outgo_income_history`;
-CREATE TABLE `outgo_income_history`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `time` datetime(0) NULL DEFAULT NULL,
-  `submit_time` datetime(0) NULL DEFAULT NULL,
-  `user_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `status` int(2) NULL DEFAULT NULL COMMENT '出：0；入：1',
-  `rec_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `rec_time` datetime(0) NULL DEFAULT NULL,
-  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `seq_id` int(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of outgo_income_history
--- ----------------------------
-INSERT INTO `outgo_income_history` VALUES (1, NULL, '2020-01-29 11:06:10', '1230936', 0, '1215072', '2020-02-02 17:31:16', 'EF2184', 1);
-INSERT INTO `outgo_income_history` VALUES (2, NULL, '2020-01-29 11:06:10', '1230936', 1, '1215072', '2020-02-02 17:36:16', 'EF2184', 1);
-INSERT INTO `outgo_income_history` VALUES (3, NULL, '2020-01-30 09:05:34', '1215072', 0, '1215072', '2020-02-05 20:10:16', 'EF0789', 1);
-INSERT INTO `outgo_income_history` VALUES (4, NULL, '2020-02-04 20:07:07', '1230936', 0, '1215072', '2020-02-05 20:12:48', 'EF2210', 1);
-
--- ----------------------------
--- Table structure for outgo_submit
--- ----------------------------
-DROP TABLE IF EXISTS `outgo_submit`;
-CREATE TABLE `outgo_submit`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `user_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `submit_time` datetime(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of outgo_submit
--- ----------------------------
-INSERT INTO `outgo_submit` VALUES (2, 'EF2189', '1230936', '2020-02-05 20:06:13');
-INSERT INTO `outgo_submit` VALUES (3, 'EF0798', '1215072', '2020-01-07 20:06:31');
-INSERT INTO `outgo_submit` VALUES (5, 'EF2241', '1230936', '2020-02-02 20:07:55');
-INSERT INTO `outgo_submit` VALUES (6, 'EF2209', '1215072', '2020-02-05 20:08:01');
-INSERT INTO `outgo_submit` VALUES (7, 'EF2236', '1230936', '2020-02-05 20:08:17');
-INSERT INTO `outgo_submit` VALUES (8, 'EF2239', '1230936', '2020-02-05 20:08:38');
-INSERT INTO `outgo_submit` VALUES (9, 'EF2185', '1215072', '2020-02-05 20:08:50');
-INSERT INTO `outgo_submit` VALUES (10, 'EF2191', '1215072', '2020-02-05 20:09:03');
-INSERT INTO `outgo_submit` VALUES (11, 'EF2191', '1230936', '2020-02-05 20:09:20');
-
--- ----------------------------
--- Table structure for outgoing_jig
--- ----------------------------
-DROP TABLE IF EXISTS `outgoing_jig`;
-CREATE TABLE `outgoing_jig`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `seq_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `user_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `submit_time` datetime(0) NULL DEFAULT NULL,
-  `outgo_time` datetime(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of outgoing_jig
--- ----------------------------
-INSERT INTO `outgoing_jig` VALUES (1, 'EF0789', '1', '1215072', '2020-01-30 09:05:34', '2020-02-05 20:10:16');
-INSERT INTO `outgoing_jig` VALUES (2, 'EF2210', '1', '1230936', '2020-02-04 20:07:07', '2020-02-05 20:12:48');
-
--- ----------------------------
--- Table structure for privoder
--- ----------------------------
-DROP TABLE IF EXISTS `privoder`;
-CREATE TABLE `privoder`  (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for production_line
@@ -332,214 +122,8 @@ INSERT INTO `production_line` VALUES (30, 'BLKA09');
 INSERT INTO `production_line` VALUES (31, 'MSUP');
 INSERT INTO `production_line` VALUES (32, 'SAU');
 INSERT INTO `production_line` VALUES (33, 'SCU');
-INSERT INTO `production_line` VALUES (34, 'Super line');
+INSERT INTO `production_line` VALUES (34, 'Super   line');
 INSERT INTO `production_line` VALUES (35, 'SXU 0501');
-
--- ----------------------------
--- Table structure for provider_supply
--- ----------------------------
-DROP TABLE IF EXISTS `provider_supply`;
-CREATE TABLE `provider_supply`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `provider_id` int(11) NULL DEFAULT NULL,
-  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `price` decimal(10, 2) NULL DEFAULT NULL,
-  `period` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
-
--- ----------------------------
--- Table structure for purchase_income_submit
--- ----------------------------
-DROP TABLE IF EXISTS `purchase_income_submit`;
-CREATE TABLE `purchase_income_submit`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `submit_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `count` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `submit_time` datetime(0) NULL DEFAULT NULL,
-  `first_time` datetime(0) NULL DEFAULT NULL,
-  `first_acceptor` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `final_time` datetime(0) NULL DEFAULT NULL,
-  `final_acceptor` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `status` varchar(2) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '0待审核 1初审未通过 2初审通过 3终审未通过 4终审通过',
-  `production_line_id` int(11) NULL DEFAULT NULL,
-  `bill_no` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `tool_photo_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of purchase_income_submit
--- ----------------------------
-INSERT INTO `purchase_income_submit` VALUES (1, '1230936', 'EF2238|EF2187', '5|1', '2020-02-03 09:36:01', NULL, NULL, NULL, NULL, '2', 12, 'BO19070500000002', NULL);
-INSERT INTO `purchase_income_submit` VALUES (2, '1230936', 'EF0789', '2', '2020-02-03 11:10:12', NULL, NULL, NULL, NULL, '0', 10, 'BO19070500002000', NULL);
-INSERT INTO `purchase_income_submit` VALUES (3, '1230936', 'EF2189|EF0789', '1|19', '2020-02-03 15:42:43', NULL, NULL, NULL, NULL, '0', 9, '20200203', NULL);
-INSERT INTO `purchase_income_submit` VALUES (4, '1230936', 'EF2191|EF2190', '1|3', '2020-02-03 15:45:38', NULL, NULL, NULL, NULL, '0', 9, '202002031545', NULL);
-INSERT INTO `purchase_income_submit` VALUES (6, '1230936', 'EF0789|EF2203', '15|12', '2020-02-03 16:41:54', NULL, NULL, NULL, NULL, '0', 9, '202002031641', NULL);
-INSERT INTO `purchase_income_submit` VALUES (7, '1230936', 'EF2203', '18', '2020-02-03 16:42:16', NULL, NULL, NULL, NULL, '0', 9, '202002031641', NULL);
-INSERT INTO `purchase_income_submit` VALUES (8, '1230936', 'EF2189', '9', '2020-02-03 16:45:02', NULL, NULL, NULL, NULL, '0', 10, '202002031644', NULL);
-INSERT INTO `purchase_income_submit` VALUES (9, '1230936', 'EF2189', '3', '2020-02-03 21:17:45', NULL, NULL, NULL, NULL, '0', 9, '202002032117', NULL);
-INSERT INTO `purchase_income_submit` VALUES (11, '1230936', 'EF2191|EF2192|EF2184', '1|1|2', '2020-02-04 12:42:58', NULL, NULL, NULL, NULL, '0', 9, '202002041242', NULL);
-INSERT INTO `purchase_income_submit` VALUES (12, '1230936', 'EF2188|EF2185|EF0798', '2|1|5', '2020-02-06 13:00:32', NULL, NULL, NULL, NULL, '0', 12, '202002061300', NULL);
-INSERT INTO `purchase_income_submit` VALUES (13, '1230936', 'EF2191|EF2208|EF2234', '2|7|4', '2020-02-06 13:00:48', NULL, NULL, NULL, NULL, '0', 14, '202002061300', NULL);
-INSERT INTO `purchase_income_submit` VALUES (15, '1230936', 'EF0789|EF2188|EF2190|EF2203', '2|4|3|2', '2020-02-06 17:28:18', NULL, NULL, NULL, NULL, '0', 12, '202002061727', NULL);
-INSERT INTO `purchase_income_submit` VALUES (16, '1230936', 'EF0789', '1', '2020-02-09 13:44:36', NULL, NULL, NULL, NULL, '0', 11, '202002091344', NULL);
-
--- ----------------------------
--- Table structure for purchase_income_submit_history
--- ----------------------------
-DROP TABLE IF EXISTS `purchase_income_submit_history`;
-CREATE TABLE `purchase_income_submit_history`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `submit_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `count` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `submit_time` datetime(0) NULL DEFAULT NULL,
-  `first_time` datetime(0) NULL DEFAULT NULL,
-  `first_acceptor` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `first_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `final_time` datetime(0) NULL DEFAULT NULL,
-  `final_acceptor` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `final_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `status` varchar(2) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '0初审未通过 1 初审通过 2 终审未通过 3 终审通过 ',
-  `production_line_id` int(11) NULL DEFAULT NULL,
-  `bill_no` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `tool_photo_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of purchase_income_submit_history
--- ----------------------------
-INSERT INTO `purchase_income_submit_history` VALUES (1, '1230936', 'EF2238|EF2187', '5|1', '2020-02-03 09:36:01', '2020-02-06 17:46:44', '1215072', NULL, NULL, NULL, NULL, '2', 12, '202002051524', NULL);
-INSERT INTO `purchase_income_submit_history` VALUES (2, '1230936', 'EF2238|EF2187', '5|10', '2020-02-03 12:20:01', '2020-02-04 17:46:44', '1215072', NULL, '2020-02-05 19:19:29', '1215072', 'EF2187数量过多', '3', 12, '202002031220', NULL);
-
--- ----------------------------
--- Table structure for regular_maintenance
--- ----------------------------
-DROP TABLE IF EXISTS `regular_maintenance`;
-CREATE TABLE `regular_maintenance`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `seq_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `pm_period` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `last_time` datetime(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
-
--- ----------------------------
--- Table structure for regular_maintenance_history
--- ----------------------------
-DROP TABLE IF EXISTS `regular_maintenance_history`;
-CREATE TABLE `regular_maintenance_history`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `seq_id` int(11) NULL DEFAULT NULL,
-  `reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '?|?|?  由‘|’符号分隔\r\n对照检修类型表\r\n',
-  `check_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
-
--- ----------------------------
--- Table structure for repair_submit
--- ----------------------------
-DROP TABLE IF EXISTS `repair_submit`;
-CREATE TABLE `repair_submit`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `seq_id` int(11) NULL DEFAULT NULL,
-  `trouble_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `trouble_photo_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `submit_time` datetime(0) NULL DEFAULT NULL,
-  `submit_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `acceptor_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `acceptor_time` datetime(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
-
--- ----------------------------
--- Table structure for repair_submit_history
--- ----------------------------
-DROP TABLE IF EXISTS `repair_submit_history`;
-CREATE TABLE `repair_submit_history`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `seq_id` int(11) NULL DEFAULT NULL,
-  `trouble_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `trouble_photo_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `submit_time` datetime(0) NULL DEFAULT NULL,
-  `submit_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `acceptor_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `acceptor_time` datetime(0) NULL DEFAULT NULL,
-  `status` varchar(2) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '0待处理 1已处理',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
-
--- ----------------------------
--- Table structure for repairing_jig
--- ----------------------------
-DROP TABLE IF EXISTS `repairing_jig`;
-CREATE TABLE `repairing_jig`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `seq_id` int(11) NULL DEFAULT NULL,
-  `start_time` datetime(0) NULL DEFAULT NULL,
-  `acceptor_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
-
--- ----------------------------
--- Table structure for scrap_submit
--- ----------------------------
-DROP TABLE IF EXISTS `scrap_submit`;
-CREATE TABLE `scrap_submit`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `seq_id` int(11) NULL DEFAULT NULL,
-  `submit_time` datetime(0) NULL DEFAULT NULL,
-  `submit_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `used_count` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `scrap_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `scrap_photo_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `first_acceptor` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `first_time` datetime(0) NULL DEFAULT NULL,
-  `first_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `final_acceptor` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `final_time` datetime(0) NULL DEFAULT NULL,
-  `final_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `status` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '0待审核 1初审未通过 2初审通过 3终审未通过 4终审通过',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of scrap_submit
--- ----------------------------
-INSERT INTO `scrap_submit` VALUES (1, 'EF2191', 1, '2020-02-16 22:14:54', '1215072', '0', '使用过久', 'images\\scrap_images\\SCRAP-20200216221454297-7dc40be3-55b9-404b-bf05-7a5c6036314d.JPG', NULL, NULL, NULL, NULL, NULL, NULL, '0');
-INSERT INTO `scrap_submit` VALUES (2, 'EF0789', 12, '2020-02-16 22:34:20', '1215072', NULL, 'test', 'images\\scrap_images\\SCRAP-20200216223420880-6f0cf957-2641-470f-9d30-f8940b121e1f.JPG', NULL, NULL, NULL, NULL, NULL, NULL, '0');
-
--- ----------------------------
--- Table structure for scrap_submit_history
--- ----------------------------
-DROP TABLE IF EXISTS `scrap_submit_history`;
-CREATE TABLE `scrap_submit_history`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `seq_id` int(11) NULL DEFAULT NULL,
-  `submit_time` datetime(0) NULL DEFAULT NULL,
-  `submit_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `used_count` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `scrap_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `scrap_photo_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `first_acceptor` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `first_time` datetime(0) NULL DEFAULT NULL,
-  `first_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `final_acceptor` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `final_time` datetime(0) NULL DEFAULT NULL,
-  `final_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `status` varchar(2) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '0待审核 1初审未通过 2初审通过 3终审未通过 4终审通过',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for user
@@ -576,24 +160,33 @@ INSERT INTO `workcell` VALUES ('7', 'JW05');
 -- View structure for jig_definition_entity_view
 -- ----------------------------
 DROP VIEW IF EXISTS `jig_definition_entity_view`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `jig_definition_entity_view` AS select `jd`.`id` AS `id`,`jd`.`name` AS `name`,`jd`.`code` AS `code`,`jd`.`model` AS `model`,`jd`.`part_no` AS `part_no`,`jd`.`family_id` AS `family_id`,`jig_family`.`family` AS `family`,`jd`.`workcell_id` AS `workcell_id`,`workcell`.`workcell` AS `workcell`,`jd`.`upl` AS `upl`,`jd`.`user_for` AS `user_for`,`jd`.`pm_period` AS `pm_period`,`jd`.`owner` AS `owner`,`u1`.`name` AS `owner_name`,`jd`.`rec_time` AS `rec_time`,`jd`.`rec_by` AS `rec_by`,`u2`.`name` AS `rec_by_name`,`jd`.`edit_time` AS `edit_time`,`jd`.`edit_by` AS `edit_by`,`u3`.`name` AS `edit_by_name`,`jd`.`remark` AS `remark` from (((((`jig_definition` `jd` join `user` `u1`) join `user` `u2`) join `user` `u3`) join `workcell`) join `jig_family`) where ((`jd`.`owner` = `u1`.`id`) and (`jd`.`rec_by` = `u2`.`id`) and (`jd`.`edit_by` = `u3`.`id`) and (`jd`.`workcell_id` = `workcell`.`id`) and (`jd`.`family_id` = `jig_family`.`id`));
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `jig_definition_entity_view` AS select `jd`.`id` AS `id`,`jd`.`name` AS `name`,`jd`.`code` AS `code`,`jd`.`model` AS `model`,`jd`.`part_no` AS `part_no`,`jd`.`family_id` AS `family_id`,`jd`.`workcell_id` AS `workcell_id`,`jd`.`upl` AS `upl`,`jd`.`user_for` AS `user_for`,`jd`.`pm_period` AS `pm_period`,`jd`.`owner` AS `owner`,`jd`.`rec_time` AS `rec_time`,`jd`.`rec_by` AS `rec_by`,`jd`.`edit_time` AS `edit_time`,`jd`.`edit_by` AS `edit_by`,`jd`.`remark` AS `remark`,`u1`.`name` AS `owner_name`,`u2`.`name` AS `rec_by_name`,`u3`.`name` AS `edit_by_name`,`workcell`.`workcell` AS `workcell`,`jig_family`.`family` AS `family` from (((((`jig_definition` `jd` join `user` `u1`) join `user` `u2`) join `user` `u3`) join `workcell`) join `jig_family`) where ((`jd`.`owner` = `u1`.`id`) and (`jd`.`rec_by` = `u2`.`id`) and (`jd`.`edit_by` = `u3`.`id`) and (`jd`.`workcell_id` = `workcell`.`id`) and (`jd`.`family_id` = `jig_family`.`id`));
 
 -- ----------------------------
--- View structure for jig_stock_view
+-- Records of workcell
 -- ----------------------------
-DROP VIEW IF EXISTS `jig_stock_view`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `jig_stock_view` AS select `jig_position`.`code` AS `code`,`jig_position`.`seq_id` AS `seq_id`,`jig_position`.`jig_cabinet_id` AS `jig_cabinet_id`,`jig_position`.`location_id` AS `location_id`,`jig_position`.`bin` AS `bin`,count(0) AS `count` from `jig_position` where (`jig_position`.`status` = '1') group by `jig_position`.`code`;
-
--- ----------------------------
--- View structure for outgoing_jig_entity_view
--- ----------------------------
-DROP VIEW IF EXISTS `outgoing_jig_entity_view`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `outgoing_jig_entity_view` AS select `outgoing_jig`.`id` AS `id`,`outgoing_jig`.`code` AS `code`,`outgoing_jig`.`seq_id` AS `seq_id`,`jig_definition`.`name` AS `name`,`outgoing_jig`.`user_id` AS `user_id`,`user`.`name` AS `user_name`,`outgoing_jig`.`submit_time` AS `submit_time`,`outgoing_jig`.`outgo_time` AS `outgo_time`,`jig_position`.`jig_cabinet_id` AS `jig_cabinet_id`,`jig_position`.`location_id` AS `location_id`,`jig_position`.`bin` AS `bin` from (((`outgoing_jig` join `jig_position`) join `user`) join `jig_definition`) where ((`user`.`id` = `outgoing_jig`.`user_id`) and (`outgoing_jig`.`code` = `jig_position`.`code`) and (`outgoing_jig`.`seq_id` = `jig_position`.`seq_id`) and (`outgoing_jig`.`code` = `jig_definition`.`code`));
-
--- ----------------------------
--- View structure for outgo_submit_entity_view
--- ----------------------------
-DROP VIEW IF EXISTS `outgo_submit_entity_view`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `outgo_submit_entity_view` AS select `outgo_submit`.`id` AS `id`,`outgo_submit`.`code` AS `code`,`outgo_submit`.`user_id` AS `user_id`,`outgo_submit`.`submit_time` AS `submit_time`,`jig_definition`.`name` AS `name`,`user`.`name` AS `user_name`,`jig_definition`.`user_for` AS `user_for`,sum(`jig_stock_view`.`count`) AS `count` from (((`jig_definition` join `outgo_submit`) join `user`) join `jig_stock_view`) where ((`jig_definition`.`code` = `outgo_submit`.`code`) and (`user`.`id` = `outgo_submit`.`user_id`) and (`jig_stock_view`.`code` = `outgo_submit`.`code`)) group by `outgo_submit`.`code`;
+INSERT INTO `workcell` VALUES (1091, 'MOD 3XM2 调谐夹具', 'EF2189', 'MOD 3XM2', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '3', '打调谐盖板', '30', '1230936', '2019-07-04 16:09:08', '1215072', '2019-07-04 16:09:08', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1092, 'MOD 3XM2 陶瓷安装夹具', 'EF2191', 'MOD 3XM2', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '1', '陶瓷安装', '30', '1230936', '2019-07-04 16:10:56', '1215072', '2019-07-04 16:10:56', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1093, 'MOD 3XM2 陶瓷组装夹具', 'EF0789', 'MOD 3XM2', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '2', '陶瓷组装', '30', '1230936', '2019-07-04 16:12:09', '1215072', '2019-07-04 16:12:09', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1094, 'MOD 防旋转夹具', 'EF2185', 'FU', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '2', '波导防旋转', '30', '1230936', '2019-07-04 16:13:01', '1215072', '2019-07-04 16:13:01', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1095, 'MOD 盖板螺丝夹具', 'EF2187', 'FU', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '1', 'AIB盖板螺丝', '30', '1230936', '2019-07-04 16:13:43', '1215072', '2019-07-04 16:13:43', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1096, 'MOD 底座夹具', 'EF2188', 'FU', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '2', 'MOD 底座', '30', '1230936', '2019-07-04 16:14:38', '1215072', '2019-07-04 16:14:38', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1097, 'MOD 波导防旋转夹具', 'EF2203', 'FU', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '2', 'MOD 波导防旋转', '30', '1230936', '2019-07-04 16:15:18', '1215072', '2019-07-04 16:15:18', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1098, 'MOD 盖板螺丝夹具', 'EF2190', 'MOD 3XM2', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '3', 'MOD 打盖板螺丝', '30', '1230936', '2019-07-04 16:16:52', '1215072', '2019-07-04 16:16:52', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1101, 'MOD 3XM2 保护夹具', 'EF2186', 'MOD 3XM2', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '1', '保护', '30', '1230936', '2019-07-12 08:02:37', '1215072', '2019-07-12 08:02:37', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1102, 'MOD 3XM2 防旋转夹具', 'EF2184', 'MOD 3XM2', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '2', 'MOD 3XM2 防旋转', '30', '1230936', '2019-07-12 08:03:57', '1215072', '2019-07-12 08:03:57', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1103, 'MOD 3XM2 最终组装夹具', 'EF2192', 'MOD 3XM2', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '1', 'MOD 3XM2 最终组装', '30', '1230936', '2019-07-12 08:04:40', '1215072', '2019-07-12 08:04:40', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1109, 'MOD 3XM2 耦合防旋转夹具1', 'EF2208', 'MOD 3XM2', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '1', 'MOD 3XM2 RX耦合防旋转', '30', '1230936', '2019-07-16 15:14:48', '1215072', '2019-07-16 15:14:48', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1110, 'MOD 3XM2 交叉耦合防旋转夹具', 'EF2207', 'MOD 3XM2', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '1', 'MOD 3XM2 交叉耦合防旋转', '30', '1230936', '2019-07-16 15:16:26', '1215072', '2019-07-16 15:16:26', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1111, 'MOD 3XM2 RX耦合防旋转夹具2', 'EF2209', 'MOD 3XM2', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '1', 'MOD 3XM2 RX耦合防旋转', '30', '1230936', '2019-07-16 15:17:46', '1215072', '2019-07-16 15:17:46', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1123, 'MOD 刷锡膏夹具', 'EF0798', 'FU', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '2', 'MOD 刷锡膏', '30', '1230936', '2019-07-18 15:59:14', '1215072', '2019-07-18 15:59:14', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1124, 'MOD 盖板螺丝夹具', 'EF2210', 'FU', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '3', 'MOD 盖板螺丝', '30', '1230936', '2019-07-18 16:00:26', '1215072', '2019-07-18 16:00:26', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1176, 'MOD 3XM2 防旋转夹具1', 'EF2234', 'MOD 3XM2', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '1', 'MOD 3XM2 防旋转', '30', '1230936', '2019-10-31 10:03:06', '1215072', '2019-11-01 08:23:05', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1177, 'MOD 3XM2 防旋转夹具2', 'EF2235', 'MOD 3XM2', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '1', 'MOD 3XM2 防旋转', '30', '1230936', '2019-10-31 10:04:20', '1215072', '2019-11-01 08:23:25', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1178, 'MOD 3XM2 防旋转夹具1', 'EF2236', 'MOD 3XM2', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '1', 'MOD 3XM2 防旋转', '30', '1230936', '2019-10-31 10:05:13', '1215072', '2019-11-01 08:23:43', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1179, 'MOD 3XM2 防旋转夹具2', 'EF2237', 'MOD 3XM2', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '1', 'MOD 3XM2 防旋转', '30', '1230936', '2019-10-31 10:06:12', '1215072', '2019-11-01 08:23:59', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1180, 'MOD 3XM2 防旋转夹具1', 'EF2238', 'MOD 3XM2', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '1', 'MOD 3XM2 防旋转', '30', '1230936', '2019-10-31 10:06:46', '1215072', '2019-11-01 08:24:14', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1181, 'MOD 3XM2 防旋转夹具2', 'EF2239', 'MOD 3XM2', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '1', 'MOD 3XM2 防旋转', '30', '1230936', '2019-10-31 10:07:29', '1215072', '2019-11-01 08:24:31', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
+INSERT INTO `workcell` VALUES (1182, 'MOD 3XM2 防旋转夹具1', 'EF2240', 'MOD 3XM2', 'PNA90320/1|PNA90320/2|PNA90322/1', '79', '7', '1', 'MOD 3XM2 防旋转', '30', '1230936', '2019-10-31 10:08:10', '1215072', '2019-11-01 08:24:51', '1215072', NULL, 'Lei Qian', 'Xianghai Zhang', 'Xianghai Zhang', 'JW05', 'JABIL FU');
 
 SET FOREIGN_KEY_CHECKS = 1;
