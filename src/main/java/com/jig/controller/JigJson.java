@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import reactor.core.publisher.Mono;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,13 +31,13 @@ public class JigJson {
     @Autowired
     private JigService jigService;
     @Value("${file.resource-url}")
-    public static String RESOURCE_URL;
+    public String RESOURCE_URL;
 
     public static final String SCRAP_IMAGE_NAME = "images/scrap_images/";
     public static final String REPAIR_IMAGE_NAME = "images/repair_images/";
     public static final String SCRAP = "SCRAP";
     public static final String REPAIR = "REPAIR";
-    public static Map<String, PhoneUpload> phoneUploadMap = new HashMap<>();
+    public static Map<String, PhoneUpload> phoneUploadMap = new HashMap<>();//存放扫码上传的map对象
 
     @NotNull
     private Map<String, Object> getStringObjectMap(List<?> data, int max) {
@@ -436,6 +435,7 @@ public class JigJson {
         //设置session
         HttpSession session = request.getSession();
         if (session.getAttribute(type + "-" + submit_id) != null) {
+            //清除无用session，以及map里的无用对象
             PhoneUpload phoneUpload = phoneUploadMap.get(session.getAttribute(type + "-" + submit_id));
             if (phoneUpload.isHadFile()) {
                 String fileName = phoneUpload.getFileName();
@@ -477,7 +477,7 @@ public class JigJson {
     @RequestMapping(value = "phone_upload_file", method = RequestMethod.POST)
     public void phoneUploadFile(@RequestParam(value = "file") MultipartFile file, @RequestParam(value = "token") String token, HttpServletRequest request) {
         assert file.getOriginalFilename() != null;
-        String after = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+        String after = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));//文件名后缀
         PhoneUpload phoneUpload = phoneUploadMap.get(token);
         String type = phoneUpload.getType();
         String fileName = phoneUpload.getFileName();
@@ -494,7 +494,6 @@ public class JigJson {
 
     @RequestMapping("get_phone_upload_token")
     public String getToken(@RequestParam(value = "token") String token, HttpServletRequest request) {
-        System.out.println("token:" + token);
         return request.getSession().getAttribute(token).toString();
     }
 

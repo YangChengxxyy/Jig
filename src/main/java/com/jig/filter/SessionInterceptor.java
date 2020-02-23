@@ -8,14 +8,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class SessionInterceptor implements HandlerInterceptor {
-    @Value("${h5.key}")
     public static String key;
+
+    @Value("${h5.key}")
+    public void setKey(String s) {
+        key = s;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
 //        System.out.println("url=" + request.getRequestURI());
         //验证session是否存在
         Object obj = request.getSession().getAttribute("user");
+//        System.out.println(key);
         if (obj == null) {
             //session不存在则先判断是否有key这个参数，
             String checkKey = request.getParameter("key") == null ? "" : request.getParameter("key");
