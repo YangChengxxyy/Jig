@@ -13,7 +13,7 @@ var left_panel = new Vue({
     },
     methods:{
         get_manager_left_message_submit_count:function () {
-            const that = this;
+            var that = this;
             $.ajax({
                 url:"get_manager_left_message_submit_count",
                 data:{
@@ -31,10 +31,10 @@ var left_panel = new Vue({
                 }
             })
         },
-        hide_purchase_submit_message(){
+        hide_purchase_submit_message:function(){
             this.purchase_submit_is_show = 0;
         },
-        hide_scrap_submit_message(){
+        hide_scrap_submit_message:function(){
             this.scrap_submit_is_show = 0;
         }
     }
@@ -62,7 +62,7 @@ var purchase_check = new Vue({
     },
     methods:{
         getData:function () {
-            const that = this;
+            var that = this;
             $.ajax({
                 url:"get_manager_purchase_submit_list",
                 data: {
@@ -76,7 +76,7 @@ var purchase_check = new Vue({
             })
         },
         get_purchaselist_detail:function (id) {
-            const that = this;
+            var that = this;
             if(this.purchase_submit_list.length!=0) {
                 this.purchase_submit = this.purchase_submit_list[id];
             }else{
@@ -84,7 +84,7 @@ var purchase_check = new Vue({
             }
         },
         pass_submit:function (id,pass) {
-            const that = this;
+            var that = this;
             $.ajax({
                 url: "manager_check_purchase_submit",
                 data: {
@@ -99,7 +99,7 @@ var purchase_check = new Vue({
         }
 
     }
-})
+});
 //历史采购记录
 var purchase_submit_history = new Vue({
     el:"#historyShop",
@@ -124,9 +124,8 @@ var purchase_submit_history = new Vue({
     },
     methods:{
         getData:function () {
-            const that = this;
-            $.ajax({
-                url:"get_manager_purchase_submit_list_history",
+            var that = this;
+            $.ajax("get_manager_purchase_submit_list_history",{
                 data:{
                     submit_name:this.submit_name,
                     submit_time:this.submit_time,
@@ -135,6 +134,7 @@ var purchase_submit_history = new Vue({
                     page_number:this.now_page_number
                 },
                 success:function (res) {
+                    console.log(res);
                     if(res.data.length === 0){
                         alert("没有结果!")
                     }
@@ -144,7 +144,7 @@ var purchase_submit_history = new Vue({
             })
         },
         get_purchase_submit_detail:function (id) {
-            const that = this;
+            var that = this;
             if(this.purchase_submit_list.length!=0) {
                 this.purchase_submit = this.purchase_submit_list[id];
             }else{
@@ -218,7 +218,7 @@ var purchase_total = new Vue({
     },
     methods:{
         getData:function () {
-            const that = this;
+            var that = this;
             $.ajax({
                 url:"get_manager_purchase_total_data",
                 data:{
@@ -283,7 +283,7 @@ var scrap_submit = new Vue({
     },
     methods:{
         getData:function () {
-            const that = this;
+            var that = this;
             $.ajax({
                 url:"get_manager_scrap_submit_list",
                 data:{
@@ -303,7 +303,7 @@ var scrap_submit = new Vue({
             }
         },
         check_scrap_submit:function (submit_id,status) {
-            const that = this;
+            var that = this;
             $.ajax({
                 url:"check_manager_scrap_submit",
                 data:{
@@ -343,7 +343,7 @@ var scrap_submit_history = new Vue({
     },
     methods:{
         getData:function () {
-            const that = this;
+            var that = this;
             $.ajax({
                 url:"get_manager_scrap_submit_list_history",
                 data:{
@@ -389,7 +389,7 @@ var jig_info = new Vue({
     },
     methods: {
         getData:function () {
-            const that = this;
+            var that = this;
             $.ajax({
                 url:"get_manager_jig_info_list",
                 data:{
@@ -403,7 +403,7 @@ var jig_info = new Vue({
         },
         //未完成
         edit_jigInfo:function (user_id) {
-            const that = this;
+            var that = this;
             $.ajax({
                 url:"edit_manager_jigInfo",
                 data:{

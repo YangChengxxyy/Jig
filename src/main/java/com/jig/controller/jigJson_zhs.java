@@ -90,6 +90,10 @@ public class jigJson_zhs {
         List<PurchaseIncomeSubmit> list = jigService.get_manager_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,status,page_number);
         int max = jigService.get_manager_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status);
         map.put("data",list);
+
+        for(PurchaseIncomeSubmit p:list){
+            System.out.println(p.getBill_no());
+        }
         map.put("max",max);
         return map;
     }

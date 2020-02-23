@@ -154,4 +154,8 @@ public class PurchaseIncomeSubmit {
     public void setTool_photo_url(String tool_photo_url) {
         this.tool_photo_url = tool_photo_url;
     }
+
+    public String toString(){
+        return bill_no;
+    }
 }
