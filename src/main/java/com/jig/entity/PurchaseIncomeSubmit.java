@@ -1,6 +1,5 @@
 package com.jig.entity;
 
-
 public class PurchaseIncomeSubmit {
     private String id;
     private String submit_id;
@@ -9,11 +8,11 @@ public class PurchaseIncomeSubmit {
     private String code;//多个用 | 分开
     private String count;//多个用 | 分开
     private String first_time;//初审时间
-    private String first_result;//初审结果
-    private String first_acceptor;//初审人
+    private String first_acceptor;//初审人id
+    private String first_acceptor_name;
     private String final_time;//终审时间
-    private String final_result;//终审结果
-    private String final_acceptor;//终审人
+    private String final_acceptor;//终审人id
+    private String final_acceptor_name;//终审人
     private String status;//审核状态 :0待审核 1初审未通过 2初审通过 3终审未通过 4终审通过
     private int production_line_id;//产线id
     private String production_line_name;
@@ -76,20 +75,20 @@ public class PurchaseIncomeSubmit {
         this.first_time = first_time;
     }
 
-    public String getFirst_result() {
-        return first_result;
-    }
-
-    public void setFirst_result(String first_result) {
-        this.first_result = first_result;
-    }
-
     public String getFirst_acceptor() {
         return first_acceptor;
     }
 
     public void setFirst_acceptor(String first_acceptor) {
         this.first_acceptor = first_acceptor;
+    }
+
+    public String getFirst_acceptor_name() {
+        return first_acceptor_name;
+    }
+
+    public void setFirst_acceptor_name(String first_acceptor_name) {
+        this.first_acceptor_name = first_acceptor_name;
     }
 
     public String getFinal_time() {
@@ -100,20 +99,20 @@ public class PurchaseIncomeSubmit {
         this.final_time = final_time;
     }
 
-    public String getFinal_result() {
-        return final_result;
-    }
-
-    public void setFinal_result(String final_result) {
-        this.final_result = final_result;
-    }
-
     public String getFinal_acceptor() {
         return final_acceptor;
     }
 
     public void setFinal_acceptor(String final_acceptor) {
         this.final_acceptor = final_acceptor;
+    }
+
+    public String getFinal_acceptor_name() {
+        return final_acceptor_name;
+    }
+
+    public void setFinal_acceptor_name(String final_acceptor_name) {
+        this.final_acceptor_name = final_acceptor_name;
     }
 
     public String getStatus() {
@@ -154,9 +153,5 @@ public class PurchaseIncomeSubmit {
 
     public void setTool_photo_url(String tool_photo_url) {
         this.tool_photo_url = tool_photo_url;
-    }
-
-    public String toString(){
-        return bill_no;
     }
 }

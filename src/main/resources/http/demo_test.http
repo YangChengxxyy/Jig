@@ -1,5 +1,6 @@
-GET http://localhost:8080/get_outgoing_submit
+GET http://localhost:8080/get_production_line_list
 Accept: application/json
 
 ###
+
 

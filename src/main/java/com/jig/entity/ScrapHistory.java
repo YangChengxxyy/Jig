@@ -1,6 +1,6 @@
 package com.jig.entity;
 
-public class ScrapSubmit {
+public class ScrapHistory {
     private String id;
     private String code;
     private String seq_id;
@@ -9,7 +9,6 @@ public class ScrapSubmit {
     private String submit_time;
     private int used_count;
     private String scrap_reason;
-    private String scrap_photo_url;
     private String first_time;//初审时间
     private String first_acceptor;//初审人id
     private String first_acceptor_name;
@@ -136,13 +135,5 @@ public class ScrapSubmit {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getScrap_photo_url() {
-        return scrap_photo_url;
-    }
-
-    public void setScrap_photo_url(String scrap_photo_url) {
-        this.scrap_photo_url = scrap_photo_url;
     }
 }

@@ -18,8 +18,7 @@ const search_jig = new Vue({
     methods: {
         getData: function () {
             const that = this;
-            $.ajax({
-                url: "search_jig_definition",
+            $.ajax("naive_search_jig_definition",{
                 data: {
                     code: this.code,
                     name: this.name,
@@ -74,10 +73,10 @@ const search_jig = new Vue({
         //     }
         // },
         onePageUrl: function () {
-            return "naive_download_search_one_excel?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&page_number=" + this.now_page_number + "&file_name=onePage" + this.now_page_number + ".xls";
+            return "naive_download_one_search?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&page_number=" + this.now_page_number + "&file_name=page" + this.now_page_number + ".xls";
         },
         allPageUrl: function () {
-            return "naive_download_search_all_excel?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&file_name=allPage.xls";
+            return "naive_download_all_search?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&file_name=page-all.xls";
         }
     }
 });
@@ -105,8 +104,7 @@ const return_jig = new Vue({
     methods: {
         getData: function () {
             const that = this;
-            $.ajax({
-                url: "get_outgoing_jig",
+            $.ajax("naive_get_outgoing_jig",{
                 data: {
                     page_number: this.now_page_number
                 },
@@ -133,8 +131,7 @@ const return_jig = new Vue({
         },
         getUsername: function () {
             const that = this;
-            $.ajax({
-                url: "get_user_name",
+            $.ajax("get_user_name",{
                 data: {
                     user_id: this.check_user_id
                 },
@@ -151,8 +148,7 @@ const return_jig = new Vue({
                 return false;
             }
             const splits = that.code_seq_id.split("-");
-            $.ajax({
-                url: "get_position",
+            $.ajax("get_position",{
                 data: {
                     code: splits[0],
                     seq_id: splits[1]
@@ -167,8 +163,7 @@ const return_jig = new Vue({
             const that = this;
             const splits = this.code_seq_id.split("-");
             if (this.check1 && this.check2 && this.check3) {
-                $.ajax({
-                    url: "return_jig",
+                $.ajax("return_jig",{
                     data: {
                         code: splits[0],
                         seq_id: splits[1],
@@ -177,10 +172,15 @@ const return_jig = new Vue({
                         user_id: this.user_id
                     },
                     success: function (res) {
-                        alert(res);
-                        $("#ruku").modal("hide");
-                        that.getData();
-                        jig_outgoing.getData();
+                        if (res) {
+                            alert("入库成功！");
+                            $("#ruku").modal("hide");
+                            that.getData();
+                            jig_outgoing.getData();
+                        } else {
+                            alert("服务器错误！")
+                        }
+
                     }
                 })
             }
@@ -209,8 +209,7 @@ const jig_outgoing = new Vue({
     methods: {
         getData: function () {
             const that = this;
-            $.ajax({
-                url: "get_outgoing_submit",
+            $.ajax("naive_get_outgoing_submit",{
                 data: {
                     page_number: this.now_page_number
                 },
@@ -235,8 +234,7 @@ const jig_outgoing = new Vue({
             if (this.check1 && this.check2) {
                 const splits = this.code_seq_id.split("-");
                 var that = this;
-                $.ajax({
-                    url: "outgo_jig",
+                $.ajax("naive_outgo_jig",{
                     data: {
                         id: this.id,
                         code: splits[0],
@@ -244,18 +242,21 @@ const jig_outgoing = new Vue({
                         rec_id: $("#id").val()
                     },
                     success: function (res) {
-                        $("#chuku").modal("hide");
-                        alert(res);
-                        that.getData();
-                        return_jig.getData();
+                        if (res) {
+                            alert("出库成功！");
+                            $("#chuku").modal("hide");
+                            that.getData();
+                            return_jig.getData();
+                        } else {
+                            alert("服务器错误！");
+                        }
                     }
                 });
             }
         },
         getUsername: function () {
             const that = this;
-            $.ajax({
-                url: "get_user_name",
+            $.ajax("get_user_name",{
                 data: {
                     user_id: this.check_user_id
                 },
@@ -272,8 +273,7 @@ const jig_outgoing = new Vue({
                 return false;
             }
             const splits = that.code_seq_id.split("-");
-            $.ajax({
-                url: "get_position",
+            $.ajax( "get_position",{
                 data: {
                     code: splits[0],
                     seq_id: splits[1]

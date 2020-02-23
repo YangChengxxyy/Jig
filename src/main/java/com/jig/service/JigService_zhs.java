@@ -1,6 +1,9 @@
 package com.jig.service;
 
-import com.jig.entity.*;
+import com.jig.entity.JigDefinition;
+import com.jig.entity.JigEntity;
+import com.jig.entity.PurchaseIncomeSubmit;
+import com.jig.entity.ScrapSubmit;
 import com.jig.mapper.JigMapper_zhs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>初级用户</title>
@@ -7,6 +7,8 @@
     <script src="js/jquery-3.4.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/vue.js"></script>
+    <script src="js/echarts.js"></script>
+    <script src="js/vue-echarts@4.0.2.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
         $(function () {
@@ -140,7 +142,7 @@
                     </ul>
                     <div class="panel-body tab-content">
                         <div id="jig_outgoing" class="tab-pane fade in active table-responsive">
-                            <table class="table table-striped table-hover" role="table">
+                            <table class="table table-striped table-hover table-bordered" role="table">
                                 <thead>
                                 <tr>
                                     <th>
@@ -258,7 +260,7 @@
                             </div>
                         </div><!--  /工夹具出库  -->
                         <div id="return_jig" class="tab-pane fade table-responsive">
-                            <table class="table table-striped table-hover" role="table">
+                            <table class="table table-striped table-hover table-bordered" role="table">
                                 <thead>
                                 <tr>
                                     <th>
@@ -411,7 +413,7 @@
                     </ul>
                     <div class="panel-body tab-content">
                         <div id="jdgjj" class="tab-pane fade in active table-responsive">
-                            <table class="table table-striped table-hover">
+                            <table class="table table-striped table-hover table-bordered">
                                 <thead>
                                 <tr>
                                     <th>
@@ -627,7 +629,7 @@
                                 </div>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-hover table-striped">
+                                <table class="table table-hover table-striped table-bordered">
                                     <thead>
                                     <tr>
                                         <th>工夹具代码</th>
@@ -787,7 +789,6 @@
                         </div><!--  /搜索工夹具  -->
                     </div>
                 </div>
-
                 <div class="panel-footer">
 
                 </div>
@@ -797,5 +798,5 @@
 </div>
 </body>
 <script src="js/pagination.js"></script>
-<script src="/js/naive_vue.js"></script>
+<script src="js/naive_vue.js"></script>
 </html>

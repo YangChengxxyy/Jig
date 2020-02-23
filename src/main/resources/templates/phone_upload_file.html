@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>文件上传</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <script src="./js/jquery-3.4.1.js"></script>
+    <script src="./js/vue.js"></script>
+</head>
+<body>
+<input id="token" th:value="${token}" style="display: none">
+<div class="panel panel-default" id="fileUpload">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            文件上传
+        </h3>
+    </div>
+    <div class="panel-body">
+        <div class="container">
+            <div class="row">
+                <div class="co-sm-12">
+                    <input type="file">
+                </div>
+            </div>
+            <div class="row">
+                <div class="co-sm-12">
+                    <button type="button" class="btn btn-primary" @click="upload">上传</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    const fileUpload = new Vue({
+        el:"#fileUpload",
+        methods:{
+            upload:function () {
+                if ($("[type='file']")[0].files.length===0){
+                    alert("请选择文件！");
+                }else{
+                    const formData = new FormData();
+                    formData.append("file", $("[type='file']")[0].files[0]);
+                    formData.append("token",$("#token").val());
+                    formData.append("key","wx6e26d78ff8614da2");
+                    $.ajax("phone_upload_file",{
+                        type: "post",
+                        processData: false,
+                        contentType: false,
+                        data:formData,
+                        success:function (res) {
+                            window.location.href = "/phone_upload_success";
+                        }
+                    })
+                }
+            }
+        }
+    })
+</script>
+</html>
