@@ -295,14 +295,14 @@ public interface JigMapper {
     /**
      * high搜索历史报废
      *
-     * @param code        工夹具代码
-     * @param seq_id      工夹具序列号
-     * @param submit_id 申请人id
+     * @param code         工夹具代码
+     * @param seq_id       工夹具序列号
+     * @param submit_id    申请人id
      * @param scrap_reason 报废原因
-     * @param status      状态
-     * @param start_date  最早日期
-     * @param end_date    最晚日期
-     * @param page_number 页码
+     * @param status       状态
+     * @param start_date   最早日期
+     * @param end_date     最晚日期
+     * @param page_number  页码
      * @return 搜索到的历史报废记录
      */
     List<ScrapHistory> highSearchScrapHistory(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_id") String submit_id, @Param("scrap_reason") String scrap_reason, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date, @Param("page_number") int page_number);
@@ -310,13 +310,13 @@ public interface JigMapper {
     /**
      * high搜索全部历史报废
      *
-     * @param code        工夹具代码
-     * @param seq_id      工夹具序列号
-     * @param submit_id 申请人id
+     * @param code         工夹具代码
+     * @param seq_id       工夹具序列号
+     * @param submit_id    申请人id
      * @param scrap_reason 报废原因
-     * @param status      状态
-     * @param start_date  最早日期
-     * @param end_date    最晚日期
+     * @param status       状态
+     * @param start_date   最早日期
+     * @param end_date     最晚日期
      * @return 搜索到的全部报废历史
      */
     List<ScrapHistory> highSearchAllScrapHistory(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_id") String submit_id, @Param("scrap_reason") String scrap_reason, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date);
@@ -324,12 +324,12 @@ public interface JigMapper {
     /**
      * high搜索历史报废
      *
-     * @param code        工夹具代码
-     * @param seq_id      序列号
-     * @param submit_id 申请人id
-     * @param status      状态
-     * @param start_date  最早日期
-     * @param end_date    最晚日期
+     * @param code       工夹具代码
+     * @param seq_id     序列号
+     * @param submit_id  申请人id
+     * @param status     状态
+     * @param start_date 最早日期
+     * @param end_date   最晚日期
      * @return 历史报废记录
      */
     int highSearchScrapHistoryPage(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_id") String submit_id, @Param("scrap_reason") String scrap_reason, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date);

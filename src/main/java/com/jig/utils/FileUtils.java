@@ -1,4 +1,5 @@
 package com.jig.utils;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -86,7 +87,7 @@ public class FileUtils {
     /**
      * 将InputStream写入到File中
      *
-     * @param ins 输入流
+     * @param ins  输入流
      * @param file 文件
      * @throws IOException
      */

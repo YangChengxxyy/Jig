@@ -12,8 +12,7 @@ import javax.servlet.http.HttpSession;
 public class JigWeb_zhs {
 
     @RequestMapping(value = "show_high_main", method = {RequestMethod.GET, RequestMethod.POST})
-    public String showHighMain(HttpServletRequest request)
-    {
+    public String showHighMain(HttpServletRequest request) {
         User user = new User();
         user.setName("Xianghai Zhang");
         user.setId("1215072");
@@ -22,9 +21,8 @@ public class JigWeb_zhs {
         return "high";
     }
 
-    @RequestMapping(value = "show_manager_main",method = {RequestMethod.GET,RequestMethod.POST})
-    public String showManagerMain(HttpServletRequest request)
-    {
+    @RequestMapping(value = "show_manager_main", method = {RequestMethod.GET, RequestMethod.POST})
+    public String showManagerMain(HttpServletRequest request) {
         User user = new User();
         user.setName("Xianghai Zhang");
         user.setId("1215072");

@@ -155,7 +155,7 @@ public class PurchaseIncomeSubmit {
         this.tool_photo_url = tool_photo_url;
     }
 
-    public String toString(){
+    public String toString() {
         return bill_no;
     }
 }

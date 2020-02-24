@@ -32,14 +32,14 @@ public class PurchaseTotalJigDetail {
         this.about_purchase_submit_list = about_purchase_submit_list;
     }
 
-    public String toString(){
-        return "code:" + code +",count:"+count+"\n";
+    public String toString() {
+        return "code:" + code + ",count:" + count + "\n";
     }
 
-    public String about_submit_toString(){
-        String str="";
-        for (PurchaseIncomeSubmit p:about_purchase_submit_list){
-            str += p.getBill_no()+",";
+    public String about_submit_toString() {
+        String str = "";
+        for (PurchaseIncomeSubmit p : about_purchase_submit_list) {
+            str += p.getBill_no() + ",";
         }
         return str;
     }

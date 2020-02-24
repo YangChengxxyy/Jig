@@ -124,6 +124,7 @@ public class Shudu {
         System.out.println();
     }
 }
+
 class Paixu {
     public static void main(String[] args) {
         String[] a = {

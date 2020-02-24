@@ -13,9 +13,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class ResourceConfig implements WebMvcConfigurer {
     @Value("${file.resource-url}")
     public String RESOURCE_URL;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/images/**")
-                .addResourceLocations("file:"+RESOURCE_URL+"images/");
+                .addResourceLocations("file:" + RESOURCE_URL + "images/");
     }
 }
