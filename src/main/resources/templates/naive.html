@@ -127,7 +127,19 @@
                                 </ul>
                             </div>
                         </div>
-
+                        <div class="panel panel-default">
+                            <div class="panel-heading" data-toggle="collapse" data-parent="#left" href="#3">
+                                <h4 class="panel-title" data-toggle="tab" href="#main3">
+                                    报修管理
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse" id="3">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li class="active" data-toggle="tab" href="#myRepair"><a>我的报修</a></li>
+                                    <li data-toggle="tab" href="#repairHistory"><a>历史报修记录</a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -789,9 +801,44 @@
                         </div><!--  /搜索工夹具  -->
                     </div>
                 </div>
-                <div class="panel-footer">
 
+                <div id="main3" class="panel-body tab-content tab-pane fade">
+                    <ul class="nav nav-tabs">
+                        <li class="active" data-toggle="tab" href="#myRepair"><a>我的报修</a></li>
+                        <li data-toggle="tab" href="#repairHistory"><a>历史报修记录</a></li>
+                    </ul>
+                    <div class="panel-body tab-content">
+                        <div id="myRepair" class="tab-pane fade in active">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>工夹具代码</th>
+                                        <th>工夹具序列号</th>
+                                        <th>故障原因</th>
+                                        <th>申请时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="item in repairList">
+                                        <td>{{item.code}}</td>
+                                        <td>{{item.seq_id}}</td>
+                                        <td>{{item.scrap_reason}}</td>
+                                        <td>{{item.submit_time}}</td>
+                                        <td></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <my-pagination :now_page_number="now_page_number" :max_page_number="max_page_number"></my-pagination>
+                        </div>
+                        <div id="repairHistory" class="tab-content fade in active">
+
+                        </div>
+                    </div>
                 </div>
+                <div class="panel-footer"></div>
             </div>
         </div>
     </div>

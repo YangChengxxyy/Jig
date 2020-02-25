@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author yc
@@ -167,5 +168,15 @@ public class JigService {
 
     public List<String> codeGetSeqId(String code) {
         return jigMapper.codeGetSeqId(code);
+    }
+
+    public List<RepairJig> naiveGetRepairList(String submit_id, int page_number) {
+        page_number = (page_number - 1) * 5;
+        return jigMapper.naiveGetRepairList(submit_id, page_number);
+    }
+
+    public int naiveGetRepairListPage(String submit_id) {
+        int a = jigMapper.naiveGetRepairListPage(submit_id);
+        return (int) Math.ceil(a / 5.0);
     }
 }

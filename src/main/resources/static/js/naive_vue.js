@@ -2,6 +2,7 @@ function position(res) {
     return (res.jig_cabinet_id == null ? "" : ("" + res.jig_cabinet_id)) + (res.location_id == null ? "" : ("-" + res.location_id)) + (res.bin == null ? "" : ("-" + res.bin));
 }
 
+let id = $("#id").val();
 const search_jig = new Vue({
     el: "#search_jig",
     data: {
@@ -18,7 +19,7 @@ const search_jig = new Vue({
     methods: {
         getData: function () {
             const that = this;
-            $.ajax("naive_search_jig_definition",{
+            $.ajax("naive_search_jig_definition", {
                 data: {
                     code: this.code,
                     name: this.name,
@@ -104,7 +105,7 @@ const return_jig = new Vue({
     methods: {
         getData: function () {
             const that = this;
-            $.ajax("naive_get_outgoing_jig",{
+            $.ajax("naive_get_outgoing_jig", {
                 data: {
                     page_number: this.now_page_number
                 },
@@ -131,7 +132,7 @@ const return_jig = new Vue({
         },
         getUsername: function () {
             const that = this;
-            $.ajax("get_user_name",{
+            $.ajax("get_user_name", {
                 data: {
                     user_id: this.check_user_id
                 },
@@ -148,7 +149,7 @@ const return_jig = new Vue({
                 return false;
             }
             const splits = that.code_seq_id.split("-");
-            $.ajax("get_position",{
+            $.ajax("get_position", {
                 data: {
                     code: splits[0],
                     seq_id: splits[1]
@@ -163,7 +164,7 @@ const return_jig = new Vue({
             const that = this;
             const splits = this.code_seq_id.split("-");
             if (this.check1 && this.check2 && this.check3) {
-                $.ajax("return_jig",{
+                $.ajax("return_jig", {
                     data: {
                         code: splits[0],
                         seq_id: splits[1],
@@ -209,7 +210,7 @@ const jig_outgoing = new Vue({
     methods: {
         getData: function () {
             const that = this;
-            $.ajax("naive_get_outgoing_submit",{
+            $.ajax("naive_get_outgoing_submit", {
                 data: {
                     page_number: this.now_page_number
                 },
@@ -234,7 +235,7 @@ const jig_outgoing = new Vue({
             if (this.check1 && this.check2) {
                 const splits = this.code_seq_id.split("-");
                 var that = this;
-                $.ajax("naive_outgo_jig",{
+                $.ajax("naive_outgo_jig", {
                     data: {
                         id: this.id,
                         code: splits[0],
@@ -256,7 +257,7 @@ const jig_outgoing = new Vue({
         },
         getUsername: function () {
             const that = this;
-            $.ajax("get_user_name",{
+            $.ajax("get_user_name", {
                 data: {
                     user_id: this.check_user_id
                 },
@@ -273,7 +274,7 @@ const jig_outgoing = new Vue({
                 return false;
             }
             const splits = that.code_seq_id.split("-");
-            $.ajax( "get_position",{
+            $.ajax("get_position", {
                 data: {
                     code: splits[0],
                     seq_id: splits[1]
@@ -290,4 +291,41 @@ const jig_outgoing = new Vue({
             })
         }
     }
+});
+const myRepair = new Vue({
+    el: "#myRepair",
+    data: {
+        repairList: [],
+        now_page_number: 1,
+        max_page_number: 0
+    },
+    created: function () {
+        this.getData();
+    },
+    methods: {
+        getData() {
+            let that = this;
+            $.ajax("naive_get_repair_list", {
+                data: {
+                    submit_id: id,
+                    page_number :that.now_page_number
+                },
+                success: function (res) {
+                    that.repair_list = res["data"];
+                    that.max_page_number = res["max"];
+                }
+            });
+        }
+    },
+    computed: {},
+    watch: {},
+});
+const repairHistory = new Vue({
+    el: "#repairHistory",
+    data: {},
+    created: function () {
+    },
+    methods: {},
+    computed: {},
+    watch: {},
 });

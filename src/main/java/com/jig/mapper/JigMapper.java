@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 @Repository
@@ -339,4 +340,8 @@ public interface JigMapper {
     int highDeleteScrap(@Param("id") String id);
 
     List<String> codeGetSeqId(@Param("code") String code);
+
+    List<RepairJig> naiveGetRepairList(@Param("submit_id") String submit_id, @Param("page_number") int page_number);
+
+    int naiveGetRepairListPage(@Param("submit_id") String submit_id);
 }

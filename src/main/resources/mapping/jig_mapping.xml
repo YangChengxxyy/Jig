@@ -427,9 +427,26 @@
         </if>
     </select>
     <select id="codeGetSeqId" resultType="java.lang.String">
-        select seq_id from jig_entity where code = #{code}
+        select seq_id
+        from jig_entity
+        where code = #{code}
     </select>
     <delete id="highDeleteScrap">
-        delete from scrap_submit where id = #{id}
+        delete
+        from scrap_submit
+        where id = #{id}
     </delete>
+    <select id="naiveGetRepairList" resultType="com.jig.entity.RepairJig">
+        select rs.*,u1.name submit_name,u2.name accrptor_name
+        from repair_submit rs
+                 left join user u1 on rs.submit_id = u1.id
+                 left join user u2 on acceptor_id = u2.id
+        where submit_id = #{submit_id}
+        limit #{page_number},5
+    </select>
+    <select id="naiveGetRepairListPage" resultType="java.lang.Integer">
+        select count(*)
+        from repair_submit
+        where submit_id = #{submit_id};
+    </select>
 </mapper>

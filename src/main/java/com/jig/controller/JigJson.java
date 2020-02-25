@@ -475,7 +475,7 @@ public class JigJson {
     }
 
     @RequestMapping(value = "phone_upload_file", method = RequestMethod.POST)
-    public void phoneUploadFile(@RequestParam(value = "file") MultipartFile file, @RequestParam(value = "token") String token, HttpServletRequest request) {
+    public void phoneUploadFile(@RequestParam(value = "file") MultipartFile file, @RequestParam(value = "token") String token) {
         assert file.getOriginalFilename() != null;
         String after = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));//文件名后缀
         PhoneUpload phoneUpload = phoneUploadMap.get(token);
@@ -500,5 +500,10 @@ public class JigJson {
     @RequestMapping("get_phone_upload_map")
     public PhoneUpload getPhoneUploadMap(@RequestParam(value = "token") String token) {
         return phoneUploadMap.get(token);
+    }
+
+    @RequestMapping("naive_get_repair_list")
+    public Map<String, Object> naiveGetRepairList(@RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "page_number") int page_number) {
+        return getStringObjectMap(jigService.naiveGetRepairList(submit_id, page_number), jigService.naiveGetRepairListPage(submit_id));
     }
 }
