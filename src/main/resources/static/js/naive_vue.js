@@ -296,6 +296,7 @@ const myRepair = new Vue({
     el: "#myRepair",
     data: {
         repairList: [],
+        repair:null,
         now_page_number: 1,
         max_page_number: 0
     },
@@ -315,6 +316,9 @@ const myRepair = new Vue({
                     that.max_page_number = res["max"];
                 }
             });
+        },
+        showDetail:function (index) {
+            this.repair = this.repair_list[index];
         }
     },
     computed: {},
