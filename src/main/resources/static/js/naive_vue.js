@@ -303,12 +303,12 @@ const myRepair = new Vue({
         this.getData();
     },
     methods: {
-        getData() {
+        getData: function () {
             let that = this;
             $.ajax("naive_get_repair_list", {
                 data: {
                     submit_id: id,
-                    page_number :that.now_page_number
+                    page_number: that.now_page_number
                 },
                 success: function (res) {
                     that.repair_list = res["data"];

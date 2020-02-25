@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>初级用户</title>
+    <link rel="shortcut icon" href="/favicon.ico">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <script src="js/jquery-3.4.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -809,6 +810,101 @@
                     </ul>
                     <div class="panel-body tab-content">
                         <div id="myRepair" class="tab-pane fade in active">
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            data-target="#submitRepair">提交报废
+                                    </button>
+                                </div>
+                                <div class="modal fade" id="submitRepair" tabindex="-1" role="dialog"
+                                     aria-labelledby="submit_repairLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-hidden="true">&times;
+                                                </button>
+                                                <h4 class="modal-title" id="submit_repairLabel">提交报修申请</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">工夹具代码</label>
+                                                        <div class="col-sm-8">
+                                                            <select  class="form-control" v-model="submit_code" @change="getSeqId"
+                                                                     :style="{'borderColor': submit_code == ''? '#c9302c':'#ccc'}">
+                                                                <option v-for="item in code_list" :value="item">
+                                                                    {{item}}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">工夹具序列号</label>
+                                                        <div class="col-sm-8">
+                                                            <select v-model="submit_seq_id" class="form-control" :style="{'borderColor': submit_seq_id == ''? '#c9302c':'#ccc'}">
+                                                                <option v-for="item in seq_list" :value="item">{{item}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">故障原因</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control"
+                                                                   v-model="submit_scrap_reason"
+                                                                   :style="{'borderColor': submit_scrap_reason == ''? '#c9302c':'#ccc'}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">故障照片</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="input-group">
+                                                                <div class="form-control"
+                                                                     :style="{'borderColor': submit_scrap_photo == '点击上传图片'? '#c9302c':'#ccc'}">
+                                                                    {{submit_scrap_photo}}
+                                                                    <input type="file" class="form-control" id="scrap_photo" v-if="phone_status == -1"
+                                                                           style="opacity: 0;position: absolute;top: 0px;left: 0px"
+                                                                           @change="file" name="file" accept="image/jpeg,image/jpg,image/png">
+                                                                </div>
+                                                                <span class="input-group-addon" data-trigger="hover"
+                                                                      data-container="body" data-toggle="popover" data-placement="top"
+                                                                      data-content="点击扫码上传,双击取消二维码" @click="showQRCode" @dblclick="cancelQR">
+                                                                    <span class="glyphicon glyphicon-qrcode"></span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" v-if="phone_status != -1">
+                                                        <div class="col-sm-8 col-sm-push-3">
+                                                            <img :src="QR_url" class="img-thumbnail">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" v-if="phone_status != -1">
+                                                        <div class="col-sm-8 col-sm-push-3">
+                                                            <div class="control-label" v-if="phone_status == 1" style="text-align: center">
+                                                                <span class="glyphicon glyphicon-ok-circle text-success"></span>扫描成功!
+                                                            </div>
+                                                            <div class="control-label" v-else-if="phone_status == 2" style="text-align: center">
+                                                                <span class="glyphicon glyphicon-ok-circle text-success"></span>上传成功！
+                                                            </div>
+                                                            <div class="control-label" v-else-if="phone_status == 3" style="text-align: center">
+                                                                <span class="glyphicon glyphicon-remove-circle text-danger"></span>二维码过期！
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                                </button>
+                                                <button type="button" class="btn btn-primary" @click="submit_scrap">
+                                                    提交更改
+                                                </button>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal -->
+                                </div>
+                            </div>
                             <div class="table-responsive">
                                 <table class="table table-bordered table-hover table-striped">
                                     <thead>
@@ -826,7 +922,9 @@
                                         <td>{{item.seq_id}}</td>
                                         <td>{{item.scrap_reason}}</td>
                                         <td>{{item.submit_time}}</td>
-                                        <td></td>
+                                        <td>
+                                            <button type="button"
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
