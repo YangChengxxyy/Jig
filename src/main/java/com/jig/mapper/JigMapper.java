@@ -344,4 +344,6 @@ public interface JigMapper {
     List<RepairJig> naiveGetRepairList(@Param("submit_id") String submit_id, @Param("page_number") int page_number);
 
     int naiveGetRepairListPage(@Param("submit_id") String submit_id);
+
+    void naiveSubmitRepair(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_id") String submit_id, @Param("repair_reason") String repair_reason, @Param("pathName") String pathName);
 }

@@ -437,7 +437,7 @@
         where id = #{id}
     </delete>
     <select id="naiveGetRepairList" resultType="com.jig.entity.RepairJig">
-        select rs.*,u1.name submit_name,u2.name accrptor_name
+        select rs.*, u1.name submit_name, u2.name accrptor_name
         from repair_submit rs
                  left join user u1 on rs.submit_id = u1.id
                  left join user u2 on acceptor_id = u2.id
@@ -449,4 +449,9 @@
         from repair_submit
         where submit_id = #{submit_id};
     </select>
+    <insert id="naiveSubmitRepair">
+        insert into repair_submit(code, seq_id, repair_reason, repair_photo_url, submit_time,
+                                  submit_id) value (#{code}, #{seq_id}, #{repair_reason}, #{pathName}, now(),
+                                                    #{submit_id})
+    </insert>
 </mapper>

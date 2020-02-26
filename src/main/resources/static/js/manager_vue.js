@@ -415,4 +415,4 @@ var jig_info = new Vue({
             })
         }
     }
-})
+});

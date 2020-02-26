@@ -411,7 +411,7 @@ const myscrap = new Vue({
         now_page_number: 1,
         max_page_number: 0,
         scrap_list: [],
-        script: null,
+        scrap: null,
         code_list: code_list,
         submit_code: "",
         submit_seq_id: "",
@@ -422,7 +422,8 @@ const myscrap = new Vue({
         QR_url: "",
         interval: "",
         phone_status: -1,
-        phone_token: ""
+        phone_token: "",
+        type: "scrap"
     },
     created: function () {
         this.getData();
@@ -452,7 +453,7 @@ const myscrap = new Vue({
             })
         },
         scrap_detail: function (index) {
-            this.script = this.scrap_list[index];
+            this.scrap = this.scrap_list[index];
         },
         del: function (id, scrap_photo_url) {
             const that = this;
@@ -547,15 +548,13 @@ const myscrap = new Vue({
         showQRCode: function () {
             let that = this;
             clearInterval(this.interval);
-            this.QR_url = "/get_phone_qr_code?type=scrap&submit_id=" + id + "&id=" + Math.random();
-            var session;
+            this.QR_url = "/get_phone_qr_code?type=" + that.type + "&submit_id=" + id + "&id=" + Math.random();
             let count = 0;
             that.phone_status = 0;
-            console.log("scrap-" + id);
             setTimeout(() => {
                 $.ajax("get_phone_upload_token", {
                     data: {
-                        token: "scrap-" + id
+                        token: that.type + "-" + id
                     },
                     async: false,
                     success: function (res) {
@@ -569,13 +568,12 @@ const myscrap = new Vue({
                             token: that.phone_token
                         },
                         success: function (res) {
-                            session = res;
                             if (res.scan && that.phone_status !== 1) {
                                 that.phone_status = 1;
                             }
                             if (res.hadFile && that.phone_status !== 2) {
                                 that.phone_status = 2;
-                                that.submit_scrap_photo = session.uploadFileName;
+                                that.submit_scrap_photo = res.uploadFileName;
                                 clearInterval(that.interval);
                             }
                         }
@@ -588,7 +586,7 @@ const myscrap = new Vue({
                 }, 500);
             }, 1000)
         },
-        cancelQR:function () {
+        cancelQR: function () {
             this.phone_status = -1;
         }
     }

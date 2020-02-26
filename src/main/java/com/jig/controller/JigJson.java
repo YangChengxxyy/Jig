@@ -57,6 +57,16 @@ public class JigJson {
         return SCRAP_IMAGE_NAME + SCRAP + "-" + nowTime + "-" + uuidString + after;
     }
 
+    private String getRepairPathName(String fileName) {
+        UUID uuid = UUID.randomUUID();
+        String uuidString = uuid.toString();
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");//设置日期格式
+        String nowTime = LocalDateTime.now().format(fmt);
+        assert fileName != null;
+        String after = fileName.substring(fileName.lastIndexOf('.'));
+        return REPAIR_IMAGE_NAME + REPAIR + "-" + nowTime + "-" + uuidString + after;
+    }
+
     @RequestMapping(value = "get_demo_list", method = {RequestMethod.POST, RequestMethod.GET})
     public Map<String, Object> getDemoList(@RequestParam(value = "page_number") int pageNumber) {
         List<DemoEntity> a = new ArrayList<>();
@@ -365,13 +375,13 @@ public class JigJson {
 
     @RequestMapping("high_phone_submit_scrap")
     public boolean high_phone_submit_scrap(@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "scrap_reason") String scrap_reason, @RequestParam(value = "token") String token, HttpServletRequest request) {
-        HttpSession session = request.getSession();
         try {
-            session = request.getSession();
+            HttpSession session = request.getSession();
             session.removeAttribute("scrap-" + submit_id);
             PhoneUpload phoneUpload = phoneUploadMap.get(token);
             String pathName = phoneUpload.getFileName();
             pathName = SCRAP_IMAGE_NAME + pathName + phoneUpload.getUploadFileName().substring(phoneUpload.getUploadFileName().lastIndexOf('.'));
+            phoneUploadMap.remove(token);
             jigService.highSubmitScrap(code, seq_id, submit_id, scrap_reason, pathName);
         } catch (Exception e) {
             return false;
@@ -505,5 +515,37 @@ public class JigJson {
     @RequestMapping("naive_get_repair_list")
     public Map<String, Object> naiveGetRepairList(@RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "page_number") int page_number) {
         return getStringObjectMap(jigService.naiveGetRepairList(submit_id, page_number), jigService.naiveGetRepairListPage(submit_id));
+    }
+
+    @RequestMapping("naive_submit_repair")
+    public boolean naiveSubmitRepair(@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "repair_reason") String repair_reason, @RequestParam(value = "file") MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        try {
+            assert fileName != null;
+            String pathName = getRepairPathName(fileName);
+            FileUtils.writeByteArrayToFile
+                    (new File(RESOURCE_URL + pathName), file.getBytes());
+            jigService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, pathName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @RequestMapping("naive_phone_submit_repair")
+    public boolean naivePhoneSubmitRepair(@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "repair_reason") String repair_reason, @RequestParam(value = "token") String token, HttpServletRequest request) {
+        try {
+            HttpSession session = request.getSession();
+            session.removeAttribute("repair-" + submit_id);
+            PhoneUpload phoneUpload = phoneUploadMap.get(token);
+            String pathName = phoneUpload.getFileName();
+            pathName = REPAIR_IMAGE_NAME + pathName + phoneUpload.getUploadFileName().substring(phoneUpload.getUploadFileName().lastIndexOf('.'));
+            phoneUploadMap.remove(token);
+            jigService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, pathName);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 }

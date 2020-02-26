@@ -59,7 +59,8 @@ public class JigService {
     }
 
     public int naiveGetOutgoingJigPage() {
-        return jigMapper.getOutgoingJigPage();
+        int a = jigMapper.getOutgoingJigPage();
+        return (int) Math.ceil(a / 5.0);
     }
 
     public void naiveReturnJig(String id, String code, String seq_id, String rec_id) {
@@ -178,5 +179,9 @@ public class JigService {
     public int naiveGetRepairListPage(String submit_id) {
         int a = jigMapper.naiveGetRepairListPage(submit_id);
         return (int) Math.ceil(a / 5.0);
+    }
+
+    public void naiveSubmitRepair(String code, String seq_id, String submit_id, String repair_reason, String pathName) {
+        jigMapper.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, pathName);
     }
 }

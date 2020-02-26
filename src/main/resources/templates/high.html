@@ -1123,13 +1123,13 @@
                                             </button>
                                             <h4 class="modal-title" id="scrap_detailLabel">报废申请明细</h4>
                                         </div>
-                                        <div class="modal-body" v-if="script != null">
+                                        <div class="modal-body" v-if="scrap != null">
                                             <div class="form-horizontal">
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-3">工夹具代码</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.code}}
+                                                            {{scrap.code}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1137,7 +1137,7 @@
                                                     <label class="control-label col-sm-3">工夹具序列号</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.seq_id}}
+                                                            {{scrap.seq_id}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1145,21 +1145,21 @@
                                                     <label class="control-label col-sm-3">故障原因</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.scrap_reason}}
+                                                            {{scrap.scrap_reason}}
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-3">故障图片</label>
                                                     <div class="col-sm-8">
-                                                        <img :src="script.scrap_photo_url" class="img-thumbnail"/>
+                                                        <img :src="scrap.scrap_photo_url" class="img-thumbnail"/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-3">申请人id</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.submit_id}}
+                                                            {{scrap.submit_id}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1167,7 +1167,7 @@
                                                     <label class="control-label col-sm-3">申请人</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.submit_name}}
+                                                            {{scrap.submit_name}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1175,52 +1175,52 @@
                                                     <label class="control-label col-sm-3">申请时间</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.submit_time}}
+                                                            {{scrap.submit_time}}
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group" v-if="script.first_acceptor_id != null">
+                                                <div class="form-group" v-if="scrap.first_acceptor_id != null">
                                                     <label class="control-label col-sm-3">初审人</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.first_acceptor_id}}
+                                                            {{scrap.first_acceptor_id}}
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group" v-if="script.first_time != null">
+                                                <div class="form-group" v-if="scrap.first_time != null">
                                                     <label class="control-label col-sm-3">初审时间</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.first_time}}
+                                                            {{scrap.first_time}}
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group" v-if="script.status == 1">
+                                                <div class="form-group" v-if="scrap.status == 1">
                                                     <label class="col-sm-3 control-label text-danger">初审不通过原因</label>
                                                     <div class="col-sm-8">
-                                                        <div class="form-control">{{script.first_reason}}</div>
+                                                        <div class="form-control">{{scrap.first_reason}}</div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group" v-if="script.final_acceptor_name != null">
+                                                <div class="form-group" v-if="scrap.final_acceptor_name != null">
                                                     <label class="control-label col-sm-3">终审人</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.final_acceptor_name}}
+                                                            {{scrap.final_acceptor_name}}
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group" v-if="script.final_time != null">
+                                                <div class="form-group" v-if="scrap.final_time != null">
                                                     <label class="control-label col-sm-3">终审时间</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.final_time}}
+                                                            {{scrap.final_time}}
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group" v-if="script.status == 3">
+                                                <div class="form-group" v-if="scrap.status == 3">
                                                     <label class="col-sm-3 control-label text-danger">终审不通过原因</label>
                                                     <div class="col-sm-8">
-                                                        <div class="form-control">{{script.final_reason}}</div>
+                                                        <div class="form-control">{{scrap.final_reason}}</div>
                                                     </div>
                                                 </div>
                                             </div>
