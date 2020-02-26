@@ -548,4 +548,10 @@ public class JigJson {
         }
         return true;
     }
+    @RequestMapping("naive_get_repair_history")
+    public Map<String,Object> naiveGetRepairHistory(@RequestParam(value = "submit_id")String submit_id,@RequestParam(value = "page_number")int page_number){
+        List<RepairJigHistory> list = jigService.naiveGetRepairHistory(submit_id,page_number);
+        int a = jigService.naiveGetRepairHistoryPage(submit_id);
+        return getStringObjectMap(list,a);
+    }
 }

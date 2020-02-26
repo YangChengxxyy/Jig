@@ -184,4 +184,14 @@ public class JigService {
     public void naiveSubmitRepair(String code, String seq_id, String submit_id, String repair_reason, String pathName) {
         jigMapper.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, pathName);
     }
+
+    public List<RepairJigHistory> naiveGetRepairHistory(String submit_id, int page_number) {
+        page_number = (page_number - 1) * 5;
+        return jigMapper.naiveGetRepairHistory(submit_id, page_number);
+    }
+
+    public int naiveGetRepairHistoryPage(String submit_id) {
+        int a = jigMapper.naiveGetRepairHistoryPage(submit_id);
+        return (int) Math.ceil(a / 5.0);
+    }
 }

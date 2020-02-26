@@ -477,10 +477,29 @@ const myRepair = new Vue({
 });
 const repairHistory = new Vue({
     el: "#repairHistory",
-    data: {},
-    created: function () {
+    data: {
+        history_list: [],
+        now_page_number: 1,
+        max_page_number: 0
     },
-    methods: {},
+    created: function () {
+        this.getData();
+    },
+    methods: {
+        getData: function () {
+            let that = this;
+            $.ajax("naive_get_repair_history", {
+                data: {
+                    submit_id: id,
+                    page_number: this.now_page_number
+                },
+                success:function (res) {
+                    that.history_list = res["data"];
+                    that.max_page_number = res["max"];
+                }
+            })
+        }
+    },
     computed: {},
     watch: {},
 });

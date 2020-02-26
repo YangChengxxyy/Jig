@@ -454,4 +454,17 @@
                                   submit_id) value (#{code}, #{seq_id}, #{repair_reason}, #{pathName}, now(),
                                                     #{submit_id})
     </insert>
+    <select id="naiveGetRepairHistory" resultType="com.jig.entity.RepairJigHistory">
+        select rs.*, u1.name submit_name, u2.name accrptor_name
+        from repair_submit_history rs
+                 left join user u1 on rs.submit_id = u1.id
+                 left join user u2 on acceptor_id = u2.id
+        where submit_id = #{submit_id}
+        limit #{page_number},5
+    </select>
+    <select id="naiveGetRepairHistoryPage" resultType="java.lang.Integer">
+        select count(*)
+        from repair_submit_history
+        where submit_id = #{submit_id};
+    </select>
 </mapper>
