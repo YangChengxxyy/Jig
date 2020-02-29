@@ -82,6 +82,16 @@ public class JigWeb {
         httpSession.setAttribute("user", user);
         return "high";
     }
+    @RequestMapping("test")
+    public String admin(HttpServletRequest request){
+        PoiUtil.getIpAddress(request);
+        User user = new User();
+        user.setName("Xianghai Zhang");
+        user.setId("1215072");
+        HttpSession httpSession = request.getSession();
+        httpSession.setAttribute("user", user);
+        return "new_naive";
+    }
 
     @RequestMapping("naive_download_one_search")
     public void naiveDownloadOneSearch(HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor, @RequestParam(value = "page_number") int pageNumber, @RequestParam(value = "file_name") String fileName) throws Exception {

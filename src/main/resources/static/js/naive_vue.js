@@ -17,6 +17,11 @@ $.ajax("get_code_list", {
         code_list = res;
     }
 });
+$(".main-menu-li").on("click",function () {
+    $(this).siblings().removeClass("active");
+    $(this).addClass("active");
+});
+
 const search_jig = new Vue({
     el: "#search_jig",
     data: {
@@ -480,7 +485,8 @@ const repairHistory = new Vue({
     data: {
         history_list: [],
         now_page_number: 1,
-        max_page_number: 0
+        max_page_number: 0,
+        repair:null
     },
     created: function () {
         this.getData();
@@ -498,6 +504,9 @@ const repairHistory = new Vue({
                     that.max_page_number = res["max"];
                 }
             })
+        },
+        checkDetail(index){
+            this.repair = this.history_list[index];
         }
     },
     computed: {},
