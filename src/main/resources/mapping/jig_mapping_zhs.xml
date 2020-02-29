@@ -30,6 +30,15 @@
 
         delete from purchase_income_submit where id = #{id}
     </update>
+    <update id="dont_pass_manager_purchase_submit">
+        update purchase_income_submit
+        set final_time = now(),status = #{status},final_acceptor='1230936',final_reason=#{final_reason}
+        where id = #{id};
+
+        insert into purchase_income_submit_history select * from purchase_income_submit where id = #{id};
+
+        delete from purchase_income_submit where id = #{id}
+    </update>
     <select id="get_manager_jig_info_list" resultType="com.jig.entity.JigDefinition">
         select *  from jig_definition j inner join jig_family f on j.family_id = f.id
         limit #{page_number},5
@@ -38,9 +47,18 @@
         SELECT count(*) from jig_definition
     </select>
     <select id="get_manager_purchase_submit_list_history" resultType="com.jig.entity.PurchaseIncomeSubmit">
-        select *,u.name submit_name,pl.name production_line_name from purchase_income_submit_history p inner join user u on p.submit_id = u.id
-                                                                    inner join production_line pl on pl.id = p.production_line_id
+        select p.*,
+               production_line.name production_line_name,
+               u.name submit_name,
+               u1.name first_acceptor_name,
+               u2.name final_acceptor_name
+
+        from purchase_income_submit_history p left join user u on p.submit_id = u.id
+                                              left join user u1 on p.first_acceptor = u1.id
+                                              left join user u2 on p.final_acceptor = u2.id,
+            production_line
         <where>
+            production_line.id = p.production_line_id
             <if test="bill_no!=''">
                 and p.bill_no like concat('%',#{bill_no},'%')
             </if>
@@ -145,5 +163,23 @@
     </select>
     <select id="get_manager_store_jig_list" resultType="com.jig.entity.JigEntity">
         select *,count(code) as 'count' from jig_position group by code
+    </select>
+    <select id="get_manager_purchase_total_submit_man" resultType="com.jig.entity.PurchaseTotalSubmitManDetail">
+        select p.submit_id,u.name 'submit_name',count(u.name) as 'submit_count' from purchase_income_submit_history p inner join user u on u.id = p.submit_id
+        <where>
+            <if test="bill_no!=''">
+                and p.bill_no like concat('%',#{bill_no},'%')
+            </if>
+            <if test="submit_name!=''">
+                and p.submit_name like concat('%',#{submit_name},'%')
+            </if>
+            <if test="status!=''">
+                and p.status = #{status}
+            </if>
+            <if test="start_date!='' and end_date !=''">
+                and (STR_TO_DATE(p.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
+            </if>
+        </where>
+        group by u.name
     </select>
 </mapper>

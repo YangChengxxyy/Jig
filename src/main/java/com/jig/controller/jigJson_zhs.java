@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.PublicKey;
 import java.util.*;
 
 @RestController
@@ -46,7 +47,6 @@ public class jigJson_zhs {
     //查看经理模块下的采购审批细节
     @RequestMapping(value = "get_manager_purchase_detail",method = {RequestMethod.GET,RequestMethod.POST})
     public PurchaseIncomeSubmit getManagerPurchaseDetail(@RequestParam(value = "id") String id){
-        //System.out.println(jigService.get_manager_purchase_detail(id).getSubmit_name());
         return jigService.get_manager_purchase_detail(id);
     }
 
@@ -90,10 +90,6 @@ public class jigJson_zhs {
         List<PurchaseIncomeSubmit> list = jigService.get_manager_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,status,page_number);
         int max = jigService.get_manager_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status);
         map.put("data",list);
-
-        for(PurchaseIncomeSubmit p:list){
-            System.out.println(p.getBill_no());
-        }
         map.put("max",max);
         return map;
     }
@@ -127,12 +123,22 @@ public class jigJson_zhs {
         List<PurchaseIncomeSubmit> jig_list = jigService.get_manager_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,"4",-1);
         int purchase_submit_count = jigService.get_manager_purchase_submit_total_count(bill_no,submit_name,start_date,end_date,"4");
         List<JigEntity> jig_entity_list = jigService.get_manager_store_jig_list();
+        List<PurchaseTotalSubmitManDetail> submit_man_list =
+                jigService.get_manager_purchase_total_submit_man(bill_no,submit_name,start_date,end_date,"4");//采购员细节list--包含采购员名+申请成功的采购单数量
+
+        for(PurchaseTotalSubmitManDetail submit_man:submit_man_list){//获取采购员list内各个采购员的相关采购单
+            for (PurchaseIncomeSubmit submit:jig_list){
+                if(submit.getSubmit_id().equals(submit_man.getSubmit_id())){
+                    submit_man.getAbout_purchase_submit_list().add(submit);
+                }
+            }
+        }
+
         int store_jig_count = 0;//库存共夹具数量
 
         for(JigEntity jigEntity:jig_entity_list){
             store_jig_count+=jigEntity.getCount();
         }
-
 
         Map<String,Integer> jig_map = new HashMap<>();
         List<PurchaseTotalJigDetail> jig_detail_list = new ArrayList<>();//显示采购统计中新增工夹具板块查看更多工夹具的细节
@@ -150,6 +156,7 @@ public class jigJson_zhs {
                 jig_count+=Integer.valueOf(count[i]);
             }
         }
+
         Iterator iter = jig_map.entrySet().iterator();
         while (iter.hasNext()){//将map遍历，放入工夹具细节List中
             PurchaseTotalJigDetail pj = new PurchaseTotalJigDetail();
@@ -190,8 +197,27 @@ public class jigJson_zhs {
         map.put("jig_count",jig_count);
         map.put("purchase_submit_count",purchase_submit_count);
         map.put("store_jig_count",store_jig_count);
+        map.put("submit_man_list",submit_man_list);//采购员细节
+        map.put("new_jig_list",jig_list);
         return map;
     }
+    //获取经理模式采购统计模块下的采购员细节数据
+    /*@RequestMapping(value = "get_manager_purchase_total_submit_man",method = {RequestMethod.POST,RequestMethod.GET},)
+    public Map<Object,Object> getMangerPurchaseTotalSubmitMan(@RequestParam(value = "user_id") String user_id,
+                                                              @RequestParam(value = "bill_no") String bill_no,
+                                                              @RequestParam(value = "submit_name") String submit_name,
+                                                              @RequestParam(value = "submit_time") String submit_time){
+        Map<Object,Object> map = new HashMap<>();
+        String start_date = "";
+        String end_date = "";
+        if(submit_time!="") {
+            start_date = submit_time.substring(0,10);
+            end_date = submit_time.substring(13);
+        }
+        List<PurchaseTotalSubmitManDetail> submit_man_list = jigService.get_manager_purchase_total_submit_man(user_id,bill_no,submit_name,start_date,end_date,"4");
+
+        return map;
+    }*/
 
     //获取经理报废管理模块下的报废审批list
     @RequestMapping(value = "get_manager_scrap_submit_list",method = {RequestMethod.GET,RequestMethod.POST})
@@ -211,6 +237,15 @@ public class jigJson_zhs {
             return "服务器异常!";
         }
         return "审批成功！";
+    }
+
+    @RequestMapping(value = "dont_pass_manager_purchase_submit",method = {RequestMethod.GET,RequestMethod.POST})
+    public String dontPassManagerPurchaseSubmit(@RequestParam(value = "id") String id,@RequestParam(value = "final_reason") String final_reason){
+        int flag = jigService.dont_pass_manager_purchase_submit(id,"3",final_reason);
+        if(flag<0){
+            return "服务器异常!";
+        }
+        return "审批成功!";
     }
 
     @RequestMapping(value = "get_manager_scrap_submit_list_history",method = {RequestMethod.GET,RequestMethod.POST})

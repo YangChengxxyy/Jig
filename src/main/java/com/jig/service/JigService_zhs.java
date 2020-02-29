@@ -1,9 +1,6 @@
 package com.jig.service;
 
-import com.jig.entity.JigDefinition;
-import com.jig.entity.JigEntity;
-import com.jig.entity.PurchaseIncomeSubmit;
-import com.jig.entity.ScrapSubmit;
+import com.jig.entity.*;
 import com.jig.mapper.JigMapper_zhs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +33,11 @@ public class JigService_zhs {
         return jigMapper.manager_check_purchase_submit(id,pass);
     }
 
+    //经理模式采购审批的终审不通过的提交
+    public int dont_pass_manager_purchase_submit(String id,String status,String final_reason){
+        return jigMapper.dont_pass_manager_purchase_submit(id,status,final_reason);
+    }
+
     public List<JigDefinition> get_manager_jig_info_list(int page_number){
         return jigMapper.get_manager_jig_info_list(page_number);
     }
@@ -64,6 +66,11 @@ public class JigService_zhs {
         return jigMapper.get_manager_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status);
     }
 
+    //获取经理模式采购统计模块下的采购员细节
+    public List<PurchaseTotalSubmitManDetail> get_manager_purchase_total_submit_man(String bill_no,String submit_name,String start_date,String end_date,String status){
+        return jigMapper.get_manager_purchase_total_submit_man(bill_no,submit_name,start_date,end_date,status);
+    }
+
     //经理模式，仓库工夹具余量; 返回类型-->
     public List<JigEntity> get_manager_store_jig_list(){
         return jigMapper.get_manager_store_jig_list();
@@ -84,6 +91,8 @@ public class JigService_zhs {
         int flag = jigMapper.check_manager_scrap_submit(submit_id,status);
         return flag;
     }
+
+
 
     //经理模式，历史审批记录list的查询显示及其页数查询
     public List<ScrapSubmit> get_manager_scrap_submit_list_history(String code,String submit_name,String start_date,String end_date,String status,String scrap_reason,int page_number){

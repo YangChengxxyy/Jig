@@ -1,9 +1,6 @@
 package com.jig.mapper;
 
-import com.jig.entity.JigDefinition;
-import com.jig.entity.JigEntity;
-import com.jig.entity.PurchaseIncomeSubmit;
-import com.jig.entity.ScrapSubmit;
+import com.jig.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -34,6 +31,10 @@ public interface JigMapper_zhs {
 
     int manager_check_purchase_submit(@Param("id") String id,
                                       @Param("pass") String pass);
+
+    int dont_pass_manager_purchase_submit(@Param("id") String id,
+                                          @Param("status") String status,
+                                          @Param("final_reason") String final_reason);
 
     List<JigDefinition> get_manager_jig_info_list(@Param("page_number") int page_number);
 
@@ -98,4 +99,18 @@ public interface JigMapper_zhs {
      */
     List<JigEntity> get_manager_store_jig_list();
 
+    /**经理模式，获取采购统计模块下的采购员细节数据
+     *
+     * @param bill_no
+     * @param submit_name
+     * @param start_date
+     * @param end_date
+     * @param status 审批状态 默认是4
+     * @return
+     */
+    List<PurchaseTotalSubmitManDetail> get_manager_purchase_total_submit_man(@Param("bill_no") String bill_no,
+                                                                             @Param("submit_name") String submit_name,
+                                                                             @Param("start_date") String start_date,
+                                                                             @Param("end_date") String end_date,
+                                                                             @Param("status") String status);
 }
