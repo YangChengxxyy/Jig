@@ -17,10 +17,7 @@ $.ajax("get_code_list", {
         code_list = res;
     }
 });
-$(".main-menu-li").on("click",function () {
-    $(this).siblings().removeClass("active");
-    $(this).addClass("active");
-});
+
 
 const search_jig = new Vue({
     el: "#search_jig",

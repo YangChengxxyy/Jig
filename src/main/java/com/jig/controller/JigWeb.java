@@ -68,7 +68,7 @@ public class JigWeb {
         user.setId("1215072");
         HttpSession httpSession = request.getSession();
         httpSession.setAttribute("user", user);
-        return "naive";
+        return "new_naive";
     }
 
     @RequestMapping("test_high")
@@ -80,17 +80,7 @@ public class JigWeb {
         user.setId("1215072");
         HttpSession httpSession = request.getSession();
         httpSession.setAttribute("user", user);
-        return "high";
-    }
-    @RequestMapping("test")
-    public String admin(HttpServletRequest request){
-        PoiUtil.getIpAddress(request);
-        User user = new User();
-        user.setName("Xianghai Zhang");
-        user.setId("1215072");
-        HttpSession httpSession = request.getSession();
-        httpSession.setAttribute("user", user);
-        return "new_naive";
+        return "new_high";
     }
 
     @RequestMapping("naive_download_one_search")

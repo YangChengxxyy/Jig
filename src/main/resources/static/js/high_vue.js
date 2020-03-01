@@ -1,3 +1,6 @@
+
+
+
 //添加采购单
 let production_line_list = [];
 let code_list = [];
@@ -14,6 +17,7 @@ $.ajax("get_code_list", {
         code_list = res;
     }
 });
+
 
 //我的采购单数据的显示
 const show_myshoplist = new Vue({
