@@ -68,7 +68,7 @@ public class JigWeb {
         user.setId("1215072");
         HttpSession httpSession = request.getSession();
         httpSession.setAttribute("user", user);
-        return "new_naive";
+        return "naive";
     }
 
     @RequestMapping("test_high")
@@ -80,7 +80,7 @@ public class JigWeb {
         user.setId("1215072");
         HttpSession httpSession = request.getSession();
         httpSession.setAttribute("user", user);
-        return "new_high";
+        return "high";
     }
 
     @RequestMapping("naive_download_one_search")
