@@ -202,4 +202,5 @@ public class JigService {
     public List<Map<String, Object>> highGetRepairBasic(String submit_id) {
         return jigMapper.highGetRepairBasic(submit_id);
     }
+
 }

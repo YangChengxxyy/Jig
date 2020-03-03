@@ -13,9 +13,11 @@ public class SessionConfigurer implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns("/error")
                 .excludePathPatterns("/show_login")
+                .excludePathPatterns("/login_check")
                 .excludePathPatterns("/css/**")
                 .excludePathPatterns("/js/**")
                 .excludePathPatterns("/font/**")
+                .excludePathPatterns("/assets/**")
                 .excludePathPatterns("/images/**")
                 .excludePathPatterns("/phone_upload_success");
     }

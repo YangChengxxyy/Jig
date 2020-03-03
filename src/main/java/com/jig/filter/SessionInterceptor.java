@@ -1,5 +1,6 @@
 package com.jig.filter;
 
+import com.jig.entity.LoginState;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,22 +20,19 @@ public class SessionInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
 //        System.out.println("url=" + request.getRequestURI());
         //验证session是否存在
-        Object obj = request.getSession().getAttribute("user");
-//        System.out.println(key);
+        Object obj = request.getSession().getAttribute("loginState");
         if (obj == null) {
-            //session不存在则先判断是否有key这个参数，
             String checkKey = request.getParameter("key") == null ? "" : request.getParameter("key");
             if (!checkKey.equals(key)) {
                 response.sendRedirect("/show_login");
-//                System.out.println("请先登录！");
                 return false;
             } else {
-//                System.out.println("小程序！");
                 return true;
             }
+        } else {
+            LoginState loginState = (LoginState) obj;
+            return loginState.getStateCode() == 0;
         }
-//        System.out.println("WEB！");
-        return true;
     }
 
     @Override

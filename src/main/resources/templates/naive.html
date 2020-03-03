@@ -381,8 +381,8 @@
                         <img src="assets/images/user-4.png" alt="user-image" class="img-circle img-inline userpic-32"
                              width="28"/>
                         <span th:inline="text">
-								[[${session.get('user').getName()}]]
-                            <input style="display: none" th:value="${session.get('user').getId()}" id="id">
+								[[${session.get('loginState').getData().getName()}]]
+                            <input style="display: none" th:value="${session.get('loginState').getData().getId()}" id="id">
 								<i class="fa-angle-down"></i>
 							</span>
                     </a>
