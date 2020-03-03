@@ -467,4 +467,10 @@
         from repair_submit_history
         where submit_id = #{submit_id};
     </select>
+    <select id="highGetRepairCount" resultType="java.lang.Integer">
+        select count(*) from repair_submit where submit_id = #{submit_id}
+    </select>
+    <select id="highGetRepairBasic" resultType="java.util.Map">
+        select code as name,count(0) as `value` from repair_submit where submit_id = #{submit_id} group by code
+    </select>
 </mapper>

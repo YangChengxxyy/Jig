@@ -1,7 +1,6 @@
-
-
-
 //添加采购单
+let Vue = window.Vue;
+Vue.component('v-chart', VueECharts);
 let production_line_list = [];
 let code_list = [];
 let id = $("#id").val();
@@ -300,14 +299,10 @@ const historyShop = new Vue({
 const myrepair = new Vue({
     el: "#myrepair",
     data: {
-        submit_code: "",
-        submit_seq_id: "",
-        submit_trouble_reason: "",
-        submit_trouble_photo: "点击上传图片",
-        code_list: code_list,
         now_page_number: 1,
         max_page_number: 0,
-        repair_list: []
+        repair_list: [],
+        repair: null
     },
     created: function () {
         this.getData();
@@ -327,7 +322,10 @@ const myrepair = new Vue({
         },
         file: function () {
             this.submit_trouble_photo = $("input[type=file]")[0].files[0].name;
-        }
+        },
+        showDetail: function (index) {
+            this.repair = this.repair_list[index];
+        },
     }
 });
 const historyMyrepair = new Vue({
@@ -745,4 +743,54 @@ const seqInfo = new Vue({
             return "naive_download_all_search?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&file_name=page-all.xls";
         }
     }
+});
+const repairStatistics = new Vue({
+    el: "#repairStatistics",
+    data: {
+        repair_count: 0,
+        option: {
+            xAxis: {
+                type: 'category',
+                data: []
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: [],
+                type: 'bar'
+            }]
+        }
+    },
+    created: function () {
+        this.getData();
+    },
+    methods: {
+        getData: function () {
+            let that = this;
+            $.ajax("high_get_repair_count", {
+                data: {
+                    submit_id: id
+                },
+                success(data, textStatus, jqXHR) {
+                    // console.log(data);
+                    that.repair_count = data;
+                }
+            });
+            $.ajax("high_get_repair_basic", {
+                data: {
+                    submit_id: id
+                },
+                success: function (data) {
+                    console.log(data);
+                    $.each(data, (i, v) => {
+                        that.option.xAxis.data.push(v.name);
+                        that.option.series[0].data.push(v.value);
+                    })
+                }
+            })
+        }
+    },
+    computed: {},
+    watch: {},
 });

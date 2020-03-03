@@ -554,4 +554,12 @@ public class JigJson {
         int a = jigService.naiveGetRepairHistoryPage(submit_id);
         return getStringObjectMap(list,a);
     }
+    @RequestMapping("high_get_repair_count")
+    public int highGetRepairCount(@RequestParam(value = "submit_id")String submit_id){
+        return jigService.highGetRepairCount(submit_id);
+    }
+    @RequestMapping("high_get_repair_basic")
+    public List<Map<String,Object>> highGetRepairBasic(@RequestParam("submit_id")String submit_id){
+        return jigService.highGetRepairBasic(submit_id);
+    }
 }

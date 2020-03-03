@@ -350,4 +350,8 @@ public interface JigMapper {
     List<RepairJigHistory> naiveGetRepairHistory(String submit_id, int page_number);
 
     int naiveGetRepairHistoryPage(String submit_id);
+
+    int highGetRepairCount(@Param("submit_id") String submit_id);
+
+    List<Map<String, Object>> highGetRepairBasic(String submit_id);
 }

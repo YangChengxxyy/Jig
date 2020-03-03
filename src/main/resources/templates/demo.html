@@ -27,19 +27,6 @@
         el: "#demo",
         data() {
             return {
-                // options:{
-                //     xAxis: {
-                //         type: 'category',
-                //         data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                //     },
-                //     yAxis: {
-                //         type: 'value'
-                //     },
-                //     series: [{
-                //         data: [820, 932, 901, 934, 1290, 1330, 1320],
-                //         type: 'line'
-                //     }]
-                // }
                 options: {
                     title: {
                         text: '会员数据统计',
@@ -49,6 +36,14 @@
                     tooltip: {
                         trigger: 'item',
                         formatter: "{a} <br/>{b} : {c} ({d}%)"
+                        /**
+                         * a series.name
+                         * b name
+                         * c value
+                         * d value/values
+                         */
+
+
                     },
                     legend: {
                         show: true,

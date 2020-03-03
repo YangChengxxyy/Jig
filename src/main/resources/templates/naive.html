@@ -23,14 +23,14 @@
     <link rel="stylesheet" href="assets/css/fonts/elusive/css/elusive.css">
 
     <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
-    <script src="js/vue.js"></script>
-    <script src="js/echarts.js"></script>
-    <script src="js/vue-echarts@4.0.2.js"></script>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script src="js/vue.js"></script>
+    <script src="js/echarts.js"></script>
+    <script src="js/vue-echarts@4.0.2.js"></script>
 
 </head>
 <body class="page-body skin-navy">
@@ -507,7 +507,7 @@
                                     </table>
                                 </div>
                                 <div>
-                                    <div class="modal fade" id="chuku" role="dialog"
+                                    <div class="modal fade" id="chuku" role="dialog" data-backdrop="false"
                                          aria-labelledby="chukuLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -662,7 +662,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="modal fade" id="ruku" tabindex="-1" role="dialog"
+                                <div class="modal fade" id="ruku" tabindex="-1" role="dialog"  data-backdrop="false"
                                      aria-labelledby="rukuLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
@@ -808,7 +808,7 @@
                                             <button class="btn btn-primary" data-toggle="modal" data-target="#jianxiu">
                                                 检修
                                             </button>
-                                            <div class="modal fade" id="jianxiu" tabindex="-1" role="dialog"
+                                            <div class="modal fade" id="jianxiu" tabindex="-1" role="dialog"  data-backdrop="false"
                                                  aria-labelledby="jianxiuLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
@@ -1045,7 +1045,7 @@
                                 </div>
                                 <my-pagination :max_page_number="max_page_number"
                                                :now_page_number="now_page_number"></my-pagination>
-                                <div class="modal fade" id="check" tabindex="-1" role="dialog"
+                                <div class="modal fade" id="check" tabindex="-1" role="dialog" data-backdrop="false"
                                      aria-labelledby="checkLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
@@ -1202,7 +1202,7 @@
                                                 data-target="#submitRepair">提交报废
                                         </button>
                                     </div>
-                                    <div class="modal fade" id="submitRepair" tabindex="-1" role="dialog"
+                                    <div class="modal fade" id="submitRepair" tabindex="-1" role="dialog" data-backdrop="false"
                                          aria-labelledby="submit_repairLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -1327,7 +1327,7 @@
                                         </tr>
                                         </tbody>
                                     </table>
-                                    <div class="modal fade" id="repairDetail" tabindex="-1" role="dialog"
+                                    <div class="modal fade" id="repairDetail" tabindex="-1" role="dialog" data-backdrop="false"
                                          aria-labelledby="repairDetailLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -1454,7 +1454,7 @@
                                         </tr>
                                         </tbody>
                                     </table>
-                                    <div class="modal fade" id="history_list" tabindex="-1" role="dialog"
+                                    <div class="modal fade" id="history_list" tabindex="-1" role="dialog" data-backdrop="false"
                                          aria-labelledby="history_listLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">

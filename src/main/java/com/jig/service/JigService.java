@@ -194,4 +194,12 @@ public class JigService {
         int a = jigMapper.naiveGetRepairHistoryPage(submit_id);
         return (int) Math.ceil(a / 5.0);
     }
+
+    public int highGetRepairCount(String submit_id) {
+        return jigMapper.highGetRepairCount(submit_id);
+    }
+
+    public List<Map<String, Object>> highGetRepairBasic(String submit_id) {
+        return jigMapper.highGetRepairBasic(submit_id);
+    }
 }
