@@ -103,7 +103,7 @@
                                         finish: function () {
 
                                             // Redirect after successful login page (when progress bar reaches 100%)
-                                            window.location.href = "test_" + resp.data.type;
+                                            window.location.href = "test_" + resp["data"]["type"];
                                             //TODO:待完善
                                         }
                                     });

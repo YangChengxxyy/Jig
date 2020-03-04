@@ -2,12 +2,13 @@ package com.jig.filter;
 
 import com.jig.entity.LoginState;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+@Component
 public class SessionInterceptor implements HandlerInterceptor {
     public static String key;
 
