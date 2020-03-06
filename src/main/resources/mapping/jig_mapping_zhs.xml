@@ -254,4 +254,14 @@
         select count(*) from purchase_income_submit
         where status = 0 or status = 1 or status = 2
     </select>
+    <update id="supervisor_pass_purchase_submit">
+        update purchase_income_submit
+        set status = #{status},first_time = now(),first_acceptor = #{first_acceptor},first_reason = null
+        where id = #{id}
+    </update>
+    <update id="supervisor_no_pass_purchase_submit">
+        update purchase_income_submit
+        set status = #{status},first_time = now(),first_reason = #{first_reason},first_acceptor = #{first_acceptor}
+        where id = #{id}
+    </update>
 </mapper>

@@ -354,5 +354,21 @@ public class jigJson_zhs {
         map.put("max",max);
         return map;
     }
+
+    //监管者模式下初审通过采购审批
+    @RequestMapping(value = "supervisor_pass_purchase_submit",method = {RequestMethod.GET,RequestMethod.POST})
+    public int SupervisorPassPurchaseSubmit(@RequestParam("id") String id,@RequestParam("status") String status){
+        String first_acceptor = "1230936";
+        return jigService.supervisor_pass_purchase_submit(id,status,first_acceptor);
+    }
+
+    //监管者模式下初审不通过采购审批
+    @RequestMapping(value = "supervisor_no_pass_purchase_submit",method = {RequestMethod.GET,RequestMethod.POST})
+    public int SupervisorNoPassPurchaseSubmit(@RequestParam("id") String id,
+                                              @RequestParam("status") String status,
+                                              @RequestParam("first_reason") String first_reason){
+        String fisrt_acceptor = "1230936";
+        return jigService.supervisor_no_pass_purchase_submit(id,status,first_reason,fisrt_acceptor);
+    }
 }
 

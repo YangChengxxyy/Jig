@@ -218,10 +218,12 @@ var jig_info = new Vue({
 var my_purchase_list = new Vue({
     el:"#purchase_list",
     data:{
-      purchase_submit_list:[],
-      purchase_submit_detail:null,
-      now_page_number:1,
-      max_page_number:0
+        purchase_submit_list:[],
+        purchase_submit_detail:null,
+        now_page_number:1,
+        max_page_number:0,
+        no_pass_purchase_submit_id:"",//需要审批不通过的采购审批id
+        no_pass_reason:"",//审批不通过的原因
     },
     created:function () {
         this.getData();
@@ -248,10 +250,48 @@ var my_purchase_list = new Vue({
                 alert("服务器异常!");
             }
         },
-        pass_purchase_submit:function () {
-            
+        pass_purchase_submit:function (id,status) {
+            const that = this;
+            $.ajax({
+                url:"supervisor_pass_purchase_submit",
+                data:{
+                    id:id,
+                    status:status
+                },
+                success:function (res) {
+                    if (res<=0){
+                        alert("审批失败!");
+                        return false;
+                    }else {
+                        alert("审批成功!");
+                        that.getData();
+                    }
+                }
+            })
         },
-
+        get_no_pass_purchase_submit_id:function (id) {
+            this.no_pass_purchase_submit_id = id;
+        },
+        no_pass_purchase_submit:function () {
+            const that = this;
+            $.ajax({
+                url:"supervisor_no_pass_purchase_submit",
+                data:{
+                    id:this.no_pass_purchase_submit_id,
+                    first_reason:this.no_pass_reason,
+                    status: 1
+                },
+                success:function (res) {
+                    if (res<=0){
+                        alert("审批失败!");
+                        return false;
+                    }else {
+                        alert("审批成功!");
+                        that.getData();
+                    }
+                }
+            })
+        }
     }
 })
 

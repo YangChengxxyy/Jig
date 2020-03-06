@@ -4,6 +4,7 @@ import com.jig.entity.*;
 import com.jig.mapper.JigMapper_zhs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -163,5 +164,15 @@ public class JigService_zhs {
     public int supervisor_get_purchase_submit_list_pages(){
         int max_page = jigMapper.supervisor_get_purchase_submit_list_pages();
         return (int)Math.ceil(max_page/5.0);
+    }
+
+    //监管者模式下初审通过我的采购审批
+    public int supervisor_pass_purchase_submit(String id,String status,String first_acceptor){
+        return jigMapper.supervisor_pass_purchase_submit(id,status,first_acceptor);
+    }
+
+    //监管者模式下初审不通过采购审批
+    public int supervisor_no_pass_purchase_submit(String id,String status,String first_reason,String first_acceptor){
+        return jigMapper.supervisor_no_pass_purchase_submit(id,status,first_reason,first_acceptor);
     }
 }

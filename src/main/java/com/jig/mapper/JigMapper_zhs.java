@@ -153,4 +153,15 @@ public interface JigMapper_zhs {
 
     //监管者模式下获取我的采购审批的最大页数
     int supervisor_get_purchase_submit_list_pages();
+
+    //监管者模式下初审通过我的采购审批
+    int supervisor_pass_purchase_submit(@Param("id") String id,
+                                        @Param("status") String status,
+                                        @Param("first_acceptor") String first_acceptor);
+
+    //监管者模式下初审不通过采购审批
+    int supervisor_no_pass_purchase_submit(@Param("id") String id,
+                                        @Param("status") String status,
+                                        @Param("first_reason") String first_reason,
+                                        @Param("first_acceptor") String first_acceptor);
 }
