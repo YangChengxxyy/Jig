@@ -1,4 +1,3 @@
-//添加采购单
 let Vue = window.Vue;
 Vue.component('v-chart', VueECharts);
 let production_line_list = [];

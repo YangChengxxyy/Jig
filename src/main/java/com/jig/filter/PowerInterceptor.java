@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,13 +15,13 @@ import javax.servlet.http.HttpSession;
 @Component
 public class PowerInterceptor implements HandlerInterceptor {
 
+    private Logger log = LoggerFactory.getLogger(this.getClass());
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
-        Logger log = LoggerFactory.getLogger(this.getClass());
         HttpSession session = request.getSession();
         LoginState loginState =  (LoginState)session.getAttribute("loginState");
         String type = loginState.getData().getType();
-        log.info(type);
+//        log.info(type);
         return true;
     }
 

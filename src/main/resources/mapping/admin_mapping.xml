@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jig.mapper.AdminMapper">
+
+    <select id="getUserInformation" resultType="com.jig.entity.User">
+        select *
+        from user
+        where workcell_id = (select workcell_id from user where id = #{id})
+        limit #{page_number},5
+    </select>
+    <select id="getUserInformationPage" resultType="java.lang.Integer">
+        select count(*)
+        from user
+        where workcell_id = (select workcell_id from user where id = #{id})
+    </select>
+</mapper>
