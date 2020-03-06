@@ -5,11 +5,21 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.*;
 import java.util.List;
 
 @Mapper
 @Repository
 public interface JigMapper_zhs {
+    //通用
+    List<Workcell> get_workcell_list();
+
+    List<Family> get_family_list();
+
+    List<Model> get_model_list();
+
+    List<PartNo> get_part_no_list();
+
     int addShoplist(@Param("submit_id") String submit_id,
                     @Param("bill_no") String bill_no,
                     @Param("production_line_id") String production_line_id,
@@ -113,4 +123,34 @@ public interface JigMapper_zhs {
                                                                              @Param("start_date") String start_date,
                                                                              @Param("end_date") String end_date,
                                                                              @Param("status") String status);
+
+
+
+    //监管者
+    //监管者模式的工夹具信息管理的获取工夹具类别family
+    List<Family> get_supervisor_jig_family();
+
+    //监管者模式的工夹具信息管理的获取所有工夹具信息List
+    List<JigDefinition> get_supervisor_all_jig_info_list();
+
+    //监管者模式下添加工夹具类别
+    int add_supervisor_jig_family(@Param("family") String family);
+
+    //监管者模式下查看要删除的工夹具类别在总共夹具信息表中的数量
+    int supervisor_get_delete_jig_family_count(@Param("jig_family_id") String jig_family_id);
+
+    //监管者模式下删除工夹具类别
+    int supervisor_delete_jig_family(@Param("id") String id);
+
+    //监管者模式下搜索工夹具信息
+    List<JigDefinition> supervisor_select_jig_info(@Param("jig_code") String jig_code,
+                                                   @Param("jig_name") String jig_name,
+                                                   @Param("jig_model") String jig_model,
+                                                   @Param("jig_workcell") String jig_workcell);
+
+    //监管者模式下获取我的采购审批list
+    List<PurchaseIncomeSubmit> supervisor_get_purchase_submit_list(@Param("page_number") int page_number);
+
+    //监管者模式下获取我的采购审批的最大页数
+    int supervisor_get_purchase_submit_list_pages();
 }

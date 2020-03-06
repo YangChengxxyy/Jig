@@ -132,3 +132,21 @@
 .fg-red {
     color: #CC6666
 }
+
+.row-margin-bottom{
+    margin-bottom:20px;
+}
+
+.row-margin-top{
+    margin-top: 20px;
+}
+
+.btn-blue{
+    background-color: #409EFF;
+    color: white;
+}
+
+.btn-blue-mouseover{
+    background-color:#66B1FF ;
+    color: white;
+}

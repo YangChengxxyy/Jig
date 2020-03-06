@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jig.mapper.JigMapper_zhs">
+    <select id="get_workcell_list" resultType="com.jig.entity.Workcell">
+        select * from workcell
+    </select>
+    <select id="get_family_list" resultType="com.jig.entity.Family">
+        select * from jig_family
+    </select>
+    <select id="get_model_list" resultType="com.jig.entity.Model">
+        select model from jig_definition group by model
+    </select>
+    <select id="get_part_no_list" resultType="com.jig.entity.PartNo">
+        select * from jig_part_no
+    </select>
     <insert id="addShoplist">
         insert into purchase_income_submit(submit_id,code,count,submit_time,status,production_line_id,bill_no)
         values (#{submit_id},#{code},#{count},#{submit_time},0,
@@ -165,7 +177,8 @@
         select *,count(code) as 'count' from jig_position group by code
     </select>
     <select id="get_manager_purchase_total_submit_man" resultType="com.jig.entity.PurchaseTotalSubmitManDetail">
-        select p.submit_id,u.name 'submit_name',count(u.name) as 'submit_count' from purchase_income_submit_history p inner join user u on u.id = p.submit_id
+        select p.submit_id,u.name 'submit_name',count(u.name) as 'submit_count'
+        from purchase_income_submit_history p inner join user u on u.id = p.submit_id
         <where>
             <if test="bill_no!=''">
                 and p.bill_no like concat('%',#{bill_no},'%')
@@ -181,5 +194,64 @@
             </if>
         </where>
         group by u.name
+    </select>
+
+    <select id="get_supervisor_jig_family" resultType="com.jig.entity.Family">
+        select * from jig_family
+    </select>
+    <select id="get_supervisor_all_jig_info_list" resultType="com.jig.entity.JigDefinition">
+        select *,u1.name 'owner_name',u2.name 'rec_by_name',u3.name 'edit_by_name'
+        from jig_definition jd inner join jig_family jf on jd.family_id = jf.id
+                               inner join workcell w on jd.workcell_id = w.id
+                               left join user u1 on jd.owner= u1.id
+                               left join user u2 on jd.rec_by = u2.id
+                               left join user u3 on jd.edit_by = u3.id
+    </select>
+    <insert id="add_supervisor_jig_family" parameterType="com.jig.entity.Family">
+        insert into jig_family (family) values (#{family});
+    </insert>
+    <select id="supervisor_get_delete_jig_family_count" resultType="java.lang.Integer">
+        select count(family_id) from jig_definition where family_id = #{jig_family_id}
+    </select>
+    <delete id="supervisor_delete_jig_family">
+        delete from jig_family where id = #{id}
+    </delete>
+    <select id="supervisor_select_jig_info" resultType="com.jig.entity.JigDefinition">
+        select *,u1.name 'owner_name',u2.name 'rec_by_name',u3.name 'edit_by_name'
+        from jig_definition jd left join jig_family jf on jd.family_id = jf.id
+                               left join workcell w on jd.workcell_id = w.id
+                               left join user u1 on jd.owner= u1.id
+                               left join user u2 on jd.rec_by = u2.id
+                               left join user u3 on jd.edit_by = u3.id
+        <where>
+            <if test="jig_code!=''">
+                and jd.code like concat('%',#{jig_code},'%')
+            </if>
+            <if test="jig_name!=''">
+                and jd.name like concat('%',#{jig_name},'%')
+            </if>
+            <if test="jig_model!=''">
+                and jd.model = #{jig_model}
+            </if>
+            <if test="jig_workcell!=''">
+                and w.workcell like concat('%',#{jig_workcell},'%')
+            </if>
+        </where>
+    </select>
+    <select id="supervisor_get_purchase_submit_list" resultType="com.jig.entity.PurchaseIncomeSubmit">
+        select p.*,u.name 'submit_name',
+               pl.name 'production_line_name',
+               u1.name 'first_acceptor_name',
+               u2.name 'final_acceptor'
+        from purchase_income_submit p inner join user u on p.submit_id = u.id
+                                      inner join production_line pl on p.production_line_id = pl.id
+                                      left join user u1 on p.first_acceptor = u1.id
+                                      left join user u2 on p.final_acceptor = u2.id
+        where p.status = 0 or p.status = 1 or p.status = 2
+        limit #{page_number},5
+    </select>
+    <select id="supervisor_get_purchase_submit_list_pages" resultType="java.lang.Integer">
+        select count(*) from purchase_income_submit
+        where status = 0 or status = 1 or status = 2
     </select>
 </mapper>

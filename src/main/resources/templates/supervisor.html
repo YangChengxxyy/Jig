@@ -1,11 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>监管员</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-select.css">
+    <link rel="stylesheet" href="css/mainStyle.css">
+
     <script src="js/jquery-3.4.1.js"></script>
+    <script src="js/bootstrap-select.js"></script>
+    <script src="js/defaults-zh_CN.js"></script>
+    <script src="js/vue.js"></script>
     <script src="js/bootstrap.min.js"></script>
+
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
         $(function () {
@@ -16,73 +24,100 @@
                 $(".nav li[href='" + href + "']").siblings().removeClass("active");
                 $(".nav li[href='" + href + "']").addClass("active");
             })
+
+            $(".ul li").on('click', function (e) {
+                $(this).siblings().removeClass('active');
+                $(this).addClass("active");
+            })
+
+            $(".btn-blue").mouseover(function () {
+                $(this).attr("class", "btn btn-blue-mouseover");
+            })
+            $(".btn-blue").mouseout(function () {
+                $(this).attr("class", "btn btn-blue");
+            });
+
+            $("#bt_select_jig_info").click(function () {
+                $("#ul_jig_family_list li").removeClass("active");
+            })
         })
     </script>
 </head>
 <body>
-<div class="page-header" style="text-align: center">
-    <h3>
-        工夹具管理系统
-    </h3>
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle show pull-left" href="#sidebar" id="bt_sideleft">
+                <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
+                    class="icon-bar"></span><span class="icon-bar"></span>
+            </button>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                       aria-expanded="false" th:inline="text"><span class="glyphicon glyphicon-user"></span>&nbsp;[[${session.get('user').getName()}]]&nbsp;<span
+                            class="caret"></span></a>
+                    <input style="display: none" th:value="${session.get('user').getId()}" id="id">
+                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-user"></span>个人信息</a>
+                        </li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#changePassword"><span
+                                    class="glyphicon glyphicon-wrench"></span>修改密码</a>
+                        </li>
+                        <li role="menuitem" class="divider"></li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-off"></span>安全退出</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="label" aria-hidden="true"
+     style="text-align: left;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="label">修改密码</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">原密码：</label>
+                        <div class="col-md-8">
+                            <input class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">新密码：</label>
+                        <div class="col-md-8">
+                            <input class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">重复密码：</label>
+                        <div class="col-md-8">
+                            <input class="form-control">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">确认修改</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
 </div>
-<div style="text-align: right;padding-right: 7%">
-    <div class="dropdown">
-        <button type="button" class="btn dropdown-toggle" id="userMenu" data-toggle="dropdown">----监管员
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="userMenu">
-            <li role="presentation" class="dropdown-header">欢迎您，小杨同学！</li>
-            <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-user"></span>个人信息</a>
-            </li>
-            <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="#changePassword" data-toggle="modal"
-                   data-target="#changePassword"><span class="glyphicon glyphicon-wrench"></span>修改密码</a>
-            </li>
-            <li role="presentation" class="divider"></li>
-            <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-off"></span>安全退出</a>
-            </li>
-        </ul>
-    </div>
-    <!-- 模态框（Modal） -->
-    <div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="label" aria-hidden="true"
-         style="text-align: left;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="label">修改密码</h4>
-                </div>
-                <div class="modal-body">
-                    <form role="form" class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">原密码：</label>
-                            <div class="col-md-8">
-                                <input class="form-control">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">新密码：</label>
-                            <div class="col-md-8">
-                                <input class="form-control">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">重复密码：</label>
-                            <div class="col-md-8">
-                                <input class="form-control">
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary">确认修改</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
-    </div>
 </div>
 <div class="container-fluid">
     <div class="row clearfix">
@@ -102,7 +137,7 @@
                             </div>
                             <div class="panel-collapse collapse in" id="1">
                                 <ul class="nav nav-pills nav-stacked">
-                                    <li class="active" data-toggle="tab" href="#gjjxi"><a>工夹具信息</a></li>
+                                    <li class="active" data-toggle="tab" href="#jig_info"><a>工夹具信息</a></li>
                                     <li data-toggle="tab" href="#ssgjj"><a>搜索工夹具</a></li>
                                 </ul>
                             </div>
@@ -116,8 +151,8 @@
                             </div>
                             <div class="panel-collapse collapse" id="2">
                                 <ul class="nav nav-pills nav-stacked">
-                                    <li class="active" data-toggle="tab" href="#cgd"><a>采购单</a></li>
-                                    <li data-toggle="tab" href="#lscgjl"><a>历史采购记录</a></li>
+                                    <li class="active" data-toggle="tab" href="#purchase_list"><a>采购审批</a></li>
+                                    <li data-toggle="tab" href="#purchase_list_history"><a>历史采购记录</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -145,50 +180,439 @@
 
                 <div id="main1" class="panel-body tab-content tab-pane fade in active">
                     <ul class="nav nav-tabs">
-                        <li class="active" data-toggle="tab" href="#gjjxi"><a>工夹具信息</a></li>
+                        <li class="active" data-toggle="tab" href="#jig_info"><a>工夹具信息</a></li>
                         <li data-toggle="tab" href="#ssgjj"><a>搜索工夹具</a></li>
                     </ul>
                     <div class="panel-body tab-content">
-                        <div id="gjjxi" class="tab-pane fade table-responsive in active">
+                        <div id="jig_info" class="tab-pane fade table-responsive in active">
+                            <div class="row row-margin-bottom">
+                                <div class="col-sm-1">
+                                    <button class="btn btn-blue" data-toggle="modal" data-target="#add_jig_family">
+                                        添加类别
+                                    </button>
+                                </div>
+                                <div class="col-sm-10">
+                                    <div class="form-inline">
+                                        <input type="text" class="form-control" placeholder="输入工夹具代码" v-model="select_jig_code">
+                                        <input type="text" class="form-control" placeholder="输入工夹具名字" v-model="select_jig_name">
+                                        <select class="form-control" v-model="select_jig_model" title="选择工夹具模组">
+                                            <option value="">选择工夹具模组</option>
+                                            <option v-for="item in model_list" :value="item.model">{{item.model}}</option>
+                                        </select>
+                                        <select class="form-control" v-model="select_jig_workcell" title="选择工夹具部门">
+                                            <option value="">选择工夹具部门</option>
+                                            <option v-for="item in workcell_list" :value="item.workcell">{{item.workcell}}</option>
+                                        </select>
+                                        <button type="button" class="btn btn-default" @click="clear_select_condition">清空</button>
+                                        <button type="button" class="btn btn-primary" @click="select_jig_info" id="bt_select_jig_info">查询</button>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <ul class="nav nav-pills nav-stacked">
-                                        <label class="control-label">类别</label>
-                                        <li class="active"><a>JABIL FU</a></li>
-                                        <li><a>其他</a></li>
-                                    </ul>
+                                    <div class="btn-group row-margin-bottom">
+                                        <select id="sela"
+                                                class="form-control selectpicker"
+                                                v-model="edit_select_part_no_list" multiple>
+                                            <option :value="item.part_no"
+                                                    v-for="item in part_no_list">
+                                                {{item.part_no}}
+                                            </option>
+                                        </select>
+                                        <div v-for="item in edit_select_part_no_list">
+                                            {{item}}
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <label class="control-label">类别</label>
+                                        </div>
+                                        <div class="panel-body">
+                                            <ul class="nav nav-pills nav-stacked" id="ul_jig_family_list">
+                                                <li v-for="(item,index) in jig_family_list"
+                                                    :class="{'active':index === 0 && jig_family_list.length>0}"
+                                                    @click="get_jig_info_list_by_family(item.family)"><a>{{item.family}}<span
+                                                        class="glyphicon glyphicon-remove pull-right"
+                                                        data-toggle="modal" data-target="#delete_jig_family"
+                                                        @click="get_delete_jig_family_info(item)"></span></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="add_jig_family" tabindex="-1" role="dialog"
+                                     aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-sm">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-hidden="true">&times;
+                                                </button>
+                                                <h4 class="modal-title">添加类别</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">类别</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control"
+                                                                   v-model="add_jig_family_info.family">
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                                </button>
+                                                <button type="button" class="btn btn-primary" @click="add_jig_family">
+                                                    提交
+                                                </button>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal -->
+                                </div>
+                                <div class="modal fade" id="delete_jig_family" tabindex="-1" role="dialog"
+                                     aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-sm">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-hidden="true">&times;
+                                                </button>
+                                                <h4 class="modal-title">删除工夹具类别</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>你确定要删除类别{{delete_jig_family_info.family}}吗?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                                                </button>
+                                                <button type="button" class="btn btn-primary"
+                                                        @click="delete_jig_family">
+                                                    确定
+                                                </button>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal -->
                                 </div>
                                 <div class="col-sm-1" style="text-align: center">
                                     ->
                                 </div>
                                 <div class="col-sm-6">
-                                    <ul class="list-group">
-                                        <label class="control-label">工夹具代码</label>
-                                        <li class="list-group-item">EF2189&nbsp;&nbsp;&nbsp;MOD 3XM2 调谐夹具
-                                            <div class="pull-right btn-group btn-group-sm" style="position: relative;top: -5px">
-                                                <button class="btn btn-primary">查看</button>
-                                                <button class="btn btn-success">修改</button>
-                                                <button class="btn btn-danger">删除</button>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <label class="control-label">工夹具代码</label>
+                                        </div>
+                                        <div class="panel-body">
+                                            <ul class="list-group pre-scrollable" style="height: 436px">
+                                                <li class="list-group-item"
+                                                    v-for="(item,index) in jig_info_list_by_family">{{item.code}}&nbsp;&nbsp;&nbsp;{{item.name}}
+                                                    <div class="pull-right btn-group btn-group-sm"
+                                                         style="position: relative;top: -5px">
+                                                        <button class="btn btn-primary" data-toggle="modal"
+                                                                data-target="#jig_info_detail"
+                                                                @click="get_jig_info_detail(index)">查看
+                                                        </button>
+                                                        <button class="btn btn-success" data-toggle="modal"
+                                                                data-target="#edit_jig_info"
+                                                                @click="get_edit_jig_info(index)">修改
+                                                        </button>
+                                                        <button class="btn btn-danger">删除</button>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--查看工夹具信息-->
+                                <div class="modal fade" id="jig_info_detail" role="dialog"
+                                     aria-labelledby="checkLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-hidden="true">&times;
+                                                </button>
+                                                <h4 class="modal-title">工夹具明细</h4>
                                             </div>
-                                        </li>
-                                        <li class="list-group-item">EF2191&nbsp;&nbsp;&nbsp;MOD 3XM2 陶瓷安装夹具
-                                            <div class="pull-right btn-group btn-group-sm" style="position: relative;top: -5px">
-                                                <button class="btn btn-primary">查看</button>
-                                                <button class="btn btn-success">修改</button>
-                                                <button class="btn btn-danger">删除</button>
+                                            <div class="modal-body">
+                                                <div class="form-horizontal" v-if="jig_info_detail!= null">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">工夹具代码</label>
+                                                        <div class="col-sm-8">
+                                                            <div type="text" class="form-control">
+                                                                {{jig_info_detail.code}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">工夹具名字</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="form-control">{{jig_info_detail.name}}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">所属部门</label>
+                                                        <div class="col-sm-8">
+                                                            <div type="text" class="form-control">
+                                                                {{jig_info_detail.workcell}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">类别</label>
+                                                        <div class="col-sm-8">
+                                                            <div type="text" class="form-control">
+                                                                {{jig_info_detail.family}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">工夹具模组</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="form-control">{{jig_info_detail.model}}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">工夹具料号</label>
+                                                        <div class="col-sm-8">
+                                                            <select class="form-control">
+                                                                <option v-for="item in jig_info_detail.part_no.split('|')">
+                                                                    {{item}}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">用途</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="form-control">
+                                                                {{jig_info_detail.user_for}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">每条产线所需</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="form-control">
+                                                                {{jig_info_detail.upl}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">责任人</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="form-control">
+                                                                {{jig_info_detail.owner_name}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">录入人</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="form-control">
+                                                                {{jig_info_detail.rec_by_name}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">录入时间</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="form-control">
+                                                                {{jig_info_detail.rec_time}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">修改人</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="form-control">
+                                                                {{jig_info_detail.edit_by_name}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">修改时间</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="form-control">
+                                                                {{jig_info_detail.edit_time}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">保养点检周期</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="form-control">
+                                                                {{jig_info_detail.pm_period}}天
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </li>
-                                        <li class="list-group-item">EF2187&nbsp;&nbsp;&nbsp;MOD 盖板螺丝夹具
-                                            <div class="pull-right btn-group btn-group-sm" style="position: relative;top: -5px">
-                                                <button class="btn btn-primary">查看</button>
-                                                <button class="btn btn-success">修改</button>
-                                                <button class="btn btn-danger">删除</button>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal">关闭
+                                                </button>
                                             </div>
-                                        </li>
-                                    </ul>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal -->
+                                </div><!--工夹具明细-->
+
+                                <!--编辑工夹具信息-->
+                                <div>
+                                    <div class="modal fade" id="edit_jig_info" role="dialog"
+                                         aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-hidden="true">&times;
+                                                    </button>
+                                                    <h4 class="modal-title">编辑工夹具信息</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-horizontal" v-if="edit_jig_info_detail!= null">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">工夹具代码</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control"
+                                                                       v-model.trim="edit_jig_info_detail.code">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">工夹具名字</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control"
+                                                                       v-model.trim="edit_jig_info_detail.name">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">所属部门</label>
+                                                            <div class="col-sm-8">
+                                                                <select class="form-control"
+                                                                        v-model="edit_jig_info_detail.workcell">
+                                                                    <option v-for="item in workcell_list"
+                                                                            :value="item.workcell">{{item.workcell}}
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">类别</label>
+                                                            <div class="col-sm-8">
+                                                                <select class="form-control"
+                                                                        v-model="edit_jig_info_detail.family">
+                                                                    <option v-for="item in family_list"
+                                                                            :value="item.family">{{item.family}}
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">工夹具模组</label>
+                                                            <div class="col-sm-8">
+                                                                <select class="form-control"
+                                                                        v-model="edit_jig_info_detail.model">
+                                                                    <option v-for="item in model_list"
+                                                                            :value="item.model">
+                                                                        {{item.model}}
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">工夹具料号</label>
+                                                            <div class="col-sm-8">
+                                                                <select id="sel_edit_jig_part_no"
+                                                                        class="form-control selectpicker"
+                                                                        v-model="select_part_no_list" multiple>
+                                                                    <option :value="item.part_no"
+                                                                            v-for="item in part_no_list">
+                                                                        {{item.part_no}}
+                                                                    </option>
+                                                                </select>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">用途</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control"
+                                                                       v-model="edit_jig_info_detail.user_for">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">每条产线所需</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="number" class="form-control"
+                                                                       v-model="edit_jig_info_detail.upl">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">责任人</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control"
+                                                                       v-model="edit_jig_info_detail.owner_name"
+                                                                       readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">录入人</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control"
+                                                                       v-model="edit_jig_info_detail.rec_by_name"
+                                                                       readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">录入时间</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control"
+                                                                       v-model="edit_jig_info_detail.rec_time" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">修改人</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control"
+                                                                       v-model="edit_jig_info_detail.edit_by_name"
+                                                                       readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">修改时间</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control"
+                                                                       v-model="edit_jig_info_detail.edit_time"
+                                                                       readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">保养点检周期</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="number" class="form-control"
+                                                                       v-model="edit_jig_info_detail.pm_period">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default"
+                                                            data-dismiss="modal">关闭
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary"
+                                                            @click="edit_jig_info">
+                                                        确认修改
+                                                    </button>
+                                                </div>
+                                            </div><!-- /.modal-content -->
+                                        </div><!-- /.modal -->
+                                    </div><!--查看编辑工夹具明细-->
                                 </div>
                             </div>
                         </div>
+
                         <div id="ssgjj" class="tab-pane fade table-responsive">
                             <div class="form-horizontal container-fluid" style="margin-bottom: 3%">
                                 <div class="form-group row">
@@ -406,94 +830,184 @@
 
                 <div id="main2" class="panel-body tab-content tab-pane fade">
                     <ul class="nav nav-tabs">
-                        <li class="active" data-toggle="tab" href="#cgd"><a>采购单</a></li>
-                        <li data-toggle="tab" href="#lscgjl"><a>历史采购记录</a></li>
+                        <li class="active" data-toggle="tab" href="#purchase_list"><a>采购审批</a></li>
+                        <li data-toggle="tab" href="#purchase_list_history"><a>历史采购记录</a></li>
                     </ul>
                     <div class="panel-body tab-content">
-                        <div id="cgd" class="tab-pane fade in active table-responsive">
+                        <!--我的采购审批-->
+                        <div id="purchase_list" class="tab-pane fade in active table-responsive">
                             <table class="table table-striped table-hover" role="table">
                                 <thead>
                                 <tr>
                                     <th>采购单据号</th>
                                     <th>采购人</th>
                                     <th>产线id</th>
-                                    <th>工夹具代码</th>
+                                    <th>工夹具代码及数量</th>
                                     <th>申请时间</th>
                                     <th>状态</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>EF07897897892</td>
-                                    <td>张三</td>
-                                    <td>BLKA10-L2</td>
-                                    <td>EF0789</td>
-                                    <td>2019-12-31 12:39</td>
-                                    <td>初审通过</td>
+                                <tr v-for="(item,index) in purchase_submit_list">
+                                    <td>{{item.bill_no}}</td>
+                                    <td>{{item.submit_name}}</td>
+                                    <td>{{item.production_line_id}}</td>
                                     <td>
-                                        <div class="btn-group">
-                                            <button class="btn btn-primary">通过</button>
-                                            <button class="btn btn-danger" data-toggle="modal"
-                                                    data-target="#disagreeModal">不通过
-                                            </button>
-                                        </div>
+                                        <label>
+                                            <select class="btn btn-default">
+                                                <option v-for="(code,index) in item.code.split('|')">{{code}} --
+                                                    {{item.count.split('|')[index]}}件
+                                                </option>
+                                            </select>
+                                        </label>
                                     </td>
-                                </tr>
-                                <div class="modal fade" id="disagreeModal" tabindex="-1" role="dialog"
-                                     aria-labelledby="disagreeLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                        aria-hidden="true">&times;
-                                                </button>
-                                                <h4 class="modal-title" id="disagreeLabel">不通过</h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="form-group">
-                                                    <label for="disagreeReason">原因：</label>
-                                                    <textarea class="form-control" rows="5"
-                                                              id="disagreeReason"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-                                                </button>
-                                                <button type="button" class="btn btn-primary">提交</button>
-                                            </div>
-                                        </div><!-- /.modal-content -->
-                                    </div><!-- /.modal -->
-                                </div>
-                                <tr>
-                                    <td>EF21841264561</td>
-                                    <td>李四</td>
-                                    <td>BLKA10-L2</td>
-                                    <td>EF2184</td>
-                                    <td>2020-01-03 09:10</td>
-                                    <td>初审通过</td>
+                                    <td>{{item.submit_time}}</td>
+                                    <td v-if="item.status==0">待审批</td>
+                                    <td v-if="item.status==1">初审未通过</td>
+                                    <td v-if="item.status==2">初审通过</td>
+                                    <td v-if="item.status==3">终审未通过</td>
+                                    <td v-if="item.status==4">终审通过</td>
                                     <td>
-                                        <div class="btn-group">
-                                            <button class="btn btn-primary">通过</button>
-                                            <button class="btn btn-danger">不通过</button>
-                                        </div>
+                                        <button class="btn btn-success" data-toggle="modal"
+                                                data-target="#purchase_submit_detail"
+                                                @click="get_purchase_submit_detail(index)">查看
+                                        </button>
+                                        <button class="btn btn-primary" @click="pass_purchase_submit(item.id,4)">初审通过
+                                        </button>
+                                        <button class="btn btn-danger" data-toggle="modal"
+                                                data-target="#purchase_submit_no_pass_reason" @click="get_purchase_submit_id(item.id)">初审不通过
+                                        </button>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
-                            <div class="row text-center">
-                                <ul class="pagination">
-                                    <li><a href="#">&laquo;</a></li>
-                                    <li class="active"><a href="#">1</a></li>
-                                    <li><a href="#">2</a></li>
-                                    <li><a href="#">3</a></li>
-                                    <li><a href="#">4</a></li>
-                                    <li><a href="#">5</a></li>
-                                    <li><a href="#">&raquo;</a></li>
-                                </ul>
+
+                            <!--审批不通过的原因-->
+                            <div class="modal fade" id="purchase_submit_no_pass_reason" tabindex="-1" role="dialog"
+                                 aria-labelledby="disagreeLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-hidden="true">&times;
+                                            </button>
+                                            <h4 class="modal-title" id="disagreeLabel">初审不通过原因</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="disagreeReason">原因：</label>
+                                                <textarea class="form-control" rows="5"
+                                                          id="disagreeReason"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                            </button>
+                                            <button type="button" class="btn btn-primary">提交</button>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal -->
                             </div>
-                        </div>
-                        <div id="lscgjl" class="tab-pane fade">
+
+                            <!--查看单个采购审批细节-->
+                            <div class="modal fade" id="purchase_submit_detail" tabindex="-1"
+                                 role="dialog"
+                                 aria-labelledby="chukuLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-hidden="true">&times;
+                                            </button>
+                                            <h4 class="modal-title" id="myModalLabel">我的采购单</h4>
+                                        </div>
+                                        <div class="modal-body" v-if="purchase_submit_detail !=null">
+                                            <form role="form" class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">采购单据号</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{purchase_submit_detail.bill_no}}</div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">采购人</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{purchase_submit_detail.submit_name}}</div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">产线id</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit_detail.production_line_id}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                                <div v-for="(item,index) in purchase_submit_detail.code.split('|')">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 control-label">工夹具代码</label>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-control">{{item}}</div>
+                                                        </div>
+                                                        <label class="col-sm-3 control-label">采购数量</label>
+                                                        <div class="col-sm-2">
+                                                            <div class="form-control">
+                                                                {{purchase_submit_detail.count.split('|')[index]}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-1"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">申请时间</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{purchase_submit_detail.submit_time}}</div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">审批状态</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control" v-if="purchase_submit_detail.status==0">待审批
+                                                        </div>
+                                                        <div class="form-control" v-if="purchase_submit_detail.status==1">
+                                                            初审未通过
+                                                        </div>
+                                                        <div class="form-control" v-if="purchase_submit_detail.status==2">
+                                                            初审通过
+                                                        </div>
+                                                        <div class="form-control" v-if="purchase_submit_detail.status==3">
+                                                            终审未通过
+                                                        </div>
+                                                        <div class="form-control" v-if="purchase_submit_detail.status==4">
+                                                            终审通过
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default"
+                                                    data-dismiss="modal">关闭
+                                            </button>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal -->
+                            </div>
+
+                            <div class="text-center row" v-if="max_page_number != 0">
+                                <my-pagination :max_page_number="max_page_number"
+                                               :now_page_number="now_page_number"></my-pagination>
+                            </div>
+                        </div><!--/我的采购审批-->
+
+                        <!--历史采购记录-->
+                        <div id="purchase_list_history" class="tab-pane fade">
                             <div style="margin-bottom: 3%">
                                 <form role="form" class="form-horizontal">
                                     <div class="form-group row">
@@ -965,5 +1479,15 @@
         </div>
     </div>
 </div>
+<script src="js/supervisor_vue.js"></script>
+<script src="js/pagination.js"></script>
+<script>
+    $(function () {
+        $("#sel_edit_jig_part_no").selectpicker({
+            multiple: true,
+            actionsBox: true
+        });
+    })
+</script>
 </body>
 </html>
