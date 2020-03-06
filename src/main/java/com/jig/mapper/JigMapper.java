@@ -4,6 +4,7 @@ import com.jig.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
@@ -234,18 +235,18 @@ public interface JigMapper {
 
     /**
      * high获取报修申请记录
-     *
+     * @param id 高级用户id
      * @param page_number 处理后页码
      * @return 获取报修申请记录
      */
-    List<RepairJig> highGetRepairJig(@Param("page_number") int page_number);
+    List<RepairJig> highGetRepairJig(@Param("id") String id, @Param("page_number") int page_number);
 
     /**
      * high获取报修申请记录条数
      *
      * @return 获取报修申请记录条数
      */
-    int highGetRepairJigPage();
+    int highGetRepairJigPage(@Param("id") String id);
 
     /**
      * high搜索历史报修记录
@@ -259,9 +260,9 @@ public interface JigMapper {
      * @param page_number 页码
      * @return 搜索到历史报修记录
      */
-    List<RepairJig> highSearchRepairHistory(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_name") String submit_name, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date, @Param("page_number") int page_number);
+    List<RepairJig> highSearchRepairHistory(@Param("id") String id, @Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_name") String submit_name, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date, @Param("page_number") int page_number);
 
-    List<RepairJig> highSearchAllRepairHistory(String code, String code1, String seq_id, String submit_name, String status, String start_date, String end_date);
+    List<RepairJig> highSearchAllRepairHistory(@Param("id") String id, @Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_name") String submit_name, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date);
 
     /**
      * high搜索历史报修记录条数
@@ -274,7 +275,7 @@ public interface JigMapper {
      * @param end_date    最晚时间
      * @return 搜索到历史报修记录条数
      */
-    int highSearchRepairHistoryPage(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_name") String submit_name, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date);
+    int highSearchRepairHistoryPage(@Param("id") String id, @Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_name") String submit_name, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date);
 
     /**
      * high获取报废记录
@@ -335,18 +336,61 @@ public interface JigMapper {
      */
     int highSearchScrapHistoryPage(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_id") String submit_id, @Param("scrap_reason") String scrap_reason, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date);
 
+    /**
+     * 高级用户提交报废
+     * @param code
+     * @param seq_id
+     * @param submit_id
+     * @param scrap_reason
+     * @param pathName
+     */
     void highSubmitScrap(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_id") String submit_id, @Param("scrap_reason") String scrap_reason, @Param("pathName") String pathName);
 
+    /**
+     * 高级用户删除报废
+     * @param id
+     * @return
+     */
     int highDeleteScrap(@Param("id") String id);
 
+    /**
+     * 查询seq_id
+     * @param code
+     * @return
+     */
     List<String> codeGetSeqId(@Param("code") String code);
 
+    /**
+     * 初级用户获取报修记录
+     * @param submit_id
+     * @param page_number
+     * @return
+     */
     List<RepairJig> naiveGetRepairList(@Param("submit_id") String submit_id, @Param("page_number") int page_number);
 
+    /**
+     *
+     * @param submit_id
+     * @return
+     */
     int naiveGetRepairListPage(@Param("submit_id") String submit_id);
 
+    /**
+     * 初级用户提交报修
+     * @param code
+     * @param seq_id
+     * @param submit_id
+     * @param repair_reason
+     * @param pathName
+     */
     void naiveSubmitRepair(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_id") String submit_id, @Param("repair_reason") String repair_reason, @Param("pathName") String pathName);
 
+    /**
+     * 初级获取历史报修记录
+     * @param submit_id
+     * @param page_number
+     * @return
+     */
     List<RepairJigHistory> naiveGetRepairHistory(String submit_id, int page_number);
 
     int naiveGetRepairHistoryPage(String submit_id);

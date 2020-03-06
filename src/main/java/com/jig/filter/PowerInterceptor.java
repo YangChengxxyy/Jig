@@ -1,7 +1,8 @@
 package com.jig.filter;
 
 import com.jig.entity.LoginState;
-import com.jig.entity.RoleEnum;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,10 +16,12 @@ public class PowerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
+        Logger log = LoggerFactory.getLogger(this.getClass());
         HttpSession session = request.getSession();
         LoginState loginState =  (LoginState)session.getAttribute("loginState");
         String type = loginState.getData().getType();
-
+        log.info(type);
+        return true;
     }
 
     @Override

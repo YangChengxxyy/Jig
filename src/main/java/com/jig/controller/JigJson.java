@@ -91,7 +91,7 @@ public class JigJson {
      * @param pageNumber 页码
      * @return 查询到的对应页数的Map对象 { data:数据 ,max:最大页数 }
      */
-    @RequestMapping("naive_search_jig_definition")
+    @RequestMapping("naive/search_jig_definition")
     public Map<String, Object> naiveSearchJigDefinition(@RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor, @RequestParam(value = "page_number") int pageNumber) throws Exception {
         return getStringObjectMap(jigService.naiveSearchJigDefinition(code, name, workcell, family, userFor, pageNumber), jigService.naiveSearchJigDefinitionPage(code, name, workcell, family, userFor));
     }
@@ -112,7 +112,7 @@ public class JigJson {
      *
      * @return 出库申请
      */
-    @RequestMapping("naive_get_outgoing_submit")
+    @RequestMapping("naive/get_outgoing_submit")
     public Map<String, Object> getOutgoingSubmit(@RequestParam(value = "page_number") int page_number) {
         return getStringObjectMap(jigService.naiveGetOutgoingSubmit(page_number), jigService.naiveGetOutgoingSubmitPage());
     }
@@ -138,7 +138,7 @@ public class JigJson {
      * @param rec_id 记录人id
      * @return 是否出库成功
      */
-    @RequestMapping("naive_outgo_jig")
+    @RequestMapping("naive/outgo_jig")
     public boolean naiveOutgoJig(@RequestParam(value = "id") String id, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "rec_id") String rec_id) {
         try {
             jigService.naiveOutgoJig(id, code, seq_id, rec_id);
@@ -153,7 +153,7 @@ public class JigJson {
      *
      * @return 需要入库的工夹具信息
      */
-    @RequestMapping("naive_get_outgoing_jig")
+    @RequestMapping("naive/get_outgoing_jig")
     public Map<String, Object> naiveGetOutgoingJig(@RequestParam(value = "page_number") int page_number) {
         return getStringObjectMap(jigService.naiveGetOutgoingJig(page_number), jigService.naiveGetOutgoingJigPage());
     }
@@ -167,7 +167,7 @@ public class JigJson {
      * @param id     outgoing_jig表id
      * @return 是否入库成功
      */
-    @RequestMapping("naive_return_jig")
+    @RequestMapping("naive/return_jig")
     public boolean naiveReturnJig(@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "rec_id") String rec_id, @RequestParam(value = "id") String id) {
         try {
             jigService.naiveReturnJig(id, code, seq_id, rec_id);
@@ -187,7 +187,7 @@ public class JigJson {
      * @param counts             数量
      * @return 添加成功，否则服务器异常
      */
-    @RequestMapping(value = "high_add_shoplist", method = RequestMethod.GET)
+    @RequestMapping(value = "high/add_shoplist", method = RequestMethod.GET)
     public boolean highAddShoplist(@RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "bill_no") String bill_no,
                                    @RequestParam(value = "production_line_id") String production_line_id, @RequestParam(value = "code") String codes,
                                    @RequestParam(value = "count") String counts) {
@@ -225,7 +225,7 @@ public class JigJson {
      * @param page_number 页码
      * @return 采购入库申请列表
      */
-    @RequestMapping("high_get_purchase_income_submit_list")
+    @RequestMapping("high/get_purchase_income_submit_list")
     public Map<String, Object> highGetPurchaseIncomeSubmitList(@RequestParam(value = "page_number") int page_number) {
         return getStringObjectMap(jigService.highGetPurchaseIncomeSubmitList(page_number), jigService.highGetPurchaseIncomeSubmitListPage());
     }
@@ -239,7 +239,7 @@ public class JigJson {
      * @param production_line_id 产线id
      * @return 是否修改成功
      */
-    @RequestMapping("high_update_purchase_income_submit")
+    @RequestMapping("high/update_purchase_income_submit")
     public boolean highUpdatePurchaseIncomeSubmit(@RequestParam(value = "id") String id, @RequestParam(value = "code") String code,
                                                   @RequestParam(value = "count") String count,
                                                   @RequestParam("production_line_id") String production_line_id) {
@@ -264,7 +264,7 @@ public class JigJson {
      * @param page_number        页码
      * @return 查询到的入库申请历史
      */
-    @RequestMapping("high_search_purchase_income_history")
+    @RequestMapping("high/search_purchase_income_history")
     public Map<String, Object> highSearchPurchaseIncomeHistory(@RequestParam(value = "bill_no") String bill_no, @RequestParam(value = "submit_name") String submit_name,
                                                                @RequestParam(value = "code") String code, @RequestParam(value = "production_line_id") String production_line_id,
                                                                @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
@@ -279,7 +279,7 @@ public class JigJson {
      * @param id purchase_income_submit表id
      * @return 是否成功
      */
-    @RequestMapping("high_delete_purchase_submit")
+    @RequestMapping("high/delete_purchase_submit")
     public boolean highDeletePurchaseSubmit(@RequestParam(value = "id") String id) {
         try {
             jigService.highDeletePurchaseSubmit(id);
@@ -294,9 +294,9 @@ public class JigJson {
      *
      * @return 获取报修申请记录
      */
-    @RequestMapping("high_get_repair_jig")
-    public Map<String, Object> highGetRepairJig(@RequestParam(value = "page_number") int page_number) {
-        return getStringObjectMap(jigService.highGetRepairJig(page_number), jigService.highGetRepairJigPage());
+    @RequestMapping("high/get_repair_jig")
+    public Map<String, Object> highGetRepairJig(@RequestParam(value = "id")String id,@RequestParam(value = "page_number") int page_number) {
+        return getStringObjectMap(jigService.highGetRepairJig(id,page_number), jigService.highGetRepairJigPage(id));
     }
 
     /**
@@ -311,10 +311,10 @@ public class JigJson {
      * @param page_number 页码
      * @return 搜索到历史报修记录
      */
-    @RequestMapping("high_search_repair_history")
-    public Map<String, Object> highSearchRepairHistory(@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number) {
-        return getStringObjectMap(jigService.highSearchRepairHistory(code, seq_id, submit_name, status, start_date, end_date, page_number)
-                , jigService.highSearchRepairHistoryPage(code, seq_id, submit_name, status, start_date, end_date));
+    @RequestMapping("high/search_repair_history")
+    public Map<String, Object> highSearchRepairHistory(@RequestParam(value = "id")String id,@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number) {
+        return getStringObjectMap(jigService.highSearchRepairHistory(id,code, seq_id, submit_name, status, start_date, end_date, page_number)
+                , jigService.highSearchRepairHistoryPage(id,code, seq_id, submit_name, status, start_date, end_date));
     }
 
     /**
@@ -324,7 +324,7 @@ public class JigJson {
      * @param page_number 页码
      * @return 报废申请
      */
-    @RequestMapping("high_get_scrap")
+    @RequestMapping("high/get_scrap")
     public Map<String, Object> highGetScrap(@RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "page_number") int page_number) {
         return getStringObjectMap(jigService.highGetScrap(submit_id, page_number)
                 , jigService.highGetScrapPage(submit_id));
@@ -342,7 +342,7 @@ public class JigJson {
      * @param page_number 页码
      * @return 搜索到的报废历史
      */
-    @RequestMapping("high_search_scrap_history")
+    @RequestMapping("high/search_scrap_history")
     public Map<String, Object> highSearchScrapHistory(@RequestParam(value = "code") String code,
                                                       @RequestParam(value = "seq_id") String seq_id,
                                                       @RequestParam(value = "submit_id") String submit_id,
@@ -355,7 +355,7 @@ public class JigJson {
                 , jigService.highSearchScrapHistoryPage(code, seq_id, submit_id, scrap_reason, status, start_date, end_date));
     }
 
-    @RequestMapping(value = "high_submit_scrap", method = RequestMethod.POST)
+    @RequestMapping(value = "high/submit_scrap", method = RequestMethod.POST)
     public boolean highSubmitRepair(@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "scrap_reason") String scrap_reason, @RequestParam(value = "file") MultipartFile file) {
         String fileName = file.getOriginalFilename();
         try {
@@ -373,8 +373,8 @@ public class JigJson {
         return true;
     }
 
-    @RequestMapping("high_phone_submit_scrap")
-    public boolean high_phone_submit_scrap(@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "scrap_reason") String scrap_reason, @RequestParam(value = "token") String token, HttpServletRequest request) {
+    @RequestMapping("high/phone_submit_scrap")
+    public boolean highPhoneSubmitScrap(@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "scrap_reason") String scrap_reason, @RequestParam(value = "token") String token, HttpServletRequest request) {
         try {
             HttpSession session = request.getSession();
             session.removeAttribute("scrap-" + submit_id);
@@ -389,7 +389,7 @@ public class JigJson {
         return true;
     }
 
-    @RequestMapping("high_delete_scrap")
+    @RequestMapping("high/delete_scrap")
     public boolean highDeleteScrap(@RequestParam(value = "id") String id, @RequestParam(value = "scrap_photo_url") String scrap_photo_url) {
         String fileName = RESOURCE_URL + scrap_photo_url;
         File file = new File(fileName);
@@ -512,12 +512,12 @@ public class JigJson {
         return phoneUploadMap.get(token);
     }
 
-    @RequestMapping("naive_get_repair_list")
+    @RequestMapping("naive/get_repair_list")
     public Map<String, Object> naiveGetRepairList(@RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "page_number") int page_number) {
         return getStringObjectMap(jigService.naiveGetRepairList(submit_id, page_number), jigService.naiveGetRepairListPage(submit_id));
     }
 
-    @RequestMapping("naive_submit_repair")
+    @RequestMapping("naive/submit_repair")
     public boolean naiveSubmitRepair(@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "repair_reason") String repair_reason, @RequestParam(value = "file") MultipartFile file) {
         String fileName = file.getOriginalFilename();
         try {
@@ -533,7 +533,7 @@ public class JigJson {
         return true;
     }
 
-    @RequestMapping("naive_phone_submit_repair")
+    @RequestMapping("naive/phone_submit_repair")
     public boolean naivePhoneSubmitRepair(@RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id, @RequestParam(value = "repair_reason") String repair_reason, @RequestParam(value = "token") String token, HttpServletRequest request) {
         try {
             HttpSession session = request.getSession();
@@ -548,17 +548,17 @@ public class JigJson {
         }
         return true;
     }
-    @RequestMapping("naive_get_repair_history")
+    @RequestMapping("naive/get_repair_history")
     public Map<String,Object> naiveGetRepairHistory(@RequestParam(value = "submit_id")String submit_id,@RequestParam(value = "page_number")int page_number){
         List<RepairJigHistory> list = jigService.naiveGetRepairHistory(submit_id,page_number);
         int a = jigService.naiveGetRepairHistoryPage(submit_id);
         return getStringObjectMap(list,a);
     }
-    @RequestMapping("high_get_repair_count")
+    @RequestMapping("high/get_repair_count")
     public int highGetRepairCount(@RequestParam(value = "submit_id")String submit_id){
         return jigService.highGetRepairCount(submit_id);
     }
-    @RequestMapping("high_get_repair_basic")
+    @RequestMapping("high/get_repair_basic")
     public List<Map<String,Object>> highGetRepairBasic(@RequestParam("submit_id")String submit_id){
         return jigService.highGetRepairBasic(submit_id);
     }

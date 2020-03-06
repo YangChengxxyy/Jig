@@ -40,7 +40,7 @@ const show_myshoplist = new Vue({
     methods: {
         getData() {
             const that = this;
-            $.ajax("high_get_purchase_income_submit_list", {
+            $.ajax("high/get_purchase_income_submit_list", {
                 data: {
                     page_number: this.now_page_number
                 },
@@ -87,7 +87,7 @@ const show_myshoplist = new Vue({
                 return false;
             } else {
                 var that = this;
-                $.ajax("high_update_purchase_income_submit", {
+                $.ajax("high/update_purchase_income_submit", {
                     data: {
                         id: this.change_id,
                         production_line_id: this.change_production_line_id,
@@ -110,7 +110,7 @@ const show_myshoplist = new Vue({
             let that = this;
             if (status === '0') {
                 if (confirm("确认删除此申请单！！！")) {
-                    $.ajax("high_delete_purchase_submit", {
+                    $.ajax("high/delete_purchase_submit", {
                         data: {
                             id: id
                         },
@@ -179,7 +179,7 @@ const add_myshoplist = new Vue({
                 return false;
             } else {
                 const that = this;
-                $.ajax("high_add_shoplist", {
+                $.ajax("high/add_shoplist", {
                     data: {
                         bill_no: this.bill_no,
                         submit_id: this.submit_id,
@@ -246,7 +246,7 @@ const historyShop = new Vue({
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            $.ajax("high_search_purchase_income_history", {
+            $.ajax("high/search_purchase_income_history", {
                 data: {
                     bill_no: this.bill_no,
                     submit_name: this.submit_name,
@@ -285,14 +285,14 @@ const historyShop = new Vue({
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            return "high_download_one_purchase_history?code=" + this.code + "&submit_name=" + this.submit_name + "&bill_no=" + this.bill_no + "&production_line_id=" + this.production_line_id + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls";
+            return "high/download_one_purchase_history?code=" + this.code + "&submit_name=" + this.submit_name + "&bill_no=" + this.bill_no + "&production_line_id=" + this.production_line_id + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls";
         },
         allPageUrl: function () {
             let splits = this.date_range.split(" - ");
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            return "high_download_all_purchase_history?code=" + this.code + "&submit_name=" + this.submit_name + "&bill_no=" + this.bill_no + "&production_line_id=" + this.production_line_id + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&file_name=page-all.xls";
+            return "high/download_all_purchase_history?code=" + this.code + "&submit_name=" + this.submit_name + "&bill_no=" + this.bill_no + "&production_line_id=" + this.production_line_id + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&file_name=page-all.xls";
         }
     }
 });
@@ -310,8 +310,9 @@ const myrepair = new Vue({
     methods: {
         getData: function () {
             let that = this;
-            $.ajax("high_get_repair_jig", {
+            $.ajax("high/get_repair_jig", {
                 data: {
+                    id: id,
                     page_number: this.now_page_number,
                 },
                 success: function (res) {
@@ -349,8 +350,9 @@ const historyMyrepair = new Vue({
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            $.ajax("high_search_repair_history", {
+            $.ajax("high/search_repair_history", {
                 data: {
+                    id: id,
                     code: this.code,
                     seq_id: this.seq_id,
                     submit_name: this.submit_name,
@@ -396,14 +398,14 @@ const historyMyrepair = new Vue({
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            return "high_download_one_repair_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_name=" + this.submit_name + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls";
+            return "high/download_one_repair_history?id=" + id + "&code=" + this.code + "&seq_id=" + this.seq_id + "&submit_name=" + this.submit_name + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls";
         },
         allPageUrl: function () {
             let splits = this.date_range.split(" - ");
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            return "high_download_all_repair_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_name=" + this.submit_name + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&file_name=page-all.xls";
+            return "high/download_all_repair_history?id=" + id + "&code=" + this.code + "&seq_id=" + this.seq_id + "&submit_name=" + this.submit_name + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&file_name=page-all.xls";
         }
     }
 });
@@ -433,7 +435,7 @@ const myscrap = new Vue({
     methods: {
         getData: function () {
             const that = this;
-            $.ajax("high_get_scrap", {
+            $.ajax("high/get_scrap", {
                 data: {
                     submit_id: id,
                     page_number: this.now_page_number
@@ -460,7 +462,7 @@ const myscrap = new Vue({
         del: function (id, scrap_photo_url) {
             const that = this;
             if (confirm("确认删除此申请！")) {
-                $.ajax("high_delete_scrap", {
+                $.ajax("high/delete_scrap", {
                     data: {
                         id: id,
                         scrap_photo_url: scrap_photo_url
@@ -493,7 +495,7 @@ const myscrap = new Vue({
                     formData.append("seq_id", this.submit_seq_id);
                     formData.append("scrap_reason", this.submit_scrap_reason);
                     let that = this;
-                    $.ajax("high_submit_scrap", {
+                    $.ajax("high/submit_scrap", {
                         type: "post",
                         processData: false,
                         contentType: false,
@@ -516,7 +518,7 @@ const myscrap = new Vue({
                     })
                 } else {
                     let that = this;
-                    $.ajax("high_phone_submit_scrap", {
+                    $.ajax("high/phone_submit_scrap", {
                         data: {
                             submit_id: id,
                             code: that.submit_code,
@@ -613,7 +615,7 @@ const historyMyscrap = new Vue({
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            $.ajax("high_search_scrap_history", {
+            $.ajax("high/search_scrap_history", {
                 data: {
                     submit_id: id,
                     code: this.code,
@@ -660,14 +662,14 @@ const historyMyscrap = new Vue({
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            return "high_download_one_scrap_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_id=" + id + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls";
+            return "high/download_one_scrap_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_id=" + id + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls";
         },
         allPageUrl: function () {
             let splits = this.date_range.split(" - ");
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            return "high_download_all_scrap_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_id=" + id + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&file_name=page-all.xls";
+            return "high/download_all_scrap_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_id=" + id + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&file_name=page-all.xls";
         }
     }
 });
@@ -768,7 +770,7 @@ const repairStatistics = new Vue({
     methods: {
         getData: function () {
             let that = this;
-            $.ajax("high_get_repair_count", {
+            $.ajax("high/get_repair_count", {
                 data: {
                     submit_id: id
                 },
@@ -777,7 +779,7 @@ const repairStatistics = new Vue({
                     that.repair_count = data;
                 }
             });
-            $.ajax("high_get_repair_basic", {
+            $.ajax("high/get_repair_basic", {
                 data: {
                     submit_id: id
                 },

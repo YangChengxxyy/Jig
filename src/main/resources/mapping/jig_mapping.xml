@@ -261,6 +261,7 @@
         from repair_submit rs
                  left join `user` u1 on rs.submit_id = u1.id
                  left join `user` u2 on rs.acceptor_id = u2.id
+        where u1.workcell_id in (select user.workcell_id from user where id = #{id})
         limit #{page_number},5
     </select>
     <select id="highGetRepairJigPage" resultType="java.lang.Integer">
@@ -268,13 +269,14 @@
         from repair_submit rs
                  left join `user` u1 on rs.submit_id = u1.id
                  left join `user` u2 on rs.acceptor_id = u2.id
+        where u1.workcell_id in (select user.workcell_id from user where id = #{id})
     </select>
     <select id="highSearchRepairHistory" resultType="com.jig.entity.RepairJig">
         select rh.*,u1.name submit_name,u2.name acceptor_name
         from repair_submit_history rh
         left join user u1 on rh.submit_id = u1.id
         left join user u2 on rh.acceptor_id = u2.id
-        <where>
+        where u1.workcell_id in (select user.workcell_id from user where id = #{id})
             <if test="code != null and code != ''">
                 and rh.code like concat('%',#{code},'%')
             </if>
@@ -290,7 +292,6 @@
             <if test="start_date != end_date">
                 and rh.submit_time between #{start_date} and #{end_date}
             </if>
-        </where>
         limit #{page_number},5
     </select>
     <select id="highSearchAllRepairHistory" resultType="com.jig.entity.RepairJig">
@@ -298,7 +299,7 @@
         from repair_submit_history rh
         left join user u1 on rh.submit_id = u1.id
         left join user u2 on rh.acceptor_id = u2.id
-        <where>
+        where u1.workcell_id in (select user.workcell_id from user where id = #{id})
             <if test="code != null and code != ''">
                 and rh.code like concat('%',#{code},'%')
             </if>
@@ -314,13 +315,13 @@
             <if test="start_date != end_date">
                 and rh.submit_time between #{start_date} and #{end_date}
             </if>
-        </where>
     </select>
     <select id="highSearchRepairHistoryPage" resultType="java.lang.Integer">
         select count(*)
         from repair_submit_history rh
         left join user u1 on rh.submit_id = u1.id
         left join user u2 on rh.acceptor_id = u2.id
+        where u1.workcell_id in (select user.workcell_id from user where id = #{id})
         <where>
             <if test="code != null and code != ''">
                 and rh.code like concat('%',#{code},'%')

@@ -35,7 +35,7 @@ const search_jig = new Vue({
     methods: {
         getData: function () {
             const that = this;
-            $.ajax("naive_search_jig_definition", {
+            $.ajax("naive/search_jig_definition", {
                 data: {
                     code: this.code,
                     name: this.name,
@@ -90,10 +90,10 @@ const search_jig = new Vue({
         //     }
         // },
         onePageUrl: function () {
-            return "naive_download_one_search?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&page_number=" + this.now_page_number + "&file_name=page" + this.now_page_number + ".xls";
+            return "naive/download_one_search?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&page_number=" + this.now_page_number + "&file_name=page" + this.now_page_number + ".xls";
         },
         allPageUrl: function () {
-            return "naive_download_all_search?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&file_name=page-all.xls";
+            return "naive/download_all_search?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&file_name=page-all.xls";
         }
     }
 });
@@ -121,7 +121,7 @@ const return_jig = new Vue({
     methods: {
         getData: function () {
             const that = this;
-            $.ajax("naive_get_outgoing_jig", {
+            $.ajax("naive/get_outgoing_jig", {
                 data: {
                     page_number: this.now_page_number
                 },
@@ -226,7 +226,7 @@ const jig_outgoing = new Vue({
     methods: {
         getData: function () {
             const that = this;
-            $.ajax("naive_get_outgoing_submit", {
+            $.ajax("naive/get_outgoing_submit", {
                 data: {
                     page_number: this.now_page_number
                 },
@@ -251,7 +251,7 @@ const jig_outgoing = new Vue({
             if (this.check1 && this.check2) {
                 const splits = this.code_seq_id.split("-");
                 var that = this;
-                $.ajax("naive_outgo_jig", {
+                $.ajax("naive/outgo_jig", {
                     data: {
                         id: this.id,
                         code: splits[0],
@@ -335,7 +335,7 @@ const myRepair = new Vue({
     methods: {
         getData: function () {
             let that = this;
-            $.ajax("naive_get_repair_list", {
+            $.ajax("naive/get_repair_list", {
                 data: {
                     submit_id: id,
                     page_number: that.now_page_number
@@ -422,7 +422,7 @@ const myRepair = new Vue({
                     formData.append("seq_id", this.submit_seq_id);
                     formData.append("repair_reason", this.submit_repair_reason);
                     let that = this;
-                    $.ajax("naive_submit_repair", {
+                    $.ajax("naive/submit_repair", {
                         type: "post",
                         processData: false,
                         contentType: false,
@@ -445,7 +445,7 @@ const myRepair = new Vue({
                     })
                 } else {
                     let that = this;
-                    $.ajax("naive_phone_submit_repair", {
+                    $.ajax("naive/phone_submit_repair", {
                         data: {
                             submit_id: id,
                             code: that.submit_code,
@@ -491,7 +491,7 @@ const repairHistory = new Vue({
     methods: {
         getData: function () {
             let that = this;
-            $.ajax("naive_get_repair_history", {
+            $.ajax("naive/get_repair_history", {
                 data: {
                     submit_id: id,
                     page_number: this.now_page_number

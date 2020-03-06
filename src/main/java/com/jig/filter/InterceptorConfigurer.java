@@ -10,7 +10,8 @@ import javax.annotation.Resource;
 public class InterceptorConfigurer implements WebMvcConfigurer {
     @Resource
     private SessionInterceptor sessionInterceptor;
-
+    @Resource
+    private PowerInterceptor powerInterceptor;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(sessionInterceptor)
@@ -24,5 +25,7 @@ public class InterceptorConfigurer implements WebMvcConfigurer {
                          "/assets/**",
                          "/images/**",
                          "/phone_upload_success");
+        registry.addInterceptor(powerInterceptor)
+                .addPathPatterns("/naive/**","/high/**","/supervisor/**","/manager/**","/admin/**");
     }
 }
