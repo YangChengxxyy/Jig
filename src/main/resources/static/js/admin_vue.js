@@ -28,7 +28,7 @@ const information_manage = new Vue({
         getData: function () {
             let that = this;
             $.ajax("admin/get_user_information", {
-                data:{
+                data: {
                     id: id,
                     page_number: that.now_page_number
                 },
@@ -40,8 +40,22 @@ const information_manage = new Vue({
                     that.max_page_number = data["max"];
                 }
             });
+        },
+        info_profile: function (index) {
+            info_profile.user = this.user_list[index];
         }
     },
+    computed: {},
+    watch: {},
+});
+const info_profile = new Vue({
+    el: "#info_profile",
+    data: {
+        user: null
+    },
+    created: function () {
+    },
+    methods: {},
     computed: {},
     watch: {},
 });

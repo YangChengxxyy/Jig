@@ -70,8 +70,16 @@ public class JigWeb {
         return "high";
     }
     @RequestMapping("test_admin")
-    public String test_admin(){
+    public String test_admin(HttpSession session,Model model){
+        LoginState loginState = (LoginState)session.getAttribute("loginState");
+        model.addAttribute("loginState",loginState);
         return "admin";
+    }
+    @RequestMapping("log_out")
+    public String logOut(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        session.removeAttribute("loginState");
+        return "redirect:show_login";
     }
     @RequestMapping("naive/download_one_search")
     public void naiveDownloadOneSearch(HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor, @RequestParam(value = "page_number") int pageNumber, @RequestParam(value = "file_name") String fileName) throws Exception {
