@@ -69,18 +69,21 @@ public class JigWeb {
     public String high(HttpServletRequest request) {
         return "high";
     }
+
     @RequestMapping("test_admin")
-    public String test_admin(HttpSession session,Model model){
-        LoginState loginState = (LoginState)session.getAttribute("loginState");
-        model.addAttribute("loginState",loginState);
+    public String test_admin(HttpSession session, Model model) {
+        LoginState loginState = (LoginState) session.getAttribute("loginState");
+        model.addAttribute("loginState", loginState);
         return "admin";
     }
+
     @RequestMapping("log_out")
-    public String logOut(HttpServletRequest request){
+    public String logOut(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.removeAttribute("loginState");
         return "redirect:show_login";
     }
+
     @RequestMapping("naive/download_one_search")
     public void naiveDownloadOneSearch(HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor, @RequestParam(value = "page_number") int pageNumber, @RequestParam(value = "file_name") String fileName) throws Exception {
         List<JigDefinition> list = jigService.naiveSearchJigDefinition(code, name, workcell, family, userFor, pageNumber);
@@ -116,13 +119,13 @@ public class JigWeb {
 
 
     @RequestMapping("high/download_one_repair_history")
-    public void highDownloadOneRepairHistory(HttpServletResponse response,@RequestParam("id")String id, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number, @RequestParam(value = "file_name") String file_name) throws Exception {
-        List<RepairJig> list = jigService.highSearchRepairHistory(id,code, seq_id, submit_name, status, start_date, end_date, page_number);
+    public void highDownloadOneRepairHistory(HttpServletResponse response, @RequestParam("id") String id, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number, @RequestParam(value = "file_name") String file_name) throws Exception {
+        List<RepairJig> list = jigService.highSearchRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date, page_number);
         outputFile(response, file_name, list);
     }
 
     @RequestMapping("high/download_all_repair_history")
-    public void highDownloadAllRepairHistory(HttpServletResponse response,@RequestParam("id")String id, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date, @RequestParam(value = "file_name") String file_name) throws Exception {
+    public void highDownloadAllRepairHistory(HttpServletResponse response, @RequestParam("id") String id, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date, @RequestParam(value = "file_name") String file_name) throws Exception {
         List<RepairJig> list = jigService.highSearchAllRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date);
         outputFile(response, file_name, list);
     }

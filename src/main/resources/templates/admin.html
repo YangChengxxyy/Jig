@@ -23,13 +23,15 @@
     <link rel="stylesheet" href="assets/css/fonts/elusive/css/elusive.css">
 
     <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="js/html5shiv-3.7.2.min.js"></script>
     <script src="js/respond-1.4.2.min.js"></script>
     <![endif]-->
 
-
+    <script src="js/bootstrap-table.min.js"></script>
     <script src="js/vue.js"></script>
     <script src="js/echarts.js"></script>
     <script src="js/vue-echarts@4.0.2.js"></script>
@@ -46,6 +48,7 @@
 
     <link rel="stylesheet" href="css/manager.css">
     <link rel="stylesheet" href="css/iconfont.css">
+    <link rel="stylesheet" href="css/bootstrap-table.min.css">
     <script>
         $(function () {
             //侧边栏点击事件
@@ -91,7 +94,11 @@
 
         })
     </script>
-
+    <style>
+        .btn{
+            margin-bottom: 0;
+        }
+    </style>
 </head>
 <body class="page-body skin-navy">
 
@@ -485,51 +492,50 @@
                                     <span class="expand-icon">+</span>
                                 </a>
 
-                                <a href="#" data-toggle="reload" @click="getData">
+                                <a href="#" data-toggle="reload">
                                     <i class="fa-rotate-right"></i>
                                 </a>
 
                             </div>
                         </div>
                         <div class="panel-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-hover table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>序号</th>
-                                        <th>id</th>
-                                        <th>名字</th>
-                                        <th>工作部门</th>
-                                        <th>职位</th>
-                                        <th>操作</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr v-for="(item,index) in user_list">
-                                        <td>{{index + 1}}</td>
-                                        <td>{{item.id}}</td>
-                                        <td>{{item.name}}</td>
-                                        <td>{{item.workcell_id}}</td>
-                                        <td>{{item.type}}</td>
-                                        <td>
-                                            <a href="#" class="btn btn-secondary btn-sm btn-icon icon-left">
-                                                修改
-                                            </a>
+<!--                                <table class="table table-bordered table-hover table-striped">-->
+<!--                                    <thead>-->
+<!--                                    <tr>-->
+<!--                                        <th>序号</th>-->
+<!--                                        <th>id</th>-->
+<!--                                        <th>名字</th>-->
+<!--                                        <th>工作部门</th>-->
+<!--                                        <th>职位</th>-->
+<!--                                        <th>操作</th>-->
+<!--                                    </tr>-->
+<!--                                    </thead>-->
+<!--                                    <tbody>-->
+<!--                                    <tr v-for="(item,index) in user_list">-->
+<!--                                        <td>{{index + 1}}</td>-->
+<!--                                        <td>{{item.id}}</td>-->
+<!--                                        <td>{{item.name}}</td>-->
+<!--                                        <td>{{item.workcell_id}}</td>-->
+<!--                                        <td>{{item.type}}</td>-->
+<!--                                        <td>-->
+<!--                                            <a href="#" class="btn btn-secondary btn-sm btn-icon icon-left">-->
+<!--                                                修改-->
+<!--                                            </a>-->
 
-                                            <a href="#" class="btn btn-danger btn-sm btn-icon icon-left">
-                                                删除
-                                            </a>
+<!--                                            <a href="#" class="btn btn-danger btn-sm btn-icon icon-left">-->
+<!--                                                删除-->
+<!--                                            </a>-->
 
-                                            <a href="#" class="btn btn-info btn-sm btn-icon icon-left" data-toggle="modal" data-target="#info_profile" @click="info_profile(index)">
-                                                简况
-                                            </a>
-                                        </td>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <my-pagination :now_page_number="now_page_number" :max_page_number="max_page_number"></my-pagination>
+<!--                                            <a href="#" class="btn btn-info btn-sm btn-icon icon-left" data-toggle="modal" data-target="#info_profile" @click="info_profile(index)">-->
+<!--                                                简况-->
+<!--                                            </a>-->
+<!--                                        </td>-->
+<!--                                    </tr>-->
+<!--                                    </tbody>-->
+<!--                                </table>-->
+                                <bootstrap-table :columns="columns" :data="user_list" :options="options"></bootstrap-table>
+
+<!--                            <my-pagination :now_page_number="now_page_number" :max_page_number="max_page_number"></my-pagination>-->
                         </div>
                     </div>
                 </div>
@@ -656,7 +662,6 @@
 </div>
 
 <!-- Bottom Scripts -->
-<script src="js/bootstrap.min.js"></script>
 <script src="assets/js/TweenMax.min.js"></script>
 <script src="assets/js/resizeable.js"></script>
 <script src="assets/js/joinable.js"></script>
@@ -674,6 +679,11 @@
 <!-- JavaScripts initializations and stuff -->
 <script src="assets/js/xenon-custom.js"></script>
 <script src="js/pagination.js"></script>
+<script src="js/jquery-3.4.1.js"></script>
+<script src="js/bootstrap-table.min.js"></script>
+<script src="js/bootstrap-table-vue.min.js"></script>
+<script src="js/bootstrap-table-export.js"></script>
 <script src="js/admin_vue.js"></script>
+
 </body>
 </html>

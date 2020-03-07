@@ -21,13 +21,8 @@ public class JigWeb_zhs {
         return "high";
     }
 
-    @RequestMapping(value = "show_manager_main", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "test_high", method = {RequestMethod.GET, RequestMethod.POST})
     public String showManagerMain(HttpServletRequest request) {
-        User user = new User();
-        user.setName("Xianghai Zhang");
-        user.setId("1215072");
-        HttpSession httpSession = request.getSession();
-        httpSession.setAttribute("user", user);
         return "manager";
     }
 }
