@@ -4,15 +4,19 @@
     <meta charset="UTF-8">
     <title>监管员</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-select.css">
+    <link rel="stylesheet" href="css/daterangepicker.css"/>
     <link rel="stylesheet" href="css/mainStyle.css">
-
+    <link rel="stylesheet" href="css/iconfont.css">
     <script src="js/jquery-3.4.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap-select.css">
+
+    <script src="js/echarts.min.js"></script>
+    <script src="js/moment.min.js"></script>
+    <script src="js/daterangepicker.js"></script>
+    <script src="js/vue.js"></script>
     <script src="js/bootstrap-select.js"></script>
     <script src="js/defaults-zh_CN.js"></script>
-    <script src="js/vue.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
@@ -40,6 +44,22 @@
             $("#bt_select_jig_info").click(function () {
                 $("#ul_jig_family_list li").removeClass("active");
             })
+
+            $(".submit_date").daterangepicker({
+                "opens": "center",
+                locale: { //汉化
+                    format: "YYYY-MM-DD", //设置显示格式
+                    applyLabel: '确定', //确定按钮文本
+                    cancelLabel: '取消', //取消按钮文本
+                    daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+                    monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
+                        '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                    firstDay: 1
+                }
+            }).on("hide.daterangepicker", function (ev) {
+                //触发DOM对象上的原生input事件
+                this.dispatchEvent(new Event('input'))
+            });
         })
     </script>
 </head>
@@ -165,8 +185,8 @@
                             </div>
                             <div class="panel-collapse collapse" id="3">
                                 <ul class="nav nav-pills nav-stacked">
-                                    <li class="active" data-toggle="tab" href="#dclbfsq"><a>待处理报废申请</a></li>
-                                    <li data-toggle="tab" href="#lsbfjl"><a>历史报废记录</a></li>
+                                    <li class="active" data-toggle="tab" href="#scrap_submit"><a>待处理报废申请</a></li>
+                                    <li data-toggle="tab" href="#scrap_submit_history"><a>历史报废记录</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -1073,38 +1093,44 @@
 
                         <!--历史采购记录-->
                         <div id="purchase_list_history" class="tab-pane fade">
-                            <div style="margin-bottom: 3%">
+                            <div style="margin-top: 2%;margin-bottom: 3%">
                                 <form role="form" class="form-horizontal">
                                     <div class="form-group row">
                                         <label for="sel_shoplist_id" class="col-sm-2 control-label">单据号</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" id="sel_shoplist_id">
+                                            <input type="text" class="form-control" id="sel_shoplist_id"
+                                                   v-model="sel_bill_no">
                                         </div>
-                                        <label for="sel_shopman_name" class="col-sm-2 control-label">采购人</label>
+                                        <label class="col-sm-2 control-label">采购人</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" id="sel_shopman_name">
+                                            <input type="text" class="form-control" id="sel_shopman_name"
+                                                   v-model="sel_submit_name">
                                         </div>
                                         <div class="col-sm-2">
-                                            <button class="btn btn-default" type="button">清空</button>
+                                            <button class="btn btn-default" type="button" @click="clear_all">清空</button>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="sel_applytime" class="col-sm-2 control-label">申请日期</label>
+                                        <label for="div_date1" class="col-sm-2 control-label">选择时间</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" id="sel_applytime">
+                                            <div class='input-group' id='div_date1'>
+                                                <input class="form-control submit_date"
+                                                       v-model="sel_submit_time"></input>
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-remove" @click="clear_date"></span>
+                                                </span>
+                                            </div>
                                         </div>
                                         <label for="sel_status" class="col-sm-2 control-label">审批状态</label>
                                         <div class="col-sm-3">
-                                            <select class="form-control" id="sel_status">
-                                                <option>待初审</option>
-                                                <option>初审通过</option>
-                                                <option>初审不通过</option>
-                                                <option>终审通过</option>
-                                                <option>终审不通过</option>
+                                            <select class="form-control" id="sel_status" v-model="sel_status">
+                                                <option v-for="option in options" v-bind:value="option.value">
+                                                    {{option.text}}
+                                                </option>
                                             </select>
                                         </div>
                                         <div class="col-sm-2">
-                                            <button class="btn btn-primary" type="button">查询</button>
+                                            <button class="btn btn-primary" type="button" @click="getData">查询</button>
                                         </div>
                                     </div>
                                 </form>
@@ -1116,112 +1142,201 @@
                                         <th>采购单据号</th>
                                         <th>采购人</th>
                                         <th>产线id</th>
-                                        <th>工夹具代码</th>
+                                        <th>工夹具代码及数量</th>
                                         <th>申请时间</th>
                                         <th>状态</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>EF07897897892</td>
-                                        <td>张三</td>
-                                        <td>BLKA10-L2</td>
-                                        <td>EF0789</td>
-                                        <td>2019-12-31 12:39</td>
-                                        <td>待初审</td>
+                                    <tr v-for="(item,index) in purchase_submit_list">
+                                        <td>{{item.bill_no}}</td>
+                                        <td>{{item.submit_name}}</td>
+                                        <td>{{item.production_line_id}}</td>
                                         <td>
-                                            <button type="button" class="btn btn-primary" data-target="#checkCgd"
-                                                    data-toggle="modal">查看
+                                            <label>
+                                                <select class="btn btn-default">
+                                                    <option v-for="(code,index) in item.code.split('|')">{{code}} --
+                                                        {{item.count.split('|')[index]}}件
+                                                    </option>
+                                                </select>
+                                            </label>
+                                        </td>
+                                        <td>{{item.submit_time}}</td>
+                                        <td v-if="item.status==0">待审批</td>
+                                        <td v-if="item.status==1">初审未通过</td>
+                                        <td v-if="item.status==2">初审通过</td>
+                                        <td v-if="item.status==3">终审未通过</td>
+                                        <td v-if="item.status==4">终审通过</td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary"
+                                                    data-target="#purchase_submit_history_detail"
+                                                    data-toggle="modal" @click="get_purchase_submit_detail(index)">查看
                                             </button>
-                                            <div class="modal fade" id="checkCgd" tabindex="-1" role="dialog"
-                                                 aria-labelledby="checkCgdLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-hidden="true">&times;
-                                                            </button>
-                                                            <h4 class="modal-title" id="checkCgdLabel">明细</h4>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="form-horizontal">
-                                                                <div class="form-group">
-                                                                    <label class="col-sm-3 control-label">单据号</label>
-                                                                    <div class="col-sm-8">
-                                                                        <div class="form-control">EF07897897892</div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="col-sm-3 control-label">申请人</label>
-                                                                    <div class="col-sm-8">
-                                                                        <div class="form-control">张三</div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="col-sm-3 control-label">工夹具代码</label>
-                                                                    <div class="col-sm-8">
-                                                                        <div class="form-control">BLKA10-L2</div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="col-sm-3 control-label">申请时间</label>
-                                                                    <div class="col-sm-8">
-                                                                        <div class="form-control">2019-12-31 12:39</div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="col-sm-3 control-label">状态</label>
-                                                                    <div class="col-sm-8">
-                                                                        <div class="form-control">初审通过</div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="col-sm-3 control-label">初审人</label>
-                                                                    <div class="col-sm-8">
-                                                                        <div class="form-control">李四</div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="col-sm-3 control-label">初审时间</label>
-                                                                    <div class="col-sm-8">
-                                                                        <div class="form-control">2020-01-03 13:39</div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default"
-                                                                    data-dismiss="modal">关闭
-                                                            </button>
-                                                        </div>
-                                                    </div><!-- /.modal-content -->
-                                                </div><!-- /.modal -->
-                                            </div>
                                         </td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="row text-center">
-                                <ul class="pagination">
-                                    <li><a href="#">&laquo;</a></li>
-                                    <li class="active"><a href="#">1</a></li>
-                                    <li><a href="#">2</a></li>
-                                    <li><a href="#">3</a></li>
-                                    <li><a href="#">4</a></li>
-                                    <li><a href="#">5</a></li>
-                                    <li><a href="#">&raquo;</a></li>
-                                </ul>
+
+                            <!--查看历史采购记录的细节-->
+                            <div class="modal fade" id="purchase_submit_history_detail" tabindex="-1"
+                                 role="dialog"
+                                 aria-labelledby="chukuLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-hidden="true">&times;
+                                            </button>
+                                            <h4 class="modal-title">我的采购单</h4>
+                                        </div>
+                                        <div class="modal-body" v-if="purchase_submit_detail != null">
+                                            <form role="form" class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">采购单据号</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{purchase_submit_detail.bill_no}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">采购人</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit_detail.submit_name}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">产线id</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit_detail.production_line_id}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                                <div v-for="(item,index) in purchase_submit_detail.code.split('|')">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 control-label">工夹具代码</label>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-control">{{item}}</div>
+                                                        </div>
+                                                        <label class="col-sm-3 control-label">采购数量</label>
+                                                        <div class="col-sm-2">
+                                                            <div class="form-control">
+                                                                {{purchase_submit_detail.count.split('|')[index]}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-1"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">申请时间</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit_detail.submit_time}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">审批状态</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control"
+                                                             v-if="purchase_submit_detail.status==0">待审批
+                                                        </div>
+                                                        <div class="form-control"
+                                                             v-if="purchase_submit_detail.status==1">
+                                                            初审未通过
+                                                        </div>
+                                                        <div class="form-control"
+                                                             v-if="purchase_submit_detail.status==2">
+                                                            初审通过
+                                                        </div>
+                                                        <div class="form-control"
+                                                             v-if="purchase_submit_detail.status==3">
+                                                            终审未通过
+                                                        </div>
+                                                        <div class="form-control"
+                                                             v-if="purchase_submit_detail.status==4">
+                                                            终审通过
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                                <div class="form-group"
+                                                     v-if="purchase_submit_detail.first_acceptor_name != null">
+                                                    <label class="col-sm-3 control-label">初审人</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit_detail.first_acceptor_name}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group"
+                                                     v-if="purchase_submit_detail.first_time != null">
+                                                    <label class="col-sm-3 control-label">初审时间</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit_detail.first_time}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group"
+                                                     v-if="purchase_submit_detail.first_reason != null">
+                                                    <label class="col-sm-3 control-label">初审不通过原因</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit_detail.first_reason}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group"
+                                                     v-if="purchase_submit_detail.final_acceptor_name != null">
+                                                    <label class="col-sm-3 control-label">终审人</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit_detail.final_acceptor_name}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group"
+                                                     v-if="purchase_submit_detail.final_time != null">
+                                                    <label class="col-sm-3 control-label">终审时间</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit_detail.final_time}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default"
+                                                    data-dismiss="modal">关闭
+                                            </button>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal -->
                             </div>
+
+                            <div class="text-center row" v-if="max_page_number != 0">
+                                <my-pagination :max_page_number="max_page_number"
+                                               :now_page_number="now_page_number"></my-pagination>
+                            </div>
+
                         </div>
                     </div>
                 </div>
 
                 <div id="main3" class="panel-body tab-content tab-pane fade">
                     <ul class="nav nav-tabs">
-                        <li class="active" data-toggle="tab" href="#dclbfsq"><a>待处理报废申请</a></li>
-                        <li data-toggle="tab" href="#lsbfjl"><a>历史报废记录</a></li>
+                        <li class="active" data-toggle="tab" href="#scrap_submit"><a>待处理报废申请</a></li>
+                        <li data-toggle="tab" href="#scrap_submit_history"><a>历史报废记录</a></li>
                     </ul>
                     <div class="panel-body tab-content">
                         <div id="dclbfsq" class="tab-pane fade in active table-responsive">
@@ -1414,7 +1529,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="sel_applytime" class="col-sm-2 control-label">报废原因</label>
+                                        <label for="sel_apply1" class="col-sm-2 control-label">报废原因</label>
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control" name="sel_repair_reason">
                                         </div>

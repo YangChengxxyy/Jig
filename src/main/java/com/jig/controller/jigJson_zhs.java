@@ -370,5 +370,33 @@ public class jigJson_zhs {
         String fisrt_acceptor = "1230936";
         return jigService.supervisor_no_pass_purchase_submit(id,status,first_reason,fisrt_acceptor);
     }
+
+    //监管者模式下获取历史采购记录
+    @RequestMapping(value = "supervisor_get_purchase_submit_list_history",method = {RequestMethod.GET,RequestMethod.POST})
+    public Map<Object,Object> SupervisorGetPurchaseSubmitHistory(@RequestParam("bill_no") String bill_no,
+                                                                 @RequestParam("submit_name") String submit_name,
+                                                                 @RequestParam("submit_time") String submit_time,
+                                                                 @RequestParam("status") String status,
+                                                                 @RequestParam("page_number") int page_number){
+        Map<Object,Object> map = new HashMap<>();
+        page_number = (page_number-1)*5;
+        String start_date = "";
+        String end_date = "";
+        if(submit_time!="") {
+            start_date = submit_time.substring(0,10);
+            end_date = submit_time.substring(13);
+        }
+
+        String user_id = "1230936";
+        List<PurchaseIncomeSubmit> list = jigService.supervisor_get_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,status,page_number,user_id);
+        int max = jigService.supervisor_get_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status,user_id);
+
+        map.put("list",list);
+        map.put("max",max);
+        return map;
+    }
+
+    //监管者模式下获取待处理的报废清单
+    @RequestMapping(value = "supervisor_get_scrap_submit_list",)
 }
 

@@ -295,3 +295,89 @@ var my_purchase_list = new Vue({
     }
 })
 
+//历史采购记录
+var purchase_submit_history = new Vue({
+    el:"#purchase_list_history",
+    data:{
+        now_page_number:1,
+        max_page_number:0,
+        sel_bill_no:"",
+        sel_submit_name:"",
+        sel_submit_time:"",
+        sel_status:"",
+        options:[{text:'',value:''},
+            {text:'待审批',value:'0'},
+            {text:'初审未通过',value:'1'},
+            {text:'初审通过',value:'2'},
+            {text:'终审未通过',value:'3'},
+            {text:'终审通过',value:'4'}],
+        purchase_submit_list:[],//搜索到的历史采购记录list
+        purchase_submit_detail:null,//采购记录细节
+    },
+    created:function () {
+        this.getData();
+    },
+    methods:{
+        clear_date:function () {
+            this.sel_submit_time = "";
+        },
+        getData:function () {
+            const that = this;
+            $.ajax({
+                url:"supervisor_get_purchase_submit_list_history",
+                data:{
+                    bill_no:this.sel_bill_no,
+                    submit_name:this.sel_submit_name,
+                    submit_time:this.sel_submit_time,
+                    status:this.sel_status,
+                    page_number:this.now_page_number
+                },
+                success:function (res) {
+                    that.purchase_submit_list = res.list;
+                    that.max_page_number = res.max;
+                }
+            })
+        },
+        get_purchase_submit_detail:function (index) {
+            if(this.purchase_submit_list.length>0){
+                this.purchase_submit_detail = this.purchase_submit_list[index];
+            }else{
+                alert("服务器异常!");
+            }
+        },
+        clear_all:function () {
+            this.sel_submit_time = "";
+            this.sel_submit_name = "";
+            this.sel_bill_no = "";
+            this.sel_status = "";
+        }
+
+    }
+})
+
+var scrap_submit = new Vue({
+    el:"#scrap_submit",
+    data:{
+        now_page_number:1,
+        max_page_number:0,
+        scrap_submit_list:[]
+    },
+    created:function(){
+        this.getData();
+    },
+    methods:{
+        getData:function () {
+            const that = this;
+            $.ajax({
+                url:"supervisor_get_scrap_submit_list",
+                data:{
+                    page_number:this.now_page_number
+                },
+                success:function (res) {
+                    this.scrap_submit_list = res.list;
+                    this.max_page_number = res.max;
+                }
+            })
+        }
+    }
+})

@@ -164,4 +164,27 @@ public interface JigMapper_zhs {
                                         @Param("status") String status,
                                         @Param("first_reason") String first_reason,
                                         @Param("first_acceptor") String first_acceptor);
+
+    /**监管者模式下获取历史采购记录
+     *
+     */
+
+    List<PurchaseIncomeSubmit> supervisor_get_purchase_submit_list_history(@Param("bill_no") String bill_no,
+                                                                      @Param("submit_name") String submit_name,
+                                                                      @Param("start_date") String start_date,
+                                                                      @Param("end_date") String end_date,
+                                                                      @Param("status") String status,
+                                                                      @Param("page_number") int page_number,
+                                                                      @Param("user_id") String user_id);
+
+    int supervisor_get_purchase_submit_list_history_pages(@Param("bill_no") String bill_no,
+                                               @Param("submit_name") String submit_name,
+                                               @Param("start_date") String start_date,
+                                               @Param("end_date") String end_date,
+                                               @Param("status") String status,
+                                               @Param("user_id") String user_id);
+
+    /**监管者模式下获取待处理的报废清单
+     *
+     */
 }

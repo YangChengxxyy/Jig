@@ -175,4 +175,16 @@ public class JigService_zhs {
     public int supervisor_no_pass_purchase_submit(String id,String status,String first_reason,String first_acceptor){
         return jigMapper.supervisor_no_pass_purchase_submit(id,status,first_reason,first_acceptor);
     }
+
+    //监管者模式下获取历史采购记录及其最大页数
+    public List<PurchaseIncomeSubmit> supervisor_get_purchase_submit_list_history(String bill_no,String submit_name,String start_date,String end_date,String status,int page_number,String user_id){
+        return jigMapper.supervisor_get_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,status,page_number,user_id);
+    }
+
+    public int supervisor_get_purchase_submit_list_history_pages(String bill_no,String submit_name,String start_date,String end_date,String status,String user_id){
+        int max_page = jigMapper.supervisor_get_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status,user_id);
+        return (int)Math.ceil(max_page/5.0);
+    }
+
+    //监管者模式下获取待处理的报废清单
 }
