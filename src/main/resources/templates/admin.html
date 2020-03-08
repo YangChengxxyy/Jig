@@ -492,7 +492,7 @@
                                     <span class="expand-icon">+</span>
                                 </a>
 
-                                <a href="#" data-toggle="reload">
+                                <a href="#" data-toggle="reload" @click="getData()">
                                     <i class="fa-rotate-right"></i>
                                 </a>
 
@@ -519,11 +519,13 @@
                                         <td>{{item.workcell_id}}</td>
                                         <td>{{item.type}}</td>
                                         <td>
-                                            <a href="#" class="btn btn-secondary btn-sm btn-icon icon-left">
+
+                                            <a href="#" class="btn btn-secondary btn-sm btn-icon icon-left" data-toggle="modal" data-target="#change_user"
+                                            @click="change_user(index)">
                                                 修改
                                             </a>
 
-                                            <a href="#" class="btn btn-danger btn-sm btn-icon icon-left">
+                                            <a href="#" class="btn btn-danger btn-sm btn-icon icon-left" @click="del(item.id)">
                                                 删除
                                             </a>
 
@@ -652,17 +654,93 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-5 control-label">邮箱：</label>
+                                <div class="col-sm-7">
+                                    <div class="form-control">
+                                        {{user.email}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary">提交更改</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
+<div class="modal fade" id="change_user" tabindex="-1" role="dialog" aria-labelledby="change_userLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="change_userLabel">修改个人信息</h4>
+            </div>
+            <div class="modal-body" v-if="user != null">
+                <div class="row">
+                    <div class="col-md-5">
+                        <img class="img-responsive img-thumbnail" :src="user.avatar_url">
+                    </div>
+                    <div class="col-md-6 form-horizontal">
+                        <input style="display: none" id="change_user_id" :value="user.id">
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-5 control-label">姓名：</label>
+                                <div class="col-sm-7">
+                                    <input class="form-control" v-model="user.name">
 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-5 control-label">职位：</label>
+                                <div class="col-sm-7">
+                                    <input class="form-control" v-model="user.position">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-5 control-label">入职时间：</label>
+                                <div class="col-sm-7">
+                                    <input class="form-control" v-model="user.entry_date" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-5 control-label">工作部门：</label>
+                                <div class="col-sm-7">
+                                    <select class="form-control" v-model="user.workcell_id">
+                                        <option v-for="item in workcell_list" :value="item.id">{{item.workcell}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-5 control-label">邮箱：</label>
+                                <div class="col-sm-7">
+                                    <input class="form-control" v-model="user.email">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" @click="submit_change_user">提交更改</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 <!-- Bottom Scripts -->
 <script src="assets/js/TweenMax.min.js"></script>
 <script src="assets/js/resizeable.js"></script>

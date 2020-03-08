@@ -1,6 +1,7 @@
 package com.jig.service;
 
 import com.jig.entity.User;
+import com.jig.entity.Workcell;
 import com.jig.mapper.AdminMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,5 +21,17 @@ public class AdminService {
     public int getUserInformationPage(String id) {
         int a = adminMapper.getUserInformationPage(id);
         return (int) Math.ceil(a / 5.0);
+    }
+
+    public List<Workcell> getWorkcellList() {
+        return adminMapper.getWorkcellList();
+    }
+
+    public int changeUser(User user) {
+        return adminMapper.changeUser(user);
+    }
+
+    public int delUser(String id) {
+        return adminMapper.delUser(id);
     }
 }

@@ -1,4 +1,3 @@
-let Vue = window.Vue;
 Vue.component('v-chart', VueECharts);
 let production_line_list = [];
 let code_list = [];

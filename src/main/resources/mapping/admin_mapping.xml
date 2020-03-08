@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jig.mapper.AdminMapper">
+    <update id="changeUser" parameterType="com.jig.entity.User">
+        update user
+        set user.name   = #{user.name},
+            position    = #{user.position},
+            workcell_id = #{user.workcell_id},
+            email       = #{user.email}
+        where id = #{user.id}
+    </update>
+    <delete id="delUser">
+        delete
+        from user
+        where id = #{id}
+    </delete>
 
     <select id="getUserInformation" resultType="com.jig.entity.User">
         select `user`.*, w.workcell
@@ -11,5 +24,9 @@
     <select id="getUserInformationPage" resultType="java.lang.Integer">
         select count(*)
         from user
+    </select>
+    <select id="getWorkcellList" resultType="com.jig.entity.Workcell">
+        select *
+        from workcell
     </select>
 </mapper>

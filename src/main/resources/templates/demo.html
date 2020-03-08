@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <title>demo</title>
@@ -21,7 +21,6 @@
 <v-chart id="demo" :options="options" :auto-resize="true"></v-chart>
 
 <script>
-    let Vue = window.Vue;
     Vue.component('v-chart', VueECharts);
     const demo = new Vue({
         el: "#demo",
