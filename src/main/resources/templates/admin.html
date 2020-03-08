@@ -31,7 +31,6 @@
     <script src="js/respond-1.4.2.min.js"></script>
     <![endif]-->
 
-    <script src="js/bootstrap-table.min.js"></script>
     <script src="js/vue.js"></script>
     <script src="js/echarts.js"></script>
     <script src="js/vue-echarts@4.0.2.js"></script>
@@ -48,7 +47,7 @@
 
     <link rel="stylesheet" href="css/manager.css">
     <link rel="stylesheet" href="css/iconfont.css">
-    <link rel="stylesheet" href="css/bootstrap-table.min.css">
+
     <script>
         $(function () {
             //侧边栏点击事件
@@ -58,10 +57,10 @@
                 $(".page-title li[href='" + href + "']").siblings().removeClass("active");
                 $(".page-title li[href='" + href + "']").addClass("active");
             });
-            $(".page-title li").on("click",function () {
+            $(".page-title li").on("click", function () {
                 const href = $(this).attr("href");
-                $("#main-menu ul li[href='"+href+"']").siblings().removeClass("active");
-                $("#main-menu ul li[href='"+href+"']").addClass("active")
+                $("#main-menu ul li[href='" + href + "']").siblings().removeClass("active");
+                $("#main-menu ul li[href='" + href + "']").addClass("active")
             });
             $(".date").datetimepicker({
                 format: 'yyyy-mm-dd',
@@ -95,7 +94,7 @@
         })
     </script>
     <style>
-        .btn{
+        .btn {
             margin-bottom: 0;
         }
     </style>
@@ -409,7 +408,8 @@
 
                 <li class="dropdown user-profile">
                     <a href="#" data-toggle="dropdown">
-                        <img th:src="${loginState.getData().getAvatar_url()}" alt="user-image" class="img-circle img-inline userpic-32"
+                        <img th:src="${loginState.getData().getAvatar_url()}" alt="user-image"
+                             class="img-circle img-inline userpic-32"
                              width="28"/>
                         <span th:inline="text">
 								[[${loginState.getData().getName()}]]
@@ -499,43 +499,44 @@
                             </div>
                         </div>
                         <div class="panel-body">
-<!--                                <table class="table table-bordered table-hover table-striped">-->
-<!--                                    <thead>-->
-<!--                                    <tr>-->
-<!--                                        <th>序号</th>-->
-<!--                                        <th>id</th>-->
-<!--                                        <th>名字</th>-->
-<!--                                        <th>工作部门</th>-->
-<!--                                        <th>职位</th>-->
-<!--                                        <th>操作</th>-->
-<!--                                    </tr>-->
-<!--                                    </thead>-->
-<!--                                    <tbody>-->
-<!--                                    <tr v-for="(item,index) in user_list">-->
-<!--                                        <td>{{index + 1}}</td>-->
-<!--                                        <td>{{item.id}}</td>-->
-<!--                                        <td>{{item.name}}</td>-->
-<!--                                        <td>{{item.workcell_id}}</td>-->
-<!--                                        <td>{{item.type}}</td>-->
-<!--                                        <td>-->
-<!--                                            <a href="#" class="btn btn-secondary btn-sm btn-icon icon-left">-->
-<!--                                                修改-->
-<!--                                            </a>-->
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>id</th>
+                                        <th>名字</th>
+                                        <th>工作部门</th>
+                                        <th>职位</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="(item,index) in user_list">
+                                        <td>{{index + 1}}</td>
+                                        <td>{{item.id}}</td>
+                                        <td>{{item.name}}</td>
+                                        <td>{{item.workcell_id}}</td>
+                                        <td>{{item.type}}</td>
+                                        <td>
+                                            <a href="#" class="btn btn-secondary btn-sm btn-icon icon-left">
+                                                修改
+                                            </a>
 
-<!--                                            <a href="#" class="btn btn-danger btn-sm btn-icon icon-left">-->
-<!--                                                删除-->
-<!--                                            </a>-->
+                                            <a href="#" class="btn btn-danger btn-sm btn-icon icon-left">
+                                                删除
+                                            </a>
 
-<!--                                            <a href="#" class="btn btn-info btn-sm btn-icon icon-left" data-toggle="modal" data-target="#info_profile" @click="info_profile(index)">-->
-<!--                                                简况-->
-<!--                                            </a>-->
-<!--                                        </td>-->
-<!--                                    </tr>-->
-<!--                                    </tbody>-->
-<!--                                </table>-->
-                                <bootstrap-table :columns="columns" :data="user_list" :options="options"></bootstrap-table>
-
-<!--                            <my-pagination :now_page_number="now_page_number" :max_page_number="max_page_number"></my-pagination>-->
+                                            <a href="#" class="btn btn-info btn-sm btn-icon icon-left"
+                                               data-toggle="modal" data-target="#info_profile"
+                                               @click="info_profile(index)">
+                                                简况
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -597,7 +598,8 @@
 <div class="page-loading-overlay">
     <div class="loader-2"></div>
 </div>
-<div class="modal fade" id="info_profile" tabindex="-1" role="dialog" aria-labelledby="info_profileLabel" aria-hidden="true">
+<div class="modal fade" id="info_profile" tabindex="-1" role="dialog" aria-labelledby="info_profileLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -680,9 +682,6 @@
 <script src="assets/js/xenon-custom.js"></script>
 <script src="js/pagination.js"></script>
 <script src="js/jquery-3.4.1.js"></script>
-<script src="js/bootstrap-table.min.js"></script>
-<script src="js/bootstrap-table-vue.min.js"></script>
-<script src="js/bootstrap-table-export.js"></script>
 <script src="js/admin_vue.js"></script>
 
 </body>

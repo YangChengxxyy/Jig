@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface AdminMapper {
 
-    List<User> getUserInformation(@Param("id") String id, @Param("offset") int offset, @Param("limit") int limit);
+    List<User> getUserInformation(@Param("id") String id, @Param("page_number") int page_number);
 
     int getUserInformationPage(@Param("id") String id);
 }

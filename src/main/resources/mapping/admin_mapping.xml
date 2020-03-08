@@ -6,7 +6,7 @@
         select `user`.*, w.workcell
         from `user`
                  left join workcell w on user.workcell_id = w.id
-        limit #{offset},#{limit}
+        limit #{page_number},5
     </select>
     <select id="getUserInformationPage" resultType="java.lang.Integer">
         select count(*)

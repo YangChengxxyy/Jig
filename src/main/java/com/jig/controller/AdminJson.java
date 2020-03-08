@@ -16,10 +16,10 @@ public class AdminJson {
     private AdminService adminService;
 
     @RequestMapping("get_user_information")
-    public Map<String, Object> getUserInformation(@RequestParam("id") String id, @RequestParam("offset") int offset, @RequestParam("limit") int limit) {
-        Map<String, Object> map = new HashMap<>(2);
-        map.put("rows", adminService.getUserInformation(id, offset, limit));
-        map.put("total", adminService.getUserInformationPage(id));
+    public Map<String,Object> getUserInformation(@RequestParam("id") String id, @RequestParam("page_number") int page_number) {
+        Map<String,Object> map = new HashMap<>(2);
+        map.put("data",adminService.getUserInformation(id, page_number));
+        map.put("max",adminService.getUserInformationPage(id));
         return map;
     }
 }

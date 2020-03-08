@@ -12,11 +12,13 @@ public class AdminService {
     @Autowired
     private AdminMapper adminMapper;
 
-    public List<User> getUserInformation(String id, int offset,int limit) {
-        return adminMapper.getUserInformation(id, offset,limit);
+    public List<User> getUserInformation(String id, int page_number) {
+        page_number = (page_number - 1) * 5;
+        return adminMapper.getUserInformation(id, page_number);
     }
 
     public int getUserInformationPage(String id) {
-        return adminMapper.getUserInformationPage(id);
+        int a = adminMapper.getUserInformationPage(id);
+        return (int) Math.ceil(a / 5.0);
     }
 }
