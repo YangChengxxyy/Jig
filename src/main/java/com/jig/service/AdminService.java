@@ -13,13 +13,13 @@ public class AdminService {
     @Autowired
     private AdminMapper adminMapper;
 
-    public List<User> getUserInformation(String id, int page_number) {
+    public List<User> searchUserInformation(String submit_id, int page_number, String id, String name, String workcell_id, String start_date, String end_date) {
         page_number = (page_number - 1) * 5;
-        return adminMapper.getUserInformation(id, page_number);
+        return adminMapper.getUserInformation(submit_id, page_number,id,name,workcell_id,start_date,end_date);
     }
 
-    public int getUserInformationPage(String id) {
-        int a = adminMapper.getUserInformationPage(id);
+    public int searchUserInformationPage(String submit_id, String id, String name, String workcell_id, String start_date, String end_date) {
+        int a = adminMapper.getUserInformationPage(submit_id,id,name,workcell_id,start_date,end_date);
         return (int) Math.ceil(a / 5.0);
     }
 
@@ -33,5 +33,9 @@ public class AdminService {
 
     public int delUser(String id) {
         return adminMapper.delUser(id);
+    }
+
+    public List<User> searchAllUserInformation(String submit_id, String id, String name, String workcell_id, String start_date, String end_date) {
+        return adminMapper.searchAllUserInformation(submit_id,id,name,workcell_id,start_date,end_date);
     }
 }

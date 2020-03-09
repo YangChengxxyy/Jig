@@ -499,6 +499,52 @@
                             </div>
                         </div>
                         <div class="panel-body">
+                            <div style="margin-bottom: 3%">
+                                <div class="form-horizontal">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">id</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" v-model.trim="id">
+                                        </div>
+                                        <label class="col-sm-2 control-label">名字</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" v-model.trim="name">
+                                        </div>
+                                        <div class="col-sm-2">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">工作部门</label>
+                                        <div class="col-sm-3">
+                                            <select class="form-control" v-model="workcell_id">
+                                                <option value=""></option>
+                                                <option v-for="item in workcell_list" :value="item.id">{{item.workcell}}</option>
+                                            </select>
+                                        </div>
+                                        <label class="col-sm-2 control-label">入职时间</label>
+                                        <div class="col-sm-3">
+                                            <div class="input-group date-range">
+                                                <input class="form-control" v-model="search_date_range">
+                                                <span class="input-group-addon"><span
+                                                        class="glyphicon glyphicon-calendar"></span></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-7"></div>
+                                        <div class="col-sm-5">
+                                            <button type="button" class="btn btn-default" @click="clear">清空</button>
+                                            <button type="button" class="btn btn-primary" @click="search">查询</button>
+                                            <a class="btn btn-default" :href="onePageUrl"
+                                               :class="{'disabled': user_list.length === 0}">导出本页</a>
+                                            <a class="btn btn-primary" :href="allPageUrl"
+                                               :class="{'disabled': user_list.length === 0}">导出全部</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="table-responsive">
                                 <table class="table table-bordered table-hover table-striped">
                                     <thead>

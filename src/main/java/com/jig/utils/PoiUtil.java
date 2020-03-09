@@ -4,6 +4,9 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -61,7 +64,16 @@ public class PoiUtil {
 
             "used_count",
             "ScrapSubmit",
-            "ScrapHistory"
+            "ScrapHistory",
+
+            "email",
+            "phone",
+            "position",
+            "password",
+            "entry_date",
+            "avatar_url",
+            "user_name",
+            "type"
     };
     private static final String[] CHINESE = {
             "id",
@@ -108,7 +120,16 @@ public class PoiUtil {
 
             "寿命计数",
             "报废申请",
-            "报废历史"
+            "报废历史",
+
+            "邮箱",
+            "手机号码",
+            "职位",
+            "密码",
+            "入职时间",
+            "头像照片",
+            "用户名",
+            "权限级别"
     };
 
     static {
@@ -133,13 +154,13 @@ public class PoiUtil {
             methodNameList.add(getMethodName);
         }
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet(COMPARISON_TABLE.get(aClass.getSimpleName()));
+        HSSFSheet sheet = workbook.createSheet(COMPARISON_TABLE.get(aClass.getSimpleName()) == null ? aClass.getSimpleName() : COMPARISON_TABLE.get(aClass.getSimpleName()));
         HSSFRow row = sheet.createRow(0);
         HSSFCell cell = null;
         int[] maxs = new int[declaredFields.length];
         for (int i = 0; i < declaredFields.length; i++) {
             cell = row.createCell(i);
-            cell.setCellValue(COMPARISON_TABLE.get(declaredFields[i].getName()));
+            cell.setCellValue(COMPARISON_TABLE.get(declaredFields[i].getName()) == null ? declaredFields[i].getName() : COMPARISON_TABLE.get(declaredFields[i].getName()));
             HSSFCellStyle cellStyle = workbook.createCellStyle();
             //设置垂直居中
             cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
@@ -219,5 +240,22 @@ public class PoiUtil {
             ip = request.getRemoteAddr();
         }
         System.out.println(ip);
+    }
+
+    public static void outputFile(HttpServletResponse response, String fileName, List<?> list) throws Exception {
+        if (list.size() == 0) {
+            return;
+        }
+        HSSFWorkbook excel = getExcel(list);
+        response.setHeader("content-type", "application/octet-stream");
+        response.setContentType("application/octet-stream;charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+        OutputStream os = null;
+        try {
+            os = response.getOutputStream();
+            excel.write(os);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

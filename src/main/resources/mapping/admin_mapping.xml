@@ -14,19 +14,66 @@
         from user
         where id = #{id}
     </delete>
-
+<!--id name workcell_id start_date end_date -->
     <select id="getUserInformation" resultType="com.jig.entity.User">
         select `user`.*, w.workcell
         from `user`
                  left join workcell w on user.workcell_id = w.id
+        <where>
+            <if test="id != ''">
+             user.id like concat('%',#{id},'%')
+            </if>
+            <if test="name != ''">
+                user.id like concat('%',#{name},'%')
+            </if>
+            <if test="workcell_id != ''">
+                user.workcell_id = #{workcell_id}
+            </if>
+            <if test="start_date != end_date">
+                user.entry_date between #{start_date} and #{end_date}
+            </if>
+        </where>
         limit #{page_number},5
     </select>
     <select id="getUserInformationPage" resultType="java.lang.Integer">
         select count(*)
         from user
+        <where>
+            <if test="id != ''">
+                user.id like concat('%',#{id},'%')
+            </if>
+            <if test="name != ''">
+                user.name like concat('%',#{name},'%')
+            </if>
+            <if test="workcell_id != ''">
+                user.workcell_id = #{workcell_id}
+            </if>
+            <if test="start_date != end_date">
+                user.entry_date between #{start_date} and #{end_date}
+            </if>
+        </where>
     </select>
     <select id="getWorkcellList" resultType="com.jig.entity.Workcell">
         select *
         from workcell
+    </select>
+    <select id="searchAllUserInformation" resultType="com.jig.entity.User">
+        select `user`.*, w.workcell
+        from `user`
+        left join workcell w on user.workcell_id = w.id
+        <where>
+            <if test="id != ''">
+                user.id like concat('%',#{id},'%')
+            </if>
+            <if test="name != ''">
+                user.id like concat('%',#{name},'%')
+            </if>
+            <if test="workcell_id != ''">
+                user.workcell_id = #{workcell_id}
+            </if>
+            <if test="start_date != end_date">
+                user.entry_date between #{start_date} and #{end_date}
+            </if>
+        </where>
     </select>
 </mapper>

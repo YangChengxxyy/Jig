@@ -2,8 +2,6 @@ package com.jig.controller;
 
 import com.jig.entity.*;
 import com.jig.service.JigService;
-import com.jig.utils.PoiUtil;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,34 +12,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.jig.utils.PoiUtil.outputFile;
 
 @Controller
 public class JigWeb {
     @Autowired
     private JigService jigService;
-
-
-    private void outputFile(HttpServletResponse response, String fileName, List<?> list) throws Exception {
-        if (list.size() == 0) {
-            return;
-        }
-        HSSFWorkbook excel = PoiUtil.getExcel(list);
-        response.setHeader("content-type", "application/octet-stream");
-        response.setContentType("application/octet-stream;charset=utf-8");
-        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
-        OutputStream os = null;
-        try {
-            os = response.getOutputStream();
-            excel.write(os);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     @RequestMapping(value = "show_demo", method = {RequestMethod.POST, RequestMethod.GET})
     public String showDemo(Model model) {

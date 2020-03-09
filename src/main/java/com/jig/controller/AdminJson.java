@@ -3,12 +3,14 @@ package com.jig.controller;
 import com.jig.entity.User;
 import com.jig.entity.Workcell;
 import com.jig.service.AdminService;
+import com.jig.utils.PoiUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,11 +21,13 @@ public class AdminJson {
     @Autowired
     private AdminService adminService;
 
-    @RequestMapping("get_user_information")
-    public Map<String, Object> getUserInformation(@RequestParam("id") String id, @RequestParam("page_number") int page_number) {
+    @RequestMapping("search_user_information")
+    public Map<String, Object> searchUserInformation(@RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number,
+                                                     @RequestParam("id") String id, @RequestParam("name") String name, @RequestParam("workcell_id") String workcell_id,
+                                                     @RequestParam("start_date") String start_date, @RequestParam("end_date") String end_date) {
         Map<String, Object> map = new HashMap<>(2);
-        map.put("data", adminService.getUserInformation(id, page_number));
-        map.put("max", adminService.getUserInformationPage(id));
+        map.put("data", adminService.searchUserInformation(submit_id, page_number, id, name, workcell_id, start_date, end_date));
+        map.put("max", adminService.searchUserInformationPage(submit_id, id, name, workcell_id, start_date, end_date));
         return map;
     }
 
@@ -40,5 +44,21 @@ public class AdminJson {
     @RequestMapping("del_user")
     public boolean delUser(@RequestParam("id") String id) {
         return adminService.delUser(id) >= 1;
+    }
+
+    @RequestMapping("download_one_user_info")
+    public void downloadOneUserInfo(HttpServletResponse response, @RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number,
+                                    @RequestParam("id") String id, @RequestParam("name") String name, @RequestParam("workcell_id") String workcell_id,
+                                    @RequestParam("start_date") String start_date, @RequestParam("end_date") String end_date, @RequestParam("file_name") String file_name) throws Exception {
+        List<User> userList = adminService.searchUserInformation(submit_id, page_number, id, name, workcell_id, start_date, end_date);
+        PoiUtil.outputFile(response, file_name, userList);
+    }
+
+    @RequestMapping("download_all_user_info")
+    public void downloadAllUserInfo(HttpServletResponse response, @RequestParam("submit_id") String submit_id,
+                                    @RequestParam("id") String id, @RequestParam("name") String name, @RequestParam("workcell_id") String workcell_id,
+                                    @RequestParam("start_date") String start_date, @RequestParam("end_date") String end_date, @RequestParam("file_name") String file_name) throws Exception {
+        List<User> usersList = adminService.searchAllUserInformation(submit_id, id, name, workcell_id, start_date, end_date);
+        PoiUtil.outputFile(response, file_name, usersList);
     }
 }

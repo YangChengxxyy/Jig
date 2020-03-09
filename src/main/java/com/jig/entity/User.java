@@ -1,16 +1,13 @@
 package com.jig.entity;
 
-import java.io.Serializable;
-
 /**
  * (User)实体类
  *
  * @author yc
  * @since 2020-03-07 10:07:10
  */
-public class User implements Serializable {
-    private static final long serialVersionUID = -19801996641498749L;
-    
+public class User {
+
     private String id;
     
     private String name;
