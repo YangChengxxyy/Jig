@@ -161,12 +161,13 @@ const change_user = new Vue({
     },
     methods: {
         submit_change_user: function () {
+            let that = this;
             $.ajax("admin/change_user", {
                 data: this.user,
                 success(data, textStatus, jqXHR) {
                     if (data) {
                         alert("修改成功！");
-                        $("#change_user").modal("hide");
+                        $(that.$el).modal("hide");
                     } else {
                         alert("服务器错误，尝试刷新页面重试");
                     }
