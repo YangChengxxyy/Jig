@@ -238,6 +238,18 @@
             </if>
         </where>
     </select>
+    <update id="supervisor_edit_jig_info" parameterType="com.jig.entity.JigDefinition">
+        update jig_definition
+        <set>
+            name = #{jig_info.name}, code = #{jig_info.code}, model = #{jig_info.model},
+            <if test="jig_info.part_no != null and jig_info.part_no != 'undefined'">
+                part_no = #{jig_info.part_no},
+            </if>
+            family_id = #{jig_info.family_id}, workcell_id = #{jig_info.workcell_id}, upl = #{jig_info.upl},
+            user_for = #{jig_info.user_for}, pm_period = #{jig_info.pm_period}, edit_time = now(),edit_by = #{user_id}
+        </set>
+        where id = #{jig_info.id}
+    </update>
     <select id="supervisor_get_purchase_submit_list" resultType="com.jig.entity.PurchaseIncomeSubmit">
         select p.*,u.name 'submit_name',
                pl.name 'production_line_name',
@@ -273,8 +285,8 @@
                                       inner join production_line pl on p.production_line_id = pl.id
                                       left join user u1 on p.first_acceptor = u1.id
                                       left join user u2 on p.final_acceptor = u2.id
-        where first_acceptor = #{user_id}
         <where>
+            first_acceptor = #{user_id}
             <if test="bill_no!=''">
                 and p.bill_no like concat('%',#{bill_no},'%')
             </if>
@@ -293,8 +305,8 @@
     <select id="supervisor_get_purchase_submit_list_history_pages" resultType="java.lang.Integer">
         select count(*)
         from purchase_income_submit_history
-        where first_acceptor = #{user_id}
         <where>
+            first_acceptor = #{user_id}
             <if test="bill_no!=''">
                 and p.bill_no like concat('%',#{bill_no},'%')
             </if>
@@ -306,6 +318,86 @@
             </if>
             <if test="status!=''">
                 and p.status = #{status}
+            </if>
+        </where>
+    </select>
+    <select id="supervisor_get_scrap_submit_list" resultType="com.jig.entity.ScrapSubmit">
+       select s.*,u.name 'submit_name',
+               u1.name 'first_acceptor_name',
+               u2.name 'final_acceptor'
+        from scrap_submit s inner join user u on s.submit_id = u.id
+                                      left join user u1 on s.first_acceptor = u1.id
+                                      left join user u2 on s.final_acceptor = u2.id
+
+        where u.workcell_id = #{workcell_id} and (s.status = 1 or s.status = 2 or s.status = 0)
+        limit #{page_number},5
+    </select>
+    <select id="supervisor_get_scrap_submit_list_pages" resultType="java.lang.Integer">
+        select count(*) from scrap_submit s
+        inner join user u on s.submit_id = u.id
+                                      left join user u1 on s.first_acceptor = u1.id
+                                      left join user u2 on s.final_acceptor = u2.id
+        where u.workcell_id = #{workcell_id} and (s.status = 1 or s.status = 2 or s.status = 0)
+    </select>
+    <update id="supervisor_pass_scrap_submit">
+        update scrap_submit
+        set status = '2', first_acceptor = #{user_id},first_time = now()
+        where id = #{id}
+    </update>
+    <update id="supervisor_no_pass_scrap_submit">
+        update scrap_submit
+        set status = '1', first_acceptor = #{user_id},first_time = now(),first_reason = #{no_pass_reason}
+        where id = #{id}
+    </update>
+    <select id="supervisor_get_scrap_submit_list_history" resultType="com.jig.entity.ScrapSubmit">
+        select s.*,
+        u1.name submit_name,
+        u2.name first_acceptor_name,
+        u3.name final_acceptor_name
+        from scrap_submit_history s INNER JOIN user u1 on u1.id = s.submit_id
+                                    LEFT JOIN user u2 on u2.id = s.first_acceptor
+                                    LEFT JOIN user u3 on u3.id = s.final_acceptor
+        <where>
+            u1.workcell_id = #{workcell_id}
+            <if test="code!=''">
+                and s.code like concat('%',#{code},'%')
+            </if>
+            <if test="submit_name!=''">
+                and s.submit_name like concat('%',#{submit_name},'%')
+            </if>
+            <if test="status!=''">
+                and s.status = #{status}
+            </if>
+            <if test="scrap_reason!=''">
+                and s.scrap_reason like concat('%',#{scrap_reason},'%')
+            </if>
+            <if test="start_date!='' and end_date !=''">
+                and (STR_TO_DATE(s.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
+            </if>
+        </where>
+        limit #{page_number},5
+    </select>
+    <select id="supervisor_get_scrap_submit_list_history_pages" resultType="java.lang.Integer">
+        select count(*)
+        from scrap_submit_history s INNER JOIN user u1 on u1.id = s.submit_id
+                                    LEFT JOIN user u2 on u2.id = s.first_acceptor
+                                    LEFT JOIN user u3 on u3.id = s.final_acceptor
+        <where>
+            u1.workcell_id = #{workcell_id}
+            <if test="code!=''">
+                and s.code like concat('%',#{code},'%')
+            </if>
+            <if test="submit_name!=''">
+                and s.submit_name like concat('%',#{submit_name},'%')
+            </if>
+            <if test="status!=''">
+                and s.status = #{status}
+            </if>
+            <if test="scrap_reason!=''">
+                and s.scrap_reason like concat('%',#{scrap_reason},'%')
+            </if>
+            <if test="start_date!='' and end_date !=''">
+                and (STR_TO_DATE(s.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
             </if>
         </where>
     </select>

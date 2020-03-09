@@ -204,6 +204,7 @@
                         <li data-toggle="tab" href="#ssgjj"><a>搜索工夹具</a></li>
                     </ul>
                     <div class="panel-body tab-content">
+                        <!--工夹具信息-->
                         <div id="jig_info" class="tab-pane fade table-responsive in active">
                             <div class="row row-margin-bottom">
                                 <div class="col-sm-1">
@@ -243,7 +244,7 @@
                                 <div class="col-sm-3">
                                     <div class="btn-group row-margin-bottom">
                                         <select id="sela"
-                                                class="form-control selectpicker"
+                                                class="form-control"
                                                 v-model="edit_select_part_no_list" multiple>
                                             <option :value="item.part_no"
                                                     v-for="item in part_no_list">
@@ -554,8 +555,8 @@
                                                             <label class="col-sm-3 control-label">工夹具料号</label>
                                                             <div class="col-sm-8">
                                                                 <select id="sel_edit_jig_part_no"
-                                                                        class="form-control selectpicker"
-                                                                        v-model="select_part_no_list" multiple>
+                                                                        class="form-control"
+                                                                        v-model="edit_select_part_no_list" multiple>
                                                                     <option :value="item.part_no"
                                                                             v-for="item in part_no_list">
                                                                         {{item.part_no}}
@@ -1339,7 +1340,8 @@
                         <li data-toggle="tab" href="#scrap_submit_history"><a>历史报废记录</a></li>
                     </ul>
                     <div class="panel-body tab-content">
-                        <div id="dclbfsq" class="tab-pane fade in active table-responsive">
+                        <!--待处理的报废申请 -->
+                        <div id="scrap_submit" class="tab-pane fade in active table-responsive">
                             <table class="table table-striped table-hover table-responsive" role="table">
                                 <thead>
                                 <tr>
@@ -1353,301 +1355,125 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>EF2189</td>
-                                    <td>1</td>
-                                    <td>小张</td>
-                                    <td>有不正常的响声</td>
-                                    <td>2019-12-31 12:39</td>
-                                    <td>待初审</td>
+                                <tr v-for="(item,index) in scrap_submit_list">
+                                    <td>{{item.code}}</td>
+                                    <td>{{item.seq_id}}</td>
+                                    <td>{{item.submit_name}}</td>
+                                    <td>{{item.scrap_reason}}</td>
+                                    <td>{{item.submit_time}}</td>
+                                    <td v-if="item.status==0">待审批</td>
+                                    <td v-if="item.status==1">初审未通过</td>
+                                    <td v-if="item.status==2">初审通过</td>
+                                    <td v-if="item.status==3">终审未通过</td>
+                                    <td v-if="item.status==4">终审通过</td>
                                     <td>
-                                        <div class="btn btn-success" data-toggle="modal" data-target="#checkDetail">查看
-                                        </div>
-                                        <div class="modal fade" id="checkDetail" tabindex="-1" role="dialog"
-                                             aria-labelledby="checkDetailLabel2" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                                aria-hidden="true">&times;
-                                                        </button>
-                                                        <h4 class="modal-title" id="checkDetailLabel2">明细</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="container-fluid">
-                                                            <div class="form-horizontal">
-                                                                <div class="form-group">
-                                                                    <label class="col-sm-3 control-label">工夹具代码</label>
-                                                                    <div class="col-sm-8">
-                                                                        <div class="form-control">EF2186</div>
-                                                                    </div>
-                                                                    <div class="col-sm-1"></div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="col-sm-3 control-label">工夹具名字</label>
-                                                                    <div class="col-sm-8">
-                                                                        <div class="form-control">MOD 3XM2 保护夹具</div>
-                                                                    </div>
-                                                                    <div class="col-sm-1"></div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="col-sm-3 control-label">所属部门</label>
-                                                                    <div class="col-sm-8">
-                                                                        <div class="form-control">JW05</div>
-                                                                    </div>
-                                                                    <div class="col-sm-1"></div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="col-sm-3 control-label">工夹具模组</label>
-                                                                    <div class="col-sm-8">
-                                                                        <select class="form-control">
-                                                                            <option>MOD 3XM2</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="col-sm-1"></div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="col-sm-3 control-label">工夹具料号</label>
-                                                                    <div class="col-sm-8">
-                                                                        <select class="form-control">
-                                                                            <option>PNA90320/1</option>
-                                                                            <option>PNA90320/2</option>
-                                                                            <option>PNA90322/1</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="col-sm-1"></div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="col-sm-3 control-label">用途</label>
-                                                                    <div class="col-sm-8">
-                                                                        <div class="form-control">
-                                                                            保护
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-sm-1"></div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="col-sm-3 control-label">每条产线所需</label>
-                                                                    <div class="col-sm-8">
-                                                                        <div class="form-control">
-                                                                            1
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-sm-1"></div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="col-sm-3 control-label">责任人</label>
-                                                                    <div class="col-sm-8">
-                                                                        <div class="form-control">
-                                                                            Lei Qian 1230936
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-sm-1"></div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="col-sm-3 control-label">录入时间</label>
-                                                                    <div class="col-sm-8">
-                                                                        <div class="form-control">
-                                                                            2019-7-12 08:02:37
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-sm-1"></div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="col-sm-3 control-label">保养点检周期</label>
-                                                                    <div class="col-sm-8">
-                                                                        <div class="form-control">
-                                                                            30天
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-sm-1"></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-default"
-                                                                data-dismiss="modal">关闭
-                                                        </button>
-                                                        <button type="button" class="btn btn-primary">提交</button>
-                                                    </div>
-                                                </div><!-- /.modal-content -->
-                                            </div><!-- /.modal -->
+                                        <div class="btn btn-success" data-toggle="modal"
+                                             data-target="#scrap_submit_detail" @click="get_scrap_submit_detail(index)">查看
                                         </div>
                                         <div class="btn-group">
-                                            <button class="btn btn-primary">通过</button>
+                                            <button class="btn btn-primary" @click="pass_scrap_submit(item.id)">通过</button>
                                             <button class="btn btn-danger" data-toggle="modal"
-                                                    data-target="#disagreeModal2">不通过
+                                                    data-target="#no_pass_scrap_submit_reason" @click="get_no_pass_scrap_submit_id(item.id)">不通过
                                             </button>
-                                        </div>
-
-                                        <div class="modal fade" id="disagreeModal2" tabindex="-1" role="dialog"
-                                             aria-labelledby="disagreeLabel2" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                                aria-hidden="true">&times;
-                                                        </button>
-                                                        <h4 class="modal-title" id="disagreeLabel2">不通过</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="form-group">
-                                                            <label for="disagreeReason2">原因：</label>
-                                                            <textarea class="form-control" rows="5"
-                                                                      id="disagreeReason2"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-default"
-                                                                data-dismiss="modal">关闭
-                                                        </button>
-                                                        <button type="button" class="btn btn-primary">提交</button>
-                                                    </div>
-                                                </div><!-- /.modal-content -->
-                                            </div><!-- /.modal -->
                                         </div>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
+
+                            <div class="text-center row" v-if="max_page_number != 0">
+                                <my-pagination :max_page_number="max_page_number"
+                                               :now_page_number="now_page_number"></my-pagination>
+                            </div>
                         </div>
-                        <div id="lsbfjl" class="tab-pane fade">
-                            <div style="margin-bottom: 3%">
+
+                        <div id="scrap_submit_history" class="tab-pane fade">
+                            <div style="margin-top: 2%;margin-bottom: 3%">
                                 <form role="form" class="form-horizontal">
                                     <div class="form-group row">
-                                        <label for="sel_shoplist_id" class="col-sm-2 control-label">工夹具代码</label>
+                                        <label for="sel_scrap_code_id" class="col-sm-2 control-label">工夹具代码</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" name="sel_repair_seq_code">
+                                            <input type="text" class="form-control" id="sel_scrap_code_id"
+                                                   v-model="sel_code">
                                         </div>
                                         <label class="col-sm-2 control-label">申请人</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" name="sel_repair_submit_name">
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <button class="btn btn-default" type="button">清空</button>
+                                            <input type="text" class="form-control" v-model="sel_submit_name">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="sel_apply1" class="col-sm-2 control-label">报废原因</label>
+                                        <label class="col-sm-2 control-label">申请时间</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" name="sel_repair_reason">
+                                            <div class="input-group">
+                                                <input class="form-control submit_date" v-model="sel_submit_time">
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-remove" @click="clear_date"></span>
+                                                </span>
+                                            </div>
                                         </div>
-                                        <label for="sel_status" class="col-sm-2 control-label">审批状态</label>
+                                        <label class="col-sm-2 control-label">审批状态</label>
                                         <div class="col-sm-3">
-                                            <select class="form-control">
-                                                <option>初审通过</option>
-                                                <option>初审不通过</option>
-                                                <option>终审不通过</option>
-                                                <option>终审通过</option>
+                                            <select class="form-control" v-model="sel_status">
+                                                <option v-for="option in options" v-bind:value="option.value">
+                                                    {{option.text}}
+                                                </option>
                                             </select>
                                         </div>
                                         <div class="col-sm-2">
-                                            <button class="btn btn-primary" type="button">查询</button>
+                                            <button class="btn btn-primary" type="button" @click="getData">查询</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="sel_scrap_reason" class="col-sm-2 control-label">故障原因</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" id="sel_scrap_reason"
+                                                   v-model="sel_scrap_reason">
                                         </div>
                                     </div>
                                 </form>
                             </div>
-                            <table class="table table-striped table-hover table-responsive" role="table">
-                                <thead>
-                                <tr>
-                                    <th>工夹具代码</th>
-                                    <th>工夹具序列号</th>
-                                    <th>申请人</th>
-                                    <th>故障原因</th>
-                                    <th>申请时间</th>
-                                    <th>审批状态</th>
-                                    <th>操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>EF2189</td>
-                                    <td>1</td>
-                                    <td>小张</td>
-                                    <td>有不正常的响声</td>
-                                    <td>2019-12-31 12:39</td>
-                                    <td>待初审</td>
-                                    <td>
 
-                                        <button class="btn btn-default" data-target="#checkDetailModal"
-                                                data-toggle="modal">查看明细
-                                        </button>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover table-responsive" role="table">
+                                    <thead>
+                                    <tr>
+                                        <th>工夹具代码</th>
+                                        <th>工夹具序列号</th>
+                                        <th>申请人</th>
+                                        <th>故障原因</th>
+                                        <th>申请时间</th>
+                                        <th>审批状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="(item,index) in scrap_submit_list">
+                                        <td>{{item.code}}</td>
+                                        <td>{{item.seq_id}}</td>
+                                        <td>{{item.submit_name}}</td>
+                                        <td>{{item.scrap_reason}}</td>
+                                        <td>{{item.submit_time}}</td>
+                                        <td v-if="item.status==0">待审批</td>
+                                        <td v-if="item.status==1">初审未通过</td>
+                                        <td v-if="item.status==2">初审通过</td>
+                                        <td v-if="item.status==3">终审未通过</td>
+                                        <td v-if="item.status==4">终审通过</td>
+                                        <td>
+                                            <button data-toggle="modal" data-target="#scrap_submit_history_detail"
+                                                    type="button" class="btn btn-primary"
+                                                    @click="get_scrap_submit_detail(index)">查看
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
-                                        <div class="modal fade" id="checkDetailModal" tabindex="-1" role="dialog"
-                                             aria-labelledby="checkDetailLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                                aria-hidden="true">&times;
-                                                        </button>
-                                                        <h4 class="modal-title" id="checkDetailLabel">明细</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="form-horizontal">
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label">工夹具代码</label>
-                                                                <div class="col-sm-8">
-                                                                    <div class="form-control">EF2186</div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label">工夹具序列号</label>
-                                                                <div class="col-sm-8">
-                                                                    <div class="form-control">1</div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label">报废原因</label>
-                                                                <div class="col-sm-8">
-                                                                    <div class="form-control">有不正常的响声</div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label">报废照片</label>
-                                                                <div class="col-sm-8">
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label">申请时间</label>
-                                                                <div class="col-sm-8">
-                                                                    <div class="form-control">2019-12-31 12:39</div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label">审批状态</label>
-                                                                <div class="col-sm-8">
-                                                                    <div class="form-control">初审通过</div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label">初审时间</label>
-                                                                <div class="col-sm-8">
-                                                                    <div class="form-control">2020-01-01 13:39</div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label">初审人</label>
-                                                                <div class="col-sm-8">
-                                                                    <div class="form-control">张三</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-default"
-                                                                data-dismiss="modal">关闭
-                                                        </button>
-                                                    </div>
-                                                </div><!-- /.modal-content -->
-                                            </div><!-- /.modal -->
-                                        </div>
+                            <div class="text-center row" v-if="max_page_number != 0">
+                                <my-pagination :max_page_number="max_page_number"
+                                               :now_page_number="now_page_number"></my-pagination>
+                            </div>
 
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
@@ -1659,6 +1485,275 @@
         </div>
     </div>
 </div>
+<!--待处理的报废申请的查看明细-->
+<div class="modal fade" id="scrap_submit_detail" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;
+                </button>
+                <h4 class="modal-title">查看报废内容</h4>
+            </div>
+            <div class="modal-body" v-if="scrap_submit!=null">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">工夹具代码</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{scrap_submit.code}}</div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">工夹具序列号</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{scrap_submit.seq_id}}</div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">申请人</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{scrap_submit.submit_name}}</div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">申请时间</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{scrap_submit.submit_time}}</div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">故障原因</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{scrap_submit.scrap_reason}}</div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">故障照片</label>
+                        <div class="col-sm-6">
+                            <!--<img src="/wp-content/uploads/2014/06/download.png"
+                                 class="img-rounded">-->
+                            <span class="icon icongongju"></span>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">审批状态</label>
+                        <div class="col-sm-8">
+                            <div class="form-control" v-if="scrap_submit.status==0">待审批
+                            </div>
+                            <div class="form-control" v-if="scrap_submit.status==1">初审未通过
+                            </div>
+                            <div class="form-control" v-if="scrap_submit.status==2">初审通过
+                            </div>
+                            <div class="form-control" v-if="scrap_submit.status==3">终审通过
+                            </div>
+                            <div class="form-control" v-if="scrap_submit.status==4">终审未通过
+                            </div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group" v-if="scrap_submit.status == 1 ">
+                        <label class="col-sm-3 control-label">原因</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{scrap_submit.first_reason}}
+                            </div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group" v-if="scrap_submit.first_acceptor_name != null ">
+                        <label class="col-sm-3 control-label">初审人</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{scrap_submit.first_acceptor_name}}
+                            </div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group" v-if="scrap_submit.first_time != null ">
+                        <label class="col-sm-3 control-label">初审时间</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{scrap_submit.first_time}}
+                            </div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!--报废申请不通过的原因-->
+<div class="modal fade" id="no_pass_scrap_submit_reason" tabindex="-1" role="dialog"
+     aria-labelledby="disagreeLabel2" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;
+                </button>
+                <h4 class="modal-title" id="disagreeLabel2">不通过</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="disagreeReason2">原因：</label>
+                    <textarea class="form-control" rows="5"
+                              id="disagreeReason2" v-model="no_pass_reason"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">关闭
+                </button>
+                <button type="button" class="btn btn-primary" @click="no_pass_scrap_submit">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!--历史报废申请记录的单个申请明细 -->
+<div class="modal fade" id="scrap_submit_history_detail" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;
+                </button>
+                <h4 class="modal-title">查看报废内容</h4>
+            </div>
+            <div class="modal-body" v-if="scrap_submit!=null">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">工夹具代码</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{scrap_submit.code}}</div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">工夹具序列号</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{scrap_submit.seq_id}}</div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">申请人</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{scrap_submit.submit_name}}</div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">申请时间</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{scrap_submit.submit_time}}</div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">故障原因</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{scrap_submit.scrap_reason}}</div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">故障照片</label>
+                        <div class="col-sm-6">
+                            <!--<img src="/wp-content/uploads/2014/06/download.png"
+                                 class="img-rounded">-->
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">审批状态</label>
+                        <div class="col-sm-8">
+                            <div class="form-control" v-if="scrap_submit.status==0">待审批
+                            </div>
+                            <div class="form-control" v-if="scrap_submit.status==1">初审未通过
+                            </div>
+                            <div class="form-control" v-if="scrap_submit.status==2">初审通过
+                            </div>
+                            <div class="form-control" v-if="scrap_submit.status==3">终审未通过
+                            </div>
+                            <div class="form-control" v-if="scrap_submit.status==4">终审通过
+                            </div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">初审人</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{scrap_submit.first_acceptor_name}}
+                            </div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">初审时间</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{scrap_submit.first_time}}
+                            </div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group" v-if="scrap_submit == 1">
+                        <label class="col-sm-3 control-label">初审原因</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{scrap_submit.first_reason}}
+                            </div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+
+                    <div class="form-group" v-if="scrap_submit.final_acceptor_name != null">
+                        <label class="col-sm-3 control-label">终审人</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{scrap_submit.final_acceptor_name}}
+                            </div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group" v-if="scrap_submit.final_time != null">
+                        <label class="col-sm-3 control-label">终审时间</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{scrap_submit.final_time}}
+                            </div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group" v-if="scrap_submit == 3">
+                        <label class="col-sm-3 control-label">终审原因</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{scrap_submit.final_reason}}
+                            </div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
 <script src="js/supervisor_vue.js"></script>
 <script src="js/pagination.js"></script>
 <script>
@@ -1667,7 +1762,16 @@
             multiple: true,
             actionsBox: true
         });
+
+        $('#sel_edit_jig_part_no').selectpicker('refresh');
+        $('#sel_edit_jig_part_no').selectpicker('render');
+
+        $("#sela").selectpicker({
+            multiple: true,
+            actionsBox: true
+        });
     })
 </script>
+
 </body>
 </html>

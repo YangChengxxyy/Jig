@@ -98,8 +98,6 @@ var jig_info = new Vue({
         },
         get_delete_jig_family_info:function(jig_family){
             this.delete_jig_family_info = jig_family;
-            console.log(jig_family);
-            console.log(this.delete_jig_family_info+"");
         },
         delete_jig_family:function () {
             const that = this;
@@ -154,11 +152,18 @@ var jig_info = new Vue({
         edit_jig_info:function () {
             console.log(this.edit_jig_info_detail);
             const that = this;
-            $.ajax({
+            var edit_part_no = "";
+            for(var i=0;i<this.edit_select_part_no_list.length-1;i++){
+                edit_part_no+=this.edit_select_part_no_list[i]+"|"
+            }
+            edit_part_no+=this.edit_select_part_no_list[this.edit_select_part_no_list.length-1];
+            this.edit_jig_info_detail.part_no = edit_part_no;
+
+           $.ajax({
                 url:"supervisor_edit_jig_info",
-                data:{
-                    edit_jig_info_detail:this.edit_jig_info_detail
-                },
+                dataType:"post",
+                data: this.edit_jig_info_detail
+                ,
                 success:function (res) {
                     alert(res);
                 }
@@ -355,12 +360,13 @@ var purchase_submit_history = new Vue({
     }
 })
 
+//待处理的报废申请
 var scrap_submit = new Vue({
     el:"#scrap_submit",
     data:{
         now_page_number:1,
         max_page_number:0,
-        scrap_submit_list:[]
+        scrap_submit_list:[],
     },
     created:function(){
         this.getData();
@@ -374,10 +380,154 @@ var scrap_submit = new Vue({
                     page_number:this.now_page_number
                 },
                 success:function (res) {
-                    this.scrap_submit_list = res.list;
-                    this.max_page_number = res.max;
+                    console.log(res.list);
+                    that.scrap_submit_list = res.list;
+                    that.max_page_number = res.max;
                 }
             })
+        },
+        get_scrap_submit_detail:function (index) {
+            if(this.scrap_submit_list.length>0){
+                scrap_submit_detail.scrap_submit = this.scrap_submit_list[index];
+            }else {
+                alert("服务器异常!");
+            }
+        },
+        pass_scrap_submit:function (id) {
+            const that = this;
+            $.ajax({
+                url:"supervisor_pass_scrap_submit",
+                data:{
+                    id:id
+                },
+                success:function (res) {
+                    if(res<0){
+                        alert("服务器异常!")
+                    }else {
+                        alert("审批成功!");
+                        that.getData();
+                    }
+                }
+            })
+        },
+        get_no_pass_scrap_submit_id:function (id) {
+            no_pass_scrap_submit_reason.id = id;
         }
     }
 })
+
+//待处理的报废申请的查看明细
+var scrap_submit_detail = new Vue({
+    el:"#scrap_submit_detail",
+    data:{
+        scrap_submit:null
+    },
+    created:function () {
+
+    },
+    methods:{
+
+    },
+    watch:{}
+})
+
+//初审报废申请不通过的原因
+var no_pass_scrap_submit_reason = new Vue({
+    el:"#no_pass_scrap_submit_reason",
+    data:{
+        id:"",
+        no_pass_reason:""
+    },
+    created:function () {
+
+    },
+    methods:{
+        no_pass_scrap_submit:function () {
+            const that = this;
+            $.ajax({
+                url:"supervisor_no_pass_scrap_submit",
+                data:{
+                    id:this.id,
+                    no_pass_reason:this.no_pass_reason
+                },
+                success:function (res) {
+                    if(res<0){
+                        alert("服务器异常!")
+                    }else {
+                        alert("审批成功!");
+                        scrap_submit.getData();
+                    }
+                }
+            })
+        }
+    },
+    watch:{}
+})
+
+//历史报废记录
+var scrap_submit_history = new Vue({
+    el:"#scrap_submit_history",
+    data:{
+        now_page_number:1,
+        max_page_number:0,
+        scrap_submit_list:[],
+        sel_code:"",//搜索条件
+        sel_submit_name:"",
+        sel_submit_time:"",
+        sel_status:"",
+        sel_scrap_reason:"",
+        options:[{text:'',value:''},
+            {text:'待审批',value:'0'},
+            {text:'初审未通过',value:'1'},
+            {text:'初审通过',value:'2'},
+            {text:'终审未通过',value:'3'},
+            {text:'终审通过',value:'4'}],
+    },
+    created:function () {
+        this.getData();
+    },
+    methods:{
+        getData:function () {
+            const that = this;
+            $.ajax({
+                url:"supervisor_get_scrap_submit_list_history",
+                data:{
+                    page_number:this.now_page_number,
+                    code:this.sel_code,
+                    submit_name:this.sel_submit_name,
+                    submit_time:this.sel_submit_time,
+                    status:this.sel_status,
+                    scrap_reason:this.sel_scrap_reason,
+                },
+                success:function (res) {
+                    if(res.list.length === 0){
+                        alert("没有结果!");
+                    }
+                    that.scrap_submit_list = res.list;
+                    that.max_page_number = res.max;
+                }
+            })
+        },
+        get_scrap_submit_detail:function (index) {
+            if(this.scrap_submit_list.length>0){
+                scrap_submit_history_detail.scrap_submit = this.scrap_submit_list[index];
+            }
+        },
+        clear_date:function () {
+            this.sel_submit_time = "";
+        }
+    }
+})
+
+//历史报废记录的单个记录明细
+var scrap_submit_history_detail = new Vue({
+    el:"#scrap_submit_history_detail",
+    data:{
+        scrap_submit:null
+    },
+    methods:{
+
+    }
+})
+
+

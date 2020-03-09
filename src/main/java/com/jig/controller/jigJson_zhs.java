@@ -1,15 +1,19 @@
 package com.jig.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.jig.entity.*;
 import com.jig.service.JigService_zhs;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.print.DocFlavor;
+import javax.servlet.http.HttpServletRequest;
 import java.security.PublicKey;
 import java.util.*;
+
+import static org.apache.logging.log4j.message.MapMessage.MapFormat.JSON;
 
 @RestController
 public class jigJson_zhs {
@@ -341,8 +345,17 @@ public class jigJson_zhs {
         return jigService.supervisor_select_jig_info(jig_code,jig_name,jig_model,jig_workcell);
     }
 
+    //监管者模式下编辑更改工夹具信息
+    @ResponseBody
+    @RequestMapping(value = "supervisor_edit_jig_info")
+    public int SupervisorEditJigInfo(JigDefinition jig_info){
+        String user_id = "1239393";
+        int flag = jigService.supervisor_edit_jig_info(jig_info,user_id);
+        return flag;
+    }
+
     //监管者模式下获取我的采购审批List
-    @RequestMapping(value = "supervisor_get_purchase_submit_list",method = {RequestMethod.GET,RequestMethod.POST})
+    @RequestMapping(value = "supervisor_get_purchase_submit_list")
     public Map<Object,Object> SupervisorGetPurchaseSubmitList(@RequestParam("page_number") int page_number){
         page_number = (page_number-1)*5;
         Map<Object,Object> map = new HashMap<>();
@@ -397,6 +410,67 @@ public class jigJson_zhs {
     }
 
     //监管者模式下获取待处理的报废清单
-    @RequestMapping(value = "supervisor_get_scrap_submit_list",)
+    @RequestMapping(value = "supervisor_get_scrap_submit_list",method = {RequestMethod.GET,RequestMethod.POST})
+    public Map<Object,Object> SupervisorGetScrapSubmitList(@RequestParam("page_number") int page_number){
+        page_number = (page_number-1)*5;
+        Map<Object,Object> map = new HashMap<>();
+
+        String user_id = "1230936";
+        String workcell_id = "7";
+        List<ScrapSubmit> list = jigService.supervisor_get_scrap_submit_list(page_number,workcell_id);
+        int max = jigService.supervisor_get_scrap_submit_list_pages(workcell_id);
+
+        map.put("list",list);
+        map.put("max",max);
+        return map;
+    }
+
+    //监管者模式下审批待处理的报废申请
+    @RequestMapping(value = "supervisor_pass_scrap_submit",method = {RequestMethod.GET,RequestMethod.POST})
+    public int SupervisorPassScrapSubmit(@RequestParam("id") String id){
+        String workcell = "7";
+        String user_id = "1239393";
+        int flag = jigService.supervisor_pass_scrap_submit(id,user_id);
+        return flag;
+    }
+
+    @RequestMapping(value = "supervisor_no_pass_scrap_submit",method = {RequestMethod.GET,RequestMethod.POST})
+    public int SupervisorNoPassScrapSubmit(@RequestParam("id") String id,
+                                           @RequestParam("no_pass_reason") String no_pass_reason){
+        String user_id = "1329393";
+        int flag = jigService.supervisor_no_pass_scrap_submit(id,no_pass_reason,user_id);
+        return flag;
+    }
+
+    //监管者模式下获取历史报废记录
+    @RequestMapping(value = "supervisor_get_scrap_submit_list_history",method = {RequestMethod.GET,RequestMethod.POST})
+    public Map<Object,Object> SupervisorGetScrapSubmitListHistory(@RequestParam("code") String code,
+                                                                  @RequestParam("submit_name") String submit_name,
+                                                                  @RequestParam("submit_time") String submit_time,
+                                                                  @RequestParam("status") String status,
+                                                                  @RequestParam("scrap_reason") String scrap_reason,
+                                                                  @RequestParam("page_number") int page_number){
+        Map<Object,Object> map = new HashMap<>();
+        page_number = (page_number - 1)*5;
+
+        String start_date = "";
+        String end_date = "";
+        if(submit_time!="") {
+            start_date = submit_time.substring(0,10);
+            end_date = submit_time.substring(13);
+        }
+        String workcell_id = "7";
+
+        List<ScrapSubmit> list = jigService.supervisor_get_scrap_submit_list_history(code,submit_name,start_date,end_date,status,scrap_reason,page_number,workcell_id);
+        int max = jigService.supervisor_get_scrap_submit_list_history_pages(code,submit_name,start_date,end_date,status,scrap_reason,workcell_id);
+
+        map.put("list",list);
+        map.put("max",max);
+        return map;
+    }
+
+
+
+
 }
 

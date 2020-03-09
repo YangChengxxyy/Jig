@@ -193,4 +193,17 @@ public class JigDefinition {
         this.remark = remark;
     }
 
+    @Override
+    public String toString() {
+        return "JigDefinition{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                ", model='" + model + '\'' +
+                ", part_no='" + part_no + '\'' +
+                ", family_id='" + family_id + '\'' +
+                ", workcell='" + workcell + '\'' +
+                '}';
+    }
+
 }

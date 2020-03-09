@@ -148,6 +148,10 @@ public interface JigMapper_zhs {
                                                    @Param("jig_model") String jig_model,
                                                    @Param("jig_workcell") String jig_workcell);
 
+    //监管者模式下编辑更改工夹具信息
+    int supervisor_edit_jig_info(@Param("jig_info") JigDefinition jig_info,
+                                 @Param("user_id") String user_id);
+
     //监管者模式下获取我的采购审批list
     List<PurchaseIncomeSubmit> supervisor_get_purchase_submit_list(@Param("page_number") int page_number);
 
@@ -184,7 +188,37 @@ public interface JigMapper_zhs {
                                                @Param("status") String status,
                                                @Param("user_id") String user_id);
 
-    /**监管者模式下获取待处理的报废清单
+    /**监管者模式下获取待处理的报废清单及其最大页数
      *
      */
+    List<ScrapSubmit> supervisor_get_scrap_submit_list(@Param("page_number") int page_number,
+                                                       @Param("workcell_id") String workcell_id);
+
+    int supervisor_get_scrap_submit_list_pages(@Param("workcell_id") String workcell_id);
+
+    //监管者模式下审批待处理的报废申请
+    int supervisor_pass_scrap_submit(@Param("id") String id,
+                                     @Param("user_id") String user_id);
+
+    int supervisor_no_pass_scrap_submit(@Param("id") String id,
+                                        @Param("no_pass_reason") String no_pass_reason,
+                                        @Param("user_id") String user_id);
+
+    //监管者模式下获取历史报废记录
+    List<ScrapSubmit> supervisor_get_scrap_submit_list_history(@Param("code") String code,
+                                                            @Param("submit_name") String submit_name,
+                                                            @Param("start_date") String start_date,
+                                                            @Param("end_date") String end_date,
+                                                            @Param("status") String status,
+                                                            @Param("scrap_reason") String scrap_reason,
+                                                            @Param("page_number") int page_number,
+                                                            @Param("workcell_id") String workcell_id);
+
+    int supervisor_get_scrap_submit_list_history_pages(@Param("code") String code,
+                                                    @Param("submit_name") String submit_name,
+                                                    @Param("start_date") String start_date,
+                                                    @Param("end_date") String end_date,
+                                                    @Param("status") String status,
+                                                    @Param("scrap_reason") String scrap_reason,
+                                                    @Param("workcell_id") String workcell_id);
 }

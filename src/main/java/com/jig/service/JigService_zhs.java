@@ -155,6 +155,11 @@ public class JigService_zhs {
         return jigMapper.supervisor_select_jig_info(jig_code,jig_name,jig_model,jig_workcell);
     }
 
+    //监管者模式下编辑更改工夹具信息
+    public int supervisor_edit_jig_info(JigDefinition jig_info,String user_id){
+        return jigMapper.supervisor_edit_jig_info(jig_info,user_id);
+    }
+
     //监管者模式下获取我的采购审批
     public List<PurchaseIncomeSubmit> supervisor_get_purchase_submit_list(int page_number){
         return jigMapper.supervisor_get_purchase_submit_list(page_number);
@@ -186,5 +191,34 @@ public class JigService_zhs {
         return (int)Math.ceil(max_page/5.0);
     }
 
-    //监管者模式下获取待处理的报废清单
+    //监管者模式下获取待处理的报废清单及其最大页数
+    public List<ScrapSubmit> supervisor_get_scrap_submit_list(int page_number,String workcell_id){
+        return jigMapper.supervisor_get_scrap_submit_list(page_number,workcell_id);
+    }
+
+    public int supervisor_get_scrap_submit_list_pages(String workcell_id){
+        int max_page = jigMapper.supervisor_get_scrap_submit_list_pages(workcell_id);
+        return (int)Math.ceil(max_page/5.0);
+    }
+
+    //监管者模式下审批待处理的报废申请
+    public int supervisor_pass_scrap_submit(String id,String user_id){
+        return jigMapper.supervisor_pass_scrap_submit(id,user_id);
+    }
+
+    public int supervisor_no_pass_scrap_submit(String id,String no_pass_reason,String user_id){
+        return jigMapper.supervisor_no_pass_scrap_submit(id,no_pass_reason,user_id);
+    }
+
+    //监管者模式下获取历史报废记录
+    public List<ScrapSubmit> supervisor_get_scrap_submit_list_history(String code,String submit_name,String start_date,String end_date,String status,String scrap_reason,int page_number,String workcell_id){
+        return jigMapper.supervisor_get_scrap_submit_list_history(code,submit_name,start_date,end_date,status,scrap_reason,page_number,workcell_id);
+    }
+
+    public int supervisor_get_scrap_submit_list_history_pages(String code,String submit_name,String start_date,String end_date,String status,String scrap_reason,String workcell_id){
+        int max_page = jigMapper.supervisor_get_scrap_submit_list_history_pages(code,submit_name,start_date,end_date,status,scrap_reason,workcell_id);
+        return (int)Math.ceil(max_page/5.0);
+    }
+
+
 }
