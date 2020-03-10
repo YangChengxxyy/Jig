@@ -1,5 +1,6 @@
 package com.jig.service;
 
+import com.jig.entity.JigPart;
 import com.jig.entity.User;
 import com.jig.entity.Workcell;
 import com.jig.mapper.AdminMapper;
@@ -37,5 +38,9 @@ public class AdminService {
 
     public List<User> searchAllUserInformation(String submit_id, String id, String name, String workcell_id, String start_date, String end_date) {
         return adminMapper.searchAllUserInformation(submit_id,id,name,workcell_id,start_date,end_date);
+    }
+
+    public List<JigPart> getPart() {
+        return adminMapper.getPart();
     }
 }

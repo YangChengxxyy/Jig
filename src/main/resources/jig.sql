@@ -11,11 +11,77 @@
  Target Server Version : 50647
  File Encoding         : 65001
 
- Date: 07/03/2020 19:27:21
+ Date: 10/03/2020 19:49:42
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for cn_en
+-- ----------------------------
+DROP TABLE IF EXISTS `cn_en`;
+CREATE TABLE `cn_en`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `english` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `chinese` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`id`, `english`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1184 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of cn_en
+-- ----------------------------
+INSERT INTO `cn_en` VALUES (4, 'id', 'id');
+INSERT INTO `cn_en` VALUES (5, 'name', '工夹具名字');
+INSERT INTO `cn_en` VALUES (6, 'code', '工夹具代码');
+INSERT INTO `cn_en` VALUES (7, 'model', '工夹具模组');
+INSERT INTO `cn_en` VALUES (8, 'part_no', '工夹具料号');
+INSERT INTO `cn_en` VALUES (9, 'family_id', '类别id');
+INSERT INTO `cn_en` VALUES (10, 'family', '类别');
+INSERT INTO `cn_en` VALUES (11, 'upl', '每条产线所需');
+INSERT INTO `cn_en` VALUES (12, 'user_for', '用途');
+INSERT INTO `cn_en` VALUES (13, 'pm_period', '保养检点周期');
+INSERT INTO `cn_en` VALUES (14, 'owner', '责任人id');
+INSERT INTO `cn_en` VALUES (15, 'owner_name', '责任人');
+INSERT INTO `cn_en` VALUES (16, 'rec_time', '录入时间');
+INSERT INTO `cn_en` VALUES (17, 'rec_by', '录入人id');
+INSERT INTO `cn_en` VALUES (18, 'rec_by_name', '录入人');
+INSERT INTO `cn_en` VALUES (19, 'edit_time', '修改时间');
+INSERT INTO `cn_en` VALUES (20, 'edit_by', '修改人id');
+INSERT INTO `cn_en` VALUES (21, 'edit_by_name', '修改人');
+INSERT INTO `cn_en` VALUES (22, 'workcell_id', '工作部门id');
+INSERT INTO `cn_en` VALUES (23, 'workcell', '工作部门');
+INSERT INTO `cn_en` VALUES (24, 'remark', '备注');
+INSERT INTO `cn_en` VALUES (25, 'JigDefinition', '工夹具定义');
+INSERT INTO `cn_en` VALUES (26, 'submit_id', '采购人id');
+INSERT INTO `cn_en` VALUES (27, 'submit_name', '采购人');
+INSERT INTO `cn_en` VALUES (28, 'count', '数量');
+INSERT INTO `cn_en` VALUES (29, 'submit_time', '申请时间');
+INSERT INTO `cn_en` VALUES (30, 'first_time', '初审时间');
+INSERT INTO `cn_en` VALUES (31, 'first_acceptor', '初审人id');
+INSERT INTO `cn_en` VALUES (32, 'first_acceptor_name', '初审人');
+INSERT INTO `cn_en` VALUES (33, 'first_reason', '初审未通过原因');
+INSERT INTO `cn_en` VALUES (34, 'final_time', '终审时间');
+INSERT INTO `cn_en` VALUES (35, 'final_acceptor', '终审人id');
+INSERT INTO `cn_en` VALUES (36, 'final_acceptor_name', '终审人');
+INSERT INTO `cn_en` VALUES (37, 'final_reason', '终审未通过原因');
+INSERT INTO `cn_en` VALUES (38, 'status', '状态');
+INSERT INTO `cn_en` VALUES (39, 'production_line_id', '产线id');
+INSERT INTO `cn_en` VALUES (40, 'production_line_name', '产线');
+INSERT INTO `cn_en` VALUES (41, 'bill_no', '单据号');
+INSERT INTO `cn_en` VALUES (42, 'tool_photo_url', '故障图片路径');
+INSERT INTO `cn_en` VALUES (43, 'PurchaseIncomeHistory', '历史采购');
+INSERT INTO `cn_en` VALUES (44, 'used_count', '寿命计数');
+INSERT INTO `cn_en` VALUES (45, 'ScrapSubmit', '报废申请');
+INSERT INTO `cn_en` VALUES (46, 'ScrapHistory', '报废历史');
+INSERT INTO `cn_en` VALUES (47, 'email', '邮箱');
+INSERT INTO `cn_en` VALUES (48, 'phone', '手机号码');
+INSERT INTO `cn_en` VALUES (49, 'position', '职位');
+INSERT INTO `cn_en` VALUES (50, 'password', '密码');
+INSERT INTO `cn_en` VALUES (51, 'entry_date', '入职时间');
+INSERT INTO `cn_en` VALUES (52, 'avatar_url', '头像照片');
+INSERT INTO `cn_en` VALUES (53, 'user_name', '用户名');
+INSERT INTO `cn_en` VALUES (54, 'type', '权限级别');
 
 -- ----------------------------
 -- Table structure for jig_definition
@@ -145,7 +211,14 @@ CREATE TABLE `jig_part_no`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `part_no` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of jig_part_no
+-- ----------------------------
+INSERT INTO `jig_part_no` VALUES (1, 'PNA90320/1');
+INSERT INTO `jig_part_no` VALUES (2, 'PNA90320/2');
+INSERT INTO `jig_part_no` VALUES (3, 'PNA90322/1');
 
 -- ----------------------------
 -- Table structure for jig_position
@@ -382,7 +455,7 @@ CREATE TABLE `purchase_income_submit`  (
 -- ----------------------------
 -- Records of purchase_income_submit
 -- ----------------------------
-INSERT INTO `purchase_income_submit` VALUES (1, '1230936', 'EF2238|EF2187', '5|1', '2020-02-03 09:36:01', NULL, NULL, NULL, NULL, '2', 12, 'BO19070500000002', NULL);
+INSERT INTO `purchase_income_submit` VALUES (1, '1230936', 'EF2238|EF2187', '5|1', '2020-02-03 09:36:01', NULL, NULL, '2020-03-08 10:03:34', '1230936', '3', 12, 'BO19070500000002', NULL);
 INSERT INTO `purchase_income_submit` VALUES (2, '1230936', 'EF0789|EF2187|EF2191', '2|2|2', '2020-02-03 11:10:12', NULL, NULL, NULL, NULL, '0', 16, 'BO19070500002000', NULL);
 INSERT INTO `purchase_income_submit` VALUES (3, '1230936', 'EF2189|EF0789', '1|19', '2020-02-03 15:42:43', NULL, NULL, NULL, NULL, '0', 9, '20200203', NULL);
 INSERT INTO `purchase_income_submit` VALUES (4, '1230936', 'EF2191|EF2190', '1|3', '2020-02-03 15:45:38', NULL, NULL, NULL, NULL, '0', 9, '202002031545', NULL);
@@ -596,9 +669,9 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1215072', 'Xianghai Zhang', '1215072', 7, 'naive', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `user` VALUES ('1230936', 'Lei Qian', '1230936', 7, 'high', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `user` VALUES ('1234567', 'Yang Cheng', '1234567', 7, 'manager', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES ('1215072', 'Xianghai Zhang', '1215072', 7, 'naive', '123@qq.com', NULL, '仓管员', NULL, NULL);
+INSERT INTO `user` VALUES ('1230936', 'Lei Qian', '1230936', 7, 'high', '1111', NULL, '产线经理', NULL, NULL);
+INSERT INTO `user` VALUES ('1234567', 'Yang Cheng', '1234567', 7, 'manager', '853364106@qq.com', NULL, 'CEO', NULL, NULL);
 INSERT INTO `user` VALUES ('admin', 'Admin', 'admin', 7, 'admin', '853364106@qq.com', '19858198127', 'Boss', '2020-03-07', 'images/avatar_images/4.jpeg');
 
 -- ----------------------------

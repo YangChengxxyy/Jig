@@ -76,4 +76,7 @@
             </if>
         </where>
     </select>
+    <select id="getPart" resultType="com.jig.entity.JigPart">
+        select * from jig_part_no
+    </select>
 </mapper>

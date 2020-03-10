@@ -1,5 +1,6 @@
 package com.jig.controller;
 
+import com.jig.entity.JigPart;
 import com.jig.entity.User;
 import com.jig.entity.Workcell;
 import com.jig.service.AdminService;
@@ -60,5 +61,9 @@ public class AdminJson {
                                     @RequestParam("start_date") String start_date, @RequestParam("end_date") String end_date, @RequestParam("file_name") String file_name) throws Exception {
         List<User> usersList = adminService.searchAllUserInformation(submit_id, id, name, workcell_id, start_date, end_date);
         PoiUtil.outputFile(response, file_name, usersList);
+    }
+    @RequestMapping("get_part")
+    public List<JigPart> getPart(){
+        return adminService.getPart();
     }
 }

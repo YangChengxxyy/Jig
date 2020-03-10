@@ -93,11 +93,7 @@
 
         })
     </script>
-    <style>
-        .btn {
-            margin-bottom: 0;
-        }
-    </style>
+
 </head>
 <body class="page-body skin-navy">
 
@@ -117,19 +113,19 @@
 
                     <div class="user-image">
                         <a href="#">
-                            <img src="assets/images/user-2.png" class="img-responsive img-circle"/>
+                            <img th:src="${loginState.getData().getAvatar_url()}" class="img-responsive img-circle"/>
                         </a>
                     </div>
 
                     <div class="user-details">
 
                         <h3>
-                            <a href="#">John Smith</a>
+                            <a href="#" th:text="${loginState.getData().getName()}"></a>
 
                             <span class="user-status is-online"></span>
                         </h3>
 
-                        <p class="user-title">Web Developer</p>
+                        <p class="user-title" th:text="${loginState.getData().getPosition()}"></p>
 
                         <div class="user-links">
                             <a href="#" class="btn btn-primary">Edit Profile</a>
@@ -277,19 +273,19 @@
                         <span class="title">工夹具管理</span>
                     </a>
                     <ul>
-                        <li class="active" href="#jig_info" data-toggle="tab">
-                            <a class="active" href="#jig_info" data-toggle="tab">
-                                <span class="title">工夹具信息</span>
+                        <li class="active" href="#jig_definition" data-toggle="tab">
+                            <a class="active" href="#jig_definition" data-toggle="tab">
+                                <span class="title">工夹具定义</span>
                             </a>
                         </li>
-                        <li href="#model_info" data-toggle="tab">
-                            <a href="#model_info" data-toggle="tab">
-                                <span class="title">模组信息</span>
+                        <li href="#jig_entity" data-toggle="tab">
+                            <a href="#jig_entity" data-toggle="tab">
+                                <span class="title">工夹具定义</span>
                             </a>
                         </li>
-                        <li href="#part_info" data-toggle="tab">
-                            <a href="#part_info" data-toggle="tab">
-                                <span class="title">料号信息</span>
+                        <li href="#model_part_info" data-toggle="tab">
+                            <a href="#model_part_info" data-toggle="tab">
+                                <span class="title">模组&料号信息</span>
                             </a>
                         </li>
                     </ul>
@@ -646,24 +642,24 @@
                     <div class="breadcrumb-env">
 
                         <ol class="breadcrumb bc-1">
-                            <li class="active" href="#jig_info" data-toggle="tab">
-                                <a>工夹具信息</a>
+                            <li class="active" href="#jig_definition" data-toggle="tab">
+                                <a>工夹具定义</a>
                             </li>
-                            <li href="#model_info" data-toggle="tab">
-                                <a>模组信息</a>
+                            <li href="#jig_entity" data-toggle="tab">
+                                <a>工夹具实体</a>
                             </li>
-                            <li href="#part_info" data-toggle="tab">
-                                <a>料号管理</a>
+                            <li href="#model_part_info" data-toggle="tab">
+                                <a>模组&料号信息</a>
                             </li>
                         </ol>
 
                     </div>
 
                 </div>
-                <div id="jig_info" class="tab-pane in active">
+                <div id="jig_definition" class="tab-pane in active">
                     <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
                         <div class="panel-heading">
-                            <h3 class="panel-title">工夹具信息</h3>
+                            <h3 class="panel-title">工夹具定义</h3>
 
                             <div class="panel-options">
 
@@ -679,15 +675,85 @@
                             </div>
                         </div>
                         <div class="panel-body">
-
-
+                            <div class="form-horizontal container-fluid">
+                                <div class="form-group row">
+                                    <label for="jig_code" class="col-sm-2 control-label">工夹具代码</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" id="jig_code" v-model.trim="code">
+                                    </div>
+                                    <label class="col-sm-2 control-label" for="jig_name">工夹具名字</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" id="jig_name" v-model.trim="name">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label" for="jig_workcell">部门</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" id="jig_workcell"
+                                               v-model.trim="workcell">
+                                    </div>
+                                    <label for="jig_family" class="col-sm-2 control-label">类别</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" id="jig_family" v-model.trim="family">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label" for="jig_userfor">用途</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" id="jig_userfor"
+                                               v-model.trim="user_for">
+                                    </div>
+                                    <div class="col-sm-2"></div>
+                                    <div class="col-sm-5">
+                                        <button class="btn btn-default" @click="clear">清空</button>
+                                        <button class="btn btn-primary" @click="search" type="button">查询</button>
+                                        <a class="btn btn-default" :href="onePageUrl"
+                                           :class="{'disabled': jig_list.length === 0}">导出本页</a>
+                                        <a class="btn btn-primary" :href="allPageUrl"
+                                           :class="{'disabled': jig_list.length === 0}">导出全部</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped table-bordered" style="margin-top: 2%">
+                                    <thead>
+                                    <tr>
+                                        <th>工夹具代码</th>
+                                        <th>工夹具名字</th>
+                                        <th>所属部门</th>
+                                        <th>类别</th>
+                                        <th>库存数量</th>
+                                        <th>用途</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="(item,index) in jig_list">
+                                        <td>{{item.code}}</td>
+                                        <td>{{item.name}}</td>
+                                        <td>{{item.workcell}}</td>
+                                        <td>{{item.family}}</td>
+                                        <td>{{item.pm_period}}</td>
+                                        <td>{{item.user_for}}</td>
+                                        <td>
+                                            <button class="btn btn-primary" data-toggle="modal" data-target="#jig_definition_detail"
+                                                    @click="check_detail(index)">
+                                                查看明细
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <my-pagination :max_page_number="max_page_number"
+                                           :now_page_number="now_page_number"></my-pagination>
                         </div>
                     </div>
                 </div>
-                <div id="model_info" class="tab-pane">
+                <div id="jig_entity" class="tab-pane">
                     <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
                         <div class="panel-heading">
-                            <h3 class="panel-title">模组信息</h3>
+                            <h3 class="panel-title">工夹具实体</h3>
 
                             <div class="panel-options">
 
@@ -703,15 +769,52 @@
                             </div>
                         </div>
                         <div class="panel-body">
-
-
+                            <div class="form-horizontal container-fluid">
+                                <div class="form-group row">
+                                    <label for="jig_code" class="col-sm-2 control-label">工夹具代码</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" v-model.trim="code">
+                                    </div>
+                                    <label class="col-sm-2 control-label" for="jig_name">工夹具名字</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" v-model.trim="name">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label" for="jig_workcell">部门</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control"
+                                               v-model.trim="workcell">
+                                    </div>
+                                    <label for="jig_family" class="col-sm-2 control-label">类别</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" v-model.trim="family">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label" for="jig_userfor">用途</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control"
+                                               v-model.trim="user_for">
+                                    </div>
+                                    <div class="col-sm-2"></div>
+                                    <div class="col-sm-5">
+                                        <button class="btn btn-default" @click="clear">清空</button>
+                                        <button class="btn btn-primary" @click="search" type="button">查询</button>
+                                        <a class="btn btn-default" :href="onePageUrl"
+                                           :class="{'disabled': jig_list.length === 0}">导出本页</a>
+                                        <a class="btn btn-primary" :href="allPageUrl"
+                                           :class="{'disabled': jig_list.length === 0}">导出全部</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div id="part_info" class="tab-pane">
+                <div id="model_part_info" class="tab-pane">
                     <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
                         <div class="panel-heading">
-                            <h3 class="panel-title">料号信息</h3>
+                            <h3 class="panel-title">模组&料号信息</h3>
 
                             <div class="panel-options">
 
@@ -727,8 +830,17 @@
                             </div>
                         </div>
                         <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6">
 
-
+                                </div>
+                                <div class="col-lg-6">
+                                    <ul class="list-group">
+                                        <li class="list-group-item list-group-item-heading list-group-item-info">料号</li>
+                                        <li class="list-group-item" v-for="item in part_list">{{item.part_no}}</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -907,6 +1019,131 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
+<div class="modal fade" id="jig_definition_detail" tabindex="-1" role="dialog" aria-labelledby="checkLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;
+                </button>
+                <h4 class="modal-title" id="checkLabel">工夹具明细</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal" v-if="jig != null">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">工夹具代码</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{jig.code}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">工夹具名字</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{jig.name}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">所属部门</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{jig.workcell}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">类别</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{jig.family}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">工夹具模组</label>
+                        <div class="col-sm-8">
+                            <select class="form-control">
+                                <option v-for="item in jig.model">{{item}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">工夹具料号</label>
+                        <div class="col-sm-8">
+                            <select class="form-control">
+                                <option v-for="item in jig.part_no">{{item}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">用途</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">
+                                {{jig.user_for}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">每条产线所需</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">
+                                {{jig.upl}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">责任人</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">
+                                {{jig.owner_name}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">录入人</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">
+                                {{jig.rec_by_name}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">录入时间</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">
+                                {{jig.rec_time}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">修改人</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">
+                                {{jig.edit_by_name}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">修改时间</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">
+                                {{jig.edit_time}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">保养点检周期</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">
+                                {{jig.pm_period}}天
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 <!-- Bottom Scripts -->
 <script src="assets/js/TweenMax.min.js"></script>
 <script src="assets/js/resizeable.js"></script>
@@ -925,7 +1162,6 @@
 <!-- JavaScripts initializations and stuff -->
 <script src="assets/js/xenon-custom.js"></script>
 <script src="js/pagination.js"></script>
-<script src="js/jquery-3.4.1.js"></script>
 <script src="js/admin_vue.js"></script>
 
 </body>

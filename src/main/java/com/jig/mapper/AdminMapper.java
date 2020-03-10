@@ -1,5 +1,6 @@
 package com.jig.mapper;
 
+import com.jig.entity.JigPart;
 import com.jig.entity.User;
 import com.jig.entity.Workcell;
 import org.apache.ibatis.annotations.Mapper;
@@ -23,4 +24,6 @@ public interface AdminMapper {
     int delUser(@Param("id") String id);
 
     List<User> searchAllUserInformation(@Param("submit_id") String submit_id, @Param("id") String id, @Param("name") String name, @Param("workcell_id") String workcell_id, @Param("start_date") String start_date, @Param("end_date") String end_date);
+
+    List<JigPart> getPart();
 }

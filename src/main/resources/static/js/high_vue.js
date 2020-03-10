@@ -680,7 +680,7 @@ const seqInfo = new Vue({
     el: "#seqInfo",
     data: {
         jig_list: [],
-        jig: "",
+        jig: null,
         name: "",
         workcell: "",
         family: "",
@@ -692,7 +692,7 @@ const seqInfo = new Vue({
     methods: {
         getData: function () {
             let that = this;
-            $.ajax("naive_search_jig_definition", {
+            $.ajax("naive/search_jig_definition", {
                 data: {
                     code: this.code,
                     name: this.name,
@@ -737,10 +737,10 @@ const seqInfo = new Vue({
     },
     computed: {
         onePageUrl: function () {
-            return "naive_download_one_search?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&page_number=" + this.now_page_number + "&file_name=page" + this.now_page_number + ".xls";
+            return "naive/download_one_search?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&page_number=" + this.now_page_number + "&file_name=page" + this.now_page_number + ".xls";
         },
         allPageUrl: function () {
-            return "naive_download_all_search?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&file_name=page-all.xls";
+            return "naive/download_all_search?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&file_name=page-all.xls";
         }
     }
 });

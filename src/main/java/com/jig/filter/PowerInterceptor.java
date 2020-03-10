@@ -1,6 +1,9 @@
 package com.jig.filter;
 
 import com.jig.entity.LoginState;
+import com.jig.entity.Role;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -20,6 +23,8 @@ public class PowerInterceptor implements HandlerInterceptor {
         key = s;
     }
 
+    private Log log = LogFactory.getLog(this.getClass());
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
         Object obj = request.getSession().getAttribute("loginState");
@@ -36,7 +41,16 @@ public class PowerInterceptor implements HandlerInterceptor {
             LoginState loginState = (LoginState) session.getAttribute("loginState");
             String type = loginState.getData().getType();
             String url = request.getRequestURI();
-            return url.indexOf(type) == 1;
+            int urlId = 0;
+            Role[] roles = Role.values();
+            Role a = Role.valueOf(type);
+            for (Role role : roles) {
+                if (url.contains(role.toString())) {
+                    urlId = role.getId();
+                }
+            }
+            log.info(a.getName());
+            return a.getId() >= urlId;
         }
     }
 

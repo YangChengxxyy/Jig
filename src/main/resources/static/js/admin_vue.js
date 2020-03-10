@@ -101,6 +101,9 @@ const information_manage = new Vue({
             change_user.user = {...this.user_list[index]};
         },
         search: function () {
+            if (this.id === "" && this.name === "" && this.workcell_id === "" && this.search_date_range === "") {
+                return false;
+            }
             this.now_page_number = 1;
             this.max_page_number = 0;
             this.getData();
@@ -176,4 +179,98 @@ const change_user = new Vue({
             })
         }
     }
+});
+const jig_definition = new Vue({
+    el: "#jig_definition",
+    data: {
+        jig_list: [],
+        name: "",
+        workcell: "",
+        family: "",
+        user_for: "",
+        code: "",
+        now_page_number: 1,
+        max_page_number: 0
+    },
+    methods: {
+        getData: function () {
+            let that = this;
+            $.ajax("naive/search_jig_definition", {
+                data: {
+                    code: this.code,
+                    name: this.name,
+                    workcell: this.workcell,
+                    family: this.family,
+                    user_for: this.user_for,
+                    page_number: this.now_page_number
+                },
+                success: function (res) {
+                    if (res.data.length === 0) {
+                        alert("没有结果！")
+                    } else {
+                        that.jig_list = res['data'];
+                        that.max_page_number = res['max'];
+                    }
+                }
+            })
+        },
+        search: function () {
+            this.now_page_number = 1;
+            if (this.code === '' && this.name === '' && this.workcell === '' && this.family === '' && this.user_for === '') {
+                return false;
+            }
+            this.getData();
+        },
+        check_detail: function (index) {
+            jig_definition_detail.jig = this.jig_list[index];
+            jig_definition_detail.jig.part_no = jig_definition_detail.jig.part_no.split("|");
+            jig_definition_detail.jig.model = jig_definition_detail.jig.model.split("|");
+        },
+        clear: function () {
+            this.jig = null;
+            this.max_page_number = 0;
+            this.now_page_number = 1;
+            this.jig_list = [];
+            this.code = "";
+            this.name = "";
+            this.workcell = "";
+            this.family = "";
+            this.user_for = "";
+        }
+    },
+    computed: {
+        onePageUrl: function () {
+            return "naive/download_one_search?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&page_number=" + this.now_page_number + "&file_name=page" + this.now_page_number + ".xls";
+        },
+        allPageUrl: function () {
+            return "naive/download_all_search?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&file_name=page-all.xls";
+        }
+    }
+});
+const jig_definition_detail = new Vue({
+    el: "#jig_definition_detail",
+    data: {
+        jig: null
+    }
+});
+const model_part_info = new Vue({
+    el: "#model_part_info",
+    data: {
+        part_list:[]
+    },
+    created: function () {
+        this.getData();
+    },
+    methods: {
+        getData:function(){
+            let that = this;
+            $.ajax("admin/get_part",{
+                success(data, textStatus, jqXHR) {
+                    that.part_list = data;
+                }
+            })
+        }
+    },
+    computed: {},
+    watch: {},
 });
