@@ -25,7 +25,7 @@
             })
         }
  */
-Vue.component('my-pagination', {
+let myPagination = {
     props: ['now_page_number', 'max_page_number'],
     template: "<div class=\"text-center row\" v-if=\"max_page_number != 0\">\n" +
         "                                <div v-if=\"max_page_number >5\">\n" +
@@ -123,4 +123,5 @@ Vue.component('my-pagination', {
             }
         }
     }
-});
+};
+Vue.component('my-pagination',myPagination);
