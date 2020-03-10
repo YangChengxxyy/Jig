@@ -5,16 +5,18 @@ import com.jig.filter.SessionInterceptor;
 import com.jig.service.JigService;
 import com.jig.utils.QrCodeUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -38,8 +40,7 @@ public class JigJson {
     public static final String REPAIR_IMAGE_NAME = "images/repair_images/";
     public static final String SCRAP = "SCRAP";
     public static final String REPAIR = "REPAIR";
-    @Resource
-    public Map<String, PhoneUpload> phoneUploadMap = new HashMap<>();//存放扫码上传的map对象
+    public static Map<String, PhoneUpload> phoneUploadMap = new HashMap<>();//存放扫码上传的map对象
 
     @NotNull
     private Map<String, Object> getStringObjectMap(List<?> data, int max) {
@@ -660,5 +661,15 @@ public class JigJson {
     @RequestMapping("high/get_repair_basic")
     public List<Map<String, Object>> highGetRepairBasic(@RequestParam("submit_id") String submit_id) {
         return jigService.highGetRepairBasic(submit_id);
+    }
+
+    /**
+     * 定时清除无用对象
+     */
+    @Scheduled(cron = "0 0 * * * ?")
+    public void removePhoneUploadMap(){
+        phoneUploadMap = new HashMap<>();
+        Log log = LogFactory.getLog(this.getClass());
+        log.info(" => removePhoneUploadMap");
     }
 }

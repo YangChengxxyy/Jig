@@ -271,6 +271,29 @@
                         </li>
                     </ul>
                 </li>
+                <li class="main-menu-li">
+                    <a href="#main2" data-toggle="tab">
+                        <i class="fa-group"></i>
+                        <span class="title">工夹具管理</span>
+                    </a>
+                    <ul>
+                        <li class="active" href="#jig_info" data-toggle="tab">
+                            <a class="active" href="#jig_info" data-toggle="tab">
+                                <span class="title">工夹具信息</span>
+                            </a>
+                        </li>
+                        <li href="#model_info" data-toggle="tab">
+                            <a href="#model_info" data-toggle="tab">
+                                <span class="title">模组信息</span>
+                            </a>
+                        </li>
+                        <li href="#part_info" data-toggle="tab">
+                            <a href="#part_info" data-toggle="tab">
+                                <span class="title">料号信息</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
 
         </div>
@@ -592,6 +615,103 @@
                     <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
                         <div class="panel-heading">
                             <h3 class="panel-title">权限管理</h3>
+
+                            <div class="panel-options">
+
+                                <a href="#" data-toggle="panel">
+                                    <span class="collapse-icon">–</span>
+                                    <span class="expand-icon">+</span>
+                                </a>
+
+                                <a href="#" data-toggle="reload" @click="getData">
+                                    <i class="fa-rotate-right"></i>
+                                </a>
+
+                            </div>
+                        </div>
+                        <div class="panel-body">
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="main2" class="tab-content tab-pane fade">
+                <div class="page-title">
+
+                    <div class="title-env">
+                        <h1 class="title">工夹具管理</h1>
+                    </div>
+
+                    <div class="breadcrumb-env">
+
+                        <ol class="breadcrumb bc-1">
+                            <li class="active" href="#jig_info" data-toggle="tab">
+                                <a>工夹具信息</a>
+                            </li>
+                            <li href="#model_info" data-toggle="tab">
+                                <a>模组信息</a>
+                            </li>
+                            <li href="#part_info" data-toggle="tab">
+                                <a>料号管理</a>
+                            </li>
+                        </ol>
+
+                    </div>
+
+                </div>
+                <div id="jig_info" class="tab-pane in active">
+                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">工夹具信息</h3>
+
+                            <div class="panel-options">
+
+                                <a href="#" data-toggle="panel">
+                                    <span class="collapse-icon">–</span>
+                                    <span class="expand-icon">+</span>
+                                </a>
+
+                                <a href="#" data-toggle="reload" @click="getData">
+                                    <i class="fa-rotate-right"></i>
+                                </a>
+
+                            </div>
+                        </div>
+                        <div class="panel-body">
+
+
+                        </div>
+                    </div>
+                </div>
+                <div id="model_info" class="tab-pane">
+                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">模组信息</h3>
+
+                            <div class="panel-options">
+
+                                <a href="#" data-toggle="panel">
+                                    <span class="collapse-icon">–</span>
+                                    <span class="expand-icon">+</span>
+                                </a>
+
+                                <a href="#" data-toggle="reload" @click="getData">
+                                    <i class="fa-rotate-right"></i>
+                                </a>
+
+                            </div>
+                        </div>
+                        <div class="panel-body">
+
+
+                        </div>
+                    </div>
+                </div>
+                <div id="part_info" class="tab-pane">
+                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">料号信息</h3>
 
                             <div class="panel-options">
 
