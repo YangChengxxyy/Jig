@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.swing.*;
 import java.util.List;
+import java.util.SplittableRandom;
 
 @Mapper
 @Repository
@@ -33,35 +34,57 @@ public interface JigMapper_zhs {
      * @return
      */
     List<PurchaseIncomeSubmit> get_manager_purchase_submit_list(@Param("user_id") String user_id,
-                                                                @Param("page_number") int page_number);
+                                                                @Param("page_number") int page_number,
+                                                                @Param("workcell_id") String workcell_id);
 
-    int get_manager_purchase_submit_list_pages();
+    int get_manager_purchase_submit_list_pages(@Param("workcell_id") String workcell_id);
 
     PurchaseIncomeSubmit get_manager_purchase_detail(@Param("id") String id);
 
+    /**经理模式下审批通过采购单
+     *
+     * @param id
+     * @param pass 采购审批通过后的状态
+     * @return
+     */
     int manager_check_purchase_submit(@Param("id") String id,
-                                      @Param("pass") String pass);
+                                      @Param("pass") String pass,
+                                      @Param("user_id") String user_id);
 
-    int dont_pass_manager_purchase_submit(@Param("id") String id,
+    int manager_dont_pass_purchase_submit(@Param("id") String id,
                                           @Param("status") String status,
-                                          @Param("final_reason") String final_reason);
+                                          @Param("final_reason") String final_reason,
+                                          @Param("user_id") String user_id);
 
     List<JigDefinition> get_manager_jig_info_list(@Param("page_number") int page_number);
 
     int get_manager_jig_info_list_pages();
 
+    /**经理模式下获取和查询历史采购记录及页数
+     *
+     * @param bill_no 单据号
+     * @param submit_name 申请人名字
+     * @param start_date 开始时间
+     * @param end_date 结束时间
+     * @param status 状态
+     * @param page_number 当前页数
+     * @param workcell_id 工作部门id
+     * @return
+     */
     List<PurchaseIncomeSubmit> get_manager_purchase_submit_list_history(@Param("bill_no") String bill_no,
-                                                        @Param("submit_name") String submit_name,
-                                                        @Param("start_date") String start_date,
-                                                        @Param("end_date") String end_date,
-                                                        @Param("status") String status,
-                                                        @Param("page_number") int page_number);
+                                                                        @Param("submit_name") String submit_name,
+                                                                        @Param("start_date") String start_date,
+                                                                        @Param("end_date") String end_date,
+                                                                        @Param("status") String status,
+                                                                        @Param("page_number") int page_number,
+                                                                        @Param("workcell_id") String workcell_id);
 
     int get_manager_purchase_submit_list_history_pages(@Param("bill_no") String bill_no,
-                                       @Param("submit_name") String submit_name,
-                                       @Param("start_date") String start_date,
-                                       @Param("end_date") String end_date,
-                                       @Param("status") String status);
+                                                       @Param("submit_name") String submit_name,
+                                                       @Param("start_date") String start_date,
+                                                       @Param("end_date") String end_date,
+                                                       @Param("status") String status,
+                                                       @Param("workcell_id") String workcell_id);
 
     /**获取左侧菜单栏的通知消息数量
      *
@@ -73,9 +96,10 @@ public interface JigMapper_zhs {
     /**
      *
      */
-    List<ScrapSubmit> get_manager_scrap_submit_list(@Param("page_number") int page_number);
+    List<ScrapSubmit> get_manager_scrap_submit_list(@Param("page_number") int page_number,
+                                                    @Param("workcell_id") String workcell_id);
 
-    int get_manager_scrap_submit_list_pages();
+    int get_manager_scrap_submit_list_pages(@Param("workcell_id") String workcell_id);
 
     /**经理模式审批报废申请
      *
@@ -83,7 +107,9 @@ public interface JigMapper_zhs {
      * @param status 经过审批之后报废申请的最终状态
      * 分为两步 1.更新
      */
-    int check_manager_scrap_submit(@Param("submit_id") String submit_id,@Param("status") String status);
+    int check_manager_scrap_submit(@Param("submit_id") String submit_id,
+                                   @Param("status") String status,
+                                   @Param("user_id") String user_id);
 
     /**经理模式下历史报废审批记录的显示及其页数查询
      *

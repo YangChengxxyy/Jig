@@ -20,14 +20,21 @@
         #{bill_no})
     </insert>
     <select id="get_manager_purchase_submit_list" resultType="com.jig.entity.PurchaseIncomeSubmit">
-        select p.*,u.name submit_name,pl.name production_line_name from purchase_income_submit p inner join user u on p.submit_id = u.id
-                                                                    inner join production_line pl on p.production_line_id = pl.id
-        where p.status = 2
+        select p.*,
+        u.name submit_name,
+        pl.name production_line_name,
+        u1.name 'first_acceptor_name',
+        u2.name 'final_acceptor_name'
+        from purchase_income_submit p inner join user u on p.submit_id = u.id
+                                      inner join production_line pl on p.production_line_id = pl.id
+                                      left join user u1 on p.first_acceptor = u1.id
+                                      left join user u2 on p.final_acceptor = u2.id
+        where p.status = 2 and u.workcell_id = #{workcell_id}
         limit #{page_number},5
     </select>
     <select id="get_manager_purchase_submit_list_pages" resultType="java.lang.Integer">
-        select count(*) from purchase_income_submit
-        where status = 2
+        select count(*) from purchase_income_submit p inner join user u on p.submit_id = u.id
+        where status = 2 and u.workcell_id = #{workcell_id}
     </select>
     <select id="get_manager_purchase_detail" resultType="com.jig.entity.PurchaseIncomeSubmit">
         select p.*,u.name submit_name from purchase_income_submit p inner join user u on p.submit_id = u.id
@@ -35,16 +42,16 @@
     </select>
     <update id="manager_check_purchase_submit">
         update purchase_income_submit
-        set final_time = now(),status = #{pass},final_acceptor='1230936'
+        set final_time = now(),status = #{pass},final_acceptor = #{user_id}
         where id = #{id};
 
         insert into purchase_income_submit_history select * from purchase_income_submit where id = #{id};
 
         delete from purchase_income_submit where id = #{id}
     </update>
-    <update id="dont_pass_manager_purchase_submit">
+    <update id="manager_dont_pass_purchase_submit">
         update purchase_income_submit
-        set final_time = now(),status = #{status},final_acceptor='1230936',final_reason=#{final_reason}
+        set final_time = now(),status = #{status},final_acceptor=#{user_id},final_reason=#{final_reason}
         where id = #{id};
 
         insert into purchase_income_submit_history select * from purchase_income_submit where id = #{id};
@@ -70,7 +77,7 @@
                                               left join user u2 on p.final_acceptor = u2.id,
             production_line
         <where>
-            production_line.id = p.production_line_id
+            production_line.id = p.production_line_id and u.workcell_id = #{workcell_id}
             <if test="bill_no!=''">
                 and p.bill_no like concat('%',#{bill_no},'%')
             </if>
@@ -92,6 +99,7 @@
     <select id="get_manager_purchase_submit_list_history_pages" resultType="java.lang.Integer">
         select count(*) from purchase_income_submit_history p inner join user u on p.submit_id = u.id
         <where>
+            u.workcell_id = #{workcell_id}
             <if test="bill_no!=''">
                 and p.bill_no like concat('%',#{bill_no},'%')
             </if>
@@ -114,18 +122,26 @@
         select count(*) from scrap_submit
     </select>
     <select id="get_manager_scrap_submit_list" resultType="com.jig.entity.ScrapSubmit">
-        select s.*,u1.name submit_name,u2.name first_acceptor_name from scrap_submit s
-        INNER JOIN user u1 on u1.id = s.submit_id
-        INNER JOIN user u2 on u2.id = s.first_acceptor
+        select s.*,
+        u1.name submit_name,
+        u2.name first_acceptor_name,
+        u3.name final_acceptor_name
+        from scrap_submit s INNER JOIN user u1 on u1.id = s.submit_id
+                            LEFT JOIN user u2 on u2.id = s.first_acceptor
+                            LEFT JOIN user u3 on u3.id = s.final_acceptor
+        where s.status = 2 and u1.workcell_id = #{workcell_id}
     </select>
     <select id="get_manager_scrap_submit_list_pages" resultType="java.lang.Integer">
-        select count(*) from scrap_submit
+        select count(*) from scrap_submit s INNER JOIN user u1 on u1.id = s.submit_id
+        where s.status = 2 and u1.workcell_id = #{workcell_id}
     </select>
     <update id="check_manager_scrap_submit">
         insert into scrap_submit_history select * from scrap_submit where id = #{submit_id};
+
         delete from scrap_submit where id = #{submit_id};
+
         update scrap_submit_history
-        set status = #{status},final_time = now(),final_acceptor = '1230936'
+        set status = #{status},final_time = now(),final_acceptor = #{user_id}
         where id = #{submit_id}
     </update>
     <select id="get_manager_scrap_submit_list_history" resultType="com.jig.entity.ScrapSubmit">
@@ -254,7 +270,7 @@
         select p.*,u.name 'submit_name',
                pl.name 'production_line_name',
                u1.name 'first_acceptor_name',
-               u2.name 'final_acceptor'
+               u2.name 'final_acceptor_name'
         from purchase_income_submit p inner join user u on p.submit_id = u.id
                                       inner join production_line pl on p.production_line_id = pl.id
                                       left join user u1 on p.first_acceptor = u1.id

@@ -163,4 +163,15 @@ public class ScrapSubmit {
     public void setFinal_reason(String final_reason) {
         this.final_reason = final_reason;
     }
+
+    @Override
+    public String toString() {
+        return "ScrapSubmit{" +
+                "code='" + code + '\'' +
+                ", seq_id='" + seq_id + '\'' +
+                ", submit_name='" + submit_name + '\'' +
+                ", submit_time='" + submit_time + '\'' +
+                ", scrap_reason='" + scrap_reason + '\'' +
+                '}';
+    }
 }

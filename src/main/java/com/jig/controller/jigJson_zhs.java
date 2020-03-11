@@ -60,9 +60,10 @@ public class jigJson_zhs {
     @RequestMapping(value = "manager_get_purchase_submit_list",method = {RequestMethod.GET,RequestMethod.POST})
     public Map<Object,Object> getManagerPurchaseSubmitList(@RequestParam(value = "user_id") String user_id,
                                                            @RequestParam(value = "page_number") int page_number){
+        String workcel_id = "7";
         page_number = (page_number-1)*5;
-        List<PurchaseIncomeSubmit> list = jigService.get_manager_purchase_submit_list(user_id,page_number);
-        int pages = jigService.get_manager_purchase_submit_list_pages();
+        List<PurchaseIncomeSubmit> list = jigService.get_manager_purchase_submit_list(user_id,page_number,workcel_id);
+        int pages = jigService.get_manager_purchase_submit_list_pages(workcel_id);
         Map<Object,Object> map = new HashMap<>();
         map.put("data",list);
         map.put("max",pages);
@@ -78,11 +79,23 @@ public class jigJson_zhs {
     //经理模块下的终审审批，@RequestParam pass 相当于经过终审审批后的采购审批单的状态
     @RequestMapping(value = "manager_check_purchase_submit",method = {RequestMethod.GET,RequestMethod.POST})
     public String  managerCheckPurchase(@RequestParam(value = "id") String id,@RequestParam(value = "pass") String pass){
-        int flag = jigService.manager_check_purchase_submit(id,pass);
+        String user_id = "1234567";
+        int flag = jigService.manager_check_purchase_submit(id,pass,user_id);
         if(flag<0){
             return "操作失败！";
         }
         return "操作成功！";
+    }
+
+    //经理模块下终审不通过 采购单 操作
+    @RequestMapping(value = "manager_dont_pass_purchase_submit",method = {RequestMethod.GET,RequestMethod.POST})
+    public String dontPassManagerPurchaseSubmit(@RequestParam(value = "id") String id,@RequestParam(value = "final_reason") String final_reason){
+        String user_id = "1234567";
+        int flag = jigService.manager_dont_pass_purchase_submit(id,"3",final_reason,user_id);
+        if(flag<0){
+            return "服务器异常!";
+        }
+        return "审批成功!";
     }
 
     @RequestMapping(value = "manager_get_jig_info_list",method = {RequestMethod.GET,RequestMethod.POST})
@@ -103,6 +116,7 @@ public class jigJson_zhs {
                                                      @RequestParam(value = "submit_time") String submit_time,
                                                      @RequestParam(value = "status") String status,
                                                      @RequestParam(value = "page_number") int page_number){
+        String workcell_id = "7";
         page_number = (page_number-1)*5;
         String start_date = "";
         String end_date = "";
@@ -112,8 +126,8 @@ public class jigJson_zhs {
         }
 
         Map<Object, Object> map = new HashMap<>(2);
-        List<PurchaseIncomeSubmit> list = jigService.get_manager_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,status,page_number);
-        int max = jigService.get_manager_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status);
+        List<PurchaseIncomeSubmit> list = jigService.get_manager_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,status,page_number,workcell_id);
+        int max = jigService.get_manager_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status,workcell_id);
         map.put("data",list);
         map.put("max",max);
         return map;
@@ -145,7 +159,7 @@ public class jigJson_zhs {
             start_date = submit_time.substring(0,10);
             end_date = submit_time.substring(13);
         }
-        List<PurchaseIncomeSubmit> jig_list = jigService.get_manager_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,"4",-1);
+        List<PurchaseIncomeSubmit> jig_list = jigService.get_manager_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,"4",-1,"7");
         int purchase_submit_count = jigService.get_manager_purchase_submit_total_count(bill_no,submit_name,start_date,end_date,"4");
         List<JigEntity> jig_entity_list = jigService.get_manager_store_jig_list();
         List<PurchaseTotalSubmitManDetail> submit_man_list =
@@ -247,30 +261,25 @@ public class jigJson_zhs {
     //获取经理报废管理模块下的报废审批list
     @RequestMapping(value = "manager_get_scrap_submit_list",method = {RequestMethod.GET,RequestMethod.POST})
     public Map<Object,Object> getManagerScrapSubmitList(@RequestParam(value = "page_number") int page_number){
-        List<ScrapSubmit> list = jigService.get_manager_scrap_submit_list(page_number);
-        int scrap_submit_max_page = jigService.get_manager_scrap_submit_list_pages();
+        String workcell_id = "7";
+        List<ScrapSubmit> list = jigService.get_manager_scrap_submit_list(page_number,workcell_id);
+        int scrap_submit_max_page = jigService.get_manager_scrap_submit_list_pages(workcell_id);
+
         Map<Object,Object> map = new HashMap<>(2);
         map.put("data",list);
         map.put("max",scrap_submit_max_page);
         return map;
     }
 
+    //经理模式下审批通过 报废申请 操作
     @RequestMapping(value = "manager_check_scrap_submit",method = {RequestMethod.GET,RequestMethod.POST})
     public String checkManagerScrapSubmit(@RequestParam(value = "submit_id") String submit_id,@RequestParam("status") String status){
-        int flag = jigService.check_manager_scrap_submit(submit_id,status);
+        String user_id = "1234567";
+        int flag = jigService.check_manager_scrap_submit(submit_id,status,user_id);
         if(flag<0){
             return "服务器异常!";
         }
         return "审批成功！";
-    }
-
-    @RequestMapping(value = "manager_dont_pass_purchase_submit",method = {RequestMethod.GET,RequestMethod.POST})
-    public String dontPassManagerPurchaseSubmit(@RequestParam(value = "id") String id,@RequestParam(value = "final_reason") String final_reason){
-        int flag = jigService.dont_pass_manager_purchase_submit(id,"3",final_reason);
-        if(flag<0){
-            return "服务器异常!";
-        }
-        return "审批成功!";
     }
 
     @RequestMapping(value = "manager_get_scrap_submit_list_history",method = {RequestMethod.GET,RequestMethod.POST})

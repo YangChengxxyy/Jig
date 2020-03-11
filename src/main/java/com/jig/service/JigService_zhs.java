@@ -33,29 +33,32 @@ public class JigService_zhs {
     public int addShoplist(String submit_id, String bill_no, String production_line_id, String code, String number, String submit_time) {
         return jigMapper.addShoplist(submit_id, bill_no, production_line_id, code, number, submit_time);
     }
-    //获取经理模块下的采购管理下的采购审批清单
-    public List<PurchaseIncomeSubmit> get_manager_purchase_submit_list(String user_id,int page_number){
-        return jigMapper.get_manager_purchase_submit_list(user_id,page_number);
+    //获取经理模块下的采购管理下的采购审批清单及其页数
+    public List<PurchaseIncomeSubmit> get_manager_purchase_submit_list(String user_id,int page_number,String workcell_id){
+        return jigMapper.get_manager_purchase_submit_list(user_id,page_number,workcell_id);
     }
 
-    public int get_manager_purchase_submit_list_pages(){
-        int max = jigMapper.get_manager_purchase_submit_list_pages();
+    public int get_manager_purchase_submit_list_pages(String workcell_id){
+        int max = jigMapper.get_manager_purchase_submit_list_pages(workcell_id);
         return (int)Math.ceil(max/5.0);
     }
 
+    //经理模式下获取单个采购申请明细（弃用）
     public PurchaseIncomeSubmit get_manager_purchase_detail(String id){
         return jigMapper.get_manager_purchase_detail(id);
     }
 
-    public int manager_check_purchase_submit(String id,String pass){
-        return jigMapper.manager_check_purchase_submit(id,pass);
+    //经理模式下审批通过采购单
+    public int manager_check_purchase_submit(String id,String pass,String user_id){
+        return jigMapper.manager_check_purchase_submit(id,pass,user_id);
     }
 
     //经理模式采购审批的终审不通过的提交
-    public int dont_pass_manager_purchase_submit(String id,String status,String final_reason){
-        return jigMapper.dont_pass_manager_purchase_submit(id,status,final_reason);
+    public int manager_dont_pass_purchase_submit(String id,String status,String final_reason,String user_id){
+        return jigMapper.manager_dont_pass_purchase_submit(id,status,final_reason,user_id);
     }
 
+    //
     public List<JigDefinition> get_manager_jig_info_list(int page_number){
         return jigMapper.get_manager_jig_info_list(page_number);
     }
@@ -65,14 +68,16 @@ public class JigService_zhs {
         return (int)Math.ceil(a/5.0);
     }
 
-    public List<PurchaseIncomeSubmit> get_manager_purchase_submit_list_history(String bill_no,String submit_name,String start_date,String end_date,String status,int page_number){
-        return jigMapper.get_manager_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,status,page_number);
+    //获取经理模块下的历史采购记录显示及其页数
+    public List<PurchaseIncomeSubmit> get_manager_purchase_submit_list_history(String bill_no,String submit_name,String start_date,String end_date,String status,int page_number,String workcell_id){
+        return jigMapper.get_manager_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,status,page_number,workcell_id);
     }
 
-    public int get_manager_purchase_submit_list_history_pages(String bill_no,String submit_name,String start_date,String end_date,String status){
-        int max =  jigMapper.get_manager_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status);
+    public int get_manager_purchase_submit_list_history_pages(String bill_no,String submit_name,String start_date,String end_date,String status,String workcell_id){
+        int max =  jigMapper.get_manager_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status,workcell_id);
         return (int)Math.ceil(max/5.0);
     }
+
     //获取左侧菜单栏的通知消息数量
     public int get_manager_purchase_submit_count(){
         return jigMapper.get_manager_purchase_submit_count();
@@ -81,7 +86,7 @@ public class JigService_zhs {
 
     //获取经理模式下采购统计模块下的新增采购单数量
     public int get_manager_purchase_submit_total_count(String bill_no,String submit_name,String start_date,String end_date,String status){
-        return jigMapper.get_manager_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status);
+        return jigMapper.get_manager_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status,"7");
     }
 
     //获取经理模式采购统计模块下的采购员细节
@@ -95,18 +100,18 @@ public class JigService_zhs {
     }
 
     //获取经理模块下的报废审批记录
-    public List<ScrapSubmit> get_manager_scrap_submit_list(int page_number){
-        return jigMapper.get_manager_scrap_submit_list(page_number);
+    public List<ScrapSubmit> get_manager_scrap_submit_list(int page_number,String workcell_id){
+        return jigMapper.get_manager_scrap_submit_list(page_number,workcell_id);
     }
     //获取经理模块下的报废审批记录的最大页数
-    public int get_manager_scrap_submit_list_pages(){
-        int max_page = jigMapper.get_manager_scrap_submit_list_pages();
+    public int get_manager_scrap_submit_list_pages(String workcell_id){
+        int max_page = jigMapper.get_manager_scrap_submit_list_pages(workcell_id);
         return (int)Math.ceil(max_page/5.0);
     }
 
     //经理模式审批的报废申请,status表示审批之后该scrap_submit的最终状态
-    public int check_manager_scrap_submit(String submit_id,String status){
-        int flag = jigMapper.check_manager_scrap_submit(submit_id,status);
+    public int check_manager_scrap_submit(String submit_id,String status,String user_id){
+        int flag = jigMapper.check_manager_scrap_submit(submit_id,status,user_id);
         return flag;
     }
 

@@ -272,14 +272,11 @@
                                             <h4 class="modal-title">审批原因</h4>
                                         </div>
                                         <div class="modal-body">
-                                            <form role="form" class="form-horizontal">
-                                                <div class="form-group">
-                                                    <label class="col-sm-3 control-label">审批原因</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control" v-model="purchase_submit_pass_reason">
-                                                    </div>
-                                                </div>
-                                            </form>
+                                            <div class="form-group">
+                                                <label for="disagreeReason">原因：</label>
+                                                <textarea class="form-control" rows="5"
+                                                          id="disagreeReason" v-model="purchase_submit_pass_reason"></textarea>
+                                            </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -288,10 +285,12 @@
                                     </div><!-- /.modal-content -->
                                 </div><!-- /.modal -->
                             </div>
+
                             <div class="text-center row" v-if="max_page_number != 0">
                                 <my-pagination :max_page_number="max_page_number"
                                                :now_page_number="now_page_number"></my-pagination>
                             </div>
+
                             <div class="modal fade" id="myshoplist_detail" tabindex="-1"
                                  role="dialog"
                                  aria-labelledby="chukuLabel" aria-hidden="true">
@@ -369,6 +368,58 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-1"></div>
+                                                </div>
+                                                <div class="form-group"
+                                                     v-if="purchase_submit.first_acceptor_name != null">
+                                                    <label class="col-sm-3 control-label">初审人</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit.first_acceptor_name}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group"
+                                                     v-if="purchase_submit.first_time != null">
+                                                    <label class="col-sm-3 control-label">初审时间</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit.first_time}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group"
+                                                     v-if="purchase_submit.first_reason != null">
+                                                    <label class="col-sm-3 control-label">初审不通过原因</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit.first_reason}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" v-if="purchase_submit.final_acceptor_name != null">
+                                                    <label class="col-sm-3 control-label">终审人</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit.final_acceptor_name}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" v-if="purchase_submit.final_time != null">
+                                                    <label class="col-sm-3 control-label">终审时间</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit.final_time}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group"
+                                                     v-if="purchase_submit.final_reason != null">
+                                                    <label class="col-sm-3 control-label">终审不通过原因</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit.final_reason}}
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </form>
                                         </div>
@@ -465,10 +516,12 @@
                                     </tbody>
                                 </table>
                             </div>
+
                             <div class="text-center row" v-if="max_page_number != 0">
                                 <my-pagination :max_page_number="max_page_number"
                                                :now_page_number="now_page_number"></my-pagination>
                             </div>
+
                             <div class="modal fade" id="myshoplist_history_detail" tabindex="-1"
                                  role="dialog"
                                  aria-labelledby="chukuLabel" aria-hidden="true">
@@ -500,7 +553,7 @@
                                                     <label class="col-sm-3 control-label">产线id</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{purchase_submit.production_line_id}}
+                                                            {{purchase_submit.production_line_name}}
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-1"></div>
@@ -546,6 +599,58 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-1"></div>
+                                                </div>
+                                                <div class="form-group"
+                                                     v-if="purchase_submit.first_acceptor_name != null">
+                                                    <label class="col-sm-3 control-label">初审人</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit.first_acceptor_name}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group"
+                                                     v-if="purchase_submit.first_time != null">
+                                                    <label class="col-sm-3 control-label">初审时间</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit.first_time}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group"
+                                                     v-if="purchase_submit.first_reason != null">
+                                                    <label class="col-sm-3 control-label">初审不通过原因</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit.first_reason}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" v-if="purchase_submit.final_acceptor_name != null">
+                                                    <label class="col-sm-3 control-label">终审人</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit.final_acceptor_name}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" v-if="purchase_submit.final_time != null">
+                                                    <label class="col-sm-3 control-label">终审时间</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit.final_time}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group"
+                                                     v-if="purchase_submit.final_reason != null">
+                                                    <label class="col-sm-3 control-label">终审不通过原因</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{purchase_submit.final_reason}}
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </form>
                                         </div>
@@ -1426,6 +1531,30 @@
                                                     <label class="col-sm-3 control-label">初审人</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">{{scrap_submit.first_acceptor_name}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">初审时间</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{scrap_submit.first_time}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                                <div class="form-group" v-if="scrap_submit.final_acceptor_name != null">
+                                                    <label class="col-sm-3 control-label">终审人</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{scrap_submit.final_acceptor_name}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-1"></div>
+                                                </div>
+                                                <div class="form-group" v-if="scrap_submit.final_time != null">
+                                                    <label class="col-sm-3 control-label">终审时间</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">{{scrap_submit.final_time}}
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-1"></div>

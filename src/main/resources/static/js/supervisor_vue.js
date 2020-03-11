@@ -56,6 +56,7 @@ var jig_info = new Vue({
         },//要删除的类别
         jig_info_list_by_family:[],//经过类别划分的工夹具信息list
         jig_info_detail:null,
+
         edit_jig_info_detail:null,//修改工夹具信息的明细
         production_line_list:production_line_list,
         workcell_list:workcell_list,
@@ -63,7 +64,8 @@ var jig_info = new Vue({
         model_list:model_list,
         part_no_list:part_no_list,//工夹具料号list,
         edit_select_part_no_list:[],//编辑页面选择的料号list
-        select_jig_code:"",
+
+        select_jig_code:"",//搜索条件
         select_jig_name:"",
         select_jig_model:"",//搜索条件:model
         select_jig_workcell:"",
