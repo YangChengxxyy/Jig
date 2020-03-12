@@ -269,7 +269,7 @@
                 </li>
                 <li class="main-menu-li">
                     <a href="#main2" data-toggle="tab">
-                        <i class="fa-group"></i>
+                        <i class="fa-wrench"></i>
                         <span class="title">工夹具管理</span>
                     </a>
                     <ul>
@@ -280,12 +280,25 @@
                         </li>
                         <li href="#jig_entity" data-toggle="tab">
                             <a href="#jig_entity" data-toggle="tab">
-                                <span class="title">工夹具定义</span>
+                                <span class="title">工夹具实体</span>
                             </a>
                         </li>
                         <li href="#model_part_info" data-toggle="tab">
                             <a href="#model_part_info" data-toggle="tab">
                                 <span class="title">模组&料号信息</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="main-menu-li">
+                    <a href="#main3" data-toggle="tab">
+                        <i class="fa-book"></i>
+                        <span class="title">字典</span>
+                    </a>
+                    <ul>
+                        <li class="active" href="#cn_en" data-toggle="tab">
+                            <a class="active" href="#cn_en" data-toggle="tab">
+                                中英字典
                             </a>
                         </li>
                     </ul>
@@ -832,7 +845,10 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-6">
-
+                                    <ul class="list-group">
+                                        <li class="list-group-item list-group-item-heading list-group-item-info">模组</li>
+                                        <li class="list-group-item" v-for="item in model_list">{{item.model}}</li>
+                                    </ul>
                                 </div>
                                 <div class="col-lg-6">
                                     <ul class="list-group">
@@ -841,6 +857,61 @@
                                     </ul>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="main3" class="tab-content tab-pane fade">
+                <div class="page-title">
+
+                    <div class="title-env">
+                        <h1 class="title">字典</h1>
+                    </div>
+
+                    <div class="breadcrumb-env">
+
+                        <ol class="breadcrumb bc-1">
+                            <li class="active" href="#jig_definition" data-toggle="tab">
+                                <a>中英字典</a>
+                            </li>
+                        </ol>
+
+                    </div>
+
+                </div>
+                <div id="cn_en" class="tab-pane in active">
+                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">中英字典</h3>
+
+                            <div class="panel-options">
+
+                                <a href="#" data-toggle="panel">
+                                    <span class="collapse-icon">–</span>
+                                    <span class="expand-icon">+</span>
+                                </a>
+
+                                <a href="#" data-toggle="reload" @click="getData">
+                                    <i class="fa-rotate-right"></i>
+                                </a>
+
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                <tr>
+                                    <th>英文</th>
+                                    <th>中文</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="item in cn_en_list">
+                                    <td>{{item.english}}</td>
+                                    <td>{{item.chinese}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

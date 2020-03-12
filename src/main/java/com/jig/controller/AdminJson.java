@@ -1,10 +1,8 @@
 package com.jig.controller;
 
-import com.jig.entity.JigPart;
-import com.jig.entity.User;
-import com.jig.entity.Workcell;
+import com.jig.entity.*;
 import com.jig.service.AdminService;
-import com.jig.utils.PoiUtil;
+import com.jig.utils.PoiUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +50,7 @@ public class AdminJson {
                                     @RequestParam("id") String id, @RequestParam("name") String name, @RequestParam("workcell_id") String workcell_id,
                                     @RequestParam("start_date") String start_date, @RequestParam("end_date") String end_date, @RequestParam("file_name") String file_name) throws Exception {
         List<User> userList = adminService.searchUserInformation(submit_id, page_number, id, name, workcell_id, start_date, end_date);
-        PoiUtil.outputFile(response, file_name, userList);
+        PoiUtils.outputFile(response, file_name, userList);
     }
 
     @RequestMapping("download_all_user_info")
@@ -60,10 +58,18 @@ public class AdminJson {
                                     @RequestParam("id") String id, @RequestParam("name") String name, @RequestParam("workcell_id") String workcell_id,
                                     @RequestParam("start_date") String start_date, @RequestParam("end_date") String end_date, @RequestParam("file_name") String file_name) throws Exception {
         List<User> usersList = adminService.searchAllUserInformation(submit_id, id, name, workcell_id, start_date, end_date);
-        PoiUtil.outputFile(response, file_name, usersList);
+        PoiUtils.outputFile(response, file_name, usersList);
     }
     @RequestMapping("get_part")
     public List<JigPart> getPart(){
         return adminService.getPart();
+    }
+    @RequestMapping("get_model")
+    public List<JigModel> getModel(){
+        return adminService.getModel();
+    }
+    @RequestMapping("get_cn_en")
+    public List<CnEn> getCnEn(){
+        return adminService.getCnEn();
     }
 }

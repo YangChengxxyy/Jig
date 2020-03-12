@@ -1,8 +1,6 @@
 package com.jig.service;
 
-import com.jig.entity.JigPart;
-import com.jig.entity.User;
-import com.jig.entity.Workcell;
+import com.jig.entity.*;
 import com.jig.mapper.AdminMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,5 +40,13 @@ public class AdminService {
 
     public List<JigPart> getPart() {
         return adminMapper.getPart();
+    }
+
+    public List<JigModel> getModel() {
+        return adminMapper.getModel();
+    }
+
+    public List<CnEn> getCnEn() {
+        return adminMapper.getCnEn();
     }
 }

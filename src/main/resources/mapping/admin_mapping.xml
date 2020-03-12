@@ -79,4 +79,10 @@
     <select id="getPart" resultType="com.jig.entity.JigPart">
         select * from jig_part_no
     </select>
+    <select id="getModel" resultType="com.jig.entity.JigModel">
+        select * from jig_model
+    </select>
+    <select id="getCnEn" resultType="com.jig.entity.CnEn">
+        select * from cn_en
+    </select>
 </mapper>

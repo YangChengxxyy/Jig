@@ -256,7 +256,8 @@ const jig_definition_detail = new Vue({
 const model_part_info = new Vue({
     el: "#model_part_info",
     data: {
-        part_list:[]
+        part_list:[],
+        model_list:[]
     },
     created: function () {
         this.getData();
@@ -267,6 +268,30 @@ const model_part_info = new Vue({
             $.ajax("admin/get_part",{
                 success(data, textStatus, jqXHR) {
                     that.part_list = data;
+                }
+            });
+            $.ajax("admin/get_model",{
+                success(data, textStatus, jqXHR) {
+                    that.model_list = data;
+                }
+            })
+        }
+    }
+});
+const cn_en = new Vue({
+    el: "#cn_en",
+    data: {
+        cn_en_list:[]
+    },
+    created: function () {
+        this.getData();
+    },
+    methods: {
+        getData:function () {
+            let that = this;
+            $.ajax("admin/get_cn_en",{
+                success(data, textStatus, jqXHR) {
+                    that.cn_en_list = data;
                 }
             })
         }

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.jig.utils.PoiUtil.outputFile;
+import static com.jig.utils.PoiUtils.outputFile;
 
 @Controller
 public class JigWeb {

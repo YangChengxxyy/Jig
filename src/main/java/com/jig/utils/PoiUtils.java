@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * @author YC
  */
-public class PoiUtil {
+public class PoiUtils {
 
     public static <T> HSSFWorkbook getExcel(List<T> list) throws Exception {
         JdbcTemplate jdbcTemplate = (JdbcTemplate) SpringUtil.applicationContext.getBean("jdbcTemplate");

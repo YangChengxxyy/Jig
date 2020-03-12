@@ -1,8 +1,6 @@
 package com.jig.mapper;
 
-import com.jig.entity.JigPart;
-import com.jig.entity.User;
-import com.jig.entity.Workcell;
+import com.jig.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -26,4 +24,8 @@ public interface AdminMapper {
     List<User> searchAllUserInformation(@Param("submit_id") String submit_id, @Param("id") String id, @Param("name") String name, @Param("workcell_id") String workcell_id, @Param("start_date") String start_date, @Param("end_date") String end_date);
 
     List<JigPart> getPart();
+
+    List<JigModel> getModel();
+
+    List<CnEn> getCnEn();
 }
