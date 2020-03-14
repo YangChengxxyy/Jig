@@ -12,20 +12,23 @@ public class InterceptorConfigurer implements WebMvcConfigurer {
     private SessionInterceptor sessionInterceptor;
     @Resource
     private PowerInterceptor powerInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(sessionInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/error",
-                         "/show_login",
-                         "/login_check",
-                         "/css/**",
-                         "/js/**",
-                         "/fonts/**",
-                         "/assets/**",
-                         "/images/**",
-                         "/phone_upload_success");
+                        "/show_login",
+                        "/login_check",
+                        "/css/**",
+                        "/js/**",
+                        "/fonts/**",
+                        "/assets/**",
+                        "/images/**",
+                        "/phone_upload_success",
+                        "/show_demo",
+                        "/get_demo_list");
         registry.addInterceptor(powerInterceptor)
-                .addPathPatterns("/naive/**","/high/**","/supervisor/**","/manager/**","/admin/**");
+                .addPathPatterns("/naive/**", "/high/**", "/supervisor/**", "/manager/**", "/admin/**");
     }
 }

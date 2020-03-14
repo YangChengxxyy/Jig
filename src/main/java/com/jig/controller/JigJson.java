@@ -71,16 +71,20 @@ public class JigJson {
     }
 
     @RequestMapping(value = "get_demo_list", method = {RequestMethod.POST, RequestMethod.GET})
-    public Map<String, Object> getDemoList(@RequestParam(value = "page_number") int pageNumber) {
+    public Map<String, Object> getDemoList(@RequestParam(value = "page_number") int page_number, @RequestParam("page_size") int page_size) {
         List<DemoEntity> a = new ArrayList<>();
         DemoEntity people = new DemoEntity();
         people.setName("yc");
         people.setSex("男");
         people.setStu_no("189050536");
-        for (int i = 0; i < pageNumber; i++) {
+        for (int i = 0; i < page_size; i++) {
             a.add(people);
         }
-        return getStringObjectMap(a, 11);
+        Map<String, Object> map = new HashMap<>();
+        map.put("data", a);
+        map.put("all", 51);
+        map.put("max", (int) Math.ceil(51 / (double) page_size));
+        return map;
     }
 
     /**
@@ -667,7 +671,7 @@ public class JigJson {
      * 定时清除无用对象
      */
     @Scheduled(cron = "0 0 * * * ?")
-    public void removePhoneUploadMap(){
+    public void removePhoneUploadMap() {
         phoneUploadMap = new HashMap<>();
         Log log = LogFactory.getLog(this.getClass());
         log.info(" => removePhoneUploadMap");

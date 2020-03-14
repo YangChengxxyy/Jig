@@ -260,11 +260,6 @@
                                 <span class="title">个人信息管理</span>
                             </a>
                         </li>
-                        <li href="#power_manage" data-toggle="tab">
-                            <a href="#power_manage" data-toggle="tab">
-                                <span class="title">权限管理</span>
-                            </a>
-                        </li>
                     </ul>
                 </li>
                 <li class="main-menu-li">
@@ -503,9 +498,6 @@
                             <li class="active" href="#information_manage" data-toggle="tab">
                                 <a>个人信息管理</a>
                             </li>
-                            <li href="#power_manage" data-toggle="tab">
-                                <a>权限管理</a>
-                            </li>
                         </ol>
 
                     </div>
@@ -620,30 +612,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="power_manage" class="tab-pane">
-                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
-                        <div class="panel-heading">
-                            <h3 class="panel-title">权限管理</h3>
 
-                            <div class="panel-options">
-
-                                <a href="#" data-toggle="panel">
-                                    <span class="collapse-icon">–</span>
-                                    <span class="expand-icon">+</span>
-                                </a>
-
-                                <a href="#" data-toggle="reload" @click="getData">
-                                    <i class="fa-rotate-right"></i>
-                                </a>
-
-                            </div>
-                        </div>
-                        <div class="panel-body">
-
-
-                        </div>
-                    </div>
-                </div>
             </div>
             <div id="main2" class="tab-content tab-pane fade">
                 <div class="page-title">
@@ -788,7 +757,7 @@
                                     <div class="col-sm-3">
                                         <input type="text" class="form-control" v-model.trim="code">
                                     </div>
-                                    <label class="col-sm-2 control-label" for="jig_name">工夹具名字</label>
+                                    <label class="col-sm-2 control-label" for="jig_name">工夹具序列号</label>
                                     <div class="col-sm-3">
                                         <input type="text" class="form-control" v-model.trim="name">
                                     </div>
@@ -845,16 +814,32 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-6">
-                                    <ul class="list-group">
-                                        <li class="list-group-item list-group-item-heading list-group-item-info">模组</li>
-                                        <li class="list-group-item" v-for="item in model_list">{{item.model}}</li>
-                                    </ul>
+                                    <table class="table table-bordered table-striped table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>模组</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr v-for="item in model_list">
+                                            <td>{{item.model}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                                 <div class="col-lg-6">
-                                    <ul class="list-group">
-                                        <li class="list-group-item list-group-item-heading list-group-item-info">料号</li>
-                                        <li class="list-group-item" v-for="item in part_list">{{item.part_no}}</li>
-                                    </ul>
+                                    <table class="table table-bordered table-striped table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>料号</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr v-for="item in part_list">
+                                            <td>{{item.part_no}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
