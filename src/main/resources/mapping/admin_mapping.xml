@@ -33,7 +33,7 @@
                 user.entry_date between #{start_date} and #{end_date}
             </if>
         </where>
-        limit #{page_number},5
+        limit #{page_number},#{page_size}
     </select>
     <select id="getUserInformationPage" resultType="java.lang.Integer">
         select count(*)

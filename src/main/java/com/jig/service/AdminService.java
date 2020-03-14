@@ -12,14 +12,13 @@ public class AdminService {
     @Autowired
     private AdminMapper adminMapper;
 
-    public List<User> searchUserInformation(String submit_id, int page_number, String id, String name, String workcell_id, String start_date, String end_date) {
-        page_number = (page_number - 1) * 5;
-        return adminMapper.getUserInformation(submit_id, page_number,id,name,workcell_id,start_date,end_date);
+    public List<User> searchUserInformation(String submit_id, int page_number,int page_size, String id, String name, String workcell_id, String start_date, String end_date) {
+        page_number = (page_number - 1) * page_size;
+        return adminMapper.getUserInformation(submit_id, page_number,page_size,id,name,workcell_id,start_date,end_date);
     }
 
     public int searchUserInformationPage(String submit_id, String id, String name, String workcell_id, String start_date, String end_date) {
-        int a = adminMapper.getUserInformationPage(submit_id,id,name,workcell_id,start_date,end_date);
-        return (int) Math.ceil(a / 5.0);
+        return adminMapper.getUserInformationPage(submit_id,id,name,workcell_id,start_date,end_date);
     }
 
     public List<Workcell> getWorkcellList() {

@@ -21,12 +21,14 @@ public class AdminJson {
     private AdminService adminService;
 
     @RequestMapping("search_user_information")
-    public Map<String, Object> searchUserInformation(@RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number,
+    public Map<String, Object> searchUserInformation(@RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size,
                                                      @RequestParam("id") String id, @RequestParam("name") String name, @RequestParam("workcell_id") String workcell_id,
                                                      @RequestParam("start_date") String start_date, @RequestParam("end_date") String end_date) {
         Map<String, Object> map = new HashMap<>(2);
-        map.put("data", adminService.searchUserInformation(submit_id, page_number, id, name, workcell_id, start_date, end_date));
-        map.put("max", adminService.searchUserInformationPage(submit_id, id, name, workcell_id, start_date, end_date));
+        map.put("data", adminService.searchUserInformation(submit_id, page_number, page_size, id, name, workcell_id, start_date, end_date));
+        int all = adminService.searchUserInformationPage(submit_id, id, name, workcell_id, start_date, end_date);
+        map.put("max", (int) Math.ceil(all / (double) page_size));
+        map.put("all", all);
         return map;
     }
 
@@ -47,9 +49,10 @@ public class AdminJson {
 
     @RequestMapping("download_one_user_info")
     public void downloadOneUserInfo(HttpServletResponse response, @RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number,
+                                    @RequestParam("page_size")int page_size,
                                     @RequestParam("id") String id, @RequestParam("name") String name, @RequestParam("workcell_id") String workcell_id,
                                     @RequestParam("start_date") String start_date, @RequestParam("end_date") String end_date, @RequestParam("file_name") String file_name) throws Exception {
-        List<User> userList = adminService.searchUserInformation(submit_id, page_number, id, name, workcell_id, start_date, end_date);
+        List<User> userList = adminService.searchUserInformation(submit_id, page_number,page_size, id, name, workcell_id, start_date, end_date);
         PoiUtils.outputFile(response, file_name, userList);
     }
 
@@ -60,16 +63,19 @@ public class AdminJson {
         List<User> usersList = adminService.searchAllUserInformation(submit_id, id, name, workcell_id, start_date, end_date);
         PoiUtils.outputFile(response, file_name, usersList);
     }
+
     @RequestMapping("get_part")
-    public List<JigPart> getPart(){
+    public List<JigPart> getPart() {
         return adminService.getPart();
     }
+
     @RequestMapping("get_model")
-    public List<JigModel> getModel(){
+    public List<JigModel> getModel() {
         return adminService.getModel();
     }
+
     @RequestMapping("get_cn_en")
-    public List<CnEn> getCnEn(){
+    public List<CnEn> getCnEn() {
         return adminService.getCnEn();
     }
 }

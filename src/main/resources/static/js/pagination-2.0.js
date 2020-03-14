@@ -26,8 +26,8 @@ let page = {
         }
     },
     template:
-        "<div class=\"container\" id=\"test\" v-if=\"max_page_number != 0\">\n" +
-        "    <div class=\"col-lg-4 col-sm-3 text-right\">\n" +
+        "<div id=\"test\" v-if=\"max_page_number != 0\">\n" +
+        "    <div class=\"col-lg-4 col-sm-3 text-left\">\n" +
         "\n" +
         "        <div style=\"height: 34px;margin: 20px 0;display: inline-block;position: relative;top: -30px\">\n" +
         "            共{{all_count}}条记录，每页\n" +
@@ -121,7 +121,7 @@ let page = {
         "            </div>\n" +
         "        </div>\n" +
         "    </div>\n" +
-        "    <div class=\"col-lg-4 col-sm-3 text-left\">\n" +
+        "    <div class=\"col-lg-4 col-sm-3 text-right\">\n" +
         "        <div style=\"margin: 20px 0;padding: 6px 0;display: inline-block\">\n" +
         "            共{{max_page_number}}页，跳转至第\n" +
         "        </div>\n" +
@@ -129,7 +129,7 @@ let page = {
         "        <div style=\"margin: 20px 0;padding: 6px 0;display: inline-block\">\n" +
         "            页\n" +
         "        </div>\n" +
-        "        <button type=\"button\" class=\"btn btn-default\" style=\"position: relative;top: -1px\" @click=\"turn_page(change_page_number)\">确定</button>\n" +
+        "        <button type=\"button\" class=\"btn btn-primary\" style=\"position: relative;top: 2px\" @click=\"turn_page(change_page_number)\">确定</button>\n" +
         "    </div>\n" +
         "</div>",
     methods: {

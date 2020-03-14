@@ -1,4 +1,5 @@
 Vue.component('v-chart', VueECharts);
+Vue.component('my-pagination', page);
 let production_line_list = [];
 let code_list = [];
 let workcell_list = [];
@@ -44,8 +45,12 @@ const information_manage = new Vue({
     el: "#information_manage",
     data: {
         user_list: [],
-        now_page_number: 1,
+
         max_page_number: 0,
+        now_page_number: 1,
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0,
 
         workcell_list: workcell_list,
         id: "",
@@ -64,6 +69,7 @@ const information_manage = new Vue({
                 data: {
                     submit_id: id,
                     page_number: that.now_page_number,
+                    page_size:that.now_page_size,
                     id: that.id,
                     name: that.name,
                     workcell_id: that.workcell_id,
@@ -73,6 +79,7 @@ const information_manage = new Vue({
                 success(data, textStatus, jqXHR) {
                     that.user_list = data["data"];
                     that.max_page_number = data["max"];
+                    that.all_count = data['all'];
                 }
             });
         },
@@ -256,21 +263,21 @@ const jig_definition_detail = new Vue({
 const model_part_info = new Vue({
     el: "#model_part_info",
     data: {
-        part_list:[],
-        model_list:[]
+        part_list: [],
+        model_list: []
     },
     created: function () {
         this.getData();
     },
     methods: {
-        getData:function(){
+        getData: function () {
             let that = this;
-            $.ajax("admin/get_part",{
+            $.ajax("admin/get_part", {
                 success(data, textStatus, jqXHR) {
                     that.part_list = data;
                 }
             });
-            $.ajax("admin/get_model",{
+            $.ajax("admin/get_model", {
                 success(data, textStatus, jqXHR) {
                     that.model_list = data;
                 }
@@ -281,15 +288,15 @@ const model_part_info = new Vue({
 const cn_en = new Vue({
     el: "#cn_en",
     data: {
-        cn_en_list:[]
+        cn_en_list: []
     },
     created: function () {
         this.getData();
     },
     methods: {
-        getData:function () {
+        getData: function () {
             let that = this;
-            $.ajax("admin/get_cn_en",{
+            $.ajax("admin/get_cn_en", {
                 success(data, textStatus, jqXHR) {
                     that.cn_en_list = data;
                 }
