@@ -14,42 +14,43 @@
         from user
         where id = #{id}
     </delete>
-<!--id name workcell_id start_date end_date -->
+    <!--id name workcell_id start_date end_date -->
     <select id="getUserInformation" resultType="com.jig.entity.User">
         select `user`.*, w.workcell
         from `user`
-                 left join workcell w on user.workcell_id = w.id
+        left join workcell w on user.workcell_id = w.id
         <where>
             <if test="id != ''">
-             user.id like concat('%',#{id},'%')
+                user.id like concat('%',#{id},'%')
             </if>
             <if test="name != ''">
-                user.id like concat('%',#{name},'%')
+                and user.name like concat('%',#{name},'%')
             </if>
             <if test="workcell_id != ''">
-                user.workcell_id = #{workcell_id}
+                and user.workcell_id = #{workcell_id}
             </if>
             <if test="start_date != end_date">
-                user.entry_date between #{start_date} and #{end_date}
+                and user.entry_date between #{start_date} and #{end_date}
             </if>
         </where>
         limit #{page_number},#{page_size}
     </select>
     <select id="getUserInformationPage" resultType="java.lang.Integer">
         select count(*)
-        from user
+        from `user`
+        left join workcell w on user.workcell_id = w.id
         <where>
             <if test="id != ''">
                 user.id like concat('%',#{id},'%')
             </if>
             <if test="name != ''">
-                user.name like concat('%',#{name},'%')
+                and user.name like concat('%',#{name},'%')
             </if>
             <if test="workcell_id != ''">
-                user.workcell_id = #{workcell_id}
+                and user.workcell_id = #{workcell_id}
             </if>
             <if test="start_date != end_date">
-                user.entry_date between #{start_date} and #{end_date}
+                and user.entry_date between #{start_date} and #{end_date}
             </if>
         </where>
     </select>
@@ -77,12 +78,15 @@
         </where>
     </select>
     <select id="getPart" resultType="com.jig.entity.JigPart">
-        select * from jig_part_no
+        select *
+        from jig_part_no
     </select>
     <select id="getModel" resultType="com.jig.entity.JigModel">
-        select * from jig_model
+        select *
+        from jig_model
     </select>
     <select id="getCnEn" resultType="com.jig.entity.CnEn">
-        select * from cn_en
+        select *
+        from cn_en
     </select>
 </mapper>
