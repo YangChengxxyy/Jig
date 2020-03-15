@@ -82,8 +82,9 @@ public class JigWeb {
     public void highDownloadOnePurchaseHistory(HttpServletResponse response, @RequestParam(value = "bill_no") String bill_no, @RequestParam(value = "submit_name") String submit_name,
                                                @RequestParam(value = "code") String code, @RequestParam(value = "production_line_id") String production_line_id,
                                                @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
-                                               @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number, @RequestParam(value = "file_name") String file_name) throws Exception {
-        List<PurchaseIncomeHistory> list = jigService.highSearchPurchaseIncomeHistory(bill_no, submit_name, code, production_line_id, status, start_date, end_date, page_number);
+                                               @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number,
+                                               @RequestParam(value = "file_name") String file_name, @RequestParam("page_size") int page_size) throws Exception {
+        List<PurchaseIncomeHistory> list = jigService.highSearchPurchaseIncomeHistory(bill_no, submit_name, code, production_line_id, status, start_date, end_date, page_number, page_size);
         outputFile(response, file_name, list);
     }
 
@@ -114,9 +115,9 @@ public class JigWeb {
                                             @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id,
                                             @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
                                             @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number,
-                                            @RequestParam(value = "scrap_reason") String scrap_reason,
+                                            @RequestParam("page_size")int page_size,@RequestParam(value = "scrap_reason") String scrap_reason,
                                             @RequestParam(value = "file_name") String file_name) throws Exception {
-        List<ScrapHistory> list = jigService.highSearchScrapHistory(code, seq_id, submit_id, scrap_reason, status, start_date, end_date, page_number);
+        List<ScrapHistory> list = jigService.highSearchScrapHistory(code, seq_id, submit_id, scrap_reason, status, start_date, end_date, page_number,page_size);
         outputFile(response, file_name, list);
     }
 

@@ -71,7 +71,7 @@
                 and user_for like concat('%',#{userFor},'%')
             </if>
         </where>
-        limit #{pageNumber},5
+        limit #{pageNumber},#{page_size}
     </select>
     <select id="naiveSearchJigDefinitionPage" resultType="java.lang.Integer">
         SELECT count(*)
@@ -200,7 +200,7 @@
         <if test="start_date != end_date">
             and ph.submit_time between #{start_date} and #{end_date}
         </if>
-        limit #{page_number},5
+        limit #{page_number},#{page_size}
     </select>
     <select id="highSearchPurchaseIncomeHistoryPage" resultType="java.lang.Integer">
         select count(*)
@@ -262,7 +262,7 @@
                  left join `user` u1 on rs.submit_id = u1.id
                  left join `user` u2 on rs.acceptor_id = u2.id
         where u1.workcell_id in (select user.workcell_id from user where id = #{id})
-        limit #{page_number},5
+        limit #{page_number},#{page_size}
     </select>
     <select id="highGetRepairJigPage" resultType="java.lang.Integer">
         select count(*)
@@ -277,21 +277,21 @@
         left join user u1 on rh.submit_id = u1.id
         left join user u2 on rh.acceptor_id = u2.id
         where u1.workcell_id in (select user.workcell_id from user where id = #{id})
-            <if test="code != null and code != ''">
-                and rh.code like concat('%',#{code},'%')
-            </if>
-            <if test="seq_id != null and seq_id !=''">
-                and rh.seq_id = #{seq_id}
-            </if>
-            <if test="submit_name != null and submit_name != ''">
-                and u1.name like concat('%',#{submit_name},'%')
-            </if>
-            <if test="status != null and status != ''">
-                and rh.status = #{status}
-            </if>
-            <if test="start_date != end_date">
-                and rh.submit_time between #{start_date} and #{end_date}
-            </if>
+        <if test="code != null and code != ''">
+            and rh.code like concat('%',#{code},'%')
+        </if>
+        <if test="seq_id != null and seq_id !=''">
+            and rh.seq_id = #{seq_id}
+        </if>
+        <if test="submit_name != null and submit_name != ''">
+            and u1.name like concat('%',#{submit_name},'%')
+        </if>
+        <if test="status != null and status != ''">
+            and rh.status = #{status}
+        </if>
+        <if test="start_date != end_date">
+            and rh.submit_time between #{start_date} and #{end_date}
+        </if>
         limit #{page_number},5
     </select>
     <select id="highSearchAllRepairHistory" resultType="com.jig.entity.RepairJig">
@@ -300,21 +300,21 @@
         left join user u1 on rh.submit_id = u1.id
         left join user u2 on rh.acceptor_id = u2.id
         where u1.workcell_id in (select user.workcell_id from user where id = #{id})
-            <if test="code != null and code != ''">
-                and rh.code like concat('%',#{code},'%')
-            </if>
-            <if test="seq_id != null and seq_id !=''">
-                and rh.seq_id = #{seq_id}
-            </if>
-            <if test="submit_name != null and submit_name != ''">
-                and u1.name like concat('%',#{submit_name},'%')
-            </if>
-            <if test="status != null and status != ''">
-                and rh.status = #{status}
-            </if>
-            <if test="start_date != end_date">
-                and rh.submit_time between #{start_date} and #{end_date}
-            </if>
+        <if test="code != null and code != ''">
+            and rh.code like concat('%',#{code},'%')
+        </if>
+        <if test="seq_id != null and seq_id !=''">
+            and rh.seq_id = #{seq_id}
+        </if>
+        <if test="submit_name != null and submit_name != ''">
+            and u1.name like concat('%',#{submit_name},'%')
+        </if>
+        <if test="status != null and status != ''">
+            and rh.status = #{status}
+        </if>
+        <if test="start_date != end_date">
+            and rh.submit_time between #{start_date} and #{end_date}
+        </if>
     </select>
     <select id="highSearchRepairHistoryPage" resultType="java.lang.Integer">
         select count(*)
@@ -347,7 +347,7 @@
                  left join `user` u2 on ss.first_acceptor = u2.id
                  left join `user` u3 on ss.final_acceptor = u3.id
         where ss.submit_id = #{submit_id}
-        limit #{page_number},5
+        limit #{page_number},#{page_size}
     </select>
     <select id="highGetScrapPage" resultType="java.lang.Integer">
         select count(*)
@@ -469,9 +469,14 @@
         where submit_id = #{submit_id};
     </select>
     <select id="highGetRepairCount" resultType="java.lang.Integer">
-        select count(*) from repair_submit where submit_id = #{submit_id}
+        select count(*)
+        from repair_submit
+        where submit_id = #{submit_id}
     </select>
     <select id="highGetRepairBasic" resultType="java.util.Map">
-        select code as name,count(0) as `value` from repair_submit where submit_id = #{submit_id} group by code
+        select code as name, count(0) as `value`
+        from repair_submit
+        where submit_id = #{submit_id}
+        group by code
     </select>
 </mapper>

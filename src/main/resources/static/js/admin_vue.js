@@ -69,7 +69,7 @@ const information_manage = new Vue({
                 data: {
                     submit_id: id,
                     page_number: that.now_page_number,
-                    page_size:that.now_page_size,
+                    page_size: that.now_page_size,
                     id: that.id,
                     name: that.name,
                     workcell_id: that.workcell_id,
@@ -196,8 +196,12 @@ const jig_definition = new Vue({
         family: "",
         user_for: "",
         code: "",
+
+        max_page_number: 0,
         now_page_number: 1,
-        max_page_number: 0
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0
     },
     methods: {
         getData: function () {
@@ -209,7 +213,8 @@ const jig_definition = new Vue({
                     workcell: this.workcell,
                     family: this.family,
                     user_for: this.user_for,
-                    page_number: this.now_page_number
+                    page_number: this.now_page_number,
+                    page_size: this.now_page_size
                 },
                 success: function (res) {
                     if (res.data.length === 0) {
@@ -217,6 +222,7 @@ const jig_definition = new Vue({
                     } else {
                         that.jig_list = res['data'];
                         that.max_page_number = res['max'];
+                        that.all_count = res['all'];
                     }
                 }
             })

@@ -1,4 +1,5 @@
 Vue.component('v-chart', VueECharts);
+Vue.component('my-pagination', page);
 let production_line_list = [];
 let code_list = [];
 let id = $("#id").val();
@@ -29,8 +30,11 @@ const show_myshoplist = new Vue({
         change_count: [],
         change_id: null,
         //分页所需
+        max_page_number: 0,
         now_page_number: 1,
-        max_page_number: 0
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0
     },
     created: function () {
         this.getData();
@@ -40,15 +44,17 @@ const show_myshoplist = new Vue({
             const that = this;
             $.ajax("high/get_purchase_income_submit_list", {
                 data: {
-                    page_number: this.now_page_number
+                    page_number: this.now_page_number,
+                    page_size: this.now_page_size
                 },
                 success: function (res) {
                     $.each(res.data, function (i, v) {
                         v.code = v.code.split("|");
                         v.count = v.count.split("|");
                     });
-                    that.purchase_income_submit_list = res.data;
-                    that.max_page_number = res.max;
+                    that.purchase_income_submit_list = res['data'];
+                    that.max_page_number = res['max'];
+                    that.all_count = res['all'];
                 }
             })
         },
@@ -222,8 +228,11 @@ const historyShop = new Vue({
         status: "",
         date_range: '',
         history_list: [],
-        now_page_number: 1,
         max_page_number: 0,
+        now_page_number: 1,
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0,
         history: null
     },
     methods: {
@@ -253,7 +262,8 @@ const historyShop = new Vue({
                     status: this.status,
                     start_date: splits[0],
                     end_date: splits[1],
-                    page_number: this.now_page_number
+                    page_number: this.now_page_number,
+                    page_size: this.now_page_size
                 },
                 success: function (res) {
                     if (res.data.length === 0) {
@@ -265,6 +275,7 @@ const historyShop = new Vue({
                         });
                         that.history_list = res.data;
                         that.max_page_number = res.max;
+                        that.all_count = res['all'];
                     }
                 }
             });
@@ -297,8 +308,11 @@ const historyShop = new Vue({
 const myrepair = new Vue({
     el: "#myrepair",
     data: {
-        now_page_number: 1,
         max_page_number: 0,
+        now_page_number: 1,
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0,
         repair_list: [],
         repair: null
     },
@@ -312,10 +326,12 @@ const myrepair = new Vue({
                 data: {
                     id: id,
                     page_number: this.now_page_number,
+                    page_size: this.page_size,
                 },
                 success: function (res) {
                     that.repair_list = res['data'];
                     that.max_page_number = res['max'];
+                    that.all_count = res['all'];
                 }
             })
         },
@@ -338,8 +354,11 @@ const historyMyrepair = new Vue({
         date_range: "",
         history_list: [],
         history: null,
+        max_page_number: 0,
         now_page_number: 1,
-        max_page_number: 0
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0
     },
     methods: {
         getData: function () {
@@ -357,7 +376,8 @@ const historyMyrepair = new Vue({
                     status: this.status,
                     start_date: splits[0],
                     end_date: splits[1],
-                    page_number: this.now_page_number
+                    page_number: this.now_page_number,
+                    page_size: this.now_page_size
                 },
                 success: function (res) {
                     if (res['data'].length === 0) {
@@ -366,6 +386,7 @@ const historyMyrepair = new Vue({
                     }
                     that.history_list = res['data'];
                     that.max_page_number = res['max'];
+                    that.all_count = res['all'];
                 }
             })
         },
@@ -396,7 +417,7 @@ const historyMyrepair = new Vue({
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            return "high/download_one_repair_history?id=" + id + "&code=" + this.code + "&seq_id=" + this.seq_id + "&submit_name=" + this.submit_name + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls";
+            return "high/download_one_repair_history?id=" + id + "&code=" + this.code + "&seq_id=" + this.seq_id + "&submit_name=" + this.submit_name + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls&page_size=" + this.now_page_size;
         },
         allPageUrl: function () {
             let splits = this.date_range.split(" - ");
@@ -410,8 +431,12 @@ const historyMyrepair = new Vue({
 const myscrap = new Vue({
     el: "#myscrap",
     data: {
-        now_page_number: 1,
         max_page_number: 0,
+        now_page_number: 1,
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0,
+
         scrap_list: [],
         scrap: null,
         code_list: code_list,
@@ -436,11 +461,13 @@ const myscrap = new Vue({
             $.ajax("high/get_scrap", {
                 data: {
                     submit_id: id,
-                    page_number: this.now_page_number
+                    page_number: this.now_page_number,
+                    page_size: this.now_page_size
                 },
                 success: function (res) {
                     that.scrap_list = res['data'];
                     that.max_page_number = res['max'];
+                    that.all_count = res['all'];
                 }
             });
         },
@@ -603,8 +630,12 @@ const historyMyscrap = new Vue({
         scrap_reason: "",
         status: "",
         date_range: "",
+
+        max_page_number: 0,
         now_page_number: 1,
-        max_page_number: 0
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0
     },
     methods: {
         getData: function () {
@@ -622,7 +653,8 @@ const historyMyscrap = new Vue({
                     status: this.status,
                     start_date: splits[0],
                     end_date: splits[1],
-                    page_number: this.now_page_number
+                    page_number: this.now_page_number,
+                    page_size: this.now_page_size
                 },
                 success: function (res) {
                     if (res.data.length === 0) {
@@ -630,6 +662,7 @@ const historyMyscrap = new Vue({
                     } else {
                         that.scarp_history = res['data'];
                         that.max_page_number = res['max'];
+                        that.now_page_size = res['all'];
                     }
                 }
             })
@@ -686,8 +719,12 @@ const seqInfo = new Vue({
         family: "",
         user_for: "",
         code: "",
+
+        max_page_number: 0,
         now_page_number: 1,
-        max_page_number: 0
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0
     },
     methods: {
         getData: function () {
@@ -699,7 +736,8 @@ const seqInfo = new Vue({
                     workcell: this.workcell,
                     family: this.family,
                     user_for: this.user_for,
-                    page_number: this.now_page_number
+                    page_number: this.now_page_number,
+                    page_size: this.now_page_size
                 },
                 success: function (res) {
                     if (res.data.length === 0) {
@@ -707,6 +745,7 @@ const seqInfo = new Vue({
                     } else {
                         that.jig_list = res['data'];
                         that.max_page_number = res['max'];
+                        that.all_count = res['all'];
                     }
                 }
             })

@@ -4,7 +4,7 @@
  * 重点有$parent要有getData()方法
  * 例如：
  *       let that = this;
-            $.ajax( url, {
+ $.ajax( url, {
                 data: {
                         page_number: that.now_page_number,
                         page_size: that.now_page_size，
@@ -20,8 +20,8 @@
  */
 let page = {
     props: ['now_page_number', 'now_page_size', 'max_page_number', 'page_size_list', 'all_count'],
-    data(){
-        return{
+    data() {
+        return {
             change_page_number: 1
         }
     },
@@ -160,3 +160,13 @@ let page = {
         }
     }
 };
+// var a = {
+//     max_page_number: 0,
+//     now_page_number: 1,
+//     now_page_size: 5,
+//     page_size_list: ['5', '10', '15', '20'],
+//     all_count: 0
+// };
+// <my-pagination :now_page_number="now_page_number" :now_page_size="now_page_size" :max_page_number="max_page_number"
+// :page_size_list="page_size_list" :all_count="all_count"
+//     ></my-pagination>
