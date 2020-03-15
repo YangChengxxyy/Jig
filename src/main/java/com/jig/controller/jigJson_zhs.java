@@ -289,6 +289,8 @@ public class jigJson_zhs {
                                                                @RequestParam("status") String status,
                                                                @RequestParam("scrap_reason") String scrap_reason,
                                                                @RequestParam("page_number") int page_number){
+        String workcell_id = "7";
+
         Map<Object,Object> map = new HashMap<>(2);
         page_number = (page_number-1)*5;
         String start_date = "";
@@ -297,8 +299,8 @@ public class jigJson_zhs {
             start_date = submit_time.substring(0,10);
             end_date = submit_time.substring(13);
         }
-        List<ScrapSubmit> list = jigService.get_manager_scrap_submit_list_history(code,submit_name,start_date,end_date,status,scrap_reason,page_number);
-        int max_page = jigService.get_manager_scrap_submit_list_history_pages(code,submit_name,start_date,end_date,status,scrap_reason);
+        List<ScrapSubmit> list = jigService.get_manager_scrap_submit_list_history(code,submit_name,start_date,end_date,status,scrap_reason,page_number,workcell_id);
+        int max_page = jigService.get_manager_scrap_submit_list_history_pages(code,submit_name,start_date,end_date,status,scrap_reason,workcell_id);
 
         map.put("data",list);
         map.put("max",max_page);

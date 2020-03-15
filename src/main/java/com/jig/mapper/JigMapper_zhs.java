@@ -1,6 +1,7 @@
 package com.jig.mapper;
 
 import com.jig.entity.*;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -120,14 +121,16 @@ public interface JigMapper_zhs {
                                                             @Param("end_date") String end_date,
                                                             @Param("status") String status,
                                                             @Param("scrap_reason") String scrap_reason,
-                                                            @Param("page_number") int page_number);
+                                                            @Param("page_number") int page_number,
+                                                            @Param("workcell_id") String workcell_id);
 
     int get_manager_scrap_submit_list_history_pages(@Param("code") String code,
                                                     @Param("submit_name") String submit_name,
                                                     @Param("start_date") String start_date,
                                                     @Param("end_date") String end_date,
                                                     @Param("status") String status,
-                                                    @Param("scrap_reason") String scrap_reason);
+                                                    @Param("scrap_reason") String scrap_reason,
+                                                    @Param("workcell_id") String workcell_id);
 
     /**经理模式,获取仓库工夹具余量
      *

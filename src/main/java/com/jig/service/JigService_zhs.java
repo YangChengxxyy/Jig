@@ -117,13 +117,13 @@ public class JigService_zhs {
 
 
 
-    //经理模式，历史审批记录list的查询显示及其页数查询
-    public List<ScrapSubmit> get_manager_scrap_submit_list_history(String code,String submit_name,String start_date,String end_date,String status,String scrap_reason,int page_number){
-        return jigMapper.get_manager_scrap_submit_list_history(code,submit_name,start_date,end_date,status,scrap_reason,page_number);
+    //经理模式，历史报废审批记录list的查询显示及其页数查询
+    public List<ScrapSubmit> get_manager_scrap_submit_list_history(String code,String submit_name,String start_date,String end_date,String status,String scrap_reason,int page_number,String workcell_id){
+        return jigMapper.get_manager_scrap_submit_list_history(code,submit_name,start_date,end_date,status,scrap_reason,page_number,workcell_id);
     }
 
-    public int get_manager_scrap_submit_list_history_pages(String code,String submit_name,String start_date,String end_date,String status,String scrap_reason){
-        int max_page = jigMapper.get_manager_scrap_submit_list_history_pages(code,submit_name,start_date,end_date,status,scrap_reason);
+    public int get_manager_scrap_submit_list_history_pages(String code,String submit_name,String start_date,String end_date,String status,String scrap_reason,String workcell_id){
+        int max_page = jigMapper.get_manager_scrap_submit_list_history_pages(code,submit_name,start_date,end_date,status,scrap_reason,workcell_id);
         return (int)Math.ceil(max_page/5.0);
     }
 
