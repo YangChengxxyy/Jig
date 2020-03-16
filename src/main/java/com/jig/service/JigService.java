@@ -22,8 +22,8 @@ public class JigService {
     }
 
     public int naiveSearchJigDefinitionPage(String code, String name, String workcell, String family, String userFor) {
-        int a = jigMapper.naiveSearchJigDefinitionPage(code, name, workcell, family, userFor);
-        return (int) Math.ceil(a / 5.0);
+        return jigMapper.naiveSearchJigDefinitionPage(code, name, workcell, family, userFor);
+
     }
 
     public JigDefinition getSimpleJigDefinition(String id) {
