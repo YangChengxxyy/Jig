@@ -242,19 +242,6 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <div class="btn-group row-margin-bottom">
-                                        <select id="sela"
-                                                class="form-control"
-                                                v-model="edit_select_part_no_list" multiple>
-                                            <option :value="item.part_no"
-                                                    v-for="item in part_no_list">
-                                                {{item.part_no}}
-                                            </option>
-                                        </select>
-                                        <div v-for="item in edit_select_part_no_list">
-                                            {{item}}
-                                        </div>
-                                    </div>
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                             <label class="control-label">类别</label>
@@ -355,290 +342,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--查看工夹具信息-->
-                                <div class="modal fade" id="jig_info_detail" role="dialog"
-                                     aria-labelledby="checkLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                        aria-hidden="true">&times;
-                                                </button>
-                                                <h4 class="modal-title">工夹具明细</h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="form-horizontal" v-if="jig_info_detail!= null">
-                                                    <div class="form-group">
-                                                        <label class="col-sm-3 control-label">工夹具代码</label>
-                                                        <div class="col-sm-8">
-                                                            <div type="text" class="form-control">
-                                                                {{jig_info_detail.code}}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-3 control-label">工夹具名字</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="form-control">{{jig_info_detail.name}}</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-3 control-label">所属部门</label>
-                                                        <div class="col-sm-8">
-                                                            <div type="text" class="form-control">
-                                                                {{jig_info_detail.workcell}}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-3 control-label">类别</label>
-                                                        <div class="col-sm-8">
-                                                            <div type="text" class="form-control">
-                                                                {{jig_info_detail.family}}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-3 control-label">工夹具模组</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="form-control">{{jig_info_detail.model}}</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-3 control-label">工夹具料号</label>
-                                                        <div class="col-sm-8">
-                                                            <select class="form-control">
-                                                                <option v-for="item in jig_info_detail.part_no.split('|')">
-                                                                    {{item}}
-                                                                </option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-3 control-label">用途</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="form-control">
-                                                                {{jig_info_detail.user_for}}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-3 control-label">每条产线所需</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="form-control">
-                                                                {{jig_info_detail.upl}}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-3 control-label">责任人</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="form-control">
-                                                                {{jig_info_detail.owner_name}}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-3 control-label">录入人</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="form-control">
-                                                                {{jig_info_detail.rec_by_name}}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-3 control-label">录入时间</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="form-control">
-                                                                {{jig_info_detail.rec_time}}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-3 control-label">修改人</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="form-control">
-                                                                {{jig_info_detail.edit_by_name}}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-3 control-label">修改时间</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="form-control">
-                                                                {{jig_info_detail.edit_time}}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-3 control-label">保养点检周期</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="form-control">
-                                                                {{jig_info_detail.pm_period}}天
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default"
-                                                        data-dismiss="modal">关闭
-                                                </button>
-                                            </div>
-                                        </div><!-- /.modal-content -->
-                                    </div><!-- /.modal -->
-                                </div><!--工夹具明细-->
 
-                                <!--编辑工夹具信息-->
-                                <div>
-                                    <div class="modal fade" id="edit_jig_info" role="dialog"
-                                         aria-labelledby="myModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                            aria-hidden="true">&times;
-                                                    </button>
-                                                    <h4 class="modal-title">编辑工夹具信息</h4>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="form-horizontal" v-if="edit_jig_info_detail!= null">
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">工夹具代码</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="text" class="form-control"
-                                                                       v-model.trim="edit_jig_info_detail.code">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">工夹具名字</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="text" class="form-control"
-                                                                       v-model.trim="edit_jig_info_detail.name">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">所属部门</label>
-                                                            <div class="col-sm-8">
-                                                                <select class="form-control"
-                                                                        v-model="edit_jig_info_detail.workcell">
-                                                                    <option v-for="item in workcell_list"
-                                                                            :value="item.workcell">{{item.workcell}}
-                                                                    </option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">类别</label>
-                                                            <div class="col-sm-8">
-                                                                <select class="form-control"
-                                                                        v-model="edit_jig_info_detail.family">
-                                                                    <option v-for="item in family_list"
-                                                                            :value="item.family">{{item.family}}
-                                                                    </option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">工夹具模组</label>
-                                                            <div class="col-sm-8">
-                                                                <select class="form-control"
-                                                                        v-model="edit_jig_info_detail.model">
-                                                                    <option v-for="item in model_list"
-                                                                            :value="item.model">
-                                                                        {{item.model}}
-                                                                    </option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">工夹具料号</label>
-                                                            <div class="col-sm-8">
-                                                                <select id="sel_edit_jig_part_no"
-                                                                        class="form-control"
-                                                                        v-model="edit_select_part_no_list" multiple>
-                                                                    <option :value="item.part_no"
-                                                                            v-for="item in part_no_list">
-                                                                        {{item.part_no}}
-                                                                    </option>
-                                                                </select>
-
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">用途</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="text" class="form-control"
-                                                                       v-model="edit_jig_info_detail.user_for">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">每条产线所需</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="number" class="form-control"
-                                                                       v-model="edit_jig_info_detail.upl">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">责任人</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="text" class="form-control"
-                                                                       v-model="edit_jig_info_detail.owner_name"
-                                                                       readonly>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">录入人</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="text" class="form-control"
-                                                                       v-model="edit_jig_info_detail.rec_by_name"
-                                                                       readonly>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">录入时间</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="text" class="form-control"
-                                                                       v-model="edit_jig_info_detail.rec_time" readonly>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">修改人</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="text" class="form-control"
-                                                                       v-model="edit_jig_info_detail.edit_by_name"
-                                                                       readonly>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">修改时间</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="text" class="form-control"
-                                                                       v-model="edit_jig_info_detail.edit_time"
-                                                                       readonly>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">保养点检周期</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="number" class="form-control"
-                                                                       v-model="edit_jig_info_detail.pm_period">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default"
-                                                            data-dismiss="modal">关闭
-                                                    </button>
-                                                    <button type="button" class="btn btn-primary"
-                                                            @click="edit_jig_info">
-                                                        确认修改
-                                                    </button>
-                                                </div>
-                                            </div><!-- /.modal-content -->
-                                        </div><!-- /.modal -->
-                                    </div><!--查看编辑工夹具明细-->
                                 </div>
                             </div>
                         </div>
@@ -1620,6 +1324,291 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
+
+<!--工夹具信息模块查看工夹具信息-->
+<div class="modal fade" id="jig_info_detail" role="dialog"
+     aria-labelledby="checkLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;
+                </button>
+                <h4 class="modal-title">工夹具明细</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal" v-if="jig_info_detail!= null">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">工夹具代码</label>
+                        <div class="col-sm-8">
+                            <div type="text" class="form-control">
+                                {{jig_info_detail.code}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">工夹具名字</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{jig_info_detail.name}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">所属部门</label>
+                        <div class="col-sm-8">
+                            <div type="text" class="form-control">
+                                {{jig_info_detail.workcell}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">类别</label>
+                        <div class="col-sm-8">
+                            <div type="text" class="form-control">
+                                {{jig_info_detail.family}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">工夹具模组</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">{{jig_info_detail.model}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">工夹具料号</label>
+                        <div class="col-sm-8">
+                            <select class="form-control">
+                                <option v-for="item in jig_info_detail.part_no.split('|')">
+                                    {{item}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">用途</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">
+                                {{jig_info_detail.user_for}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">每条产线所需</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">
+                                {{jig_info_detail.upl}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">责任人</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">
+                                {{jig_info_detail.owner_name}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">录入人</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">
+                                {{jig_info_detail.rec_by_name}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">录入时间</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">
+                                {{jig_info_detail.rec_time}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">修改人</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">
+                                {{jig_info_detail.edit_by_name}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">修改时间</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">
+                                {{jig_info_detail.edit_time}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">保养点检周期</label>
+                        <div class="col-sm-8">
+                            <div class="form-control">
+                                {{jig_info_detail.pm_period}}天
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div><!--工夹具明细-->
+
+<!--工夹具信息模块编辑工夹具信息-->
+<div>
+    <div class="modal fade" id="edit_jig_info" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;
+                    </button>
+                    <h4 class="modal-title">编辑工夹具信息</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal" v-if="edit_jig_info_detail!= null">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">工夹具代码</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"
+                                       v-model.trim="edit_jig_info_detail.code">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">工夹具名字</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"
+                                       v-model.trim="edit_jig_info_detail.name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">所属部门</label>
+                            <div class="col-sm-8">
+                                <select class="form-control"
+                                        v-model="edit_jig_info_detail.workcell">
+                                    <option v-for="item in workcell_list"
+                                            :value="item.workcell">{{item.workcell}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">类别</label>
+                            <div class="col-sm-8">
+                                <select class="form-control"
+                                        v-model="edit_jig_info_detail.family">
+                                    <option v-for="item in family_list"
+                                            :value="item.family">{{item.family}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">工夹具模组</label>
+                            <div class="col-sm-8">
+                                <select class="form-control"
+                                        v-model="edit_jig_info_detail.model">
+                                    <option v-for="item in model_list"
+                                            :value="item.model">
+                                        {{item.model}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">工夹具料号</label>
+                            <div class="col-sm-8">
+                                <select id="sel_edit_jig_part_no"
+                                        class="form-control"
+                                        v-model="edit_select_part_no_list" multiple>
+                                    <option :value="item.part_no"
+                                            v-for="item in part_no_list">
+                                        {{item.part_no}}
+                                    </option>
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">用途</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"
+                                       v-model="edit_jig_info_detail.user_for">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">每条产线所需</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control"
+                                       v-model="edit_jig_info_detail.upl">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">责任人</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"
+                                       v-model="edit_jig_info_detail.owner_name"
+                                       readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">录入人</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"
+                                       v-model="edit_jig_info_detail.rec_by_name"
+                                       readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">录入时间</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"
+                                       v-model="edit_jig_info_detail.rec_time" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">修改人</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"
+                                       v-model="edit_jig_info_detail.edit_by_name"
+                                       readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">修改时间</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"
+                                       v-model="edit_jig_info_detail.edit_time"
+                                       readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">保养点检周期</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control"
+                                       v-model="edit_jig_info_detail.pm_period">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary"
+                            @click="edit_jig_info">
+                        确认修改
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div><!--查看编辑工夹具明细-->
 
 <!--历史报废申请记录的单个申请明细 -->
 <div class="modal fade" id="scrap_submit_history_detail" tabindex="-1" role="dialog"

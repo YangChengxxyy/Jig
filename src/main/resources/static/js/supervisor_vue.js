@@ -57,14 +57,10 @@ var jig_info = new Vue({
         jig_info_list_by_family:[],//经过类别划分的工夹具信息list
         jig_info_detail:null,
 
-        edit_jig_info_detail:null,//修改工夹具信息的明细
-        production_line_list:production_line_list,
-        workcell_list:workcell_list,
-        family_list:family_list,
+        //edit_jig_info_detail:null,//修改工夹具信息的明细
         model_list:model_list,
-        part_no_list:part_no_list,//工夹具料号list,
-        edit_select_part_no_list:[],//编辑页面选择的料号list
-
+        part_no_list:part_no_list,
+        workcell_list:workcell_list,
         select_jig_code:"",//搜索条件
         select_jig_name:"",
         select_jig_model:"",//搜索条件:model
@@ -114,8 +110,7 @@ var jig_info = new Vue({
                     that.get_jig_family();
                 }
             })
-        }
-        ,
+        },
         get_all_jig_info_list:function () {
             const  that = this;
             $.ajax({
@@ -139,37 +134,17 @@ var jig_info = new Vue({
         },
         get_jig_info_detail:function (index) {
             if(this.all_jig_info_list.length!=0){
-                this.jig_info_detail = this.all_jig_info_list[index];
+                jig_info_detail.jig_info_detail = this.all_jig_info_list[index];
             }else {
                 alert("服务器异常!");
             }
         },
         get_edit_jig_info:function (index) {
             if(this.all_jig_info_list.length!=0){
-                this.edit_jig_info_detail = this.all_jig_info_list[index];
+                edit_jig_info.edit_jig_info_detail = this.all_jig_info_list[index];
             }else {
                 alert("服务器异常!");
             }
-        },
-        edit_jig_info:function () {
-            console.log(this.edit_jig_info_detail);
-            const that = this;
-            var edit_part_no = "";
-            for(var i=0;i<this.edit_select_part_no_list.length-1;i++){
-                edit_part_no+=this.edit_select_part_no_list[i]+"|"
-            }
-            edit_part_no+=this.edit_select_part_no_list[this.edit_select_part_no_list.length-1];
-            this.edit_jig_info_detail.part_no = edit_part_no;
-
-           $.ajax({
-                url:"supervisor_edit_jig_info",
-                dataType:"post",
-                data: this.edit_jig_info_detail
-                ,
-                success:function (res) {
-                    alert(res);
-                }
-            })
         },
         init_part_no:function () {
             console.log("init_part");
@@ -220,6 +195,53 @@ var jig_info = new Vue({
     }
 });
 
+//工夹具信息模块查看工夹具明细
+var jig_info_detail = new Vue({
+    el:"#jig_info_detail",
+    data:{
+        jig_info_detail:null,
+    },
+    methods:{
+
+    }
+})
+
+//工夹具信息模块编辑工夹具
+var edit_jig_info = new Vue({
+    el:"#edit_jig_info",
+    data:{
+        edit_jig_info_detail:null,
+
+        production_line_list:production_line_list,
+        workcell_list:workcell_list,
+        family_list:family_list,
+        model_list:model_list,
+        part_no_list:part_no_list,//工夹具料号list,
+
+        edit_select_part_no_list:[],//编辑页面选择的料号list
+    },
+    methods:{
+        edit_jig_info:function () {
+            const that = this;
+            var edit_part_no = "";
+            for(var i=0;i<this.edit_select_part_no_list.length-1;i++){
+                edit_part_no+=this.edit_select_part_no_list[i]+"|"
+            }
+            edit_part_no+=this.edit_select_part_no_list[this.edit_select_part_no_list.length-1];
+            this.edit_jig_info_detail.part_no = edit_part_no;
+
+            $.ajax({
+                url:"supervisor_edit_jig_info",
+                dataType:"post",
+                data: this.edit_jig_info_detail
+                ,
+                success:function (res) {
+                    alert(res);
+                }
+            })
+        },
+    }
+})
 
 //我的采购审批
 var my_purchase_list = new Vue({
