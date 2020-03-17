@@ -1,10 +1,13 @@
 package com.jig.controller;
 
+import com.jig.entity.LoginState;
 import com.jig.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpSession;
 
 @RestController
 public class UserJson {
@@ -14,5 +17,14 @@ public class UserJson {
     @RequestMapping("get_user_name")
     public String getUserName(@RequestParam(value = "user_id") String user_id) {
         return userService.getUserName(user_id);
+    }
+
+    @RequestMapping("login_check")
+    public LoginState loginCheck(@RequestParam(value = "id") String id, @RequestParam(value = "password") String password, HttpSession session) {
+        LoginState state = userService.loginCheck(id, password);
+        if (state.getStateCode() == 0) {
+            session.setAttribute("loginState",state);
+        }
+        return state;
     }
 }

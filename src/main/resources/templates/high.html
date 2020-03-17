@@ -1,48 +1,63 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>高级用户</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css">
-    <script src="js/jquery-3.4.1.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/vue.js"></script>
-    <script src="js/shake.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="Xenon Boostrap Admin Panel"/>
+    <meta name="author" content=""/>
+
+    <title>高级用户</title>
+
+    <link rel="stylesheet" href="css/googleapis.css">
+    <link rel="stylesheet" href="assets/css/fonts/linecons/css/linecons.css">
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-3.3.4.css">
+    <link rel="stylesheet" href="assets/css/xenon-core.css">
+    <link rel="stylesheet" href="assets/css/xenon-forms.css">
+    <link rel="stylesheet" href="assets/css/xenon-components.css">
+    <link rel="stylesheet" href="assets/css/xenon-skins.css">
+    <link rel="stylesheet" href="assets/css/custom.css">
+
+    <link rel="stylesheet" href="assets/css/fonts/elusive/css/elusive.css">
+
+    <script src="js/jquery-1.10.2.js"></script>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv-3.7.2.min.js"></script>
+    <script src="js/respond-1.4.2.min.js"></script>
+    <![endif]-->
+
+
+    <script src="js/vue.js"></script>
+    <script src="js/echarts.js"></script>
+    <script src="js/vue-echarts@4.0.2.js"></script>
+    <script src="js/shake.js"></script>
+    <!--    <script src="js/bootstrap.min.js"></script>-->
+    <!--日期选择器-->
     <script src="js/moment-with-locales.js"></script>
     <script src="js/bootstrap-datetimepicker.min.js"></script>
     <script src="js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
-
+    <!--日期范围选择器-->
     <script src="js/moment.min.js"></script>
     <script src="js/daterangepicker.js"></script>
     <link rel="stylesheet" href="css/daterangepicker.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--    <script type="text/javascript" src="js/dateRange.js"></script>-->
-    <!--    <link rel="stylesheet" type="text/css" href="css/dateRange.css"/>-->
+
+    <link rel="stylesheet" href="css/manager.css">
+    <link rel="stylesheet" href="css/iconfont.css">
     <script>
         $(function () {
-            // var dateRange1 = new pickerDateRange('date1', {
-            //     stopToday: false,
-            //     isTodayValid: true,
-            //     startDate: '2020-2-01',
-            //     endDate: '2020-2-02',
-            //     needCompare: false,
-            //     defaultText: ' 到 ',
-            //     autoSubmit: false,
-            //     inputTrigger: 'input_trigger1',
-            //     theme: 'ta'
-            // });
-
-            var seq_number = 0;
-            var navis_side = 0;
-            $(".nav li:not('.dropdown')").on('click', function (e) {
+            $("#main-menu ul li").on('click', function (e) {
                 const href = $(this).attr("href");
-                $(this).siblings().removeClass("active");
-                $(this).addClass("active");
-                $(".nav li[href='" + href + "']").siblings().removeClass("active");
-                $(".nav li[href='" + href + "']").addClass("active");
-            })
+                $(".page-title li[href='" + href + "']").siblings().removeClass("active");
+                $(".page-title li[href='" + href + "']").addClass("active");
+            });
+            $(".page-title li").on("click",function () {
+                const href = $(this).attr("href");
+                $("#main-menu ul li[href='"+href+"']").siblings().removeClass("active");;
+                $("#main-menu ul li[href='"+href+"']").addClass("active")
+            });
             $(".date").datetimepicker({
                 format: 'yyyy-mm-dd',
                 language: 'zh-CN',
@@ -71,208 +86,466 @@
                 $(this).val('');
                 $(this).children("input").val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
             });
-            // $("#bt_addshoplist").click(function () {
-            //     var aData = new Date();
-            //     var submit_time =
-            //         aData.getFullYear() + "-" + ((aData.getMonth() + 1)>=10?aData.getMonth()+1:"0"+aData.getMonth()+1) + "-" +
-            //         ((aData.getDate())>=10?aData.getDate():"0"+aData.getDate()) + " " +
-            //         ((aData.getHours())>=10?aData.getHours():"0"+aData.getHours()) +":"+
-            //         ((aData.getMinutes())>=10?aData.getMinutes():"0"+aData.getMinutes());
-            //     $("#add_submittime").val(submit_time);
-            // })
-            /*$("#add_seq").on('click', function (e) {
-                seq_number++;
-                $("#add_seq_block").append($("<div class='addblock'><div class='row form-group' id='add_seq_block'" + seq_number +
-                    "'><label for='seq_code' class='col-sm-3 control-label'>工夹具代码</label><div class='col-sm-3'>" +
-                    "<input type='text' class='form-control' name='add_seq_code" + seq_number + "'></div>" +
-                    "<label for='shop_number' class='col-sm-3 control-label'>采购数量</label> <div class='col-sm-2'>" +
-                    "<input type='text' class='form-control' name='add_shop_number" + seq_number + "'> </div> <div class='col-sm-1'></div></div></div>"))
-                if (seq_number >= 3) {
-                    $("#add_seq").attr("disabled", "disabled");
-                }
-            })
-            $("#close_add_modal").on('click', function (e) {
-                seq_number = 0;
-                $(".addblock").remove();
-            })*/
 
-
-            $('#bt_sideleft').click(function () {
-                if (navis_side == 0) {
-                    $('#navbar_left').hide(1000);
-                    setTimeout(function () {
-                        $('#navbar_right').attr('class', 'col-lg-12 column');
-                    }, 1000);
-                    navis_side = 1;
-                } else {
-                    $('#navbar_left').show(1000);
-                    $('#navbar_right').attr('class', 'col-lg-9 column');
-                    navis_side = 0;
-                }
-            });
-            $(function (){
-                $("[data-toggle='popover']").popover({
-
-                });
-            })
         })
     </script>
+    <style>
+    </style>
 </head>
-<body>
-<nav class="navbar navbar-default navbar-static-top" role="navigation">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle show pull-left" href="#sidebar" id="bt_sideleft">
-                <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
-                    class="icon-bar"></span><span class="icon-bar"></span>
-            </button>
+<body class="page-body skin-navy">
+
+<div class="settings-pane">
+
+    <a href="#" data-toggle="settings-pane" data-animate="true">
+        &times;
+    </a>
+
+    <div class="settings-pane-inner">
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                <div class="user-info">
+
+                    <div class="user-image">
+                        <a href="#">
+                            <img src="assets/images/user-2.png" class="img-responsive img-circle"/>
+                        </a>
+                    </div>
+
+                    <div class="user-details">
+
+                        <h3>
+                            <a href="#">John Smith</a>
+
+                            <span class="user-status is-online"></span>
+                        </h3>
+
+                        <p class="user-title">Web Developer</p>
+
+                        <div class="user-links">
+                            <a href="#" class="btn btn-primary">Edit Profile</a>
+                            <a href="#" class="btn btn-success">Upgrade</a>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-8 link-blocks-env">
+
+                <div class="links-block left-sep">
+                    <h4>
+                        <span>Notifications</span>
+                    </h4>
+
+                    <ul class="list-unstyled">
+                        <li>
+                            <input type="checkbox" class="cbr cbr-primary" checked="checked" id="sp-chk1"/>
+                            <label for="sp-chk1">Messages</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" class="cbr cbr-primary" checked="checked" id="sp-chk2"/>
+                            <label for="sp-chk2">Events</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" class="cbr cbr-primary" checked="checked" id="sp-chk3"/>
+                            <label for="sp-chk3">Updates</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" class="cbr cbr-primary" checked="checked" id="sp-chk4"/>
+                            <label for="sp-chk4">Server Uptime</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="links-block left-sep">
+                    <h4>
+                        <a href="#">
+                            <span>Help Desk</span>
+                        </a>
+                    </h4>
+
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="#">
+                                <i class="fa-angle-right"></i>
+                                Support Center
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa-angle-right"></i>
+                                Submit a Ticket
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa-angle-right"></i>
+                                Domains Protocol
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa-angle-right"></i>
+                                Terms of Service
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
         </div>
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                       aria-expanded="false" th:inline="text"><span class="glyphicon glyphicon-user"></span>&nbsp;[[${session.get('user').getName()}]]&nbsp;<span
-                            class="caret"></span></a>
-                    <input style="display: none" th:value="${session.get('user').getId()}" id="id">
-                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
-                        <li role="presentation">
-                            <a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-user"></span>个人信息</a>
+
+    </div>
+
+</div>
+
+<div class="page-container">
+
+    <div class="sidebar-menu toggle-others fixed">
+
+        <div class="sidebar-menu-inner">
+
+            <header class="logo-env">
+
+                <!-- logo -->
+                <div class="logo">
+                    <a href="#" class="logo-expanded">
+                        <img src="assets/images/logo@2x.png" width="80" alt=""/>
+                    </a>
+
+                    <a href="#" class="logo-collapsed">
+                        <img src="assets/images/logo-collapsed@2x.png" width="40" alt=""/>
+                    </a>
+                </div>
+
+                <div class="mobile-menu-toggle visible-xs">
+                    <a href="#" data-toggle="user-info-menu">
+                        <i class="fa-bell-o"></i>
+                        <span class="badge badge-success">7</span>
+                    </a>
+
+                    <a href="#" data-toggle="mobile-menu">
+                        <i class="fa-bars"></i>
+                    </a>
+                </div>
+
+                <div class="settings-icon">
+                    <a href="#" data-toggle="settings-pane" data-animate="true">
+                        <i class="linecons-cog"></i>
+                    </a>
+                </div>
+
+
+            </header>
+
+
+            <ul id="main-menu" class="main-menu">
+                <li class="active opened main-menu-li">
+                    <a href="#main1" data-toggle="tab">
+                        <i class="fa-database"></i>
+                        <span class="title">采购管理</span>
+                    </a>
+                    <ul>
+                        <li class="active" href="#myShopList" data-toggle="tab">
+                            <a class="active" href="#myShopList" data-toggle="tab">
+                                <span class="title">我的采购单</span>
+                            </a>
                         </li>
-                        <li role="presentation">
-                            <a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#changePassword"><span
-                                    class="glyphicon glyphicon-wrench"></span>修改密码</a>
+                        <li href="#historyShop" data-toggle="tab">
+                            <a href="#historyShop" data-toggle="tab">
+                                <span class="title">历史采购记录</span>
+                            </a>
                         </li>
-                        <li role="menuitem" class="divider"></li>
-                        <li role="presentation">
-                            <a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-off"></span>安全退出</a>
+                    </ul>
+                </li>
+                <li class="main-menu-li">
+                    <a href="#main2" data-toggle="tab">
+                        <i class="fa-home"></i>
+                        <span class="title">报修管理</span>
+                    </a>
+                    <ul>
+                        <li class="active" href="#myrepair" data-toggle="tab">
+                            <a href="#myrepair" data-toggle="tab">
+                                <span class="title">我的报修审核</span>
+                            </a>
+                        </li>
+                        <li href="#historyMyrepair" data-toggle="tab">
+                            <a href="#historyMyrepair" data-toggle="tab">
+                                <span class="title">历史报修记录</span>
+                            </a>
+                        </li>
+                        <li href="#repairStatistics" data-toggle="tab">
+                            <a href="#repairStatistics" data-toggle="tab">
+                                <span class="title">报修统计</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="main-menu-li">
+                    <a href="#main3" data-toggle="tab">
+                        <i class="fa-wrench"></i>
+                        <span class="title">报废管理</span>
+                    </a>
+                    <ul>
+                        <li class="active" href="#myscrap" data-toggle="tab">
+                            <a href="#myscrap" data-toggle="tab">
+                                <span class="title">我的报废申请</span>
+                            </a>
+                        </li>
+                        <li href="#historyMyscrap" data-toggle="tab">
+                            <a href="#historyMyscrap" data-toggle="tab">
+                                <span class="title">历史报废记录</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="main-menu-li">
+                    <a href="#main4" data-toggle="tab">
+                        <i class="fa-wrench"></i>
+                        <span class="title">工夹具信息管理</span>
+                    </a>
+                    <ul>
+                        <li class="active" href="#seqInfo" data-toggle="tab">
+                            <a href="#seqInfo" data-toggle="tab">
+                                <span class="title">工夹具信息</span>
+                            </a>
                         </li>
                     </ul>
                 </li>
             </ul>
+
         </div>
+
     </div>
-</nav>
-<div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="label" aria-hidden="true"
-     style="text-align: left">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="label">修改密码</h4>
-            </div>
-            <div class="modal-body">
-                <form role="form" class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">原密码：</label>
-                        <div class="col-md-8">
-                            <input class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">新密码：</label>
-                        <div class="col-md-8">
-                            <input class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">重复密码：</label>
-                        <div class="col-md-8">
-                            <input class="form-control">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary">确认修改</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container-fluid all">
-    <div class="row clearfix">
-        <div class="col-lg-3 column" id="navbar_left">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">功能菜单</h4>
-                </div>
-                <!--功能菜单 导航栏-->
-                <div class="panel-body">
-                    <div class="panel-group" id="left">
-                        <div class="panel panel-default">
-                            <div class="panel-heading" data-toggle="collapse" data-parent="#left" href="#1">
-                                <h4 class="panel-title" data-toggle="tab" href="#main1">
-                                    采购管理
-                                </h4>
-                            </div>
-                            <div class="panel-collapse collapse in" id="1">
-                                <ul class="nav nav-pills nav-stacked">
-                                    <li class="active" data-toggle="tab" href="#myShopList"><a>我的采购单</a></li>
-                                    <li data-toggle="tab" href="#historyShop"><a>历史采购记录</a></li>
 
-                                </ul>
-                            </div>
-                        </div>
+    <div class="main-content">
 
-                        <div class="panel panel-default">
-                            <div class="panel-heading" data-toggle="collapse" data-parent="#left" href="#2">
-                                <h4 class="panel-title" data-toggle="tab" href="#main2">
-                                    报修管理
-                                </h4>
-                            </div>
-                            <div class="panel-collapse collapse" id="2">
-                                <ul class="nav nav-pills nav-stacked">
-                                    <li class="active" data-toggle="tab" href="#myrepair"><a>我的报修审核</a></li>
-                                    <li data-toggle="tab" href="#historyMyrepair"><a>历史报修记录</a></li>
-                                    <li data-toggle="tab" href="#repairStatistics"><a>报修统计</a></li>
-                                </ul>
-                            </div>
-                        </div>
+        <nav class="navbar user-info-navbar" role="navigation">
 
-                        <div class="panel panel-default">
-                            <div class="panel-heading" data-toggle="collapse" data-parent="#left" href="#3">
-                                <h4 class="panel-title" data-toggle="tab" href="#main3">
-                                    报废管理
-                                </h4>
-                            </div>
-                            <div class="panel-collapse collapse" id="3">
-                                <ul class="nav nav-pills nav-stacked">
-                                    <li class="active" data-toggle="tab" href="#myscrap"><a>我的报废申请</a></li>
-                                    <li data-toggle="tab" href="#historyMyscrap"><a>历史报废记录</a></li>
-                                </ul>
-                            </div>
-                        </div>
+            <ul class="user-info-menu left-links list-inline list-unstyled">
 
-                        <div class="panel panel-default">
-                            <div class="panel-heading" data-toggle="collapse" data-parent="#left" href="#4">
-                                <h4 class="panel-title" data-toggle="tab" href="#main4">
-                                    工夹具信息管理
-                                </h4>
-                            </div>
-                            <div class="panel-collapse collapse" id="4">
-                                <ul class="nav nav-pills nav-stacked">
-                                    <li class="active" data-toggle="tab" href="#seqInfo"><a>工夹具信息</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-9 column" id="navbar_right">
-            <div class="panel panel-default tab-content">
+                <li class="hidden-sm hidden-xs">
+                    <a href="#" data-toggle="sidebar">
+                        <i class="fa-bars"></i>
+                    </a>
+                </li>
 
-                <div id="main1" class="panel-body tab-content tab-pane fade in active">
-                    <ul class="nav nav-tabs">
-                        <li class="active" data-toggle="tab" href="#myShopList"><a>我的采购单</a></li>
-                        <li data-toggle="tab" href="#historyShop"><a>历史采购记录</a></li>
+                <li class="dropdown hover-line">
+                    <a href="#" data-toggle="dropdown">
+                        <i class="fa-bell-o"></i>
+                        <span class="badge badge-purple">7</span>
+                    </a>
+
+                    <ul class="dropdown-menu notifications">
+                        <li class="top">
+                            <p class="small">
+                                <a href="#" class="pull-right">Mark all Read</a>
+                                You have <strong>3</strong> new notifications.
+                            </p>
+                        </li>
+
+                        <li>
+                            <ul class="dropdown-menu-list list-unstyled ps-scrollbar">
+                                <li class="active notification-success">
+                                    <a href="#">
+                                        <i class="fa-user"></i>
+
+                                        <span class="line">
+												<strong>New user registered</strong>
+											</span>
+
+                                        <span class="line small time">
+												30 seconds ago
+											</span>
+                                    </a>
+                                </li>
+
+                                <li class="active notification-secondary">
+                                    <a href="#">
+                                        <i class="fa-lock"></i>
+
+                                        <span class="line">
+												<strong>Privacy settings have been changed</strong>
+											</span>
+
+                                        <span class="line small time">
+												3 hours ago
+											</span>
+                                    </a>
+                                </li>
+
+                                <li class="notification-primary">
+                                    <a href="#">
+                                        <i class="fa-thumbs-up"></i>
+
+                                        <span class="line">
+												<strong>Someone special liked this</strong>
+											</span>
+
+                                        <span class="line small time">
+												2 minutes ago
+											</span>
+                                    </a>
+                                </li>
+
+                                <li class="notification-danger">
+                                    <a href="#">
+                                        <i class="fa-calendar"></i>
+
+                                        <span class="line">
+												John cancelled the event
+											</span>
+
+                                        <span class="line small time">
+												9 hours ago
+											</span>
+                                    </a>
+                                </li>
+
+                                <li class="notification-info">
+                                    <a href="#">
+                                        <i class="fa-database"></i>
+
+                                        <span class="line">
+												The server is status is stable
+											</span>
+
+                                        <span class="line small time">
+												yesterday at 10:30am
+											</span>
+                                    </a>
+                                </li>
+
+                                <li class="notification-warning">
+                                    <a href="#">
+                                        <i class="fa-envelope-o"></i>
+
+                                        <span class="line">
+												New comments waiting approval
+											</span>
+
+                                        <span class="line small time">
+												last week
+											</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="external">
+                            <a href="#">
+                                <span>View all notifications</span>
+                                <i class="fa-link-ext"></i>
+                            </a>
+                        </li>
                     </ul>
-                    <div class="panel-body tab-content">
-                        <!--我的采购单 -->
-                        <div id="myShopList" class="tab-pane fade in active">
+                </li>
+
+            </ul>
+
+
+            <ul class="user-info-menu right-links list-inline list-unstyled">
+
+
+                <li class="dropdown user-profile">
+                    <a href="#" data-toggle="dropdown">
+                        <img src="assets/images/user-4.png" alt="user-image" class="img-circle img-inline userpic-32"
+                             width="28"/>
+                        <span th:inline="text">
+								[[${session.get('loginState').getData().getName()}]]
+                            <input style="display: none" th:value="${session.get('loginState').getData().getId()}" id="id">
+								<i class="fa-angle-down"></i>
+							</span>
+                    </a>
+
+                    <ul class="dropdown-menu user-profile-menu list-unstyled">
+                        <li>
+                            <a href="#edit-profile">
+                                <i class="fa-edit"></i>
+                                New Post
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#settings">
+                                <i class="fa-wrench"></i>
+                                Settings
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#profile">
+                                <i class="fa-user"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#help">
+                                <i class="fa-info"></i>
+                                &nbsp;Help
+                            </a>
+                        </li>
+                        <li class="last">
+                            <a href="extra-lockscreen.html">
+                                <i class="fa-lock"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+            </ul>
+
+        </nav>
+
+        <div class="tab-content">
+            <div id="main1" class="tab-content tab-pane fade in active">
+                <div class="page-title">
+
+                    <div class="title-env">
+                        <h1 class="title">采购管理</h1>
+                    </div>
+
+                    <div class="breadcrumb-env">
+
+                        <ol class="breadcrumb bc-1">
+                            <li class="active" href="#myShopList" data-toggle="tab">
+                                <a>我的采购单</a>
+                            </li>
+                            <li href="#historyShop" data-toggle="tab">
+                                <a>历史采购记录</a>
+                            </li>
+                        </ol>
+
+                    </div>
+
+                </div>
+
+                <div id="myShopList" class="tab-pane fade in active">
+                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">我的采购单</h3>
+
+                            <div class="panel-options">
+
+                                <a href="#" data-toggle="panel">
+                                    <span class="collapse-icon">–</span>
+                                    <span class="expand-icon">+</span>
+                                </a>
+
+                                <a href="#" data-toggle="reload" @click="getData">
+                                    <i class="fa-rotate-right"></i>
+                                </a>
+
+                            </div>
+                        </div>
+                        <div class="panel-body">
+
                             <div class="row">
                                 <div class="col-sm-2">
                                     <!--添加采购单按钮 -->
@@ -325,10 +598,11 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <my-pagination :max_page_number="max_page_number"
-                                           :now_page_number="now_page_number"></my-pagination>
+                            <my-pagination :now_page_number="now_page_number" :now_page_size="now_page_size" :max_page_number="max_page_number"
+                                           :page_size_list="page_size_list" :all_count="all_count"
+                            ></my-pagination>
                             <div class="modal fade" id="myshoplist_detail" tabindex="-1"
-                                 role="dialog"
+                                 role="dialog" data-backdrop="false"
                                  aria-labelledby="chukuLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -439,98 +713,119 @@
                                     </div><!-- /.modal-content -->
                                 </div><!-- /.modal -->
                             </div>
+
                         </div>
-                        <div class="modal fade" id="add_myshoplist" tabindex="-1" role="dialog"
-                             aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal"
-                                                aria-hidden="true">&times;
-                                        </button>
-                                        <h4 class="modal-title">添加采购单</h4>
+                    </div>
+                </div>
+                <div class="modal fade" id="add_myshoplist" tabindex="-1" role="dialog" data-backdrop="false"
+                     aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"
+                                        aria-hidden="true">&times;
+                                </button>
+                                <h4 class="modal-title">添加采购单</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">采购单据号</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" v-model="bill_no"
+                                                   :style="{'borderColor': bill_no == ''? '#c9302c':'#ccc'}">
+                                        </div>
                                     </div>
-                                    <div class="modal-body">
-                                        <div class="form-horizontal">
-                                            <div class="form-group">
-                                                <label class="col-sm-3 control-label">采购单据号</label>
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control" v-model="bill_no"
-                                                           :style="{'borderColor': bill_no == ''? '#c9302c':'#ccc'}">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-sm-3 control-label">采购人id</label>
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control" v-model="submit_id"
-                                                           :style="{'borderColor': submit_id == ''? '#c9302c':'#ccc'}">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-sm-3 control-label">产线</label>
-                                                <div class="col-sm-8">
-                                                    <select class="form-control" v-model="production_line_id"
-                                                            :style="{'borderColor': production_line_id == ''? '#c9302c':'#ccc'}">
-                                                        <option v-for="item in production_line_list" :value="item.id">
-                                                            {{item.name}}
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-8 col-sm-offset-3">
-                                                    <div class="pull-right">
-                                                        <button type="button" class="btn btn-default" @click="clean">
-                                                            清空
-                                                        </button>
-                                                        <button type="button" class="btn btn-success" @click="addMax"
-                                                                :class="{'disabled':max === 4}">
-                                                            添加工夹具
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div v-for="n in max">
-                                                <div class="row form-group">
-                                                    <label class="col-sm-3 control-label">工夹具代码</label>
-                                                    <div class="col-sm-3">
-                                                        <select class="form-control" v-model.trim="code[n-1]"
-                                                                :style="{'borderColor': code[n-1] == ''? '#c9302c':'#ccc'}">
-                                                            <option :value="code[n-1]">{{code[n-1]}}</option>
-                                                            <option v-for="item in code_list" :value="item">{{item}}
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                    <label class="col-sm-2 control-label">采购数量</label>
-                                                    <div class="col-sm-2">
-                                                        <input type="number" class="form-control"
-                                                               :style="{'borderColor':count[n-1] ==''? '#c9302c':'#ccc' }"
-                                                               v-model.trim="count[n-1]" min="1"
-                                                               max="99">
-                                                    </div>
-                                                    <div class="col-sm-1">
-                                                        <button type="button" class="btn btn-danger pull-right"
-                                                                @click="del(n-1)" :class="{'disabled' : max == 1}"><span
-                                                                class="glyphicon glyphicon-remove"></span></button>
-                                                    </div>
-                                                </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">采购人id</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" v-model="submit_id"
+                                                   :style="{'borderColor': submit_id == ''? '#c9302c':'#ccc'}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">产线</label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control" v-model="production_line_id"
+                                                    :style="{'borderColor': production_line_id == ''? '#c9302c':'#ccc'}">
+                                                <option v-for="item in production_line_list" :value="item.id">
+                                                    {{item.name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-8 col-sm-offset-3">
+                                            <div class="pull-right">
+                                                <button type="button" class="btn btn-default" @click="clean">
+                                                    清空
+                                                </button>
+                                                <button type="button" class="btn btn-success" @click="addMax"
+                                                        :class="{'disabled':max === 4}">
+                                                    添加工夹具
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default"
-                                                data-dismiss="modal" id="close_add_modal">关闭
-                                        </button>
-                                        <button type="button" class="btn btn-primary"
-                                                @click.stop="add_shoplist">添加
-                                        </button>
+                                    <div v-for="n in max">
+                                        <div class="row form-group">
+                                            <label class="col-sm-3 control-label">工夹具代码</label>
+                                            <div class="col-sm-3">
+                                                <select class="form-control" v-model.trim="code[n-1]"
+                                                        :style="{'borderColor': code[n-1] == ''? '#c9302c':'#ccc'}">
+                                                    <option :value="code[n-1]">{{code[n-1]}}</option>
+                                                    <option v-for="item in code_list" :value="item">{{item}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <label class="col-sm-2 control-label">采购数量</label>
+                                            <div class="col-sm-2">
+                                                <input type="number" class="form-control"
+                                                       :style="{'borderColor':count[n-1] ==''? '#c9302c':'#ccc' }"
+                                                       v-model.trim="count[n-1]" min="1"
+                                                       max="99">
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <button type="button" class="btn btn-danger pull-right"
+                                                        @click="del(n-1)" :class="{'disabled' : max == 1}"><span
+                                                        class="glyphicon glyphicon-remove"></span></button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div><!-- /.modal-content -->
-                            </div><!-- /.modal -->
-                        </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default"
+                                        data-dismiss="modal" id="close_add_modal">关闭
+                                </button>
+                                <button type="button" class="btn btn-primary"
+                                        @click.stop="add_shoplist">添加
+                                </button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal -->
+                </div>
+                <div id="historyShop" class="tab-pane fade">
+                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">历史采购记录</h3>
 
-                        <div id="historyShop" class="tab-pane fade">
-                            <!--历史采购记录-->
+                            <div class="panel-options">
+
+                                <a href="#" data-toggle="panel">
+                                    <span class="collapse-icon">–</span>
+                                    <span class="expand-icon">+</span>
+                                </a>
+
+                                <a href="#" data-toggle="reload" @click="getData">
+                                    <i class="fa-rotate-right"></i>
+                                </a>
+
+
+                            </div>
+                        </div>
+                        <div class="panel panel-body">
+
                             <div style="margin-bottom: 3%">
                                 <div class="form-horizontal">
                                     <div class="form-group row">
@@ -630,9 +925,10 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <my-pagination :max_page_number="max_page_number"
-                                           :now_page_number="now_page_number"></my-pagination>
+                            <my-pagination :now_page_number="now_page_number" :now_page_size="now_page_size" :max_page_number="max_page_number"
+                                           :page_size_list="page_size_list" :all_count="all_count"></my-pagination>
                             <div class="modal fade" id="history_detail" tabindex="-1" role="dialog"
+                                 data-backdrop="false"
                                  aria-labelledby="history_detailLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -739,18 +1035,54 @@
                                     </div><!-- /.modal-content -->
                                 </div><!-- /.modal -->
                             </div>
+
                         </div>
                     </div>
                 </div>
+            </div>
+            <div id="main2" class="tab-content tab-pane fade">
+                <div class="page-title">
 
-                <div id="main2" class="panel-body tab-content tab-pane fade">
-                    <ul class="nav nav-tabs">
-                        <li class="active" data-toggle="tab" href="#myrepair"><a>我的报修</a></li>
-                        <li data-toggle="tab" href="#historyMyrepair"><a>历史报修记录</a></li>
-                        <li data-toggle="tab" href="#repairStatistics"><a>报修统计</a></li>
-                    </ul>
-                    <div class="panel-body tab-content">
-                        <div id="myrepair" class="tab-pane fade in active ">
+                    <div class="title-env">
+                        <h1 class="title">报修管理</h1>
+                    </div>
+
+                    <div class="breadcrumb-env">
+
+                        <ol class="breadcrumb bc-1">
+                            <li class="active" href="#myrepair" data-toggle="tab">
+                                <a>我的报修审核</a>
+                            </li>
+                            <li href="#historyMyrepair" data-toggle="tab">
+                                <a>历史报修记录</a>
+                            </li>
+                            <li href="#repairStatistics" data-toggle="tab">
+                                <a>报修统计</a>
+                            </li>
+                        </ol>
+
+                    </div>
+
+                </div>
+                <div id="myrepair" class="tab-pane fade in active">
+                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">我的报修</h3>
+
+                            <div class="panel-options">
+
+                                <a href="#" data-toggle="panel">
+                                    <span class="collapse-icon">–</span>
+                                    <span class="expand-icon">+</span>
+                                </a>
+
+                                <a href="#" data-toggle="reload" @click="getData">
+                                    <i class="fa-rotate-right"></i>
+                                </a>
+
+                            </div>
+                        </div>
+                        <div class="panel-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover table-bordered" role="table">
                                     <thead>
@@ -768,11 +1100,11 @@
                                         <td>{{item.code}}</td>
                                         <td>{{item.seq_id}}</td>
                                         <td>{{item.submit_name}}</td>
-                                        <td>{{item.trouble_reason}}</td>
+                                        <td>{{item.repair_reason}}</td>
                                         <td>{{item.submit_time}}</td>
                                         <td>
                                             <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                    data-target="#repairDetail">查看
+                                                    data-target="#repairDetail" @click="showDetail(index)">查看
                                             </button>
                                             <button type="button" class="btn btn-primary" data-toggle="modal"
                                                     data-target="#repairHistory">查看报修历史
@@ -784,11 +1116,107 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <my-pagination :max_page_number="max_page_number"
-                                           :now_page_number="now_page_number"></my-pagination>
+                            <my-pagination :now_page_number="now_page_number" :now_page_size="now_page_size" :max_page_number="max_page_number"
+                                           :page_size_list="page_size_list" :all_count="all_count"></my-pagination>
+                            <div class="modal fade" id="repairDetail" tabindex="-1" role="dialog" data-backdrop="false"
+                                 aria-labelledby="repairDetailLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-hidden="true">&times;
+                                            </button>
+                                            <h4 class="modal-title" id="repairDetailLabel">报修明细</h4>
+                                        </div>
+                                        <div class="modal-body" v-if="repair != null">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">工夹具代码</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{repair.code}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">工夹具序列号</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{repair.seq_id}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">报修原因</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{repair.repair_reason}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">故障图片</label>
+                                                    <div class="col-sm-8">
+                                                        <img :src="repair.repair_photo_url" class="img-thumbnail"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">申请人id</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{repair.submit_id}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">申请人</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{repair.submit_name}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">申请时间</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{repair.submit_time}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                            </button>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal -->
+                            </div>
                         </div>
-                        <div id="historyMyrepair" class="tab-pane fade">
-                            <!--历史报修记录-->
+                    </div>
+                </div>
+                <div id="historyMyrepair" class="tab-pane fade">
+                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">历史报修记录</h3>
+
+                            <div class="panel-options">
+
+                                <a href="#" data-toggle="panel">
+                                    <span class="collapse-icon">–</span>
+                                    <span class="expand-icon">+</span>
+                                </a>
+
+                                <a href="#" data-toggle="reload" @click="getData">
+                                    <i class="fa-rotate-right"></i>
+                                </a>
+
+
+                            </div>
+                        </div>
+                        <div class="panel-body">
                             <div style="margin-bottom: 3%">
                                 <div class="form-horizontal">
                                     <div class="form-group row">
@@ -842,39 +1270,40 @@
                                 </div>
                             </div>
                             <div class="table-responsive">
-                            <table class="table table-striped table-hover" role="table">
-                                <thead>
-                                <tr>
-                                    <th>工夹具代码</th>
-                                    <th>工夹具序列号</th>
-                                    <th>申请人</th>
-                                    <th>故障原因</th>
-                                    <th>申请时间</th>
-                                    <th>处理状态</th>
-                                    <th>操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr v-for="(item,index) in history_list">
-                                    <td>{{item.code}}</td>
-                                    <td>{{item.seq_id}}</td>
-                                    <td>{{item.submit_name}}</td>
-                                    <td>{{item.trouble_reason}}</td>
-                                    <td>{{item.submit_time}}</td>
-                                    <td v-if="item.status == 0">待处理</td>
-                                    <td v-else>已处理</td>
-                                    <td>
-                                        <button class="btn btn-primary" data-toggle="modal"
-                                                data-target="#history_repair_detail" @click="check_detail(index)">查看
-                                        </button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                <table class="table table-striped table-hover" role="table">
+                                    <thead>
+                                    <tr>
+                                        <th>工夹具代码</th>
+                                        <th>工夹具序列号</th>
+                                        <th>申请人</th>
+                                        <th>故障原因</th>
+                                        <th>申请时间</th>
+                                        <th>处理状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="(item,index) in history_list">
+                                        <td>{{item.code}}</td>
+                                        <td>{{item.seq_id}}</td>
+                                        <td>{{item.submit_name}}</td>
+                                        <td>{{item.trouble_reason}}</td>
+                                        <td>{{item.submit_time}}</td>
+                                        <td v-if="item.status == 0">待处理</td>
+                                        <td v-else>已处理</td>
+                                        <td>
+                                            <button class="btn btn-primary" data-toggle="modal"
+                                                    data-target="#history_repair_detail" @click="check_detail(index)">查看
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                            <my-pagination :now_page_number="now_page_number"
-                                           :max_page_number="max_page_number"></my-pagination>
+                            <my-pagination :now_page_number="now_page_number" :now_page_size="now_page_size" :max_page_number="max_page_number"
+                                           :page_size_list="page_size_list" :all_count="all_count"></my-pagination>
                             <div class="modal fade" id="history_repair_detail" tabindex="-1" role="dialog"
+                                 data-backdrop="false"
                                  aria-labelledby="history_repair_detailLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -967,42 +1396,131 @@
                                 </div><!-- /.modal -->
                             </div>
                         </div>
-                        <div id="repairStatistics" class="tab-pane fade">
+                    </div>
+                </div>
+                <div id="repairStatistics" class="tab-pane fade">
+                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">报修统计</h3>
 
+                            <div class="panel-options">
+
+                                <a href="#" data-toggle="panel">
+                                    <span class="collapse-icon">–</span>
+                                    <span class="expand-icon">+</span>
+                                </a>
+
+                                <a href="#" data-toggle="reload" @click="getData">
+                                    <i class="fa-rotate-right"></i>
+                                </a>
+
+
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <div class="small-box">
+                                        <div class="small-box-icon bg-lightskyblue">
+                                            <i class="iconfont icongouwuche"></i>
+                                        </div>
+                                        <div class="small-box-inner">
+                                            <h1 class="data fg-lightskyblue">{{repair_count}}</h1>
+                                            <p>报修总数</p>
+                                            <a class="more" href="#" title="查看更多" data-toggle="modal"
+                                               data-target="#repair_basic_detail">查看更多</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="repair_basic_detail" tabindex="-1" role="dialog"
+                             aria-labelledby="repair_basic_detailLabel" data-backdrop="false" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                            &times;
+                                        </button>
+                                        <h4 class="modal-title" id="repair_basic_detailLabel">报修概况</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <v-chart :options="option" :auto-resize="true"></v-chart>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary">提交更改</button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal -->
                         </div>
                     </div>
                 </div>
+            </div>
+            <div id="main3" class="tab-content tab-pane fade">
+                <div class="page-title">
 
-                <div id="main3" class="panel-body tab-content tab-pane fade">
-                    <ul class="nav nav-tabs">
-                        <li class="active" data-toggle="tab" href="#myscrap"><a>我的报废申请</a></li>
-                        <li data-toggle="tab" href="#historyMyscrap"><a>历史报废记录</a></li>
-                    </ul>
-                    <div class="panel-body tab-content">
-                        <div id="myscrap" class="tab-pane fade in active">
-                            <!--我的报废-->
+                <div class="title-env">
+                    <h1 class="title">报废管理</h1>
+                </div>
+
+                <div class="breadcrumb-env">
+
+                    <ol class="breadcrumb bc-1">
+                        <li class="active" href="#myscrap" data-toggle="tab">
+                            <a>我的报废申请</a>
+                        </li>
+                        <li href="#historyMyscrap" data-toggle="tab">
+                            <a>历史报废记录</a>
+                        </li>
+                    </ol>
+
+                </div>
+
+            </div>
+                <div id="myscrap" class="tab-pane fade in active">
+                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">我的报废申请</h3>
+
+                            <div class="panel-options">
+
+                                <a href="#" data-toggle="panel">
+                                    <span class="collapse-icon">–</span>
+                                    <span class="expand-icon">+</span>
+                                </a>
+
+                                <a href="#" data-toggle="reload" @click="getData">
+                                    <i class="fa-rotate-right"></i>
+                                </a>
+
+
+                            </div>
+                        </div>
+                        <div class="panel-body">
                             <div class="row">
                                 <div class="col-sm-2">
                                     <button type="button" class="btn btn-primary" data-toggle="modal"
-                                            data-target="#submit_repair">提交报废
+                                            data-target="#submitScrap">提交报废
                                     </button>
                                 </div>
-                                <div class="modal fade" id="submit_repair" tabindex="-1" role="dialog"
-                                     aria-labelledby="submit_repairLabel" aria-hidden="true">
+                                <div class="modal fade" id="submitScrap" tabindex="-1" role="dialog"
+                                     data-backdrop="false"
+                                     aria-labelledby="submitScrapLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal"
                                                         aria-hidden="true">&times;
                                                 </button>
-                                                <h4 class="modal-title" id="submit_repairLabel">提交报废申请</h4>
+                                                <h4 class="modal-title" id="submitScrapLabel">提交报废申请</h4>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="form-horizontal">
                                                     <div class="form-group">
                                                         <label class="col-sm-3 control-label">工夹具代码</label>
                                                         <div class="col-sm-8">
-                                                            <select  class="form-control" v-model="submit_code" @change="getSeqId"
+                                                            <select class="form-control" v-model="submit_code"
+                                                                    @change="getSeqId"
                                                                     :style="{'borderColor': submit_code == ''? '#c9302c':'#ccc'}">
                                                                 <option v-for="item in code_list" :value="item">
                                                                     {{item}}
@@ -1013,8 +1531,11 @@
                                                     <div class="form-group">
                                                         <label class="col-sm-3 control-label">工夹具序列号</label>
                                                         <div class="col-sm-8">
-                                                            <select v-model="submit_seq_id" class="form-control" :style="{'borderColor': submit_seq_id == ''? '#c9302c':'#ccc'}">
-                                                                <option v-for="item in seq_list" :value="item">{{item}}</option>
+                                                            <select v-model="submit_seq_id" class="form-control"
+                                                                    :style="{'borderColor': submit_seq_id == ''? '#c9302c':'#ccc'}">
+                                                                <option v-for="item in seq_list" :value="item">
+                                                                    {{item}}
+                                                                </option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -1030,16 +1551,20 @@
                                                         <label class="col-sm-3 control-label">故障照片</label>
                                                         <div class="col-sm-8">
                                                             <div class="input-group">
-                                                            <div class="form-control"
-                                                                 :style="{'borderColor': submit_scrap_photo == '点击上传图片'? '#c9302c':'#ccc'}">
-                                                                {{submit_scrap_photo}}
-                                                                <input type="file" class="form-control" id="scrap_photo" v-if="phone_status == -1"
-                                                                       style="opacity: 0;position: absolute;top: 0px;left: 0px"
-                                                                       @change="file" name="file" accept="image/jpeg,image/jpg,image/png">
-                                                            </div>
+                                                                <div class="form-control"
+                                                                     :style="{'borderColor': submit_scrap_photo == '点击上传图片'? '#c9302c':'#ccc'}">
+                                                                    {{submit_scrap_photo}}
+                                                                    <input type="file" class="form-control"
+                                                                           id="scrap_photo" v-if="phone_status == -1"
+                                                                           style="opacity: 0;position: absolute;top: 0px;left: 0px"
+                                                                           @change="file" name="file"
+                                                                           accept="image/jpeg,image/jpg,image/png">
+                                                                </div>
                                                                 <span class="input-group-addon" data-trigger="hover"
-                                                                      data-container="body" data-toggle="popover" data-placement="top"
-                                                                      data-content="点击扫码上传,双击取消二维码" @click="showQRCode" @dblclick="cancelQR">
+                                                                      data-container="body" data-toggle="popover"
+                                                                      data-placement="top"
+                                                                      data-content="点击扫码上传,双击取消二维码" @click="showQRCode"
+                                                                      @dblclick="cancelQR">
                                                                     <span class="glyphicon glyphicon-qrcode"></span>
                                                                 </span>
                                                             </div>
@@ -1052,13 +1577,16 @@
                                                     </div>
                                                     <div class="form-group" v-if="phone_status != -1">
                                                         <div class="col-sm-8 col-sm-push-3">
-                                                            <div class="control-label" v-if="phone_status == 1" style="text-align: center">
+                                                            <div class="control-label" v-if="phone_status == 1"
+                                                                 style="text-align: center">
                                                                 <span class="glyphicon glyphicon-ok-circle text-success"></span>扫描成功!
                                                             </div>
-                                                            <div class="control-label" v-else-if="phone_status == 2" style="text-align: center">
+                                                            <div class="control-label" v-else-if="phone_status == 2"
+                                                                 style="text-align: center">
                                                                 <span class="glyphicon glyphicon-ok-circle text-success"></span>上传成功！
                                                             </div>
-                                                            <div class="control-label" v-else-if="phone_status == 3" style="text-align: center">
+                                                            <div class="control-label" v-else-if="phone_status == 3"
+                                                                 style="text-align: center">
                                                                 <span class="glyphicon glyphicon-remove-circle text-danger"></span>二维码过期！
                                                             </div>
                                                         </div>
@@ -1105,15 +1633,17 @@
                                             <button class="btn btn-primary" data-toggle="modal"
                                                     data-target="#scrap_detail" @click="scrap_detail(index)">查看
                                             </button>
-                                            <button class="btn btn-primary" @click="del(item.id,item.scrap_photo_url)">删除</button>
+                                            <button class="btn btn-primary" @click="del(item.id,item.scrap_photo_url)">
+                                                删除
+                                            </button>
                                         </td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <my-pagination :now_page_number="now_page_number"
-                                           :max_page_number="max_page_number"></my-pagination>
-                            <div class="modal fade" id="scrap_detail" tabindex="-1" role="dialog"
+                            <my-pagination :now_page_number="now_page_number" :now_page_size="now_page_size" :max_page_number="max_page_number"
+                                           :page_size_list="page_size_list" :all_count="all_count"></my-pagination>
+                            <div class="modal fade" id="scrap_detail" tabindex="-1" role="dialog" data-backdrop="false"
                                  aria-labelledby="scrap_detailLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -1123,13 +1653,13 @@
                                             </button>
                                             <h4 class="modal-title" id="scrap_detailLabel">报废申请明细</h4>
                                         </div>
-                                        <div class="modal-body" v-if="script != null">
+                                        <div class="modal-body" v-if="scrap != null">
                                             <div class="form-horizontal">
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-3">工夹具代码</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.code}}
+                                                            {{scrap.code}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1137,7 +1667,7 @@
                                                     <label class="control-label col-sm-3">工夹具序列号</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.seq_id}}
+                                                            {{scrap.seq_id}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1145,21 +1675,21 @@
                                                     <label class="control-label col-sm-3">故障原因</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.scrap_reason}}
+                                                            {{scrap.scrap_reason}}
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-3">故障图片</label>
                                                     <div class="col-sm-8">
-                                                        <img :src="script.scrap_photo_url" class="img-thumbnail"/>
+                                                        <img :src="scrap.scrap_photo_url" class="img-thumbnail"/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-3">申请人id</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.submit_id}}
+                                                            {{scrap.submit_id}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1167,7 +1697,7 @@
                                                     <label class="control-label col-sm-3">申请人</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.submit_name}}
+                                                            {{scrap.submit_name}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1175,52 +1705,52 @@
                                                     <label class="control-label col-sm-3">申请时间</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.submit_time}}
+                                                            {{scrap.submit_time}}
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group" v-if="script.first_acceptor_id != null">
+                                                <div class="form-group" v-if="scrap.first_acceptor_id != null">
                                                     <label class="control-label col-sm-3">初审人</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.first_acceptor_id}}
+                                                            {{scrap.first_acceptor_id}}
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group" v-if="script.first_time != null">
+                                                <div class="form-group" v-if="scrap.first_time != null">
                                                     <label class="control-label col-sm-3">初审时间</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.first_time}}
+                                                            {{scrap.first_time}}
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group" v-if="script.status == 1">
+                                                <div class="form-group" v-if="scrap.status == 1">
                                                     <label class="col-sm-3 control-label text-danger">初审不通过原因</label>
                                                     <div class="col-sm-8">
-                                                        <div class="form-control">{{script.first_reason}}</div>
+                                                        <div class="form-control">{{scrap.first_reason}}</div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group" v-if="script.final_acceptor_name != null">
+                                                <div class="form-group" v-if="scrap.final_acceptor_name != null">
                                                     <label class="control-label col-sm-3">终审人</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.final_acceptor_name}}
+                                                            {{scrap.final_acceptor_name}}
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group" v-if="script.final_time != null">
+                                                <div class="form-group" v-if="scrap.final_time != null">
                                                     <label class="control-label col-sm-3">终审时间</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.final_time}}
+                                                            {{scrap.final_time}}
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group" v-if="script.status == 3">
+                                                <div class="form-group" v-if="scrap.status == 3">
                                                     <label class="col-sm-3 control-label text-danger">终审不通过原因</label>
                                                     <div class="col-sm-8">
-                                                        <div class="form-control">{{script.final_reason}}</div>
+                                                        <div class="form-control">{{scrap.final_reason}}</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1233,8 +1763,28 @@
                                 </div><!-- /.modal -->
                             </div>
                         </div>
-                        <div id="historyMyscrap" class="tab-pane fade">
-                            <!--历史报废记录-->
+                    </div>
+                </div>
+                <div id="historyMyscrap" class="tab-pane fade">
+                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">历史报废记录</h3>
+
+                            <div class="panel-options">
+
+                                <a href="#" data-toggle="panel">
+                                    <span class="collapse-icon">–</span>
+                                    <span class="expand-icon">+</span>
+                                </a>
+
+                                <a href="#" data-toggle="reload" @click="getData">
+                                    <i class="fa-rotate-right"></i>
+                                </a>
+
+
+                            </div>
+                        </div>
+                        <div class="panel-body">
                             <div style="margin-bottom: 3%">
                                 <form role="form" class="form-horizontal">
                                     <div class="form-group row">
@@ -1313,9 +1863,10 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <my-pagination :now_page_number="now_page_number"
-                                           :max_page_number="max_page_number"></my-pagination>
+                            <my-pagination :now_page_number="now_page_number" :now_page_size="now_page_size" :max_page_number="max_page_number"
+                                           :page_size_list="page_size_list" :all_count="all_count"></my-pagination>
                             <div class="modal fade" id="scrap_history_detail" tabindex="-1" role="dialog"
+                                 data-backdrop="false"
                                  aria-labelledby="scrap_history_detailLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -1403,7 +1954,8 @@
                                                         <div class="form-control">{{scarp_history.first_reason}}</div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group" v-if="scarp_history.final_acceptor_name != null">
+                                                <div class="form-group"
+                                                     v-if="scarp_history.final_acceptor_name != null">
                                                     <label class="control-label col-sm-3">终审人</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
@@ -1438,13 +1990,45 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div id="main4" class="tab-content tab-pane fade">
+                <div class="page-title">
 
-                <div id="main4" class="panel-body tab-content tab-pane fade">
-                    <ul class="nav nav-tabs">
-                        <li class="active" data-toggle="tab" href="#seqInfo"><a>工夹具信息</a></li>
-                    </ul>
-                    <div class="panel-body tab-content">
-                        <div class="tab-pane fade in active" id="seqInfo">
+                    <div class="title-env">
+                        <h1 class="title">工夹具信息管理</h1>
+                    </div>
+
+                    <div class="breadcrumb-env">
+
+                        <ol class="breadcrumb bc-1">
+                            <li class="active" href="#seqInfo" data-toggle="tab">
+                                <a>工夹具信息</a>
+                            </li>
+                        </ol>
+
+                    </div>
+                </div>
+
+                    <div id="seqInfo" class="tab-pane fade in active">
+                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">工夹具信息</h3>
+
+                            <div class="panel-options">
+
+                                <a href="#" data-toggle="panel">
+                                    <span class="collapse-icon">–</span>
+                                    <span class="expand-icon">+</span>
+                                </a>
+
+                                <a href="#" data-toggle="reload" @click="getData">
+                                    <i class="fa-rotate-right"></i>
+                                </a>
+
+
+                            </div>
+                        </div>
+                        <div class="panel-body">
                             <div class="form-horizontal container-fluid">
                                 <div class="form-group row">
                                     <label for="jig_code" class="col-sm-2 control-label">工夹具代码</label>
@@ -1484,6 +2068,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="table-responsive">
                             <table class="table table-hover table-striped table-bordered" style="margin-top: 2%">
                                 <thead>
                                 <tr>
@@ -1513,9 +2098,10 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <my-pagination :max_page_number="max_page_number"
-                                           :now_page_number="now_page_number"></my-pagination>
-                            <div class="modal fade" id="check" tabindex="-1" role="dialog"
+                            </div>
+                            <my-pagination :now_page_number="now_page_number" :now_page_size="now_page_size" :max_page_number="max_page_number"
+                                           :page_size_list="page_size_list" :all_count="all_count"></my-pagination>
+                            <div class="modal fade" id="check" tabindex="-1" role="dialog" data-backdrop="false"
                                  aria-labelledby="checkLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -1644,14 +2230,61 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel-footer">
-
-                </div>
             </div>
         </div>
+
+
+        <footer class="main-footer sticky footer-type-1">
+
+            <div class="footer-inner">
+
+                <div class="footer-text">
+                    &copy; 2020
+                    <strong>Omega</strong>
+                    theme by <a href="http://laborator.co" target="_blank">YC</a>
+                </div>
+
+
+                <div class="go-up">
+
+                    <a href="#" rel="go-top">
+                        <i class="fa-angle-up"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </footer>
     </div>
+
 </div>
-</body>
-<script src="js/pagination.js"></script>
+
+
+<div class="page-loading-overlay">
+    <div class="loader-2"></div>
+</div>
+
+
+<!-- Bottom Scripts -->
+<script src="js/bootstrap.min.js"></script>
+<script src="assets/js/TweenMax.min.js"></script>
+<script src="assets/js/resizeable.js"></script>
+<script src="assets/js/joinable.js"></script>
+<script src="assets/js/xenon-api.js"></script>
+<script src="assets/js/xenon-toggles.js"></script>
+
+
+<!-- Imported scripts on this page -->
+<script src="assets/js/xenon-widgets.js"></script>
+<script src="assets/js/devexpress-web-14.1/js/globalize.min.js"></script>
+<script src="assets/js/devexpress-web-14.1/js/dx.chartjs.js"></script>
+<script src="assets/js/toastr/toastr.min.js"></script>
+
+
+<!-- JavaScripts initializations and stuff -->
+<script src="assets/js/xenon-custom.js"></script>
+<script src="js/pagination-2.0.js"></script>
 <script src="js/high_vue.js"></script>
+</body>
 </html>

@@ -2,8 +2,12 @@ package com.jig.utils;
 
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -15,110 +19,15 @@ import java.util.Map;
  * @author YC
  */
 public class PoiUtil {
-    private static final Map<String, String> COMPARISON_TABLE;
-    private static final String[] ENGLISH = {
-            "id",
-            "name",
-            "code",
-            "model",
-            "part_no",
-            "family_id",
-            "family",
-            "upl",
-            "user_for",
-            "pm_period",
-            "owner",
-            "owner_name",
-            "rec_time",
-            "rec_by",
-            "rec_by_name",
-            "edit_time",
-            "edit_by",
-            "edit_by_name",
-            "workcell_id",
-            "workcell",
-            "remark",
-            "JigDefinition",
-
-            "submit_id",
-            "submit_name",
-            "count",
-            "submit_time",
-            "first_time",
-            "first_acceptor",
-            "first_acceptor_name",
-            "first_reason",
-            "final_time",
-            "final_acceptor",
-            "final_acceptor_name",
-            "final_reason",
-            "status",
-            "production_line_id",
-            "production_line_name",
-            "bill_no",
-            "tool_photo_url",
-            "PurchaseIncomeHistory",
-
-            "used_count",
-            "ScrapSubmit",
-            "ScrapHistory"
-    };
-    private static final String[] CHINESE = {
-            "id",
-            "工夹具名字",
-            "工夹具代码",
-            "工夹具模组",
-            "工夹具料号",
-            "类别id",
-            "类别",
-            "每条产线所需",
-            "用途",
-            "保养检点周期",
-            "责任人id",
-            "责任人",
-            "录入时间",
-            "录入人id",
-            "录入人",
-            "修改时间",
-            "修改人id",
-            "修改人",
-            "工作部门id",
-            "工作部门",
-            "备注",
-            "工夹具定义",
-
-            "采购人id",
-            "采购人",
-            "数量",
-            "申请时间",
-            "初审时间",
-            "初审人id",
-            "初审人",
-            "初审未通过原因",
-            "终审时间",
-            "终审人id",
-            "终审人",
-            "终审未通过原因",
-            "状态",
-            "产线id",
-            "产线",
-            "单据号",
-            "故障图片路径",
-            "历史采购",
-
-            "寿命计数",
-            "报废申请",
-            "报废历史"
-    };
-
-    static {
-        COMPARISON_TABLE = new HashMap<>(40);
-        for (int i = 0; i < ENGLISH.length; i++) {
-            COMPARISON_TABLE.put(ENGLISH[i], CHINESE[i]);
-        }
-    }
 
     public static <T> HSSFWorkbook getExcel(List<T> list) throws Exception {
+        JdbcTemplate jdbcTemplate = (JdbcTemplate) SpringUtil.applicationContext.getBean("jdbcTemplate");
+        String sql = "select * from cn_en";
+        List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql);
+        Map<String,String> chEnMap = new HashMap<>();
+        for (Map<String, Object> map : mapList) {
+            chEnMap.put(map.get("english").toString(),map.get("chinese").toString());
+        }
         Object t = list.get(0);
         //获取对象的类对象
         Class<?> aClass = t.getClass();
@@ -133,13 +42,13 @@ public class PoiUtil {
             methodNameList.add(getMethodName);
         }
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet(COMPARISON_TABLE.get(aClass.getSimpleName()));
+        HSSFSheet sheet = workbook.createSheet(chEnMap.get(aClass.getSimpleName()) == null ? aClass.getSimpleName() : chEnMap.get(aClass.getSimpleName()));
         HSSFRow row = sheet.createRow(0);
         HSSFCell cell = null;
         int[] maxs = new int[declaredFields.length];
         for (int i = 0; i < declaredFields.length; i++) {
             cell = row.createCell(i);
-            cell.setCellValue(COMPARISON_TABLE.get(declaredFields[i].getName()));
+            cell.setCellValue(chEnMap.get(declaredFields[i].getName()) == null ? declaredFields[i].getName() : chEnMap.get(declaredFields[i].getName()));
             HSSFCellStyle cellStyle = workbook.createCellStyle();
             //设置垂直居中
             cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
@@ -219,5 +128,22 @@ public class PoiUtil {
             ip = request.getRemoteAddr();
         }
         System.out.println(ip);
+    }
+
+    public static void outputFile(HttpServletResponse response, String fileName, List<?> list) throws Exception {
+        if (list.size() == 0) {
+            return;
+        }
+        HSSFWorkbook excel = getExcel(list);
+        response.setHeader("content-type", "application/octet-stream");
+        response.setContentType("application/octet-stream;charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+        OutputStream os;
+        try {
+            os = response.getOutputStream();
+            excel.write(os);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

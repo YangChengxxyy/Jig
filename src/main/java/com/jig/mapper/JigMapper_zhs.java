@@ -1,14 +1,11 @@
 package com.jig.mapper;
 
 import com.jig.entity.*;
-import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.*;
 import java.util.List;
-import java.util.SplittableRandom;
 
 @Mapper
 @Repository

@@ -1,13 +1,39 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="Xenon Boostrap Admin Panel"/>
+    <meta name="author" content=""/>
+
     <title>经理</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="css/googleapis.css">
+    <link rel="stylesheet" href="assets/css/fonts/linecons/css/linecons.css">
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-3.3.4.css">
+    <link rel="stylesheet" href="assets/css/xenon-core.css">
+    <link rel="stylesheet" href="assets/css/xenon-forms.css">
+    <link rel="stylesheet" href="assets/css/xenon-components.css">
+    <link rel="stylesheet" href="assets/css/xenon-skins.css">
+    <link rel="stylesheet" href="assets/css/custom.css">
+
+    <link rel="stylesheet" href="assets/css/fonts/elusive/css/elusive.css">
+
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv-3.7.2.min.js"></script>
+    <script src="js/respond-1.4.2.min.js"></script>
+    <![endif]-->
     <link rel="stylesheet" href="css/daterangepicker.css"/>
     <link rel="stylesheet" href="css/mainStyle.css">
     <link rel="stylesheet" href="css/iconfont.css">
-    <script src="js/jquery-3.4.1.js"></script>
+
     <script src="js/bootstrap.min.js"></script>
 
     <script src="js/echarts.min.js"></script>
@@ -17,19 +43,21 @@
 
     <link rel="stylesheet" href="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.css"/>
     <script src="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <!--<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <script>
         $(function () {
-            $(".nav li:not('.dropdown')").on('click', function (e) {
+            //侧边栏点击事件
+            //以及page-title下的li点击事件
+            $("#main-menu ul li").on('click', function (e) {
                 const href = $(this).attr("href");
-                $(this).siblings().removeClass("active");
-                $(this).addClass("active");
-                $(".nav li[href='" + href + "']").siblings().removeClass("active");
-                $(".nav li[href='" + href + "']").addClass("active");
-            })
+                $(".page-title li[href='" + href + "']").siblings().removeClass("active");
+                $(".page-title li[href='" + href + "']").addClass("active");
+            });
+            $(".page-title li").on("click", function () {
+                const href = $(this).attr("href");
+                $("#main-menu ul li[href='" + href + "']").siblings().removeClass("active");
+                $("#main-menu ul li[href='" + href + "']").addClass("active")
+            });
 
             $(".modal").draggable({
                 handle: ".modal-header", // 只能点击头部拖动
@@ -61,160 +89,447 @@
         })
     </script>
     <style>
-        .div_echart{
+        .div_echart {
             width: 500px;
             height: 350px;
         }
     </style>
+
 </head>
-<body>
-<nav class="navbar navbar-default navbar-static-top" role="navigation">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle show pull-left" href="#sidebar" id="bt_sideleft">
-                <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
-                    class="icon-bar"></span><span class="icon-bar"></span>
-            </button>
+<body class="page-body skin-navy">
+
+<div class="settings-pane">
+
+    <a href="#" data-toggle="settings-pane" data-animate="true">
+        &times;
+    </a>
+
+    <div class="settings-pane-inner">
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                <div class="user-info">
+
+                    <div class="user-image">
+                        <a href="#">
+                            <img th:src="${loginState.getData().getAvatar_url()}" class="img-responsive img-circle"/>
+                        </a>
+                    </div>
+
+                    <div class="user-details">
+
+                        <h3>
+                            <a href="#" th:text="${loginState.getData().getName()}"></a>
+
+                            <span class="user-status is-online"></span>
+                        </h3>
+
+                        <p class="user-title" th:text="${loginState.getData().getPosition()}"></p>
+
+                        <div class="user-links">
+                            <a href="#" class="btn btn-primary">Edit Profile</a>
+                            <a href="#" class="btn btn-success">Upgrade</a>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-8 link-blocks-env">
+
+                <div class="links-block left-sep">
+                    <h4>
+                        <span>Notifications</span>
+                    </h4>
+
+                    <ul class="list-unstyled">
+                        <li>
+                            <input type="checkbox" class="cbr cbr-primary" checked="checked" id="sp-chk1"/>
+                            <label for="sp-chk1">Messages</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" class="cbr cbr-primary" checked="checked" id="sp-chk2"/>
+                            <label for="sp-chk2">Events</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" class="cbr cbr-primary" checked="checked" id="sp-chk3"/>
+                            <label for="sp-chk3">Updates</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" class="cbr cbr-primary" checked="checked" id="sp-chk4"/>
+                            <label for="sp-chk4">Server Uptime</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="links-block left-sep">
+                    <h4>
+                        <a href="#">
+                            <span>Help Desk</span>
+                        </a>
+                    </h4>
+
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="#">
+                                <i class="fa-angle-right"></i>
+                                Support Center
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa-angle-right"></i>
+                                Submit a Ticket
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa-angle-right"></i>
+                                Domains Protocol
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa-angle-right"></i>
+                                Terms of Service
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
         </div>
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                       aria-expanded="false"><span class="glyphicon glyphicon-user"></span>&nbsp;小张同学&nbsp;<span
-                            class="caret"></span></a>
-                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
-                        <li role="presentation">
-                            <a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-user"></span>个人信息</a>
+
+    </div>
+
+</div>
+
+<div class="page-container">
+
+    <div class="sidebar-menu toggle-others fixed">
+
+        <div class="sidebar-menu-inner">
+
+            <header class="logo-env">
+
+                <!-- logo -->
+                <div class="logo">
+                    <a href="#" class="logo-expanded">
+                        <img src="assets/images/logo@2x.png" width="80" alt=""/>
+                    </a>
+
+                    <a href="#" class="logo-collapsed">
+                        <img src="assets/images/logo-collapsed@2x.png" width="40" alt=""/>
+                    </a>
+                </div>
+
+                <div class="mobile-menu-toggle visible-xs">
+                    <a href="#" data-toggle="user-info-menu">
+                        <i class="fa-bell-o"></i>
+                        <span class="badge badge-success">7</span>
+                    </a>
+
+                    <a href="#" data-toggle="mobile-menu">
+                        <i class="fa-bars"></i>
+                    </a>
+                </div>
+
+                <div class="settings-icon">
+                    <a href="#" data-toggle="settings-pane" data-animate="true">
+                        <i class="linecons-cog"></i>
+                    </a>
+                </div>
+
+
+            </header>
+
+
+            <ul id="main-menu" class="main-menu">
+                <li class="active opened main-menu-li">
+                    <a href="#main1" data-toggle="tab">
+                        <i class="fa-group"></i>
+                        <span class="title">采购管理</span>
+                    </a>
+                    <ul>
+                        <li class="active" href="#shopCheck" data-toggle="tab" @click="hide_purchase_submit_message">
+                            <a class="active" href="#shopCheck" data-toggle="tab">
+                                <span class="title">采购审批<span class="badge" v-if="purchase_submit_is_show===1">{{purchase_submit_count}}</span></span>
+                            </a>
                         </li>
-                        <li role="presentation">
-                            <a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#changePassword"><span
-                                    class="glyphicon glyphicon-wrench"></span>修改密码</a>
+                        <li href="#historyShop" data-toggle="tab">
+                            <a href="#historyShop" data-toggle="tab">
+                                <span class="title">历史采购记录</span>
+                            </a>
                         </li>
-                        <li role="menuitem" class="divider"></li>
-                        <li role="presentation">
-                            <a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-off"></span>安全退出</a>
+                        <li href="#purchaseTotal" data-toggle="tab">
+                            <a href="#purchaseTotal" data-toggle="tab">
+                                <span class="title">采购统计</span>
+                            </a>
+                        </li>
+                        <li href="#storehouse" data-toggle="tab">
+                            <a href="#storehouse" data-toggle="tab">
+                                <span class="title">仓库余量</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="main-menu-li">
+                    <a href="#main2" data-toggle="tab">
+                        <i class="fa-wrench"></i>
+                        <span class="title">报废管理</span>
+                    </a>
+                    <ul>
+                        <li class="active" href="#scrapCheck" data-toggle="tab" @click="hide_scrap_submit_message">
+                            <a class="active" href="#scrapCheck" data-toggle="tab">
+                                <span class="title">报废审批<span class="badge" v-if="scrap_submit_is_show===1">{{scrap_submit_count}}</span></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="main-menu-li">
+                    <a href="#main3" data-toggle="tab">
+                        <i class="fa-book"></i>
+                        <span class="title">工夹具信息</span>
+                    </a>
+                    <ul>
+                        <li class="active" href="#seqInfo" data-toggle="tab">
+                            <a class="active" href="#seqInfo" data-toggle="tab">
+                                工夹具信息
+                            </a>
                         </li>
                     </ul>
                 </li>
             </ul>
+
         </div>
+
     </div>
-</nav>
-<div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="label" aria-hidden="true"
-     style="text-align: left">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="label">修改密码</h4>
-            </div>
-            <div class="modal-body">
-                <form role="form" class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">原密码：</label>
-                        <div class="col-md-8">
-                            <input class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">新密码：</label>
-                        <div class="col-md-8">
-                            <input class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">重复密码：</label>
-                        <div class="col-md-8">
-                            <input class="form-control">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary">确认修改</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container-fluid">
-    <div class="row clearfix">
-        <div class="col-lg-3 column">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">功能菜单</h4>
-                </div>
-                <div class="panel-body">
-                    <div class="panel-group" id="left">
-                        <div class="panel panel-default">
-                            <div class="panel-heading" data-toggle="collapse" data-parent="#left" href="#1">
-                                <h4 class="panel-title" data-toggle="tab" href="#main1">
-                                    采购管理
-                                </h4>
-                            </div>
-                            <div class="panel-collapse collapse in" id="1">
-                                <ul class="nav nav-pills nav-stacked">
-                                    <li class="active" data-toggle="tab" href="#shopCheck"
-                                        @click="hide_purchase_submit_message"><a>采购审批<span class="badge"
-                                                                                           v-if="purchase_submit_is_show===1">{{purchase_submit_count}}</span></a>
-                                    </li>
-                                    <li data-toggle="tab" href="#historyShop"><a>历史采购记录</a></li>
-                                    <li data-toggle="tab" href="#purchaseTotal"><a>采购统计</a></li>
-                                    <li data-toggle="tab" href="#storehouse"><a>仓库余量</a></li>
-                                </ul>
-                            </div>
-                        </div>
 
-                        <div class="panel panel-default">
-                            <div class="panel-heading" data-toggle="collapse" data-parent="#left" href="#2">
-                                <h4 class="panel-title" data-toggle="tab" href="#main2">
-                                    报废管理
-                                </h4>
-                            </div>
-                            <div class="panel-collapse collapse" id="2">
-                                <ul class="nav nav-pills nav-stacked">
-                                    <li class="active" data-toggle="tab" href="#scrapCheck"
-                                        @click="hide_scrap_submit_message"><a>报废审批<span class="badge"
-                                                                                        v-if="scrap_submit_is_show===1">{{scrap_submit_count}}</span></a>
-                                    </li>
-                                    <li data-toggle="tab" href="#scrap_submit_history"><a>历史报废记录</a></li>
-                                </ul>
-                            </div>
-                        </div>
+    <div class="main-content">
 
-                        <div class="panel panel-default">
-                            <div class="panel-heading" data-toggle="collapse" data-parent="#left" href="#3">
-                                <h4 class="panel-title" data-toggle="tab" href="#main3">
-                                    工夹具信息
-                                </h4>
-                            </div>
-                            <div class="panel-collapse collapse" id="3">
-                                <ul class="nav nav-pills nav-stacked">
-                                    <li class="active" data-toggle="tab" href="#seqInfo"><a>工夹具信息</a></li>
-                                </ul>
-                            </div>
-                        </div>
+        <nav class="navbar user-info-navbar" role="navigation">
 
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-9 column">
-            <div class="panel panel-default tab-content">
+            <ul class="user-info-menu left-links list-inline list-unstyled">
 
-                <div id="main1" class="panel-body tab-content tab-pane fade in active">
-                    <ul class="nav nav-tabs">
-                        <li class="active" data-toggle="tab" href="#shopCheck"><a>采购审批</a></li>
-                        <li data-toggle="tab" href="#historyShop"><a>历史采购记录</a></li>
-                        <li data-toggle="tab" href="#purchaseTotal"><a>采购统计</a></li>
-                        <li data-toggle="tab" href="#storehouse"><a>仓库余量</a></li>
+                <li class="hidden-sm hidden-xs">
+                    <a href="#" data-toggle="sidebar">
+                        <i class="fa-bars"></i>
+                    </a>
+                </li>
+
+                <li class="dropdown hover-line">
+                    <a href="#" data-toggle="dropdown">
+                        <i class="fa-bell-o"></i>
+                        <span class="badge badge-purple">7</span>
+                    </a>
+
+                    <ul class="dropdown-menu notifications">
+                        <li class="top">
+                            <p class="small">
+                                <a href="#" class="pull-right">Mark all Read</a>
+                                You have <strong>3</strong> new notifications.
+                            </p>
+                        </li>
+
+                        <li>
+                            <ul class="dropdown-menu-list list-unstyled ps-scrollbar">
+                                <li class="active notification-success">
+                                    <a href="#">
+                                        <i class="fa-user"></i>
+
+                                        <span class="line">
+												<strong>New user registered</strong>
+											</span>
+
+                                        <span class="line small time">
+												30 seconds ago
+											</span>
+                                    </a>
+                                </li>
+
+                                <li class="active notification-secondary">
+                                    <a href="#">
+                                        <i class="fa-lock"></i>
+
+                                        <span class="line">
+												<strong>Privacy settings have been changed</strong>
+											</span>
+
+                                        <span class="line small time">
+												3 hours ago
+											</span>
+                                    </a>
+                                </li>
+
+                                <li class="notification-primary">
+                                    <a href="#">
+                                        <i class="fa-thumbs-up"></i>
+
+                                        <span class="line">
+												<strong>Someone special liked this</strong>
+											</span>
+
+                                        <span class="line small time">
+												2 minutes ago
+											</span>
+                                    </a>
+                                </li>
+
+                                <li class="notification-danger">
+                                    <a href="#">
+                                        <i class="fa-calendar"></i>
+
+                                        <span class="line">
+												John cancelled the event
+											</span>
+
+                                        <span class="line small time">
+												9 hours ago
+											</span>
+                                    </a>
+                                </li>
+
+                                <li class="notification-info">
+                                    <a href="#">
+                                        <i class="fa-database"></i>
+
+                                        <span class="line">
+												The server is status is stable
+											</span>
+
+                                        <span class="line small time">
+												yesterday at 10:30am
+											</span>
+                                    </a>
+                                </li>
+
+                                <li class="notification-warning">
+                                    <a href="#">
+                                        <i class="fa-envelope-o"></i>
+
+                                        <span class="line">
+												New comments waiting approval
+											</span>
+
+                                        <span class="line small time">
+												last week
+											</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="external">
+                            <a href="#">
+                                <span>View all notifications</span>
+                                <i class="fa-link-ext"></i>
+                            </a>
+                        </li>
                     </ul>
-                    <div class="panel-body tab-content">
-                        <!--采购审批-->
-                        <div id="shopCheck" class="tab-pane fade in active">
+                </li>
+
+            </ul>
+
+
+            <ul class="user-info-menu right-links list-inline list-unstyled">
+
+
+                <li class="dropdown user-profile">
+                    <a href="#" data-toggle="dropdown">
+                        <img th:src="${loginState.getData().getAvatar_url()}" alt="user-image"
+                             class="img-circle img-inline userpic-32"
+                             width="28"/>
+                        <span th:inline="text">
+								[[${loginState.getData().getName()}]]
+                            <input style="display: none" th:value="${loginState.getData().getId()}" id="id">
+								<i class="fa-angle-down"></i>
+							</span>
+                    </a>
+
+                    <ul class="dropdown-menu user-profile-menu list-unstyled">
+                        <li>
+                            <a href="#edit-profile">
+                                <i class="fa-edit"></i>
+                                New Post
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#settings">
+                                <i class="fa-wrench"></i>
+                                Settings
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#profile">
+                                <i class="fa-user"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#help">
+                                <i class="fa-info"></i>
+                                &nbsp;Help
+                            </a>
+                        </li>
+                        <li class="last">
+                            <a href="/log_out">
+                                <i class="fa-lock"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+            </ul>
+
+        </nav>
+
+        <div class="tab-content">
+            <div id="main1" class="tab-content tab-pane fade in active">
+                <div class="page-title">
+
+                    <div class="title-env">
+                        <h1 class="title">采购管理</h1>
+                    </div>
+
+                    <div class="breadcrumb-env">
+
+                        <ol class="breadcrumb bc-1">
+                            <li class="active" data-toggle="tab" href="#shopCheck"><a>采购审批</a></li>
+                            <li data-toggle="tab" href="#historyShop"><a>历史采购记录</a></li>
+                            <li data-toggle="tab" href="#purchaseTotal"><a>采购统计</a></li>
+                            <li data-toggle="tab" href="#storehouse"><a>仓库余量</a></li>
+                        </ol>
+
+                    </div>
+
+                </div>
+
+                <div id="shopCheck" class="tab-pane fade in active">
+                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">采购审批</h3>
+
+                            <div class="panel-options">
+
+                                <a href="#" data-toggle="panel">
+                                    <span class="collapse-icon">–</span>
+                                    <span class="expand-icon">+</span>
+                                </a>
+
+                                <a href="#" data-toggle="reload" @click="getData()">
+                                    <i class="fa-rotate-right"></i>
+                                </a>
+
+                            </div>
+                        </div>
+                        <div class="panel-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover" role="table">
                                     <thead>
@@ -256,7 +571,8 @@
                                             <button class="btn btn-primary" @click="pass_submit(item.id,4)">终审通过
                                             </button>
                                             <button class="btn btn-danger" data-toggle="modal"
-                                                    data-target="#purchase_submit_pass_reason" @click="get_purchase_submit_id(item.id)">终审不通过
+                                                    data-target="#purchase_submit_pass_reason"
+                                                    @click="get_purchase_submit_id(item.id)">终审不通过
                                             </button>
                                         </td>
                                     </tr>
@@ -264,23 +580,30 @@
                                 </table>
                             </div>
                             <!--我的采购审批的审批不通过原因-->
-                            <div class="modal fade" id="purchase_submit_pass_reason" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="purchase_submit_pass_reason" tabindex="-1" role="dialog"
+                                 aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                &times;
+                                            </button>
                                             <h4 class="modal-title">审批原因</h4>
                                         </div>
                                         <div class="modal-body">
                                             <div class="form-group">
                                                 <label for="disagreeReason">原因：</label>
                                                 <textarea class="form-control" rows="5"
-                                                          id="disagreeReason" v-model="purchase_submit_pass_reason"></textarea>
+                                                          id="disagreeReason"
+                                                          v-model="purchase_submit_pass_reason"></textarea>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                                            <button type="button" class="btn btn-primary" @click="dont_pass_purchase_submit">提交</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                            </button>
+                                            <button type="button" class="btn btn-primary"
+                                                    @click="dont_pass_purchase_submit">提交
+                                            </button>
                                         </div>
                                     </div><!-- /.modal-content -->
                                 </div><!-- /.modal -->
@@ -396,7 +719,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group" v-if="purchase_submit.final_acceptor_name != null">
+                                                <div class="form-group"
+                                                     v-if="purchase_submit.final_acceptor_name != null">
                                                     <label class="col-sm-3 control-label">终审人</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
@@ -431,10 +755,30 @@
                                     </div><!-- /.modal-content -->
                                 </div><!-- /.modal -->
                             </div>
-                        </div><!-- /采购审批 -->
+                        </div>
+                    </div>
+                </div><!-- /采购审批 -->
 
-                        <div id="historyShop" class="tab-pane fade">
-                            <!--历史采购记录-->
+                <div id="historyShop" class="tab-pane fade">
+                    <!--历史采购记录-->
+                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">历史采购记录</h3>
+
+                            <div class="panel-options">
+
+                                <a href="#" data-toggle="panel">
+                                    <span class="collapse-icon">–</span>
+                                    <span class="expand-icon">+</span>
+                                </a>
+
+                                <a href="#" data-toggle="reload" @click="getData()">
+                                    <i class="fa-rotate-right"></i>
+                                </a>
+
+                            </div>
+                        </div>
+                        <div class="panel-body">
                             <div style="margin-top: 2%;margin-bottom: 3%">
                                 <form role="form" class="form-horizontal">
                                     <div class="form-group row">
@@ -627,7 +971,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group" v-if="purchase_submit.final_acceptor_name != null">
+                                                <div class="form-group"
+                                                     v-if="purchase_submit.final_acceptor_name != null">
                                                     <label class="col-sm-3 control-label">终审人</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
@@ -662,10 +1007,30 @@
                                     </div><!-- /.modal-content -->
                                 </div><!-- /.modal -->
                             </div>
-                        </div><!-- /历史采购记录-->
+                        </div>
+                    </div>
+                </div><!-- /历史采购记录-->
 
-                        <!--采购统计-->
-                        <div id="purchaseTotal" class="tab-pane fade">
+                <!--采购统计-->
+                <div id="purchaseTotal" class="tab-pane fade">
+                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">采购统计</h3>
+
+                            <div class="panel-options">
+
+                                <a href="#" data-toggle="panel">
+                                    <span class="collapse-icon">–</span>
+                                    <span class="expand-icon">+</span>
+                                </a>
+
+                                <a href="#" data-toggle="reload" @click="getData()">
+                                    <i class="fa-rotate-right"></i>
+                                </a>
+
+                            </div>
+                        </div>
+                        <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-8">
                                     <div class="row">
@@ -708,7 +1073,9 @@
                                                                     <tr v-for="(item,index) in new_submit_list">
                                                                         <td data-toggle="modal"
                                                                             data-target="#new_submit_detail"
-                                                                            @click="get_new_submit_detail(index)">{{item.bill_no}}</td>
+                                                                            @click="get_new_submit_detail(index)">
+                                                                            {{item.bill_no}}
+                                                                        </td>
                                                                         <td>{{item.submit_name}}</td>
                                                                         <td><label>
                                                                             <select class="btn btn-default">
@@ -749,14 +1116,18 @@
                                                             <div class="form-group">
                                                                 <label class="col-sm-3 control-label">采购单据号</label>
                                                                 <div class="col-sm-8">
-                                                                    <div class="form-control">{{new_submit_detail.bill_no}}</div>
+                                                                    <div class="form-control">
+                                                                        {{new_submit_detail.bill_no}}
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-sm-1"></div>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="col-sm-3 control-label">采购人</label>
                                                                 <div class="col-sm-8">
-                                                                    <div class="form-control">{{new_submit_detail.submit_name}}</div>
+                                                                    <div class="form-control">
+                                                                        {{new_submit_detail.submit_name}}
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-sm-1"></div>
                                                             </div>
@@ -787,25 +1158,32 @@
                                                             <div class="form-group">
                                                                 <label class="col-sm-3 control-label">申请时间</label>
                                                                 <div class="col-sm-8">
-                                                                    <div class="form-control">{{new_submit_detail.submit_time}}</div>
+                                                                    <div class="form-control">
+                                                                        {{new_submit_detail.submit_time}}
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-sm-1"></div>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="col-sm-3 control-label">审批状态</label>
                                                                 <div class="col-sm-8">
-                                                                    <div class="form-control" v-if="new_submit_detail.status==0">待审批
+                                                                    <div class="form-control"
+                                                                         v-if="new_submit_detail.status==0">待审批
                                                                     </div>
-                                                                    <div class="form-control" v-if="new_submit_detail.status==1">
+                                                                    <div class="form-control"
+                                                                         v-if="new_submit_detail.status==1">
                                                                         初审未通过
                                                                     </div>
-                                                                    <div class="form-control" v-if="new_submit_detail.status==2">
+                                                                    <div class="form-control"
+                                                                         v-if="new_submit_detail.status==2">
                                                                         初审通过
                                                                     </div>
-                                                                    <div class="form-control" v-if="new_submit_detail.status==3">
+                                                                    <div class="form-control"
+                                                                         v-if="new_submit_detail.status==3">
                                                                         终审未通过
                                                                     </div>
-                                                                    <div class="form-control" v-if="new_submit_detail.status==4">
+                                                                    <div class="form-control"
+                                                                         v-if="new_submit_detail.status==4">
                                                                         终审通过
                                                                     </div>
                                                                 </div>
@@ -814,14 +1192,18 @@
                                                             <div class="form-group">
                                                                 <label class="col-sm-3 control-label">终审人</label>
                                                                 <div class="col-sm-8">
-                                                                    <div class="form-control">{{new_submit_detail.final_acceptor_name}}</div>
+                                                                    <div class="form-control">
+                                                                        {{new_submit_detail.final_acceptor_name}}
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-sm-1"></div>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="col-sm-3 control-label">终审时间</label>
                                                                 <div class="col-sm-8">
-                                                                    <div class="form-control">{{new_submit_detail.final_time}}</div>
+                                                                    <div class="form-control">
+                                                                        {{new_submit_detail.final_time}}
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-sm-1"></div>
                                                             </div>
@@ -924,7 +1306,9 @@
                                                             <tr v-for="(item,index) in jig_detail_about_submit_list">
                                                                 <td data-toggle="modal"
                                                                     data-target="#new_jig_about_submit_detail"
-                                                                    @click="get_new_jig_about_submit_detail(item.bill_no)">{{item.bill_no}}</td>
+                                                                    @click="get_new_jig_about_submit_detail(item.bill_no)">
+                                                                    {{item.bill_no}}
+                                                                </td>
                                                                 <td>{{item.submit_name}}</td>
                                                                 <td>
                                                                     <label>
@@ -966,14 +1350,18 @@
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">采购单据号</label>
                                                             <div class="col-sm-8">
-                                                                <div class="form-control">{{jig_detail_about_submit_detail.bill_no}}</div>
+                                                                <div class="form-control">
+                                                                    {{jig_detail_about_submit_detail.bill_no}}
+                                                                </div>
                                                             </div>
                                                             <div class="col-sm-1"></div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">采购人</label>
                                                             <div class="col-sm-8">
-                                                                <div class="form-control">{{jig_detail_about_submit_detail.submit_name}}</div>
+                                                                <div class="form-control">
+                                                                    {{jig_detail_about_submit_detail.submit_name}}
+                                                                </div>
                                                             </div>
                                                             <div class="col-sm-1"></div>
                                                         </div>
@@ -1004,25 +1392,32 @@
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">申请时间</label>
                                                             <div class="col-sm-8">
-                                                                <div class="form-control">{{jig_detail_about_submit_detail.submit_time}}</div>
+                                                                <div class="form-control">
+                                                                    {{jig_detail_about_submit_detail.submit_time}}
+                                                                </div>
                                                             </div>
                                                             <div class="col-sm-1"></div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">审批状态</label>
                                                             <div class="col-sm-8">
-                                                                <div class="form-control" v-if="jig_detail_about_submit_detail.status==0">待审批
+                                                                <div class="form-control"
+                                                                     v-if="jig_detail_about_submit_detail.status==0">待审批
                                                                 </div>
-                                                                <div class="form-control" v-if="jig_detail_about_submit_detail.status==1">
+                                                                <div class="form-control"
+                                                                     v-if="jig_detail_about_submit_detail.status==1">
                                                                     初审未通过
                                                                 </div>
-                                                                <div class="form-control" v-if="jig_detail_about_submit_detail.status==2">
+                                                                <div class="form-control"
+                                                                     v-if="jig_detail_about_submit_detail.status==2">
                                                                     初审通过
                                                                 </div>
-                                                                <div class="form-control" v-if="jig_detail_about_submit_detail.status==3">
+                                                                <div class="form-control"
+                                                                     v-if="jig_detail_about_submit_detail.status==3">
                                                                     终审未通过
                                                                 </div>
-                                                                <div class="form-control" v-if="jig_detail_about_submit_detail.status==4">
+                                                                <div class="form-control"
+                                                                     v-if="jig_detail_about_submit_detail.status==4">
                                                                     终审通过
                                                                 </div>
                                                             </div>
@@ -1031,14 +1426,18 @@
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">终审人</label>
                                                             <div class="col-sm-8">
-                                                                <div class="form-control">{{jig_detail_about_submit_detail.final_acceptor_name}}</div>
+                                                                <div class="form-control">
+                                                                    {{jig_detail_about_submit_detail.final_acceptor_name}}
+                                                                </div>
                                                             </div>
                                                             <div class="col-sm-1"></div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">终审时间</label>
                                                             <div class="col-sm-8">
-                                                                <div class="form-control">{{jig_detail_about_submit_detail.final_time}}</div>
+                                                                <div class="form-control">
+                                                                    {{jig_detail_about_submit_detail.final_time}}
+                                                                </div>
                                                             </div>
                                                             <div class="col-sm-1"></div>
                                                         </div>
@@ -1140,7 +1539,9 @@
                                                                 <tr v-for="(item,index) in submit_man_about_submit_list">
                                                                     <td data-toggle="modal"
                                                                         data-target="#submit_man_about_submit_detail"
-                                                                        @click="get_submit_man_about_submit_detail(item.bill_no)">{{item.bill_no}}</td>
+                                                                        @click="get_submit_man_about_submit_detail(item.bill_no)">
+                                                                        {{item.bill_no}}
+                                                                    </td>
                                                                     <td>{{item.submit_name}}</td>
                                                                     <td>
                                                                         <label>
@@ -1198,14 +1599,18 @@
                                                     <div class="form-group">
                                                         <label class="col-sm-3 control-label">采购单据号</label>
                                                         <div class="col-sm-8">
-                                                            <div class="form-control">{{submit_man_about_submit_detail.bill_no}}</div>
+                                                            <div class="form-control">
+                                                                {{submit_man_about_submit_detail.bill_no}}
+                                                            </div>
                                                         </div>
                                                         <div class="col-sm-1"></div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="col-sm-3 control-label">采购人</label>
                                                         <div class="col-sm-8">
-                                                            <div class="form-control">{{submit_man_about_submit_detail.submit_name}}</div>
+                                                            <div class="form-control">
+                                                                {{submit_man_about_submit_detail.submit_name}}
+                                                            </div>
                                                         </div>
                                                         <div class="col-sm-1"></div>
                                                     </div>
@@ -1236,25 +1641,32 @@
                                                     <div class="form-group">
                                                         <label class="col-sm-3 control-label">申请时间</label>
                                                         <div class="col-sm-8">
-                                                            <div class="form-control">{{submit_man_about_submit_detail.submit_time}}</div>
+                                                            <div class="form-control">
+                                                                {{submit_man_about_submit_detail.submit_time}}
+                                                            </div>
                                                         </div>
                                                         <div class="col-sm-1"></div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="col-sm-3 control-label">审批状态</label>
                                                         <div class="col-sm-8">
-                                                            <div class="form-control" v-if="submit_man_about_submit_detail.status==0">待审批
+                                                            <div class="form-control"
+                                                                 v-if="submit_man_about_submit_detail.status==0">待审批
                                                             </div>
-                                                            <div class="form-control" v-if="submit_man_about_submit_detail.status==1">
+                                                            <div class="form-control"
+                                                                 v-if="submit_man_about_submit_detail.status==1">
                                                                 初审未通过
                                                             </div>
-                                                            <div class="form-control" v-if="submit_man_about_submit_detail.status==2">
+                                                            <div class="form-control"
+                                                                 v-if="submit_man_about_submit_detail.status==2">
                                                                 初审通过
                                                             </div>
-                                                            <div class="form-control" v-if="submit_man_about_submit_detail.status==3">
+                                                            <div class="form-control"
+                                                                 v-if="submit_man_about_submit_detail.status==3">
                                                                 终审未通过
                                                             </div>
-                                                            <div class="form-control" v-if="submit_man_about_submit_detail.status==4">
+                                                            <div class="form-control"
+                                                                 v-if="submit_man_about_submit_detail.status==4">
                                                                 终审通过
                                                             </div>
                                                         </div>
@@ -1263,14 +1675,18 @@
                                                     <div class="form-group">
                                                         <label class="col-sm-3 control-label">终审人</label>
                                                         <div class="col-sm-8">
-                                                            <div class="form-control">{{submit_man_about_submit_detail.final_acceptor_name}}</div>
+                                                            <div class="form-control">
+                                                                {{submit_man_about_submit_detail.final_acceptor_name}}
+                                                            </div>
                                                         </div>
                                                         <div class="col-sm-1"></div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="col-sm-3 control-label">终审时间</label>
                                                         <div class="col-sm-8">
-                                                            <div class="form-control">{{submit_man_about_submit_detail.final_time}}</div>
+                                                            <div class="form-control">
+                                                                {{submit_man_about_submit_detail.final_time}}
+                                                            </div>
                                                         </div>
                                                         <div class="col-sm-1"></div>
                                                     </div>
@@ -1350,9 +1766,29 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                        <div id="storehouse" class="tab-pane fade">
-                            <!--仓库余量-->
+                <div id="storehouse" class="tab-pane fade">
+                    <!--仓库余量-->
+                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">仓库余量</h3>
+
+                            <div class="panel-options">
+
+                                <a href="#" data-toggle="panel">
+                                    <span class="collapse-icon">–</span>
+                                    <span class="expand-icon">+</span>
+                                </a>
+
+                                <a href="#" data-toggle="reload" @click="getData()">
+                                    <i class="fa-rotate-right"></i>
+                                </a>
+
+                            </div>
+                        </div>
+                        <div class="panel-body">
                             <div style="margin-top: 2%;margin-bottom: 3%">
                                 <form role="form" class="form-horizontal">
                                     <div class="form-group row">
@@ -1404,19 +1840,48 @@
                             </table>
                         </div>
                     </div>
-
                 </div>
 
-                <div id="main2" class="panel-body tab-content tab-pane fade">
-                    <ul class="nav nav-tabs">
-                        <li class="active" data-toggle="tab" href="#scrapCheck"><a>报废审批</a></li>
-                        <li data-toggle="tab" href="#scrap_submit_history"><a>历史报废记录</a></li>
-                    </ul>
-                    <div class="panel-body tab-content">
-                        <div id="scrapCheck" class="tab-pane fade in active">
-                            <!--报废审批-->
-                            <div>
-                                <table class="table table-striped table-hover table-responsive" role="table">
+            </div>
+            <div id="main2" class="tab-content tab-pane fade">
+                <div class="page-title">
+
+                    <div class="title-env">
+                        <h1 class="title">报废管理</h1>
+                    </div>
+
+                    <div class="breadcrumb-env">
+
+                        <ol class="breadcrumb bc-1">
+                            <li class="active" data-toggle="tab" href="#scrapCheck"><a>报废审批</a></li>
+                            <li data-toggle="tab" href="#scrap_submit_history"><a>历史报废记录</a></li>
+                        </ol>
+
+                    </div>
+
+                </div>
+                <div id="scrapCheck" class="tab-pane fade in active">
+                    <!--报废审批-->
+                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">报废审批</h3>
+
+                            <div class="panel-options">
+
+                                <a href="#" data-toggle="panel">
+                                    <span class="collapse-icon">–</span>
+                                    <span class="expand-icon">+</span>
+                                </a>
+
+                                <a href="#" data-toggle="reload" @click="getData()">
+                                    <i class="fa-rotate-right"></i>
+                                </a>
+
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover" role="table">
                                     <thead>
                                     <tr>
                                         <th>工夹具代码</th>
@@ -1587,9 +2052,29 @@
                                 </div><!-- /.modal -->
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                        <div id="scrap_submit_history" class="tab-pane fade">
-                            <!--历史报废记录-->
+                <div id="scrap_submit_history" class="tab-pane fade">
+                    <!--历史报废记录-->
+                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">历史报废记录</h3>
+
+                            <div class="panel-options">
+
+                                <a href="#" data-toggle="panel">
+                                    <span class="collapse-icon">–</span>
+                                    <span class="expand-icon">+</span>
+                                </a>
+
+                                <a href="#" data-toggle="reload" @click="getData()">
+                                    <i class="fa-rotate-right"></i>
+                                </a>
+
+                            </div>
+                        </div>
+                        <div class="panel-body">
                             <div style="margin-top: 2%;margin-bottom: 3%">
                                 <form role="form" class="form-horizontal">
                                     <div class="form-group row">
@@ -1786,7 +2271,8 @@
                                                     </div>
                                                     <div class="col-sm-1"></div>
                                                 </div>
-                                                <div class="form-group" v-if="scrap_submit.status == 3 && scrao_submit.final_reason != null">
+                                                <div class="form-group"
+                                                     v-if="scrap_submit.status == 3 && scrao_submit.final_reason != null">
                                                     <label class="col-sm-3 control-label">终审不通过原因</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">{{scrap_submit.final_reason}}
@@ -1806,56 +2292,85 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                    <div id="main3" class="tab-content tab-pane fade">
+                        <div class="page-title">
 
-                        <div id="main3" class="panel-body tab-content tab-pane fade">
-                            <ul class="nav nav-tabs">
-                                <li class="active" data-toggle="tab" href="#seqInfo"><a>工夹具信息</a></li>
+                            <div class="title-env">
+                                <h1 class="title">工夹具信息</h1>
+                            </div>
 
-                            </ul>
-                            <div class="panel-body tab-content">
-                                <!--工夹具信息-->
-                                <div id="seqInfo" class="tab-pane fade in active table-responsive">
-                                    <table class="table table-striped table-hover" role="table">
-                                        <thead>
-                                        <tr>
-                                            <th style="display: none">工夹具id</th>
-                                            <th>工夹具代码</th>
-                                            <th>工夹具名称</th>
-                                            <th>工夹具模组</th>
-                                            <th>工夹具料号</th>
-                                            <th>类别</th>
-                                            <th>每条产线所需</th>
-                                            <th>用途</th>
-                                            <th>检点周期</th>
-                                            <th>操作</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr v-for="jig in jig_list">
-                                            <td style="display:none;">1091</td>
-                                            <td>{{jig.code}}</td>
-                                            <td>{{jig.name}}</td>
-                                            <td>{{jig.model}}</td>
-                                            <td>
-                                                <label>
-                                                    <select class="btn btn-default">
-                                                        <option v-for="part_no in jig.part_no.split('|')">{{part_no}}</option>
-                                                    </select>
-                                                </label>
-                                            </td>
-                                            <td>{{jig.family}}</td>
-                                            <td>{{jig.upl}}</td>
-                                            <td>{{jig.user_for}}</td>
-                                            <td>{{jig.pm_period}}</td>
-                                            <td>
-                                                <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                        data-target="#edit_jigInfo">修改
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                            <div class="breadcrumb-env">
+
+                                <ol class="breadcrumb bc-1">
+                                    <li class="active" data-toggle="tab" href="#seqInfo"><a>工夹具信息</a></li>
+                                </ol>
+
+                            </div>
+
+                        </div>
+                        <div id="seqInfo" class="tab-pane fade in active table-responsive">
+                            <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">工夹具信息</h3>
+
+                                    <div class="panel-options">
+
+                                        <a href="#" data-toggle="panel">
+                                            <span class="collapse-icon">–</span>
+                                            <span class="expand-icon">+</span>
+                                        </a>
+
+                                        <a href="#" data-toggle="reload" @click="getData()">
+                                            <i class="fa-rotate-right"></i>
+                                        </a>
+
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover" role="table">
+                                            <thead>
+                                            <tr>
+                                                <th style="display: none">工夹具id</th>
+                                                <th>工夹具代码</th>
+                                                <th>工夹具名称</th>
+                                                <th>工夹具模组</th>
+                                                <th>工夹具料号</th>
+                                                <th>类别</th>
+                                                <th>每条产线所需</th>
+                                                <th>用途</th>
+                                                <th>检点周期</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr v-for="jig in jig_list">
+                                                <td style="display:none;">1091</td>
+                                                <td>{{jig.code}}</td>
+                                                <td>{{jig.name}}</td>
+                                                <td>{{jig.model}}</td>
+                                                <td>
+                                                    <label>
+                                                        <select class="btn btn-default">
+                                                            <option v-for="part_no in jig.part_no.split('|')">
+                                                                {{part_no}}
+                                                            </option>
+                                                        </select>
+                                                    </label>
+                                                </td>
+                                                <td>{{jig.family}}</td>
+                                                <td>{{jig.upl}}</td>
+                                                <td>{{jig.user_for}}</td>
+                                                <td>{{jig.pm_period}}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                            data-target="#edit_jigInfo">修改
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     <div class="text-center row" v-if="max_page_number != 0">
                                         <my-pagination :max_page_number="max_page_number"
                                                        :now_page_number="now_page_number"></my-pagination>
@@ -1875,25 +2390,29 @@
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">工夹具代码</label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" class="form-control" v-model="jig.code">
+                                                                <input type="text" class="form-control"
+                                                                       v-model="jig.code">
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">工夹具名字</label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" class="form-control" v-model="jig.name">
+                                                                <input type="text" class="form-control"
+                                                                       v-model="jig.name">
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">所属部门</label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" class="form-control" v-model="jig.workcell">
+                                                                <input type="text" class="form-control"
+                                                                       v-model="jig.workcell">
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">类别</label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" class="form-control" v-model="jig.family">
+                                                                <input type="text" class="form-control"
+                                                                       v-model="jig.family">
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
@@ -1908,7 +2427,8 @@
                                                             <label class="col-sm-3 control-label">工夹具料号</label>
                                                             <div class="col-sm-8">
                                                                 <select class="form-control">
-                                                                    <option v-for="item in jig.part_no">{{item}}</option>
+                                                                    <option v-for="item in jig.part_no">{{item}}
+                                                                    </option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -1986,20 +2506,64 @@
                                             </div><!-- /.modal-content -->
                                         </div><!-- /.modal -->
                                     </div>
-                                </div><!-- /工夹具信息 -->
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="panel-footer">
-
-                        </div>
+                        </div><!-- /工夹具信息 -->
                     </div>
                 </div>
+
+
+                <footer class="main-footer sticky footer-type-1">
+
+                    <div class="footer-inner">
+
+                        <div class="footer-text">
+                            &copy; 2020
+                            <strong>Omega</strong>
+                            theme by <a href="http://laborator.co" target="_blank">YC</a>
+                        </div>
+
+
+                        <div class="go-up">
+
+                            <a href="#" rel="go-top">
+                                <i class="fa-angle-up"></i>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </footer>
             </div>
+
+        </div>
+
+
+        <div class="page-loading-overlay">
+            <div class="loader-2"></div>
         </div>
     </div>
 </div>
+<!-- Bottom Scripts -->
+<script src="assets/js/TweenMax.min.js"></script>
+<script src="assets/js/resizeable.js"></script>
+<script src="assets/js/joinable.js"></script>
+<script src="assets/js/xenon-api.js"></script>
+<script src="assets/js/xenon-toggles.js"></script>
+
+
+<!-- Imported scripts on this page -->
+<script src="assets/js/xenon-widgets.js"></script>
+<script src="assets/js/devexpress-web-14.1/js/globalize.min.js"></script>
+<script src="assets/js/devexpress-web-14.1/js/dx.chartjs.js"></script>
+<script src="assets/js/toastr/toastr.min.js"></script>
+
+
+<!-- JavaScripts initializations and stuff -->
+<script src="assets/js/xenon-custom.js"></script>
 <script src="js/pagination.js"></script>
 <script src="js/manager_vue.js"></script>
+
 </body>
 </html>

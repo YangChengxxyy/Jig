@@ -11,11 +11,77 @@
  Target Server Version : 50647
  File Encoding         : 65001
 
- Date: 16/02/2020 22:39:30
+ Date: 10/03/2020 19:49:42
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for cn_en
+-- ----------------------------
+DROP TABLE IF EXISTS `cn_en`;
+CREATE TABLE `cn_en`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `english` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `chinese` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`id`, `english`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1184 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of cn_en
+-- ----------------------------
+INSERT INTO `cn_en` VALUES (4, 'id', 'id');
+INSERT INTO `cn_en` VALUES (5, 'name', '工夹具名字');
+INSERT INTO `cn_en` VALUES (6, 'code', '工夹具代码');
+INSERT INTO `cn_en` VALUES (7, 'model', '工夹具模组');
+INSERT INTO `cn_en` VALUES (8, 'part_no', '工夹具料号');
+INSERT INTO `cn_en` VALUES (9, 'family_id', '类别id');
+INSERT INTO `cn_en` VALUES (10, 'family', '类别');
+INSERT INTO `cn_en` VALUES (11, 'upl', '每条产线所需');
+INSERT INTO `cn_en` VALUES (12, 'user_for', '用途');
+INSERT INTO `cn_en` VALUES (13, 'pm_period', '保养检点周期');
+INSERT INTO `cn_en` VALUES (14, 'owner', '责任人id');
+INSERT INTO `cn_en` VALUES (15, 'owner_name', '责任人');
+INSERT INTO `cn_en` VALUES (16, 'rec_time', '录入时间');
+INSERT INTO `cn_en` VALUES (17, 'rec_by', '录入人id');
+INSERT INTO `cn_en` VALUES (18, 'rec_by_name', '录入人');
+INSERT INTO `cn_en` VALUES (19, 'edit_time', '修改时间');
+INSERT INTO `cn_en` VALUES (20, 'edit_by', '修改人id');
+INSERT INTO `cn_en` VALUES (21, 'edit_by_name', '修改人');
+INSERT INTO `cn_en` VALUES (22, 'workcell_id', '工作部门id');
+INSERT INTO `cn_en` VALUES (23, 'workcell', '工作部门');
+INSERT INTO `cn_en` VALUES (24, 'remark', '备注');
+INSERT INTO `cn_en` VALUES (25, 'JigDefinition', '工夹具定义');
+INSERT INTO `cn_en` VALUES (26, 'submit_id', '采购人id');
+INSERT INTO `cn_en` VALUES (27, 'submit_name', '采购人');
+INSERT INTO `cn_en` VALUES (28, 'count', '数量');
+INSERT INTO `cn_en` VALUES (29, 'submit_time', '申请时间');
+INSERT INTO `cn_en` VALUES (30, 'first_time', '初审时间');
+INSERT INTO `cn_en` VALUES (31, 'first_acceptor', '初审人id');
+INSERT INTO `cn_en` VALUES (32, 'first_acceptor_name', '初审人');
+INSERT INTO `cn_en` VALUES (33, 'first_reason', '初审未通过原因');
+INSERT INTO `cn_en` VALUES (34, 'final_time', '终审时间');
+INSERT INTO `cn_en` VALUES (35, 'final_acceptor', '终审人id');
+INSERT INTO `cn_en` VALUES (36, 'final_acceptor_name', '终审人');
+INSERT INTO `cn_en` VALUES (37, 'final_reason', '终审未通过原因');
+INSERT INTO `cn_en` VALUES (38, 'status', '状态');
+INSERT INTO `cn_en` VALUES (39, 'production_line_id', '产线id');
+INSERT INTO `cn_en` VALUES (40, 'production_line_name', '产线');
+INSERT INTO `cn_en` VALUES (41, 'bill_no', '单据号');
+INSERT INTO `cn_en` VALUES (42, 'tool_photo_url', '故障图片路径');
+INSERT INTO `cn_en` VALUES (43, 'PurchaseIncomeHistory', '历史采购');
+INSERT INTO `cn_en` VALUES (44, 'used_count', '寿命计数');
+INSERT INTO `cn_en` VALUES (45, 'ScrapSubmit', '报废申请');
+INSERT INTO `cn_en` VALUES (46, 'ScrapHistory', '报废历史');
+INSERT INTO `cn_en` VALUES (47, 'email', '邮箱');
+INSERT INTO `cn_en` VALUES (48, 'phone', '手机号码');
+INSERT INTO `cn_en` VALUES (49, 'position', '职位');
+INSERT INTO `cn_en` VALUES (50, 'password', '密码');
+INSERT INTO `cn_en` VALUES (51, 'entry_date', '入职时间');
+INSERT INTO `cn_en` VALUES (52, 'avatar_url', '头像照片');
+INSERT INTO `cn_en` VALUES (53, 'user_name', '用户名');
+INSERT INTO `cn_en` VALUES (54, 'type', '权限级别');
 
 -- ----------------------------
 -- Table structure for jig_definition
@@ -136,6 +202,23 @@ CREATE TABLE `jig_family`  (
 -- Records of jig_family
 -- ----------------------------
 INSERT INTO `jig_family` VALUES ('79', 'JABIL FU');
+
+-- ----------------------------
+-- Table structure for jig_part_no
+-- ----------------------------
+DROP TABLE IF EXISTS `jig_part_no`;
+CREATE TABLE `jig_part_no`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `part_no` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of jig_part_no
+-- ----------------------------
+INSERT INTO `jig_part_no` VALUES (1, 'PNA90320/1');
+INSERT INTO `jig_part_no` VALUES (2, 'PNA90320/2');
+INSERT INTO `jig_part_no` VALUES (3, 'PNA90322/1');
 
 -- ----------------------------
 -- Table structure for jig_position
@@ -367,13 +450,13 @@ CREATE TABLE `purchase_income_submit`  (
   `bill_no` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   `tool_photo_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of purchase_income_submit
 -- ----------------------------
-INSERT INTO `purchase_income_submit` VALUES (1, '1230936', 'EF2238|EF2187', '5|1', '2020-02-03 09:36:01', NULL, NULL, NULL, NULL, '2', 12, 'BO19070500000002', NULL);
-INSERT INTO `purchase_income_submit` VALUES (2, '1230936', 'EF0789', '2', '2020-02-03 11:10:12', NULL, NULL, NULL, NULL, '0', 10, 'BO19070500002000', NULL);
+INSERT INTO `purchase_income_submit` VALUES (1, '1230936', 'EF2238|EF2187', '5|1', '2020-02-03 09:36:01', NULL, NULL, '2020-03-08 10:03:34', '1230936', '3', 12, 'BO19070500000002', NULL);
+INSERT INTO `purchase_income_submit` VALUES (2, '1230936', 'EF0789|EF2187|EF2191', '2|2|2', '2020-02-03 11:10:12', NULL, NULL, NULL, NULL, '0', 16, 'BO19070500002000', NULL);
 INSERT INTO `purchase_income_submit` VALUES (3, '1230936', 'EF2189|EF0789', '1|19', '2020-02-03 15:42:43', NULL, NULL, NULL, NULL, '0', 9, '20200203', NULL);
 INSERT INTO `purchase_income_submit` VALUES (4, '1230936', 'EF2191|EF2190', '1|3', '2020-02-03 15:45:38', NULL, NULL, NULL, NULL, '0', 9, '202002031545', NULL);
 INSERT INTO `purchase_income_submit` VALUES (6, '1230936', 'EF0789|EF2203', '15|12', '2020-02-03 16:41:54', NULL, NULL, NULL, NULL, '0', 9, '202002031641', NULL);
@@ -385,6 +468,7 @@ INSERT INTO `purchase_income_submit` VALUES (12, '1230936', 'EF2188|EF2185|EF079
 INSERT INTO `purchase_income_submit` VALUES (13, '1230936', 'EF2191|EF2208|EF2234', '2|7|4', '2020-02-06 13:00:48', NULL, NULL, NULL, NULL, '0', 14, '202002061300', NULL);
 INSERT INTO `purchase_income_submit` VALUES (15, '1230936', 'EF0789|EF2188|EF2190|EF2203', '2|4|3|2', '2020-02-06 17:28:18', NULL, NULL, NULL, NULL, '0', 12, '202002061727', NULL);
 INSERT INTO `purchase_income_submit` VALUES (16, '1230936', 'EF0789', '1', '2020-02-09 13:44:36', NULL, NULL, NULL, NULL, '0', 11, '202002091344', NULL);
+INSERT INTO `purchase_income_submit` VALUES (17, '1230736', 'EF2191|EF2189', '2|1', '2020-03-01 21:21:18', NULL, NULL, NULL, NULL, '0', 11, '202003012121', NULL);
 
 -- ----------------------------
 -- Table structure for purchase_income_submit_history
@@ -449,14 +533,21 @@ CREATE TABLE `repair_submit`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   `seq_id` int(11) NULL DEFAULT NULL,
-  `trouble_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `trouble_photo_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `repair_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `repair_photo_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `submit_time` datetime(0) NULL DEFAULT NULL,
   `submit_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   `acceptor_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   `acceptor_time` datetime(0) NULL DEFAULT NULL,
+  `status` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of repair_submit
+-- ----------------------------
+INSERT INTO `repair_submit` VALUES (2, 'EF2189', 1, '123', 'images/repair_images/REPAIR-20200226083618645-c775a1e1-6c7e-42d4-a45f-45d53f01623c.png', '2020-02-26 08:36:18', '1215072', NULL, NULL, NULL);
+INSERT INTO `repair_submit` VALUES (3, 'EF2191', 1, '手机上传测试', 'images/repair_images/REPAIR-20200226084302934-8d7c0146-1cb4-4aad-8389-8cb2d00c15d1.jpeg', '2020-02-26 08:43:48', '1215072', NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for repair_submit_history
@@ -466,8 +557,8 @@ CREATE TABLE `repair_submit_history`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   `seq_id` int(11) NULL DEFAULT NULL,
-  `trouble_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
-  `trouble_photo_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `repair_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `repair_photo_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `submit_time` datetime(0) NULL DEFAULT NULL,
   `submit_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   `acceptor_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
@@ -510,13 +601,29 @@ CREATE TABLE `scrap_submit`  (
   `final_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   `status` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '0待审核 1初审未通过 2初审通过 3终审未通过 4终审通过',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of scrap_submit
 -- ----------------------------
 INSERT INTO `scrap_submit` VALUES (1, 'EF2191', 1, '2020-02-16 22:14:54', '1215072', '0', '使用过久', 'images\\scrap_images\\SCRAP-20200216221454297-7dc40be3-55b9-404b-bf05-7a5c6036314d.JPG', NULL, NULL, NULL, NULL, NULL, NULL, '0');
-INSERT INTO `scrap_submit` VALUES (2, 'EF0789', 12, '2020-02-16 22:34:20', '1215072', NULL, 'test', 'images\\scrap_images\\SCRAP-20200216223420880-6f0cf957-2641-470f-9d30-f8940b121e1f.JPG', NULL, NULL, NULL, NULL, NULL, NULL, '0');
+INSERT INTO `scrap_submit` VALUES (4, 'EF2191', 1, '2020-02-17 08:33:15', '1215072', '0', '巴黎', 'images\\scrap_images\\SCRAP-20200217083315688-20c43e58-823b-48d4-bc73-620544365e24.jpg', NULL, NULL, NULL, NULL, NULL, NULL, '0');
+INSERT INTO `scrap_submit` VALUES (5, 'EF2185', 1, '2020-02-17 14:50:44', '1215072', '0', '`12', 'images\\scrap_images\\SCRAP-20200217145044791-6a7fdcc2-855a-4770-8fa5-5e8fafa503e0.JPG', NULL, NULL, NULL, NULL, NULL, NULL, '0');
+INSERT INTO `scrap_submit` VALUES (7, 'EF2191', 1, '2020-02-17 15:58:43', '1215072', '0', 'hg', 'images\\scrap_images\\SCRAP-20200217155843667-296e7d10-1797-47db-811a-58af9c35a2c7.png', NULL, NULL, NULL, NULL, NULL, NULL, '0');
+INSERT INTO `scrap_submit` VALUES (8, 'EF0789', 2, '2020-02-17 16:12:45', '1215072', '32', '夹具有自己的想法', 'images\\scrap_images\\SCRAP-20200217161245234-19d7cef1-f655-4e0e-8328-5a1db0c9e9ae.jpeg', NULL, NULL, NULL, NULL, NULL, NULL, '0');
+INSERT INTO `scrap_submit` VALUES (9, 'EF2185', 2, '2020-02-17 16:17:17', '1215072', '0', '得', 'images\\scrap_images\\SCRAP-20200217161717617-70e31b31-9ab5-4572-9ba5-9cbb6b6ee8c5.jpeg', NULL, NULL, NULL, NULL, NULL, NULL, '0');
+INSERT INTO `scrap_submit` VALUES (10, 'EF2188', 2, '2020-02-17 21:17:21', '1215072', '23', 'ceshi', 'images\\scrap_images\\SCRAP-20200217211721721-3b0d13f8-16d9-49d8-9e3b-40617bfc5902.jpg', NULL, NULL, NULL, NULL, NULL, NULL, '0');
+INSERT INTO `scrap_submit` VALUES (11, 'EF2188', 2, '2020-02-17 21:17:58', '1215072', '23', 'ceshi', 'images\\scrap_images\\SCRAP-20200217211758458-19b6e6e1-5015-45c1-8a70-8e26afca6e57.jpg', NULL, NULL, NULL, NULL, NULL, NULL, '0');
+INSERT INTO `scrap_submit` VALUES (12, 'EF2189', 1, '2020-02-19 10:14:27', '1215072', '0', 'asd ', 'images\\scrap_images\\SCRAP-20200219101427125-2b6012f7-934b-48af-9c12-68817f427675.JPG', NULL, NULL, NULL, NULL, NULL, NULL, '0');
+INSERT INTO `scrap_submit` VALUES (13, 'EF2191', 1, '2020-02-19 10:18:20', '1215072', '0', 'asd', 'images\\scrap_images\\SCRAP-20200219101740828-19955475-e760-40c1-8be0-6e59353fea9f.jpg', NULL, NULL, NULL, NULL, NULL, NULL, '0');
+INSERT INTO `scrap_submit` VALUES (14, 'EF0789', 1, '2020-02-19 10:19:04', '1215072', '3', 'sdf ', 'images\\scrap_images\\SCRAP-20200219101904909-f74b3c4e-24b1-4fbc-9b81-c62184c62b36.JPG', NULL, NULL, NULL, NULL, NULL, NULL, '0');
+INSERT INTO `scrap_submit` VALUES (15, 'EF0789', 2, '2020-02-19 10:20:02', '1215072', '32', '12', 'images\\scrap_images\\SCRAP-20200219101948308-4c66cbb8-2613-4b70-8de5-ebebea3fbbcb.jpg', NULL, NULL, NULL, NULL, NULL, NULL, '0');
+INSERT INTO `scrap_submit` VALUES (16, 'EF0789', 2, '2020-02-19 10:21:06', '1215072', '32', '123', 'images\\scrap_images\\SCRAP-20200219102031453-a6b98b2b-bcbc-4bb5-a4ab-e3b3c2896652.jpeg', NULL, NULL, NULL, NULL, NULL, NULL, '0');
+INSERT INTO `scrap_submit` VALUES (17, 'EF2187', 1, '2020-02-19 10:24:52', '1215072', '0', '123', 'images\\scrap_images\\SCRAP-20200219102421621-7afa87e6-cd3b-4e60-add3-887a4b5b8fdd.jpeg', NULL, NULL, NULL, NULL, NULL, NULL, '0');
+INSERT INTO `scrap_submit` VALUES (18, 'EF2189', 1, '2020-02-19 20:00:10', '1215072', '0', '阿萨德', 'images/scrap_images/SCRAP-20200219195927559-e640702d-b086-47c6-b24f-581885c2ad5e.jpeg', NULL, NULL, NULL, NULL, NULL, NULL, '0');
+INSERT INTO `scrap_submit` VALUES (19, 'EF2189', 1, '2020-02-20 21:27:30', '1215072', '0', '111', 'images/scrap_images/SCRAP-20200220212601593-9c674486-5d70-4936-8300-5e2d57a3da0e.jpeg', NULL, NULL, NULL, NULL, NULL, NULL, '0');
+INSERT INTO `scrap_submit` VALUES (20, 'EF2189', 1, '2020-02-23 14:57:52', '1215072', '0', 'asdasd', 'images/scrap_images/SCRAP-20200223145709296-2cc78bfd-3a95-4ced-927a-2d6cec4187ae.jpeg', NULL, NULL, NULL, NULL, NULL, NULL, '0');
+INSERT INTO `scrap_submit` VALUES (21, 'EF2191', 1, '2020-03-03 21:29:31', '1230936', '0', '123', 'images/scrap_images/SCRAP-20200303212931396-31948bba-06d9-449e-8673-7e379eff108f.png', NULL, NULL, NULL, NULL, NULL, NULL, '0');
 
 -- ----------------------------
 -- Table structure for scrap_submit_history
@@ -546,16 +653,26 @@ CREATE TABLE `scrap_submit_history`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
-  `id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `id` varchar(15) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `password` varchar(15) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `workcell_id` int(11) NULL DEFAULT NULL,
+  `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `phone` varchar(11) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `position` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `entry_date` date NULL DEFAULT NULL COMMENT '入职时间',
+  `avatar_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '头像路径',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1215072', 'Xianghai Zhang');
-INSERT INTO `user` VALUES ('1230936', 'Lei Qian');
+INSERT INTO `user` VALUES ('1215072', 'Xianghai Zhang', '1215072', 7, 'naive', '123@qq.com', NULL, '仓管员', NULL, NULL);
+INSERT INTO `user` VALUES ('1230936', 'Lei Qian', '1230936', 7, 'high', '1111', NULL, '产线经理', NULL, NULL);
+INSERT INTO `user` VALUES ('1234567', 'Yang Cheng', '1234567', 7, 'manager', '853364106@qq.com', NULL, 'CEO', NULL, NULL);
+INSERT INTO `user` VALUES ('admin', 'Admin', 'admin', 7, 'admin', '853364106@qq.com', '19858198127', 'Boss', '2020-03-07', 'images/avatar_images/4.jpeg');
 
 -- ----------------------------
 -- Table structure for workcell

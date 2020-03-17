@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jig.mapper.AdminMapper">
+    <update id="changeUser" parameterType="com.jig.entity.User">
+        update user
+        set user.name   = #{user.name},
+            position    = #{user.position},
+            workcell_id = #{user.workcell_id},
+            email       = #{user.email}
+        where id = #{user.id}
+    </update>
+    <delete id="delUser">
+        delete
+        from user
+        where id = #{id}
+    </delete>
+    <!--id name workcell_id start_date end_date -->
+    <select id="getUserInformation" resultType="com.jig.entity.User">
+        select `user`.*, w.workcell
+        from `user`
+        left join workcell w on user.workcell_id = w.id
+        <where>
+            <if test="id != ''">
+                user.id like concat('%',#{id},'%')
+            </if>
+            <if test="name != ''">
+                and user.name like concat('%',#{name},'%')
+            </if>
+            <if test="workcell_id != ''">
+                and user.workcell_id = #{workcell_id}
+            </if>
+            <if test="start_date != end_date">
+                and user.entry_date between #{start_date} and #{end_date}
+            </if>
+        </where>
+        limit #{page_number},#{page_size}
+    </select>
+    <select id="getUserInformationPage" resultType="java.lang.Integer">
+        select count(*)
+        from `user`
+        left join workcell w on user.workcell_id = w.id
+        <where>
+            <if test="id != ''">
+                user.id like concat('%',#{id},'%')
+            </if>
+            <if test="name != ''">
+                and user.name like concat('%',#{name},'%')
+            </if>
+            <if test="workcell_id != ''">
+                and user.workcell_id = #{workcell_id}
+            </if>
+            <if test="start_date != end_date">
+                and user.entry_date between #{start_date} and #{end_date}
+            </if>
+        </where>
+    </select>
+    <select id="getWorkcellList" resultType="com.jig.entity.Workcell">
+        select *
+        from workcell
+    </select>
+    <select id="searchAllUserInformation" resultType="com.jig.entity.User">
+        select `user`.*, w.workcell
+        from `user`
+        left join workcell w on user.workcell_id = w.id
+        <where>
+            <if test="id != ''">
+                user.id like concat('%',#{id},'%')
+            </if>
+            <if test="name != ''">
+                user.id like concat('%',#{name},'%')
+            </if>
+            <if test="workcell_id != ''">
+                user.workcell_id = #{workcell_id}
+            </if>
+            <if test="start_date != end_date">
+                user.entry_date between #{start_date} and #{end_date}
+            </if>
+        </where>
+    </select>
+    <select id="getPart" resultType="com.jig.entity.JigPart">
+        select *
+        from jig_part_no
+    </select>
+    <select id="getModel" resultType="com.jig.entity.JigModel">
+        select *
+        from jig_model
+    </select>
+    <select id="getCnEn" resultType="com.jig.entity.CnEn">
+        select *
+        from cn_en
+    </select>
+</mapper>

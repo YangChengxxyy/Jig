@@ -1,7 +1,7 @@
 
 //左侧菜单显示未读审批
 var left_panel = new Vue({
-    el:"#left",
+    el:"#main-menu",//新界面是这个下面 原来#left
     data:{
         purchase_submit_count:0,
         purchase_submit_is_show:1,
