@@ -34,38 +34,30 @@ public class JigWeb {
         return "demo";
     }
 
-    @RequestMapping("show_login")
+    @RequestMapping("/")
+    public String main(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
+        LoginState loginState = (LoginState) session.getAttribute("loginState");
+        model.addAttribute("loginState", loginState);
+        return loginState.getData().getType();
+    }
+
+    @RequestMapping("login")
     public String login() {
         return "login";
     }
 
-    @RequestMapping("test_naive")
-    public String naive(HttpServletRequest request) {
-        return "naive";
-    }
-
-    @RequestMapping("test_high")
-    public String high(HttpServletRequest request) {
-        return "high";
-    }
-
-    @RequestMapping("test_admin")
-    public String test_admin(HttpSession session, Model model) {
-        LoginState loginState = (LoginState) session.getAttribute("loginState");
-        model.addAttribute("loginState", loginState);
-        return "admin";
-    }
 
     @RequestMapping("log_out")
     public String logOut(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.removeAttribute("loginState");
-        return "redirect:show_login";
+        return "redirect:login";
     }
 
     @RequestMapping("naive/download_one_search")
-    public void naiveDownloadOneSearch(HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor, @RequestParam(value = "page_number") int pageNumber,@RequestParam("page_size")int page_size, @RequestParam(value = "file_name") String fileName) throws Exception {
-        List<JigDefinition> list = jigService.naiveSearchJigDefinition(code, name, workcell, family, userFor, pageNumber,page_size);
+    public void naiveDownloadOneSearch(HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor, @RequestParam(value = "page_number") int pageNumber, @RequestParam("page_size") int page_size, @RequestParam(value = "file_name") String fileName) throws Exception {
+        List<JigDefinition> list = jigService.naiveSearchJigDefinition(code, name, workcell, family, userFor, pageNumber, page_size);
         if (list.size() == 0) {
             return;
         }
@@ -115,9 +107,9 @@ public class JigWeb {
                                             @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id,
                                             @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
                                             @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number,
-                                            @RequestParam("page_size")int page_size,@RequestParam(value = "scrap_reason") String scrap_reason,
+                                            @RequestParam("page_size") int page_size, @RequestParam(value = "scrap_reason") String scrap_reason,
                                             @RequestParam(value = "file_name") String file_name) throws Exception {
-        List<ScrapHistory> list = jigService.highSearchScrapHistory(code, seq_id, submit_id, scrap_reason, status, start_date, end_date, page_number,page_size);
+        List<ScrapHistory> list = jigService.highSearchScrapHistory(code, seq_id, submit_id, scrap_reason, status, start_date, end_date, page_number, page_size);
         outputFile(response, file_name, list);
     }
 

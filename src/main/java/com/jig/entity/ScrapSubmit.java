@@ -13,9 +13,11 @@ public class ScrapSubmit {
     private String first_time;//初审时间
     private String first_acceptor;//初审人id
     private String first_acceptor_name;
+    private String first_reason;
     private String final_time;//终审时间
     private String final_acceptor;//终审人id
     private String final_acceptor_name;//终审人
+    private String final_reason;
     private String status;//审核状态 :0待审核 1初审未通过 2初审通过 3终审未通过 4终审通过
 
     public String getId() {
@@ -144,5 +146,32 @@ public class ScrapSubmit {
 
     public void setScrap_photo_url(String scrap_photo_url) {
         this.scrap_photo_url = scrap_photo_url;
+    }
+
+    public String getFirst_reason() {
+        return first_reason;
+    }
+
+    public void setFirst_reason(String first_reason) {
+        this.first_reason = first_reason;
+    }
+
+    public String getFinal_reason() {
+        return final_reason;
+    }
+
+    public void setFinal_reason(String final_reason) {
+        this.final_reason = final_reason;
+    }
+
+    @Override
+    public String toString() {
+        return "ScrapSubmit{" +
+                "code='" + code + '\'' +
+                ", seq_id='" + seq_id + '\'' +
+                ", submit_name='" + submit_name + '\'' +
+                ", submit_time='" + submit_time + '\'' +
+                ", scrap_reason='" + scrap_reason + '\'' +
+                '}';
     }
 }

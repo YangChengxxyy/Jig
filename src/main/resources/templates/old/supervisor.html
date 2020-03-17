@@ -1,61 +1,33 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="description" content="Xenon Boostrap Admin Panel"/>
-    <meta name="author" content=""/>
-
+    <meta charset="UTF-8">
     <title>监管员</title>
+    <link rel="stylesheet" href="../../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../static/css/daterangepicker.css"/>
+    <link rel="stylesheet" href="../../static/css/mainStyle.css">
+    <link rel="stylesheet" href="../../static/css/iconfont.css">
+    <script src="../../static/js/jquery-3.4.1.js"></script>
+    <script src="../../static/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../../static/css/bootstrap-select.css">
 
-    <link rel="stylesheet" href="css/googleapis.css">
-    <link rel="stylesheet" href="assets/css/fonts/linecons/css/linecons.css">
-    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="css/bootstrap-3.3.4.css">
-    <link rel="stylesheet" href="assets/css/xenon-core.css">
-    <link rel="stylesheet" href="assets/css/xenon-forms.css">
-    <link rel="stylesheet" href="assets/css/xenon-components.css">
-    <link rel="stylesheet" href="assets/css/xenon-skins.css">
-    <link rel="stylesheet" href="assets/css/custom.css">
+    <script src="../../static/js/echarts.min.js"></script>
+    <script src="../../static/js/moment.min.js"></script>
+    <script src="../../static/js/daterangepicker.js"></script>
+    <script src="../../static/js/vue.js"></script>
+    <script src="../../static/js/bootstrap-select.js"></script>
+    <script src="../../static/js/defaults-zh_CN.js"></script>
 
-    <link rel="stylesheet" href="assets/css/fonts/elusive/css/elusive.css">
-
-    <script src="js/jquery-1.10.2.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="js/html5shiv-3.7.2.min.js"></script>
-    <script src="js/respond-1.4.2.min.js"></script>
-    <![endif]-->
-    <link rel="stylesheet" href="css/daterangepicker.css"/>
-    <link rel="stylesheet" href="css/mainStyle.css">
-    <link rel="stylesheet" href="css/iconfont.css">
-    <script src="js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="css/bootstrap-select.css">
-
-    <script src="js/echarts.min.js"></script>
-    <script src="js/moment.min.js"></script>
-    <script src="js/daterangepicker.js"></script>
-    <script src="js/vue.js"></script>
-    <script src="js/bootstrap-select.js"></script>
-    <script src="js/defaults-zh_CN.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
         $(function () {
-            //侧边栏点击事件
-            //以及page-title下的li点击事件
-            $("#main-menu ul li").on('click', function (e) {
+            $(".nav li").on('click', function (e) {
                 const href = $(this).attr("href");
-                $(".page-title li[href='" + href + "']").siblings().removeClass("active");
-                $(".page-title li[href='" + href + "']").addClass("active");
-            });
-            $(".page-title li").on("click", function () {
-                const href = $(this).attr("href");
-                $("#main-menu ul li[href='" + href + "']").siblings().removeClass("active");
-                $("#main-menu ul li[href='" + href + "']").addClass("active")
-            });
+                $(this).siblings().removeClass("active");
+                $(this).addClass("active");
+                $(".nav li[href='" + href + "']").siblings().removeClass("active");
+                $(".nav li[href='" + href + "']").addClass("active");
+            })
 
             $(".ul li").on('click', function (e) {
                 $(this).siblings().removeClass('active');
@@ -90,439 +62,150 @@
             });
         })
     </script>
-
 </head>
-<body class="page-body skin-navy">
-
-<div class="settings-pane">
-
-    <a href="#" data-toggle="settings-pane" data-animate="true">
-        &times;
-    </a>
-
-    <div class="settings-pane-inner">
-
-        <div class="row">
-
-            <div class="col-md-4">
-
-                <div class="user-info">
-
-                    <div class="user-image">
-                        <a href="#">
-                            <img th:src="${loginState.getData().getAvatar_url()}" class="img-responsive img-circle"/>
-                        </a>
-                    </div>
-
-                    <div class="user-details">
-
-                        <h3>
-                            <a href="#" th:text="${loginState.getData().getName()}"></a>
-
-                            <span class="user-status is-online"></span>
-                        </h3>
-
-                        <p class="user-title" th:text="${loginState.getData().getPosition()}"></p>
-
-                        <div class="user-links">
-                            <a href="#" class="btn btn-primary">Edit Profile</a>
-                            <a href="#" class="btn btn-success">Upgrade</a>
+<body>
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle show pull-left" href="#sidebar" id="bt_sideleft">
+                <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
+                    class="icon-bar"></span><span class="icon-bar"></span>
+            </button>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                       aria-expanded="false" th:inline="text"><span class="glyphicon glyphicon-user"></span>&nbsp;[[${session.get('user').getName()}]]&nbsp;<span
+                            class="caret"></span></a>
+                    <input style="display: none" th:value="${session.get('user').getId()}" id="id">
+                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-user"></span>个人信息</a>
+                        </li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#changePassword"><span
+                                    class="glyphicon glyphicon-wrench"></span>修改密码</a>
+                        </li>
+                        <li role="menuitem" class="divider"></li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-off"></span>安全退出</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="label" aria-hidden="true"
+     style="text-align: left;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="label">修改密码</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">原密码：</label>
+                        <div class="col-md-8">
+                            <input class="form-control">
                         </div>
-
                     </div>
-
-                </div>
-
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">新密码：</label>
+                        <div class="col-md-8">
+                            <input class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">重复密码：</label>
+                        <div class="col-md-8">
+                            <input class="form-control">
+                        </div>
+                    </div>
+                </form>
             </div>
-
-            <div class="col-md-8 link-blocks-env">
-
-                <div class="links-block left-sep">
-                    <h4>
-                        <span>Notifications</span>
-                    </h4>
-
-                    <ul class="list-unstyled">
-                        <li>
-                            <input type="checkbox" class="cbr cbr-primary" checked="checked" id="sp-chk1"/>
-                            <label for="sp-chk1">Messages</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" class="cbr cbr-primary" checked="checked" id="sp-chk2"/>
-                            <label for="sp-chk2">Events</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" class="cbr cbr-primary" checked="checked" id="sp-chk3"/>
-                            <label for="sp-chk3">Updates</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" class="cbr cbr-primary" checked="checked" id="sp-chk4"/>
-                            <label for="sp-chk4">Server Uptime</label>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="links-block left-sep">
-                    <h4>
-                        <a href="#">
-                            <span>Help Desk</span>
-                        </a>
-                    </h4>
-
-                    <ul class="list-unstyled">
-                        <li>
-                            <a href="#">
-                                <i class="fa-angle-right"></i>
-                                Support Center
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa-angle-right"></i>
-                                Submit a Ticket
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa-angle-right"></i>
-                                Domains Protocol
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa-angle-right"></i>
-                                Terms of Service
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">确认修改</button>
             </div>
-
-        </div>
-
-    </div>
-
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
 </div>
-
-<div class="page-container">
-
-    <div class="sidebar-menu toggle-others fixed">
-
-        <div class="sidebar-menu-inner">
-
-            <header class="logo-env">
-
-                <!-- logo -->
-                <div class="logo">
-                    <a href="#" class="logo-expanded">
-                        <img src="assets/images/logo@2x.png" width="80" alt=""/>
-                    </a>
-
-                    <a href="#" class="logo-collapsed">
-                        <img src="assets/images/logo-collapsed@2x.png" width="40" alt=""/>
-                    </a>
+</div>
+<div class="container-fluid">
+    <div class="row clearfix">
+        <div class="col-lg-3 column">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">功能菜单</h4>
                 </div>
+                <div class="panel-body">
+                    <div class="panel-group" id="left">
 
-                <div class="mobile-menu-toggle visible-xs">
-                    <a href="#" data-toggle="user-info-menu">
-                        <i class="fa-bell-o"></i>
-                        <span class="badge badge-success">7</span>
-                    </a>
-
-                    <a href="#" data-toggle="mobile-menu">
-                        <i class="fa-bars"></i>
-                    </a>
-                </div>
-
-                <div class="settings-icon">
-                    <a href="#" data-toggle="settings-pane" data-animate="true">
-                        <i class="linecons-cog"></i>
-                    </a>
-                </div>
-
-
-            </header>
-
-
-            <ul id="main-menu" class="main-menu">
-                <li class="active opened main-menu-li">
-                    <a href="#main1" data-toggle="tab">
-                        <i class="fa-group"></i>
-                        <span class="title">工夹具信息管理</span>
-                    </a>
-                    <ul>
-                        <li class="active" href="#jig_info" data-toggle="tab">
-                            <a class="active" href="#jig_info" data-toggle="tab">
-                                <span class="title">工夹具信息</span>
-                            </a>
-                        </li>
-                        <li href="#ssgjj" data-toggle="tab">
-                            <a href="#ssgjj" data-toggle="tab">
-                                <span class="title">搜索工夹具</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="main-menu-li">
-                    <a href="#main2" data-toggle="tab">
-                        <i class="fa-wrench"></i>
-                        <span class="title">采购管理</span>
-                    </a>
-                    <ul>
-                        <li class="active" href="#purchase_list" data-toggle="tab">
-                            <a class="active" href="#purchase_list" data-toggle="tab">
-                                <span class="title">采购审批</span>
-                            </a>
-                        </li>
-                        <li href="#purchase_list_history" data-toggle="tab">
-                            <a href="#purchase_list_history" data-toggle="tab">
-                                <span class="title">历史采购记录</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="main-menu-li">
-                    <a href="#main3" data-toggle="tab">
-                        <i class="fa-book"></i>
-                        <span class="title">报废管理</span>
-                    </a>
-                    <ul>
-                        <li class="active" href="#scrap_submit" data-toggle="tab">
-                            <a class="active" href="#scrap_submit" data-toggle="tab">
-                                待处理报废申请
-                            </a>
-                        </li>
-                        <li href="#scrap_submit_history" data-toggle="tab">
-                            <a href="#scrap_submit_history" data-toggle="tab">
-                                <span class="title">历史报废记录</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-
-        </div>
-
-    </div>
-
-    <div class="main-content">
-
-        <nav class="navbar user-info-navbar" role="navigation">
-
-            <ul class="user-info-menu left-links list-inline list-unstyled">
-
-                <li class="hidden-sm hidden-xs">
-                    <a href="#" data-toggle="sidebar">
-                        <i class="fa-bars"></i>
-                    </a>
-                </li>
-
-                <li class="dropdown hover-line">
-                    <a href="#" data-toggle="dropdown">
-                        <i class="fa-bell-o"></i>
-                        <span class="badge badge-purple">7</span>
-                    </a>
-
-                    <ul class="dropdown-menu notifications">
-                        <li class="top">
-                            <p class="small">
-                                <a href="#" class="pull-right">Mark all Read</a>
-                                You have <strong>3</strong> new notifications.
-                            </p>
-                        </li>
-
-                        <li>
-                            <ul class="dropdown-menu-list list-unstyled ps-scrollbar">
-                                <li class="active notification-success">
-                                    <a href="#">
-                                        <i class="fa-user"></i>
-
-                                        <span class="line">
-												<strong>New user registered</strong>
-											</span>
-
-                                        <span class="line small time">
-												30 seconds ago
-											</span>
-                                    </a>
-                                </li>
-
-                                <li class="active notification-secondary">
-                                    <a href="#">
-                                        <i class="fa-lock"></i>
-
-                                        <span class="line">
-												<strong>Privacy settings have been changed</strong>
-											</span>
-
-                                        <span class="line small time">
-												3 hours ago
-											</span>
-                                    </a>
-                                </li>
-
-                                <li class="notification-primary">
-                                    <a href="#">
-                                        <i class="fa-thumbs-up"></i>
-
-                                        <span class="line">
-												<strong>Someone special liked this</strong>
-											</span>
-
-                                        <span class="line small time">
-												2 minutes ago
-											</span>
-                                    </a>
-                                </li>
-
-                                <li class="notification-danger">
-                                    <a href="#">
-                                        <i class="fa-calendar"></i>
-
-                                        <span class="line">
-												John cancelled the event
-											</span>
-
-                                        <span class="line small time">
-												9 hours ago
-											</span>
-                                    </a>
-                                </li>
-
-                                <li class="notification-info">
-                                    <a href="#">
-                                        <i class="fa-database"></i>
-
-                                        <span class="line">
-												The server is status is stable
-											</span>
-
-                                        <span class="line small time">
-												yesterday at 10:30am
-											</span>
-                                    </a>
-                                </li>
-
-                                <li class="notification-warning">
-                                    <a href="#">
-                                        <i class="fa-envelope-o"></i>
-
-                                        <span class="line">
-												New comments waiting approval
-											</span>
-
-                                        <span class="line small time">
-												last week
-											</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="external">
-                            <a href="#">
-                                <span>View all notifications</span>
-                                <i class="fa-link-ext"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-            </ul>
-
-
-            <ul class="user-info-menu right-links list-inline list-unstyled">
-
-
-                <li class="dropdown user-profile">
-                    <a href="#" data-toggle="dropdown">
-                        <img th:src="${loginState.getData().getAvatar_url()}" alt="user-image"
-                             class="img-circle img-inline userpic-32"
-                             width="28"/>
-                        <span th:inline="text">
-								[[${loginState.getData().getName()}]]
-                            <input style="display: none" th:value="${loginState.getData().getId()}" id="id">
-								<i class="fa-angle-down"></i>
-							</span>
-                    </a>
-
-                    <ul class="dropdown-menu user-profile-menu list-unstyled">
-                        <li>
-                            <a href="#edit-profile">
-                                <i class="fa-edit"></i>
-                                New Post
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#settings">
-                                <i class="fa-wrench"></i>
-                                Settings
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#profile">
-                                <i class="fa-user"></i>
-                                Profile
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#help">
-                                <i class="fa-info"></i>
-                                &nbsp;Help
-                            </a>
-                        </li>
-                        <li class="last">
-                            <a href="/log_out">
-                                <i class="fa-lock"></i>
-                                Logout
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-
-            </ul>
-
-        </nav>
-
-        <div class="tab-content">
-            <div id="main1" class="tab-content tab-pane fade in active">
-                <div class="page-title">
-
-                    <div class="title-env">
-                        <h1 class="title">工夹具信息管理</h1>
-                    </div>
-
-                    <div class="breadcrumb-env">
-
-                        <ol class="breadcrumb bc-1">
-                            <li class="active" data-toggle="tab" href="#jig_info"><a>工夹具信息</a></li>
-                            <li data-toggle="tab" href="#ssgjj"><a>搜索工夹具</a></li>
-                        </ol>
-
-                    </div>
-
-                </div>
-                <div id="jig_info" class="tab-pane fade in active">
-                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
-                        <div class="panel-heading">
-                            <h3 class="panel-title">工夹具信息</h3>
-
-                            <div class="panel-options">
-
-                                <a href="#" data-toggle="panel">
-                                    <span class="collapse-icon">–</span>
-                                    <span class="expand-icon">+</span>
-                                </a>
-
-                                <a href="#" data-toggle="reload" @click="getData()">
-                                    <i class="fa-rotate-right"></i>
-                                </a>
-
+                        <div class="panel panel-default">
+                            <div class="panel-heading" data-toggle="collapse" data-parent="#left" href="#1">
+                                <h4 class="panel-title" data-toggle="tab" href="#main1">
+                                    工夹具信息管理
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse in" id="1">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li class="active" data-toggle="tab" href="#jig_info"><a>工夹具信息</a></li>
+                                    <li data-toggle="tab" href="#ssgjj"><a>搜索工夹具</a></li>
+                                </ul>
                             </div>
                         </div>
-                        <div class="panel-body">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" data-toggle="collapse" data-parent="#left" href="#2">
+                                <h4 class="panel-title" data-toggle="tab" href="#main2">
+                                    采购管理
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse" id="2">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li class="active" data-toggle="tab" href="#purchase_list"><a>采购审批</a></li>
+                                    <li data-toggle="tab" href="#purchase_list_history"><a>历史采购记录</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" data-toggle="collapse" data-parent="#left" href="#3">
+                                <h4 class="panel-title" data-toggle="tab" href="#main3">
+                                    报废管理
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse" id="3">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li class="active" data-toggle="tab" href="#scrap_submit"><a>待处理报废申请</a></li>
+                                    <li data-toggle="tab" href="#scrap_submit_history"><a>历史报废记录</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9 column">
+            <div class="panel panel-default tab-content">
+
+                <div id="main1" class="panel-body tab-content tab-pane fade in active">
+                    <ul class="nav nav-tabs">
+                        <li class="active" data-toggle="tab" href="#jig_info"><a>工夹具信息</a></li>
+                        <li data-toggle="tab" href="#ssgjj"><a>搜索工夹具</a></li>
+                    </ul>
+                    <div class="panel-body tab-content">
+                        <!--工夹具信息-->
+                        <div id="jig_info" class="tab-pane fade table-responsive in active">
                             <div class="row row-margin-bottom">
                                 <div class="col-sm-1">
                                     <button class="btn btn-blue" data-toggle="modal" data-target="#add_jig_family">
@@ -660,29 +343,10 @@
                                     </div>
                                 </div>
 
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="ssgjj" class="tab-pane fade table-responsive">
-                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
-                        <div class="panel-heading">
-                            <h3 class="panel-title">搜索工夹具</h3>
 
-                            <div class="panel-options">
-
-                                <a href="#" data-toggle="panel">
-                                    <span class="collapse-icon">–</span>
-                                    <span class="expand-icon">+</span>
-                                </a>
-
-                                <a href="#" data-toggle="reload" @click="getData()">
-                                    <i class="fa-rotate-right"></i>
-                                </a>
-
-                            </div>
-                        </div>
-                        <div class="panel-body">
+                        <div id="ssgjj" class="tab-pane fade table-responsive">
                             <div class="form-horizontal container-fluid" style="margin-bottom: 3%">
                                 <div class="form-group row">
                                     <label for="jig_code" class="col-sm-2 control-label">工夹具代码</label>
@@ -897,93 +561,61 @@
                     </div>
                 </div>
 
-            </div>
-            <div id="main2" class="tab-content tab-pane fade">
-                <div class="page-title">
-
-                    <div class="title-env">
-                        <h1 class="title">采购管理</h1>
-                    </div>
-
-                    <div class="breadcrumb-env">
-
-                        <ol class="breadcrumb bc-1">
-                            <li class="active" data-toggle="tab" href="#purchase_list"><a>采购审批</a></li>
-                            <li data-toggle="tab" href="#purchase_list_history"><a>历史采购记录</a></li>
-                        </ol>
-
-                    </div>
-
-                </div>
-                <!--我的采购审批-->
-                <div id="purchase_list" class="tab-pane fade in active">
-                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
-                        <div class="panel-heading">
-                            <h3 class="panel-title">采购审批</h3>
-
-                            <div class="panel-options">
-
-                                <a href="#" data-toggle="panel">
-                                    <span class="collapse-icon">–</span>
-                                    <span class="expand-icon">+</span>
-                                </a>
-
-                                <a href="#" data-toggle="reload" @click="getData()">
-                                    <i class="fa-rotate-right"></i>
-                                </a>
-
-                            </div>
-                        </div>
-                        <div class="panel-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-hover" role="table">
-                                    <thead>
-                                    <tr>
-                                        <th>采购单据号</th>
-                                        <th>采购人</th>
-                                        <th>产线id</th>
-                                        <th>工夹具代码及数量</th>
-                                        <th>申请时间</th>
-                                        <th>状态</th>
-                                        <th>操作</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr v-for="(item,index) in purchase_submit_list">
-                                        <td>{{item.bill_no}}</td>
-                                        <td>{{item.submit_name}}</td>
-                                        <td>{{item.production_line_id}}</td>
-                                        <td>
-                                            <label>
-                                                <select class="btn btn-default">
-                                                    <option v-for="(code,index) in item.code.split('|')">{{code}} -- {{item.count.split('|')[index]}}件
-                                                    </option>
-                                                </select>
-                                            </label>
-                                        </td>
-                                        <td>{{item.submit_time}}</td>
-                                        <td v-if="item.status==0">待审批</td>
-                                        <td v-if="item.status==1">初审未通过</td>
-                                        <td v-if="item.status==2">初审通过</td>
-                                        <td v-if="item.status==3">终审未通过</td>
-                                        <td v-if="item.status==4">终审通过</td>
-                                        <td>
-                                            <button class="btn btn-success" data-toggle="modal"
-                                                    data-target="#purchase_submit_detail"
-                                                    @click="get_purchase_submit_detail(index)">查看
-                                            </button>
-                                            <button class="btn btn-primary" @click="pass_purchase_submit(item.id,2)">
-                                                初审通过
-                                            </button>
-                                            <button class="btn btn-danger" data-toggle="modal"
-                                                    data-target="#purchase_submit_no_pass_reason"
-                                                    @click="get_no_pass_purchase_submit_id(item.id)">初审不通过
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                <div id="main2" class="panel-body tab-content tab-pane fade">
+                    <ul class="nav nav-tabs">
+                        <li class="active" data-toggle="tab" href="#purchase_list"><a>采购审批</a></li>
+                        <li data-toggle="tab" href="#purchase_list_history"><a>历史采购记录</a></li>
+                    </ul>
+                    <div class="panel-body tab-content">
+                        <!--我的采购审批-->
+                        <div id="purchase_list" class="tab-pane fade in active table-responsive">
+                            <table class="table table-striped table-hover" role="table">
+                                <thead>
+                                <tr>
+                                    <th>采购单据号</th>
+                                    <th>采购人</th>
+                                    <th>产线id</th>
+                                    <th>工夹具代码及数量</th>
+                                    <th>申请时间</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="(item,index) in purchase_submit_list">
+                                    <td>{{item.bill_no}}</td>
+                                    <td>{{item.submit_name}}</td>
+                                    <td>{{item.production_line_id}}</td>
+                                    <td>
+                                        <label>
+                                            <select class="btn btn-default">
+                                                <option v-for="(code,index) in item.code.split('|')">{{code}} --
+                                                    {{item.count.split('|')[index]}}件
+                                                </option>
+                                            </select>
+                                        </label>
+                                    </td>
+                                    <td>{{item.submit_time}}</td>
+                                    <td v-if="item.status==0">待审批</td>
+                                    <td v-if="item.status==1">初审未通过</td>
+                                    <td v-if="item.status==2">初审通过</td>
+                                    <td v-if="item.status==3">终审未通过</td>
+                                    <td v-if="item.status==4">终审通过</td>
+                                    <td>
+                                        <button class="btn btn-success" data-toggle="modal"
+                                                data-target="#purchase_submit_detail"
+                                                @click="get_purchase_submit_detail(index)">查看
+                                        </button>
+                                        <button class="btn btn-primary" @click="pass_purchase_submit(item.id,2)">初审通过
+                                        </button>
+                                        <button class="btn btn-danger" data-toggle="modal"
+                                                data-target="#purchase_submit_no_pass_reason"
+                                                @click="get_no_pass_purchase_submit_id(item.id)">初审不通过
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
 
                             <!--审批不通过的原因-->
                             <div class="modal fade" id="purchase_submit_no_pass_reason" tabindex="-1" role="dialog"
@@ -1161,30 +793,10 @@
                                 <my-pagination :max_page_number="max_page_number"
                                                :now_page_number="now_page_number"></my-pagination>
                             </div>
-                        </div>
-                    </div>
-                </div><!--/我的采购审批-->
+                        </div><!--/我的采购审批-->
 
-                <!--历史采购记录-->
-                <div id="purchase_list_history" class="tab-pane fade">
-                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
-                        <div class="panel-heading">
-                            <h3 class="panel-title">历史采购记录</h3>
-
-                            <div class="panel-options">
-
-                                <a href="#" data-toggle="panel">
-                                    <span class="collapse-icon">–</span>
-                                    <span class="expand-icon">+</span>
-                                </a>
-
-                                <a href="#" data-toggle="reload" @click="getData()">
-                                    <i class="fa-rotate-right"></i>
-                                </a>
-
-                            </div>
-                        </div>
-                        <div class="panel-body">
+                        <!--历史采购记录-->
+                        <div id="purchase_list_history" class="tab-pane fade">
                             <div style="margin-top: 2%;margin-bottom: 3%">
                                 <form role="form" class="form-horizontal">
                                     <div class="form-group row">
@@ -1248,7 +860,8 @@
                                         <td>
                                             <label>
                                                 <select class="btn btn-default">
-                                                    <option v-for="(code,index) in item.code.split('|')">{{code}} -- {{item.count.split('|')[index]}}件
+                                                    <option v-for="(code,index) in item.code.split('|')">{{code}} --
+                                                        {{item.count.split('|')[index]}}件
                                                     </option>
                                                 </select>
                                             </label>
@@ -1419,119 +1032,65 @@
                                 <my-pagination :max_page_number="max_page_number"
                                                :now_page_number="now_page_number"></my-pagination>
                             </div>
+
                         </div>
                     </div>
                 </div>
-            </div>
-            <div id="main3" class="tab-content tab-pane fade">
-                <div class="page-title">
 
-                    <div class="title-env">
-                        <h1 class="title">报废管理</h1>
-                    </div>
-
-                    <div class="breadcrumb-env">
-
-                        <ol class="breadcrumb bc-1">
-                            <li class="active" data-toggle="tab" href="#scrap_submit"><a>待处理报废申请</a></li>
-                            <li data-toggle="tab" href="#scrap_submit_history"><a>历史报废记录</a></li>
-                        </ol>
-
-                    </div>
-
-                </div>
-                <!--待处理的报废申请 -->
-                <div id="scrap_submit" class="tab-pane fade in active">
-                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
-                        <div class="panel-heading">
-                            <h3 class="panel-title">待处理报废申请</h3>
-
-                            <div class="panel-options">
-
-                                <a href="#" data-toggle="panel">
-                                    <span class="collapse-icon">–</span>
-                                    <span class="expand-icon">+</span>
-                                </a>
-
-                                <a href="#" data-toggle="reload" @click="getData()">
-                                    <i class="fa-rotate-right"></i>
-                                </a>
-
-                            </div>
-                        </div>
-                        <div class="panel-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-hover table-responsive" role="table">
-                                    <thead>
-                                    <tr>
-                                        <th>工夹具代码</th>
-                                        <th>工夹具序列号</th>
-                                        <th>申请人</th>
-                                        <th>报废原因</th>
-                                        <th>申请时间</th>
-                                        <th>审批状态</th>
-                                        <th>操作</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr v-for="(item,index) in scrap_submit_list">
-                                        <td>{{item.code}}</td>
-                                        <td>{{item.seq_id}}</td>
-                                        <td>{{item.submit_name}}</td>
-                                        <td>{{item.scrap_reason}}</td>
-                                        <td>{{item.submit_time}}</td>
-                                        <td v-if="item.status==0">待审批</td>
-                                        <td v-if="item.status==1">初审未通过</td>
-                                        <td v-if="item.status==2">初审通过</td>
-                                        <td v-if="item.status==3">终审未通过</td>
-                                        <td v-if="item.status==4">终审通过</td>
-                                        <td>
-                                            <div class="btn btn-success" data-toggle="modal"
-                                                 data-target="#scrap_submit_detail"
-                                                 @click="get_scrap_submit_detail(index)">查看
-                                            </div>
-                                            <div class="btn-group">
-                                                <button class="btn btn-primary" @click="pass_scrap_submit(item.id)">通过
-                                                </button>
-                                                <button class="btn btn-danger" data-toggle="modal"
-                                                        data-target="#no_pass_scrap_submit_reason"
-                                                        @click="get_no_pass_scrap_submit_id(item.id)">不通过
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                <div id="main3" class="panel-body tab-content tab-pane fade">
+                    <ul class="nav nav-tabs">
+                        <li class="active" data-toggle="tab" href="#scrap_submit"><a>待处理报废申请</a></li>
+                        <li data-toggle="tab" href="#scrap_submit_history"><a>历史报废记录</a></li>
+                    </ul>
+                    <div class="panel-body tab-content">
+                        <!--待处理的报废申请 -->
+                        <div id="scrap_submit" class="tab-pane fade in active table-responsive">
+                            <table class="table table-striped table-hover table-responsive" role="table">
+                                <thead>
+                                <tr>
+                                    <th>工夹具代码</th>
+                                    <th>工夹具序列号</th>
+                                    <th>申请人</th>
+                                    <th>报废原因</th>
+                                    <th>申请时间</th>
+                                    <th>审批状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="(item,index) in scrap_submit_list">
+                                    <td>{{item.code}}</td>
+                                    <td>{{item.seq_id}}</td>
+                                    <td>{{item.submit_name}}</td>
+                                    <td>{{item.scrap_reason}}</td>
+                                    <td>{{item.submit_time}}</td>
+                                    <td v-if="item.status==0">待审批</td>
+                                    <td v-if="item.status==1">初审未通过</td>
+                                    <td v-if="item.status==2">初审通过</td>
+                                    <td v-if="item.status==3">终审未通过</td>
+                                    <td v-if="item.status==4">终审通过</td>
+                                    <td>
+                                        <div class="btn btn-success" data-toggle="modal"
+                                             data-target="#scrap_submit_detail" @click="get_scrap_submit_detail(index)">查看
+                                        </div>
+                                        <div class="btn-group">
+                                            <button class="btn btn-primary" @click="pass_scrap_submit(item.id)">通过</button>
+                                            <button class="btn btn-danger" data-toggle="modal"
+                                                    data-target="#no_pass_scrap_submit_reason" @click="get_no_pass_scrap_submit_id(item.id)">不通过
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
 
                             <div class="text-center row" v-if="max_page_number != 0">
                                 <my-pagination :max_page_number="max_page_number"
                                                :now_page_number="now_page_number"></my-pagination>
                             </div>
                         </div>
-                    </div>
 
-                </div>
-
-                <div id="scrap_submit_history" class="tab-pane fade">
-                    <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
-                        <div class="panel-heading">
-                            <h3 class="panel-title">历史报废记录</h3>
-
-                            <div class="panel-options">
-
-                                <a href="#" data-toggle="panel">
-                                    <span class="collapse-icon">–</span>
-                                    <span class="expand-icon">+</span>
-                                </a>
-
-                                <a href="#" data-toggle="reload" @click="getData()">
-                                    <i class="fa-rotate-right"></i>
-                                </a>
-
-                            </div>
-                        </div>
-                        <div class="panel-body">
+                        <div id="scrap_submit_history" class="tab-pane fade">
                             <div style="margin-top: 2%;margin-bottom: 3%">
                                 <form role="form" class="form-horizontal">
                                     <div class="form-group row">
@@ -1617,42 +1176,17 @@
                                 <my-pagination :max_page_number="max_page_number"
                                                :now_page_number="now_page_number"></my-pagination>
                             </div>
+
                         </div>
                     </div>
                 </div>
+
+                <div class="panel-footer">
+
+                </div>
             </div>
         </div>
-
-
-        <footer class="main-footer sticky footer-type-1">
-
-            <div class="footer-inner">
-
-                <div class="footer-text">
-                    &copy; 2020
-                    <strong>Omega</strong>
-                    theme by <a href="http://laborator.co" target="_blank">YC</a>
-                </div>
-
-
-                <div class="go-up">
-
-                    <a href="#" rel="go-top">
-                        <i class="fa-angle-up"></i>
-                    </a>
-
-                </div>
-
-            </div>
-
-        </footer>
     </div>
-
-</div>
-
-
-<div class="page-loading-overlay">
-    <div class="loader-2"></div>
 </div>
 <!--待处理的报废申请的查看明细-->
 <div class="modal fade" id="scrap_submit_detail" tabindex="-1" role="dialog"
@@ -1927,153 +1461,153 @@
 <!--工夹具信息模块编辑工夹具信息-->
 
 <div class="modal fade" id="edit_jig_info" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                        aria-hidden="true">&times;
-                </button>
-                <h4 class="modal-title">编辑工夹具信息</h4>
-            </div>
-            <div class="modal-body">
-                <div class="form-horizontal" v-if="edit_jig_info_detail!= null">
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">工夹具代码</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control"
-                                   v-model.trim="edit_jig_info_detail.code">
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;
+                    </button>
+                    <h4 class="modal-title">编辑工夹具信息</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal" v-if="edit_jig_info_detail!= null">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">工夹具代码</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"
+                                       v-model.trim="edit_jig_info_detail.code">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">工夹具名字</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control"
-                                   v-model.trim="edit_jig_info_detail.name">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">工夹具名字</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"
+                                       v-model.trim="edit_jig_info_detail.name">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">所属部门</label>
-                        <div class="col-sm-8">
-                            <select class="form-control"
-                                    v-model="edit_jig_info_detail.workcell">
-                                <option v-for="item in workcell_list"
-                                        :value="item.workcell">{{item.workcell}}
-                                </option>
-                            </select>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">所属部门</label>
+                            <div class="col-sm-8">
+                                <select class="form-control"
+                                        v-model="edit_jig_info_detail.workcell">
+                                    <option v-for="item in workcell_list"
+                                            :value="item.workcell">{{item.workcell}}
+                                    </option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">类别</label>
-                        <div class="col-sm-8">
-                            <select class="form-control"
-                                    v-model="edit_jig_info_detail.family">
-                                <option v-for="item in family_list"
-                                        :value="item.family">{{item.family}}
-                                </option>
-                            </select>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">类别</label>
+                            <div class="col-sm-8">
+                                <select class="form-control"
+                                        v-model="edit_jig_info_detail.family">
+                                    <option v-for="item in family_list"
+                                            :value="item.family">{{item.family}}
+                                    </option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">工夹具模组</label>
-                        <div class="col-sm-8">
-                            <select class="form-control"
-                                    v-model="edit_jig_info_detail.model">
-                                <option v-for="item in model_list"
-                                        :value="item.model">
-                                    {{item.model}}
-                                </option>
-                            </select>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">工夹具模组</label>
+                            <div class="col-sm-8">
+                                <select class="form-control"
+                                        v-model="edit_jig_info_detail.model">
+                                    <option v-for="item in model_list"
+                                            :value="item.model">
+                                        {{item.model}}
+                                    </option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">工夹具料号</label>
-                        <div class="col-sm-8">
-                            <select id="sel_edit_jig_part_no"
-                                    class="form-control"
-                                    v-model="edit_select_part_no_list" multiple>
-                                <option :value="item.part_no"
-                                        v-for="item in part_no_list">
-                                    {{item.part_no}}
-                                </option>
-                            </select>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">工夹具料号</label>
+                            <div class="col-sm-8">
+                                <select id="sel_edit_jig_part_no"
+                                        class="form-control"
+                                        v-model="edit_select_part_no_list" multiple>
+                                    <option :value="item.part_no"
+                                            v-for="item in part_no_list">
+                                        {{item.part_no}}
+                                    </option>
+                                </select>
 
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">用途</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control"
-                                   v-model="edit_jig_info_detail.user_for">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">用途</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"
+                                       v-model="edit_jig_info_detail.user_for">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">每条产线所需</label>
-                        <div class="col-sm-8">
-                            <input type="number" class="form-control"
-                                   v-model="edit_jig_info_detail.upl">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">每条产线所需</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control"
+                                       v-model="edit_jig_info_detail.upl">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">责任人</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control"
-                                   v-model="edit_jig_info_detail.owner_name"
-                                   readonly>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">责任人</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"
+                                       v-model="edit_jig_info_detail.owner_name"
+                                       readonly>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">录入人</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control"
-                                   v-model="edit_jig_info_detail.rec_by_name"
-                                   readonly>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">录入人</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"
+                                       v-model="edit_jig_info_detail.rec_by_name"
+                                       readonly>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">录入时间</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control"
-                                   v-model="edit_jig_info_detail.rec_time" readonly>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">录入时间</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"
+                                       v-model="edit_jig_info_detail.rec_time" readonly>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">修改人</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control"
-                                   v-model="edit_jig_info_detail.edit_by_name"
-                                   readonly>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">修改人</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"
+                                       v-model="edit_jig_info_detail.edit_by_name"
+                                       readonly>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">修改时间</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control"
-                                   v-model="edit_jig_info_detail.edit_time"
-                                   readonly>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">修改时间</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"
+                                       v-model="edit_jig_info_detail.edit_time"
+                                       readonly>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">保养点检周期</label>
-                        <div class="col-sm-8">
-                            <input type="number" class="form-control"
-                                   v-model="edit_jig_info_detail.pm_period">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">保养点检周期</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control"
+                                       v-model="edit_jig_info_detail.pm_period">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">关闭
-                </button>
-                <button type="button" class="btn btn-primary"
-                        @click="edit_jig_info">
-                    确认修改
-                </button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
-</div><!--查看编辑工夹具明细-->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary"
+                            @click="edit_jig_info">
+                        确认修改
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div><!--查看编辑工夹具明细-->
 
 <!--历史报废申请记录的单个申请明细 -->
 <div class="modal fade" id="scrap_submit_history_detail" tabindex="-1" role="dialog"
@@ -2208,25 +1742,24 @@
     </div><!-- /.modal -->
 </div>
 
-<!-- Bottom Scripts -->
-<script src="assets/js/TweenMax.min.js"></script>
-<script src="assets/js/resizeable.js"></script>
-<script src="assets/js/joinable.js"></script>
-<script src="assets/js/xenon-api.js"></script>
-<script src="assets/js/xenon-toggles.js"></script>
+<script src="../../static/js/supervisor_vue.js"></script>
+<script src="../../static/js/pagination.js"></script>
+<script>
+    $(function () {
+        $("#sel_edit_jig_part_no").selectpicker({
+            multiple: true,
+            actionsBox: true
+        });
 
+        $('#sel_edit_jig_part_no').selectpicker('refresh');
+        $('#sel_edit_jig_part_no').selectpicker('render');
 
-<!-- Imported scripts on this page -->
-<script src="assets/js/xenon-widgets.js"></script>
-<script src="assets/js/devexpress-web-14.1/js/globalize.min.js"></script>
-<script src="assets/js/devexpress-web-14.1/js/dx.chartjs.js"></script>
-<script src="assets/js/toastr/toastr.min.js"></script>
-
-
-<!-- JavaScripts initializations and stuff -->
-<script src="assets/js/xenon-custom.js"></script>
-<script src="js/pagination.js"></script>
-<script src="js/supervisor_vue.js"></script>
+        $("#sela").selectpicker({
+            multiple: true,
+            actionsBox: true
+        });
+    })
+</script>
 
 </body>
 </html>

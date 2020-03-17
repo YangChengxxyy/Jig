@@ -10,11 +10,9 @@ public class PurchaseIncomeHistory {
     private String first_time;
     private String first_acceptor;
     private String first_acceptor_name;
-    private String first_reason;
     private String final_time;
     private String final_acceptor;
     private String final_acceptor_name;
-    private String final_reason;
     private String status;
     private int production_line_id;
     private String production_line_name;
@@ -155,21 +153,5 @@ public class PurchaseIncomeHistory {
 
     public void setTool_photo_url(String tool_photo_url) {
         this.tool_photo_url = tool_photo_url;
-    }
-
-    public String getFirst_reason() {
-        return first_reason;
-    }
-
-    public void setFirst_reason(String first_reason) {
-        this.first_reason = first_reason;
-    }
-
-    public String getFinal_reason() {
-        return final_reason;
-    }
-
-    public void setFinal_reason(String final_reason) {
-        this.final_reason = final_reason;
     }
 }

@@ -102,7 +102,7 @@
                                         pct: 100,
                                         finish: function () {
                                             if(resp.stateCode === 0){
-                                                window.location.href = "test_" + resp["data"]["type"];
+                                                window.location.href = "/";
                                             }else{
                                                 alert(resp.message);
                                                 $("#password").val("").focus();

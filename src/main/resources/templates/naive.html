@@ -31,7 +31,18 @@
     <script src="js/vue.js"></script>
     <script src="js/echarts.js"></script>
     <script src="js/vue-echarts@4.0.2.js"></script>
-
+    <script>
+        $("#main-menu ul li").on('click', function (e) {
+            const href = $(this).attr("href");
+            $(".page-title li[href='" + href + "']").siblings().removeClass("active");
+            $(".page-title li[href='" + href + "']").addClass("active");
+        });
+        $(".page-title li").on("click",function () {
+            const href = $(this).attr("href");
+            $("#main-menu ul li[href='"+href+"']").siblings().removeClass("active");;
+            $("#main-menu ul li[href='"+href+"']").addClass("active")
+        });
+    </script>
 </head>
 <body class="page-body skin-navy">
 
@@ -193,12 +204,12 @@
                         <span class="title">工夹具出入库</span>
                     </a>
                     <ul>
-                        <li class="active">
+                        <li class="active" href="#jig_outgoing" data-toggle="tab">
                             <a href="#jig_outgoing" data-toggle="tab">
                                 <span class="title">工夹具出库</span>
                             </a>
                         </li>
-                        <li>
+                        <li href="#return_jig" data-toggle="tab">
                             <a href="#return_jig" data-toggle="tab">
                                 <span class="title">归还工夹具</span>
                             </a>
@@ -211,12 +222,12 @@
                         <span class="title">仓库管理</span>
                     </a>
                     <ul>
-                        <li class="active">
+                        <li class="active" href="#jdgjj" data-toggle="tab">
                             <a href="#jdgjj" data-toggle="tab">
                                 <span class="title">检点工夹具</span>
                             </a>
                         </li>
-                        <li>
+                        <li href="#search_jig" data-toggle="tab">
                             <a href="#search_jig" data-toggle="tab">
                                 <span class="title">搜索工夹具</span>
                             </a>
@@ -229,12 +240,12 @@
                         <span class="title">报修管理</span>
                     </a>
                     <ul>
-                        <li class="active">
+                        <li class="active" href="#myRepair" data-toggle="tab">
                             <a href="#myRepair" data-toggle="tab">
                                 <span class="title">我的报修</span>
                             </a>
                         </li>
-                        <li>
+                        <li href="#repairHistory" data-toggle="tab">
                             <a href="#repairHistory" data-toggle="tab">
                                 <span class="title">历史报修记录</span>
                             </a>
@@ -426,10 +437,29 @@
 
         </nav>
 
-        <div class="row">
             <div class="tab-content">
 
                 <div id="main1" class="tab-content tab-pane fade in active">
+                    <div class="page-title">
+
+                        <div class="title-env">
+                            <h1 class="title">工夹具出入库</h1>
+                        </div>
+
+                        <div class="breadcrumb-env">
+
+                            <ol class="breadcrumb bc-1">
+                                <li class="active" href="#jig_outgoing" data-toggle="tab">
+                                    <a>工夹具出库</a>
+                                </li>
+                                <li href="#return_jig" data-toggle="tab">
+                                    <a>归还工夹具</a>
+                                </li>
+                            </ol>
+
+                        </div>
+
+                    </div>
                     <div id="jig_outgoing" class="tab-pane fade in active">
                         <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
                             <div class="panel-heading">
@@ -751,6 +781,26 @@
                     </div><!--  /归还工夹具  -->
                 </div>
                 <div id="main2" class="tab-content tab-pane fade">
+                    <div class="page-title">
+
+                        <div class="title-env">
+                            <h1 class="title">仓库管理</h1>
+                        </div>
+
+                        <div class="breadcrumb-env">
+
+                            <ol class="breadcrumb bc-1">
+                                <li class="active" href="#jdgjj" data-toggle="tab">
+                                    <a>检点工夹具</a>
+                                </li>
+                                <li href="#search_jig" data-toggle="tab">
+                                    <a>搜索工夹具</a>
+                                </li>
+                            </ol>
+
+                        </div>
+
+                    </div>
                     <div id="jdgjj" class="tab-pane fade in active">
                         <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
                             <div class="panel-heading">
@@ -1176,6 +1226,26 @@
                     </div><!--  /搜索工夹具  -->
                 </div>
                 <div id="main3" class="tab-content tab-pane fade">
+                    <div class="page-title">
+
+                        <div class="title-env">
+                            <h1 class="title">报修管理</h1>
+                        </div>
+
+                        <div class="breadcrumb-env">
+
+                            <ol class="breadcrumb bc-1">
+                                <li class="active" href="#myRepair" data-toggle="tab">
+                                    <a>我的报修</a>
+                                </li>
+                                <li href="#repairHistory" data-toggle="tab">
+                                    <a>历史报修记录</a>
+                                </li>
+                            </ol>
+
+                        </div>
+
+                    </div>
                     <div id="myRepair" class="tab-pane fade in active">
                         <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
                             <div class="panel-heading">
@@ -1542,7 +1612,6 @@
                 </div>
 
             </div>
-        </div>
 
 
         <footer class="main-footer sticky footer-type-1">

@@ -6,12 +6,11 @@ public class RepairJig {
     private String seq_id;
     private String submit_id;
     private String submit_name;
-    private String submit_time;
-    private String repair_photo_url;
-    private String repair_reason;
+    private String trouble_photo_url;
+    private String trouble_reason;
     private String acceptor_id;
     private String acceptor_name;
-    private String status;
+
     public String getId() {
         return id;
     }
@@ -52,28 +51,20 @@ public class RepairJig {
         this.submit_name = submit_name;
     }
 
-    public String getSubmit_time() {
-        return submit_time;
+    public String getTrouble_photo_url() {
+        return trouble_photo_url;
     }
 
-    public void setSubmit_time(String submit_time) {
-        this.submit_time = submit_time;
+    public void setTrouble_photo_url(String trouble_photo_url) {
+        this.trouble_photo_url = trouble_photo_url;
     }
 
-    public String getRepair_photo_url() {
-        return repair_photo_url;
+    public String getTrouble_reason() {
+        return trouble_reason;
     }
 
-    public void setRepair_photo_url(String repair_photo_url) {
-        this.repair_photo_url = repair_photo_url;
-    }
-
-    public String getRepair_reason() {
-        return repair_reason;
-    }
-
-    public void setRepair_reason(String repair_reason) {
-        this.repair_reason = repair_reason;
+    public void setTrouble_reason(String trouble_reason) {
+        this.trouble_reason = trouble_reason;
     }
 
     public String getAcceptor_id() {
@@ -90,13 +81,5 @@ public class RepairJig {
 
     public void setAcceptor_name(String acceptor_name) {
         this.acceptor_name = acceptor_name;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }

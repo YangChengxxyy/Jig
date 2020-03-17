@@ -1,7 +1,7 @@
 
 //左侧菜单显示未读审批
 var left_panel = new Vue({
-    el:"#main-menu",//#left
+    el:"#main-menu",//新界面是这个下面 原来#left
     data:{
         purchase_submit_count:0,
         purchase_submit_is_show:1,
@@ -15,7 +15,7 @@ var left_panel = new Vue({
         get_manager_left_message_submit_count:function () {
             var that = this;
             $.ajax({
-                url:"get_manager_left_message_submit_count",
+                url:"manager_get_left_message_submit_count",
                 data:{
 
                 },
@@ -54,6 +54,8 @@ var purchase_check = new Vue({
             submit_time:"",
             status:0,
         },
+        purchase_submit_pass_reason:"",//终审不通过原因
+        purchase_submit_id:"",
         now_page_number: 1,
         max_page_number: 0
     },
@@ -64,7 +66,7 @@ var purchase_check = new Vue({
         getData:function () {
             var that = this;
             $.ajax({
-                url:"get_manager_purchase_submit_list",
+                url:"manager_get_purchase_submit_list",
                 data: {
                     page_number:this.now_page_number,
                     user_id:"111111"
@@ -83,6 +85,9 @@ var purchase_check = new Vue({
                 alert("服务器异常!")
             }
         },
+        get_purchase_submit_id:function(id){
+            this.purchase_submit_id = id;
+        },
         pass_submit:function (id,pass) {
             var that = this;
             $.ajax({
@@ -92,6 +97,20 @@ var purchase_check = new Vue({
                     pass:pass
                 },
                 success: function (res) {
+                    alert(res);
+                    that.getData();
+                }
+            })
+        },
+        dont_pass_purchase_submit:function () {
+            const that = this;
+            $.ajax({
+                url:"manager_dont_pass_purchase_submit",
+                data:{
+                    id:this.purchase_submit_id,
+                    final_reason:this.purchase_submit_pass_reason
+                },
+                success:function (res) {
                     alert(res);
                     that.getData();
                 }
@@ -125,7 +144,7 @@ var purchase_submit_history = new Vue({
     methods:{
         getData:function () {
             var that = this;
-            $.ajax("get_manager_purchase_submit_list_history",{
+            $.ajax("manager_get_purchase_submit_list_history",{
                 data:{
                     submit_name:this.submit_name,
                     submit_time:this.submit_time,
@@ -134,7 +153,6 @@ var purchase_submit_history = new Vue({
                     page_number:this.now_page_number
                 },
                 success:function (res) {
-                    console.log(res);
                     if(res.data.length === 0){
                         alert("没有结果!")
                     }
@@ -170,23 +188,31 @@ var purchase_submit_history = new Vue({
         }*/
     }
 })
+
+
 //采购统计显示
 var purchase_total = new Vue({
     el:"#purchaseTotal",
     data:{
         purchase_submit_count:0,
-        jig_detail_list:[],
-        jig_detail_about_submit_list:[],
-        jig_count:0,
-        store_jig_count:0,
-        submit_name:"",
-        submit_time:"",
-        bill_no:"",
-        echart_jig_code_list:[],
-        echart_jig_count_list:[],
-        echart_store_jig_count_list:[],
-        myChart:'',
-        option_new_jig:{
+        new_submit_list:[],
+        new_submit_detail:null,//新增采购单的采购单详情
+        jig_detail_list:[],//新增工夹具 1.工夹具代码 2.工夹具数量 的list
+        jig_detail_about_submit_list:[],//新增工夹具相关采购单list
+        jig_detail_about_submit_detail:null,//新增工夹具相关采购单的采购单详情
+        jig_count:0,//工夹具数量
+        store_jig_count:0,//库存工夹具数量
+        submit_name:"",//查询条件
+        submit_time:"",//
+        bill_no:"",//查询条件
+        echart_jig_code_list:[],//用于柱形图表的 新增工夹具代码 数组
+        echart_jig_count_list:[],//用于柱形图表的 新增工夹具数量 数组
+        echart_store_jig_count_list:[],//用于柱形图表的 库存工夹具数量 数组
+        submit_man_list:[],//采购员list
+        submit_man_about_submit_list:[],//采购员相关采购单list
+        submit_man_about_submit_detail:null,//采购员相关采购单的采购单详情
+        ehart_style_new_jig:'',
+        option_new_jig:{//柱形图
             title: {
                 text: '新增工夹具'
             },
@@ -208,19 +234,51 @@ var purchase_total = new Vue({
                 data: []
             }]
         },
+        echart_submit_man_data:[],//饼图数据
+        echart_style_submit_man:'',//饼图的div id
+        option_submit_man:{
+            title: {
+                text: '采购员',
+                x: 'left'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            stillShowZeroSum: false,
+            series: [
+                {
+                    name: '采购员',
+                    type: 'pie',
+                    radius: '80%',
+                    center: ['60%', '60%'],
+                    data: [],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(128, 128, 128, 0.5)'
+                        }
+                    }
+                }
+            ]
+        }
     },
     created:function () {
         this.getData();
     },
     mounted:function(){
-        this.myChart = echarts.init(document.getElementById('echart_total_jig'));
-        this.myChart.setOption(this.option_new_jig);
+        this.ehart_style_new_jig = echarts.init(document.getElementById('echart_total_jig'));
+        this.ehart_style_new_jig.setOption(this.option_new_jig);
+
+        this.echart_style_submit_man = echarts.init(document.getElementById('echart_submit_man'));
+        this.echart_style_submit_man.setOption(this.option_submit_man);
     },
     methods:{
         getData:function () {
             var that = this;
             $.ajax({
-                url:"get_manager_purchase_total_data",
+                url:"manager_get_purchase_total_data",
                 data:{
                     submit_name:this.submit_name,
                     submit_time:this.submit_time,
@@ -235,6 +293,8 @@ var purchase_total = new Vue({
                     that.echart_jig_count_list = res.echart_jig_count_list;
                     that.echart_store_jig_count_list = res.echart_store_jig_count_list;
                     that.store_jig_count = res.store_jig_count;
+                    that.submit_man_list = res.submit_man_list;
+                    that.new_submit_list = res.new_jig_list;
                 }
             })
         },
@@ -246,12 +306,12 @@ var purchase_total = new Vue({
             this.submit_name="";
             this.bill_no="";
         },
-        change:function(){
-            var temp = this.option_new_jig;
-            temp.series[0].data = this.echart_jig_count_list;
-            temp.series[1].data = this.echart_store_jig_count_list;
-            temp.xAxis.data = this.echart_jig_code_list;
-            this.myChart.setOption(temp);
+        get_new_submit_detail:function(index){
+            if(this.new_submit_list.length!=0){
+                this.new_submit_detail = this.new_submit_list[index];
+            }else {
+                alert("服务器异常!")
+            }
         },
         get_about_submit_list:function (index) {
             if(this.jig_detail_list.length!=0){
@@ -259,13 +319,61 @@ var purchase_total = new Vue({
             }else{
                 alert("服务器异常!");
             }
-
+        },
+        get_submit_man_detail:function (index) {
+            if(this.submit_man_list.length!=0){
+                console.log(this.submit_man_list[index].about_purchase_submit_list);
+                this.submit_man_about_submit_list = this.submit_man_list[index].about_purchase_submit_list;
+            }else {
+                alert("服务器异常!");
+            }
+        },
+        get_new_jig_about_submit_detail:function(bill_no){
+            if (this.jig_detail_about_submit_list.length!=0){
+                for (var i=0;i<this.jig_detail_about_submit_list.length;i++){
+                    if(this.jig_detail_about_submit_list[i].bill_no === bill_no){
+                        this.jig_detail_about_submit_detail = this.jig_detail_about_submit_list[i];
+                    }
+                }
+            }
+        },
+        get_submit_man_about_submit_detail:function (bill_no) {
+            if(this.submit_man_about_submit_list.length!=0){
+                for(var i=0;i<this.submit_man_about_submit_list.length;i++){
+                    if(this.submit_man_about_submit_list[i].bill_no === bill_no){
+                        this.submit_man_about_submit_detail = this.submit_man_about_submit_list[i];
+                    }
+                }
+            }
+        },
+        change:function(){
+            var temp = this.option_new_jig;
+            temp.series[0].data = this.echart_jig_count_list;
+            temp.series[1].data = this.echart_store_jig_count_list;
+            temp.xAxis.data = this.echart_jig_code_list;
+            this.ehart_style_new_jig.setOption(temp);
+        },
+        get_echart_submit_man_data:function () {
+            var temp = this.option_submit_man;
+            for (var i=0;i<this.submit_man_list.length;i++){
+                var val = {value:0,name:""};
+                val.value = this.submit_man_list[i].submit_count;
+                val.name = this.submit_man_list[i].submit_name;
+                /*console.log(val);
+                console.log(temp.series[0].data);
+                temp.series[0].data.push(val);*/
+                temp.series[0].data[i] = val;
+            }
+            this.echart_style_submit_man.setOption(temp);
         }
     },
     computed:{
         new_jig_percent:function () {
             return Math.round(this.jig_count / this.store_jig_count * 10000) / 100.0 + "%";
-        }
+        },
+        submit_man_count:function () {
+            return this.submit_man_list.length;
+        },
     }
 })
 
@@ -285,7 +393,7 @@ var scrap_submit = new Vue({
         getData:function () {
             var that = this;
             $.ajax({
-                url:"get_manager_scrap_submit_list",
+                url:"manager_get_scrap_submit_list",
                 data:{
                     page_number: this.now_page_number
                 },
@@ -305,7 +413,7 @@ var scrap_submit = new Vue({
         check_scrap_submit:function (submit_id,status) {
             var that = this;
             $.ajax({
-                url:"check_manager_scrap_submit",
+                url:"manager_check_scrap_submit",
                 data:{
                     submit_id:submit_id,
                     status:status
@@ -345,7 +453,7 @@ var scrap_submit_history = new Vue({
         getData:function () {
             var that = this;
             $.ajax({
-                url:"get_manager_scrap_submit_list_history",
+                url:"manager_get_scrap_submit_list_history",
                 data:{
                     page_number:this.now_page_number,
                     code:this.code,
@@ -391,7 +499,7 @@ var jig_info = new Vue({
         getData:function () {
             var that = this;
             $.ajax({
-                url:"get_manager_jig_info_list",
+                url:"manager_get_jig_info_list",
                 data:{
                     now_page_number:this.now_page_number
                 },
@@ -415,4 +523,4 @@ var jig_info = new Vue({
             })
         }
     }
-});
+})

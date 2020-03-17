@@ -1,20 +1,8 @@
 package com.jig.entity;
 
-import java.io.Serializable;
-
-/**
- * (Workcell)实体类
- *
- * @author makejava
- * @since 2020-03-07 09:15:19
- */
-public class Workcell implements Serializable {
-    private static final long serialVersionUID = -19861262688919759L;
-    
+public class Workcell {
     private String id;
-    
-    private String workcell;
-
+    private String workcell;//部门名
 
     public String getId() {
         return id;
@@ -31,5 +19,4 @@ public class Workcell implements Serializable {
     public void setWorkcell(String workcell) {
         this.workcell = workcell;
     }
-
 }
