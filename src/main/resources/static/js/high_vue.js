@@ -294,7 +294,7 @@ const historyShop = new Vue({
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            return "high/download_one_purchase_history?code=" + this.code + "&submit_name=" + this.submit_name + "&bill_no=" + this.bill_no + "&production_line_id=" + this.production_line_id + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls";
+            return "high/download_one_purchase_history?code=" + this.code + "&submit_name=" + this.submit_name + "&bill_no=" + this.bill_no + "&production_line_id=" + this.production_line_id + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls&page_size=" + this.now_page_size;
         },
         allPageUrl: function () {
             let splits = this.date_range.split(" - ");
@@ -313,8 +313,12 @@ const myrepair = new Vue({
         now_page_size: 5,
         page_size_list: ['5', '10', '15', '20'],
         all_count: 0,
+
         repair_list: [],
-        repair: null
+        repair: null,
+
+        reason:"",
+        disagree_id:""
     },
     created: function () {
         this.getData();
@@ -341,6 +345,54 @@ const myrepair = new Vue({
         showDetail: function (index) {
             this.repair = this.repair_list[index];
         },
+        agree: function (table_id) {
+            let that = this;
+            $.ajax("high/handle_repair_submit", {
+                    data: {
+                        id: table_id,
+                        submit_id: id,
+                        state: true,
+                        reason: ""
+                    },
+                    success(data, textStatus, jqXHR) {
+                        if (data) {
+                            alert("操作成功！");
+                            that.getData();
+                        } else {
+                            alert("服务器错误，请重试！");
+                            that.getData();
+                        }
+                    }
+                }
+            )
+        },
+        disagreeModal: function (table_id) {
+            this.disagree_id = table_id;
+        },
+        disagree:function(){
+            let that = this;
+            if(this.reason === ""){
+                $("#disagreeModal [style*='border-color: rgb(201, 48, 44);']:eq(0)").focus().shake(2, 10, 200);
+                return false;
+            }
+            $.ajax("high/handle_repair_submit",{
+                data:{
+                    id: this.disagree_id,
+                    submit_id: id,
+                    state: true,
+                    reason: this.reason
+                },
+                success(data, textStatus, jqXHR) {
+                    if (data) {
+                        alert("操作成功！");
+                        that.getData();
+                    } else {
+                        alert("服务器错误，请重试！");
+                        that.getData();
+                    }
+                }
+            })
+        }
     }
 });
 const historyMyrepair = new Vue({
@@ -693,7 +745,7 @@ const historyMyscrap = new Vue({
             if (splits.length === 1) {
                 splits = ['', ''];
             }
-            return "high/download_one_scrap_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_id=" + id + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls";
+            return "high/download_one_scrap_history?code=" + this.code + "&seq_id=" + this.seq_id + "&submit_id=" + id + "&status=" + this.status + "&start_date=" + splits[0] + "&end_date=" + splits[1] + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls&page_size=" + this.now_page_size;
         },
         allPageUrl: function () {
             let splits = this.date_range.split(" - ");

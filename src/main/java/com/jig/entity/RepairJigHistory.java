@@ -11,6 +11,8 @@ public class RepairJigHistory {
     private String repair_reason;
     private String acceptor_id;
     private String acceptor_name;
+    private String acceptor_time;
+    private String acceptor_reason;
     private String status;
     public String getId() {
         return id;
@@ -98,5 +100,21 @@ public class RepairJigHistory {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getAcceptor_reason() {
+        return acceptor_reason;
+    }
+
+    public void setAcceptor_reason(String acceptor_reason) {
+        this.acceptor_reason = acceptor_reason;
+    }
+
+    public String getAcceptor_time() {
+        return acceptor_time;
+    }
+
+    public void setAcceptor_time(String acceptor_time) {
+        this.acceptor_time = acceptor_time;
     }
 }

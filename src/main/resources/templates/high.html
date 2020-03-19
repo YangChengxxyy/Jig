@@ -1109,8 +1109,9 @@
                                             <button type="button" class="btn btn-primary" data-toggle="modal"
                                                     data-target="#repairHistory">查看报修历史
                                             </button>
-                                            <button type="button" class="btn btn-success">通过</button>
-                                            <button type="button" class="btn btn-danger">不通过</button>
+                                            <button type="button" class="btn btn-success" @click="agree(item.id)">通过</button>
+                                            <button type="button" class="btn btn-danger" @click="disagreeModal(item.id)" data-toggle="modal"
+                                            data-target="#disagreeModal">不通过</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -1190,6 +1191,33 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">关闭
                                             </button>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal -->
+                            </div>
+                            <div class="modal fade" id="disagreeModal" tabindex="-1" role="dialog" data-backdrop="false"
+                                 aria-labelledby="disagreeModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-hidden="true">&times;
+                                            </button>
+                                            <h4 class="modal-title" id="disagreeModalLabel">不同意原因填写</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">不同意原因：</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea class="form-control" v-model="reason" rows="4" :style="{'borderColor': reason == ''? '#c9302c':'#ccc'}"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                            <button type="button" class="btn btn-primary" @click="disagree()">提交更改</button>
                                         </div>
                                     </div><!-- /.modal-content -->
                                 </div><!-- /.modal -->
@@ -1290,7 +1318,8 @@
                                         <td>{{item.trouble_reason}}</td>
                                         <td>{{item.submit_time}}</td>
                                         <td v-if="item.status == 0">待处理</td>
-                                        <td v-else>已处理</td>
+                                        <td v-else-if="item.status == 1">已同意</td>
+                                        <td v-else>未同意</td>
                                         <td>
                                             <button class="btn btn-primary" data-toggle="modal"
                                                     data-target="#history_repair_detail" @click="check_detail(index)">查看
@@ -1335,14 +1364,14 @@
                                                     <label class="control-label col-sm-3">故障原因</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{history.trouble_reason}}
+                                                            {{history.repair_reason}}
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-3">故障图片</label>
                                                     <div class="col-sm-8">
-                                                        <img :src="history.trouble_photo_url"/>
+                                                        <img class="img-thumbnail" :src="history.repair_photo_url"/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -1381,7 +1410,15 @@
                                                     <label class="control-label col-sm-3">处理时间</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
-                                                            {{script.acceptor_time}}
+                                                            {{history.acceptor_time}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" v-if="history.status == 2">
+                                                    <label class="control-label col-sm-3">未通过原因</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{history.acceptor_reason}}
                                                         </div>
                                                     </div>
                                                 </div>

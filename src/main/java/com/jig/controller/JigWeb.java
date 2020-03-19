@@ -91,14 +91,14 @@ public class JigWeb {
 
 
     @RequestMapping("high/download_one_repair_history")
-    public void highDownloadOneRepairHistory(HttpServletResponse response, @RequestParam("id") String id, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number, @RequestParam(value = "file_name") String file_name) throws Exception {
-        List<RepairJig> list = jigService.highSearchRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date, page_number);
+    public void highDownloadOneRepairHistory(HttpServletResponse response, @RequestParam("id") String id, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number, @RequestParam(value = "file_name") String file_name,@RequestParam("page_size")int page_size) throws Exception {
+        List<RepairJigHistory> list = jigService.highSearchRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date, page_number,page_size);
         outputFile(response, file_name, list);
     }
 
     @RequestMapping("high/download_all_repair_history")
     public void highDownloadAllRepairHistory(HttpServletResponse response, @RequestParam("id") String id, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date, @RequestParam(value = "file_name") String file_name) throws Exception {
-        List<RepairJig> list = jigService.highSearchAllRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date);
+        List<RepairJigHistory> list = jigService.highSearchAllRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date);
         outputFile(response, file_name, list);
     }
 

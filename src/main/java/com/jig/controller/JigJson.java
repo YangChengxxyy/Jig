@@ -337,7 +337,7 @@ public class JigJson {
     @RequestMapping("high/search_repair_history")
     public Map<String, Object> highSearchRepairHistory(@RequestParam("id") String id, @RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_name") String submit_name, @RequestParam("status") String status, @RequestParam("start_date") String start_date, @RequestParam("end_date") String end_date, @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
         int all = jigService.highSearchRepairHistoryPage(id, code, seq_id, submit_name, status, start_date, end_date);
-        Map<String, Object> map = getStringObjectMap(jigService.highSearchRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date, page_number)
+        Map<String, Object> map = getStringObjectMap(jigService.highSearchRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date, page_number,page_size)
                 , (int) Math.ceil(all / (double) all));
         map.put("all", all);
         return map;
@@ -702,5 +702,19 @@ public class JigJson {
         phoneUploadMap = new HashMap<>();
         Log log = LogFactory.getLog(this.getClass());
         log.info(" => removePhoneUploadMap");
+    }
+
+    @RequestMapping("high/handle_repair_submit")
+    public boolean handleRepairSubmit(@RequestParam("id") int id, @RequestParam("submit_id") String submit_id, @RequestParam("state") boolean state, @RequestParam("reason") String reason) {
+        try {
+            if (state) {
+                jigService.highAgreeRepairSubmit(id, submit_id);
+            } else {
+                jigService.highDisagreeRepairSubmit(id, submit_id, reason);
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

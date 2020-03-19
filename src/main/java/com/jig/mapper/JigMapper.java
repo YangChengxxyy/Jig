@@ -261,9 +261,9 @@ public interface JigMapper {
      * @param page_number 页码
      * @return 搜索到历史报修记录
      */
-    List<RepairJig> highSearchRepairHistory(@Param("id") String id, @Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_name") String submit_name, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date, @Param("page_number") int page_number);
+    List<RepairJigHistory> highSearchRepairHistory(@Param("id") String id, @Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_name") String submit_name, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date, @Param("page_number") int page_number, @Param("page_size") int page_size);
 
-    List<RepairJig> highSearchAllRepairHistory(@Param("id") String id, @Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_name") String submit_name, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date);
+    List<RepairJigHistory> highSearchAllRepairHistory(@Param("id") String id, @Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_name") String submit_name, @Param("status") String status, @Param("start_date") String start_date, @Param("end_date") String end_date);
 
     /**
      * high搜索历史报修记录条数
@@ -404,4 +404,8 @@ public interface JigMapper {
     int highGetRepairCount(@Param("submit_id") String submit_id);
 
     List<Map<String, Object>> highGetRepairBasic(String submit_id);
+
+    void highAgreeRepairSubmit(@Param("id") int id, @Param("submit_id") String submit_id);
+
+    void highDisagreeRepairSubmit(@Param("id") int id, @Param("submit_id") String submit_id, @Param("reason") String reason);
 }
