@@ -30,18 +30,27 @@
     <script src="js/html5shiv-3.7.2.min.js"></script>
     <script src="js/respond-1.4.2.min.js"></script>
     <![endif]-->
-    <link rel="stylesheet" href="css/daterangepicker.css"/>
+
     <link rel="stylesheet" href="css/mainStyle.css">
     <link rel="stylesheet" href="css/iconfont.css">
-    <script src="js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="css/bootstrap-select.css">
 
     <script src="js/echarts.min.js"></script>
+    <script src="js/vue.js"></script>
+
+    <!--日期选择器-->
+    <script src="js/moment-with-locales.js"></script>
+    <script src="js/bootstrap-datetimepicker.min.js"></script>
+    <script src="js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+    <!--日期范围选择器-->
     <script src="js/moment.min.js"></script>
     <script src="js/daterangepicker.js"></script>
-    <script src="js/vue.js"></script>
+    <link rel="stylesheet" href="css/daterangepicker.css">
+    <!--多选控件-->
+    <link rel="stylesheet" href="css/bootstrap-select.css">
     <script src="js/bootstrap-select.js"></script>
-    <script src="js/defaults-zh_CN.js"></script>
+
+
+
     <script>
         $(function () {
             //侧边栏点击事件
@@ -57,10 +66,10 @@
                 $("#main-menu ul li[href='" + href + "']").addClass("active")
             });
 
-            $(".ul li").on('click', function (e) {
+            /*$(".ul li").on('click', function (e) {
                 $(this).siblings().removeClass('active');
                 $(this).addClass("active");
-            })
+            })*/
 
             $(".btn-blue").mouseover(function () {
                 $(this).attr("class", "btn btn-blue-mouseover");
@@ -90,8 +99,8 @@
             });
         })
     </script>
-
 </head>
+
 <body class="page-body skin-navy">
 
 <div class="settings-pane">

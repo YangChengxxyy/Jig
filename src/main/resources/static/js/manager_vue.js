@@ -139,7 +139,7 @@ var purchase_submit_history = new Vue({
         max_page_number: 0
     },
     created:function () {
-        this.getData();
+        //this.getData();
     },
     methods:{
         getData:function () {
@@ -447,7 +447,7 @@ var scrap_submit_history = new Vue({
         max_page_number:0
     },
     created:function () {
-        this.getData();
+        //this.getData();
     },
     methods:{
         getData:function () {

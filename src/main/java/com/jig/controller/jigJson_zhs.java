@@ -71,10 +71,10 @@ public class jigJson_zhs {
     }
 
     //查看经理模块下的采购审批细节
-    @RequestMapping(value = "get_manager_purchase_detail",method = {RequestMethod.GET,RequestMethod.POST})
+    /*@RequestMapping(value = "get_manager_purchase_detail",method = {RequestMethod.GET,RequestMethod.POST})
     public PurchaseIncomeSubmit getManagerPurchaseDetail(@RequestParam(value = "id") String id){
         return jigService.get_manager_purchase_detail(id);
-    }
+    }*/
 
     //经理模块下的终审审批，@RequestParam pass 相当于经过终审审批后的采购审批单的状态
     @RequestMapping(value = "manager_check_purchase_submit",method = {RequestMethod.GET,RequestMethod.POST})
