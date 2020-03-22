@@ -696,6 +696,7 @@ public class JigJson {
 
     /**
      * 定时清除无用对象
+     * 每一个小时
      */
     @Scheduled(cron = "0 0 * * * ?")
     public void removePhoneUploadMap() {
