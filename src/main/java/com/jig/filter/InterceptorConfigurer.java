@@ -27,7 +27,8 @@ public class InterceptorConfigurer implements WebMvcConfigurer {
                         "/images/**",
                         "/phone_upload_success",
                         "/show_demo",
-                        "/get_demo_list");
+                        "/get_demo_list",
+                        "/get_workcell_list");
         registry.addInterceptor(powerInterceptor)
                 .addPathPatterns("/naive/**", "/high/**", "/supervisor/**", "/manager/**", "/admin/**");
     }
