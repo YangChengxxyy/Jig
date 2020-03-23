@@ -29,7 +29,7 @@ public class MailWeb {
     /**
      * 每天8点检查是否需要点检
      */
-    @Scheduled(cron = "0 */1 * * * ?")
+    @Scheduled(cron = "0 */1 * * * ?")//测试用
 //    @Scheduled(cron = "0 0 8 1/1 ? ?")
     public void check() throws ParseException {
         logger.info("开始查询是否需要点检");
