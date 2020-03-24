@@ -282,6 +282,17 @@ public class jigJson_zhs {
         return "审批成功！";
     }
 
+    //经理模式/报废审批/不通过报废申请
+    @RequestMapping(value = "manager_no_pass_submit")
+    public String managerNoPassSubmit(@Param("submit_id") String submit_id,@Param("no_pass_reason") String no_pass_reason){
+        String user_id = "1234567";
+        int flag = jigService.manager_no_pass_submit(submit_id,no_pass_reason,user_id);
+        if(flag<0){
+            return "服务器异常!";
+        }
+        return "审批成功";
+    }
+
     @RequestMapping(value = "manager_get_scrap_submit_list_history",method = {RequestMethod.GET,RequestMethod.POST})
     public Map<Object,Object> getManagerScrapSubmitListHistory(@RequestParam("code") String code,
                                                                @RequestParam("submit_name") String submit_name,
@@ -360,7 +371,7 @@ public class jigJson_zhs {
     @ResponseBody
     @RequestMapping(value = "supervisor_edit_jig_info")
     public int SupervisorEditJigInfo(JigDefinition jig_info){
-        String user_id = "1239393";
+        String user_id = "123456";
         int flag = jigService.supervisor_edit_jig_info(jig_info,user_id);
         return flag;
     }
@@ -382,7 +393,7 @@ public class jigJson_zhs {
     //监管者模式下初审通过采购审批
     @RequestMapping(value = "supervisor_pass_purchase_submit",method = {RequestMethod.GET,RequestMethod.POST})
     public int SupervisorPassPurchaseSubmit(@RequestParam("id") String id,@RequestParam("status") String status){
-        String first_acceptor = "1230936";
+        String first_acceptor = "123456";
         return jigService.supervisor_pass_purchase_submit(id,status,first_acceptor);
     }
 
@@ -391,7 +402,7 @@ public class jigJson_zhs {
     public int SupervisorNoPassPurchaseSubmit(@RequestParam("id") String id,
                                               @RequestParam("status") String status,
                                               @RequestParam("first_reason") String first_reason){
-        String fisrt_acceptor = "1230936";
+        String fisrt_acceptor = "123456";
         return jigService.supervisor_no_pass_purchase_submit(id,status,first_reason,fisrt_acceptor);
     }
 
@@ -411,7 +422,7 @@ public class jigJson_zhs {
             end_date = submit_time.substring(13);
         }
 
-        String user_id = "1230936";
+        String user_id = "123456";
         List<PurchaseIncomeSubmit> list = jigService.supervisor_get_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,status,page_number,user_id);
         int max = jigService.supervisor_get_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status,user_id);
 
@@ -426,7 +437,7 @@ public class jigJson_zhs {
         page_number = (page_number-1)*5;
         Map<Object,Object> map = new HashMap<>();
 
-        String user_id = "1230936";
+        String user_id = "123456";
         String workcell_id = "7";
         List<ScrapSubmit> list = jigService.supervisor_get_scrap_submit_list(page_number,workcell_id);
         int max = jigService.supervisor_get_scrap_submit_list_pages(workcell_id);
@@ -440,7 +451,7 @@ public class jigJson_zhs {
     @RequestMapping(value = "supervisor_pass_scrap_submit",method = {RequestMethod.GET,RequestMethod.POST})
     public int SupervisorPassScrapSubmit(@RequestParam("id") String id){
         String workcell = "7";
-        String user_id = "1239393";
+        String user_id = "123456";
         int flag = jigService.supervisor_pass_scrap_submit(id,user_id);
         return flag;
     }
@@ -448,7 +459,7 @@ public class jigJson_zhs {
     @RequestMapping(value = "supervisor_no_pass_scrap_submit",method = {RequestMethod.GET,RequestMethod.POST})
     public int SupervisorNoPassScrapSubmit(@RequestParam("id") String id,
                                            @RequestParam("no_pass_reason") String no_pass_reason){
-        String user_id = "1329393";
+        String user_id = "123456";
         int flag = jigService.supervisor_no_pass_scrap_submit(id,no_pass_reason,user_id);
         return flag;
     }

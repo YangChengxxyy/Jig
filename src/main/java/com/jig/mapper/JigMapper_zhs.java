@@ -109,6 +109,10 @@ public interface JigMapper_zhs {
                                    @Param("status") String status,
                                    @Param("user_id") String user_id);
 
+    int manager_no_pass_submit(@Param("submit_id") String submit_id,
+                               @Param("no_pass_reason") String no_pass_reason,
+                               @Param("user_id") String user_id);
+
     /**经理模式下历史报废审批记录的显示及其页数查询
      *
      */

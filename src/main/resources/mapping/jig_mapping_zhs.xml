@@ -136,13 +136,26 @@
         where s.status = 2 and u1.workcell_id = #{workcell_id}
     </select>
     <update id="check_manager_scrap_submit">
+        update scrap_submit
+        set status = #{status},final_time = now(),final_acceptor = #{user_id}
+        where id = #{submit_id};
+
         insert into scrap_submit_history select * from scrap_submit where id = #{submit_id};
 
-        delete from scrap_submit where id = #{submit_id};
+        delete from scrap_submit where id = #{submit_id}
 
-        update scrap_submit_history
-        set status = #{status},final_time = now(),final_acceptor = #{user_id}
-        where id = #{submit_id}
+
+    </update>
+    <update id="manager_no_pass_submit">
+        update scrap_submit
+        set status = 3,final_time = now(),final_acceptor = #{user_id},final_reason = #{no_pass_reason}
+        where id = #{submit_id};
+
+        insert into scrap_submit_history select * from scrap_submit where id = #{submit_id};
+
+        delete from scrap_submit where id = #{submit_id}
+
+
     </update>
     <select id="get_manager_scrap_submit_list_history" resultType="com.jig.entity.ScrapSubmit">
         select s.*,

@@ -115,6 +115,11 @@ public class JigService_zhs {
         return flag;
     }
 
+    //经理模式/报废审批/不通过报废申请
+    public int manager_no_pass_submit(String submit_id,String no_pass_reason,String user_id){
+        return jigMapper.manager_no_pass_submit(submit_id,no_pass_reason,user_id);
+    }
+
 
 
     //经理模式，历史报废审批记录list的查询显示及其页数查询

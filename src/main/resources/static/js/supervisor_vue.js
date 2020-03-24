@@ -344,7 +344,7 @@ var purchase_submit_history = new Vue({
         purchase_submit_detail:null,//采购记录细节
     },
     created:function () {
-        this.getData();
+        //this.getData();
     },
     methods:{
         clear_date:function () {
@@ -508,7 +508,7 @@ var scrap_submit_history = new Vue({
             {text:'终审通过',value:'4'}],
     },
     created:function () {
-        this.getData();
+        //this.getData();
     },
     methods:{
         getData:function () {
