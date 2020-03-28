@@ -50,22 +50,26 @@
                     // Validation and Ajax action
                     $("form#login").validate({
                         rules: {
-                            username: {
+                            id: {
                                 required: true
                             },
-
-                            passwd: {
+                            password: {
+                                required: true
+                            },
+                            workcell: {
                                 required: true
                             }
                         },
 
                         messages: {
-                            username: {
+                            id: {
                                 required: 'Please enter your username.'
                             },
-
-                            passwd: {
+                            password: {
                                 required: 'Please enter your password.'
+                            },
+                            workcell: {
+                                required: 'Please choose your workCell.'
                             }
                         },
 
@@ -94,7 +98,7 @@
                                 data: {
                                     id: $(form).find('#id').val(),
                                     password: $(form).find('#password').val(),
-                                    workcell_id:$("#workcell").val()
+                                    workcell_id: $("#workcell").val()
                                 },
                                 success: function (resp) {
                                     console.log(resp);
@@ -102,9 +106,9 @@
                                         delay: .5,
                                         pct: 100,
                                         finish: function () {
-                                            if(resp.stateCode === 0){
+                                            if (resp.stateCode === 0) {
                                                 window.location.href = "/";
-                                            }else{
+                                            } else {
                                                 alert(resp.message);
                                                 $("#password").val("").focus();
                                             }
@@ -204,13 +208,13 @@
 <script src="js/vue.js"></script>
 <script>
     new Vue({
-        el:"#workcell_list",
-        data:{
-            workcell_list:[]
+        el: "#workcell_list",
+        data: {
+            workcell_list: []
         },
-        created:function () {
+        created: function () {
             let that = this;
-            $.ajax("get_workcell_list",{
+            $.ajax("get_workcell_list", {
                 success(data, textStatus, jqXHR) {
                     that.workcell_list = data;
 

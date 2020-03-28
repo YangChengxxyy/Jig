@@ -32,15 +32,13 @@ public class UserService {
                     type = type_list[i];
                 }
             }
-            if (!type.equals("")) {
-                if (passwords.size() > 0) {
-                    User user = passwords.get(0);
-                    user.setWorkcell_id(set_workcell_id);
-                    user.setType(type);
-                    loginState.setData(user);
-                    loginState.setMessage("登录成功！");
-                    loginState.setStateCode(0);
-                }
+            if (!type.equals("") && passwords.size() > 0) {
+                User user = passwords.get(0);
+                user.setWorkcell_id(set_workcell_id);
+                user.setType(type);
+                loginState.setData(user);
+                loginState.setMessage("登录成功！");
+                loginState.setStateCode(0);
             } else {
                 loginState.setStateCode(1);
                 loginState.setMessage("密码或者账户错误");

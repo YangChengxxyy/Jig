@@ -103,7 +103,7 @@ public class MailService {
         logger.info("发送静态邮件开始: {},{},{},{},{}", to, subject, content, rscPath, rscId);
 
         MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = null;
+        MimeMessageHelper helper;
 
         try {
 

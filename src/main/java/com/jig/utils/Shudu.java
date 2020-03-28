@@ -32,6 +32,7 @@ public class Shudu {
         }
         Shudu s = new Shudu(a);
         s.backTrace(0, 0);
+        scanner.close();
     }
 
     /**
