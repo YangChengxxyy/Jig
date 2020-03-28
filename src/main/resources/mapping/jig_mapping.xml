@@ -300,6 +300,7 @@
                  left join `user` u1 on rs.submit_id = u1.id
                  left join `user` u2 on rs.acceptor_id = u2.id
         where u1.workcell_id in (select user.workcell_id from user where id = #{id})
+            and rs.status = 0
     </select>
     <select id="highSearchRepairHistory" resultType="com.jig.entity.RepairJigHistory">
         select rh.*,u1.name submit_name,u2.name acceptor_name
@@ -480,8 +481,8 @@
     </select>
     <insert id="naiveSubmitRepair">
         insert into repair_submit(code, seq_id, repair_reason, repair_photo_url, submit_time,
-                                  submit_id) value (#{code}, #{seq_id}, #{repair_reason}, #{pathName}, now(),
-                                                    #{submit_id})
+                                  submit_id,status) value (#{code}, #{seq_id}, #{repair_reason}, #{pathName}, now(),
+                                                    #{submit_id},0)
     </insert>
     <select id="naiveGetRepairHistory" resultType="com.jig.entity.RepairJigHistory">
         select rs.*, u1.name submit_name, u2.name accrptor_name
@@ -499,12 +500,14 @@
     <select id="highGetRepairCount" resultType="java.lang.Integer">
         select count(*)
         from repair_submit
-        where submit_id = #{submit_id}
+                 inner join user on submit_id = user.id
+        where workcell_id = (select workcell_id from user where id = #{submit_id})
     </select>
     <select id="highGetRepairBasic" resultType="java.util.Map">
         select code as name, count(0) as `value`
         from repair_submit
-        where submit_id = #{submit_id}
+                 inner join user on submit_id = user.id
+        where workcell_id = (select workcell_id from user where id = #{submit_id})
         group by code
     </select>
 </mapper>

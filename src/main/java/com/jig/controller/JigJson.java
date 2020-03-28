@@ -154,6 +154,7 @@ public class JigJson {
             jigService.naiveOutgoJig(id, code, seq_id, rec_id);
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -183,6 +184,7 @@ public class JigJson {
             jigService.naiveReturnJig(id, code, seq_id, rec_id);
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -205,6 +207,7 @@ public class JigJson {
             jigService.highAddShoplist(submit_id, bill_no, production_line_id, codes, counts);
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -262,6 +265,7 @@ public class JigJson {
             jigService.highUpdatePurchaseIncomeSubmit(id, code, count, production_line_id);
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -305,6 +309,7 @@ public class JigJson {
             jigService.highDeletePurchaseSubmit(id);
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -439,6 +444,7 @@ public class JigJson {
             phoneUploadMap.remove(token);
             jigService.highSubmitScrap(code, seq_id, submit_id, scrap_reason, pathName);
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
         return true;
@@ -653,6 +659,7 @@ public class JigJson {
             phoneUploadMap.remove(token);
             jigService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, pathName);
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
         return true;
@@ -715,6 +722,7 @@ public class JigJson {
             }
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
