@@ -84,6 +84,15 @@ public interface JigMapper_zhs {
                                                        @Param("status") String status,
                                                        @Param("workcell_id") String workcell_id);
 
+    /**获取经理模块下/历史采购记录/查看历史操作记录
+     *
+     * @param submit_id 要查询的记录id
+     * @param workcell_id
+     * @return
+     */
+    List<Operate> manager_get_purchase_submit_history_operate(@Param("submit_id") String submit_id,
+                                                              @Param("workcell_id") String workcell_id);
+
     /**获取左侧菜单栏的通知消息数量
      *
      * @return

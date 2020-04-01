@@ -114,6 +114,14 @@
             </if>
         </where>
     </select>
+    <select id="manager_get_purchase_submit_history_operate" resultType="com.jig.entity.Operate">
+        select o.*,
+        u.name 'operate_man_name',
+        u.type 'operate_man_type'
+        from operate o inner join user u on o.operate_man_id = u.id
+        where u.workcell_id = #{workcell_id}  and o.operate_key_id = #{submit_id}
+        order by o.operate_time
+    </select>
     <select id="get_manager_purchase_submit_count" resultType="java.lang.Integer">
         select count(*) from purchase_income_submit
         where status = 2

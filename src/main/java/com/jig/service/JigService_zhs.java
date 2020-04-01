@@ -78,6 +78,11 @@ public class JigService_zhs {
         return (int)Math.ceil(max/5.0);
     }
 
+    //获取经理模块下/历史采购记录/查看历史操作记录
+    public List<Operate> manager_get_purchase_submit_history_operate(String submit_id,String workcell_id){
+        return jigMapper.manager_get_purchase_submit_history_operate(submit_id,workcell_id);
+    }
+
     //获取左侧菜单栏的通知消息数量
     public int get_manager_purchase_submit_count(){
         return jigMapper.get_manager_purchase_submit_count();

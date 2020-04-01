@@ -205,6 +205,21 @@ var purchase_submit_history = new Vue({
             this.submit_time = "";
             this.status = "";
         },
+        get_purchase_submit_history_operate:function (id) {
+            const that = this;
+            $.ajax({
+                url:"manager/get_purchase_submit_history_operate",
+                data:{
+                    submit_id:id
+                },
+                success:function (res) {
+                    purchase_submit_history_operate.operate_list = res.operate_list;
+                    purchase_submit_history_operate.purchase_submit_list = res.purchase_submit_list;
+                    purchase_submit_history_operate.operate_update_info_list = res.update_info_list;
+                    console.log(res);
+                }
+            })
+        }
         /*timer(){
             return setTimeout(()=>(this.getData(),5000));
         }*/
@@ -221,6 +236,34 @@ var purchase_submit_history_detail = new Vue({
     el:"#myshoplist_history_detail",
     data:{
         purchase_submit:null
+    },
+    created:function(){
+
+    },
+    computed: {
+    },
+    methods:{
+
+    }
+})
+
+//历史采购审批/查看历史操作
+var purchase_submit_history_operate = new Vue({
+    el:"#purchase_submit_history_operate",
+    data:{
+        operate_list:[],
+        purchase_submit_list:[],
+        operate_update_info_list:[],
+        li_index:0,
+    },
+    methods:{
+        get_li_index:function (index) {
+            if(this.purchase_submit_list[index].bill_no != null){
+                this.li_index = index;
+                console.log(this.li_index);
+            }
+
+        }
     }
 })
 

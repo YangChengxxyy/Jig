@@ -1,5 +1,7 @@
 package com.jig.entity;
 
+import java.util.UUID;
+
 public class PurchaseIncomeSubmit {
     private String id;
     private String submit_id;
@@ -20,6 +22,10 @@ public class PurchaseIncomeSubmit {
     private String production_line_name;
     private String bill_no;//单据号
     private String tool_photo_url;//工夹具照片路径
+
+    public PurchaseIncomeSubmit(){
+        id = UUID.randomUUID().toString().replaceAll("-","");
+    }
 
     public String getId() {
         return id;
@@ -173,7 +179,17 @@ public class PurchaseIncomeSubmit {
         this.final_reason = final_reason;
     }
 
-    public String toString(){
-        return bill_no;
+    @Override
+    public String toString() {
+        return "PurchaseIncomeSubmit{" +
+                "id='" + id + '\'' +
+                ", submit_id='" + submit_id + '\'' +
+                ", submit_time='" + submit_time + '\'' +
+                ", code='" + code + '\'' +
+                ", count='" + count + '\'' +
+                ", status='" + status + '\'' +
+                ", production_line_id=" + production_line_id +
+                ", bill_no='" + bill_no + '\'' +
+                '}';
     }
 }

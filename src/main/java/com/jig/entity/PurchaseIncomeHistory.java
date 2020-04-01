@@ -1,5 +1,7 @@
 package com.jig.entity;
 
+import java.util.UUID;
+
 public class PurchaseIncomeHistory {
     private String id;
     private String submit_id;
@@ -18,6 +20,10 @@ public class PurchaseIncomeHistory {
     private String production_line_name;
     private String bill_no;
     private String tool_photo_url;
+
+    public PurchaseIncomeHistory(){
+        id = UUID.randomUUID().toString().replaceAll("-","");
+    }
 
     public String getId() {
         return id;

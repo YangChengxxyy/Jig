@@ -133,6 +133,33 @@ public class jigJson_zhs {
         return map;
     }
 
+    //获取经理模块下/历史采购记录/查看历史操作记录
+    @RequestMapping("manager/get_purchase_submit_history_operate")
+    public Map<Object,Object> ManagerGetPurchaseSubmitHistoryOperate(@RequestParam("submit_id") String submit_id){
+        String workcell_id = "7";
+        Map<Object,Object> map = new HashMap<>();
+        List<Operate> operates = jigService.manager_get_purchase_submit_history_operate(submit_id,workcell_id);
+        List<PurchaseIncomeSubmit> purchase_submit_list = new ArrayList<>();
+        List<OperateUpdateInfo> update_info_list = new ArrayList<>();
+
+        for(int i=0;i<operates.size();i++){
+            operates.get(i).toString();
+            purchase_submit_list.add(operates.get(i).getPurchase_submit());
+            update_info_list.add(operates.get(i).setOperateUpdateInfo());
+        }
+
+        /*for (PurchaseIncomeSubmit purchaseIncomeSubmit:purchase_submit_list){
+            System.out.println(purchaseIncomeSubmit);
+        }*/
+        for(OperateUpdateInfo updateInfo:update_info_list){
+            System.out.println(updateInfo);
+        }
+        map.put("update_info_list",update_info_list);
+        map.put("operate_list",operates);
+        map.put("purchase_submit_list",purchase_submit_list);
+        return map;
+    }
+
     //获取左侧菜单栏的通知消息数量
     @RequestMapping(value = "manager_get_left_message_submit_count",method = {RequestMethod.GET,RequestMethod.POST})
     public Map<Object, Object> getManagerPurchaseSubmitCount(){

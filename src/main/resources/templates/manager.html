@@ -638,7 +638,8 @@
                                         <label for="div_date1" class="col-sm-2 control-label">选择时间</label>
                                         <div class="col-sm-3">
                                             <div class='input-group' id='div_date1'>
-                                                <input class="form-control submit_date" v-model="submit_time" value=""></input>
+                                                <input class="form-control submit_date" v-model="submit_time"
+                                                       value=""></input>
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-remove" @click="clear_date"></span>
                                                 </span>
@@ -695,6 +696,10 @@
                                             <button type="button" data-target="#myshoplist_history_detail"
                                                     data-toggle="modal" class="btn btn-primary"
                                                     @click="get_purchase_submit_detail(list_index)">查看
+                                            </button>
+                                            <button type="button" data-target="#purchase_submit_history_operate"
+                                                    data-toggle="modal" class="btn btn-primary"
+                                                    @click="get_purchase_submit_history_operate(item.id)">历史操作
                                             </button>
                                         </td>
                                     </tr>
@@ -757,7 +762,8 @@
                                                     <h1 class="data fg-green">{{jig_count}}</h1>
                                                     <p>新增工夹具</p>
                                                     <a class="more" href="#" title="查看更多" data-toggle="modal"
-                                                       data-target="#purchase_total_jig_detail" @click="get_echart_new_jig_data">查看更多</a>
+                                                       data-target="#purchase_total_jig_detail"
+                                                       @click="get_echart_new_jig_data">查看更多</a>
                                                     <span class="status arrow-up">{{new_jig_percent}}</span>
                                                 </div>
                                             </div>
@@ -1697,6 +1703,75 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div><!--/采购记录history明细-->
+
+<!--历史采购记录/查看历史操作记录-->
+<div class="modal fade" id="purchase_submit_history_operate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">历史操作记录</h4>
+            </div>
+            <div class="modal-body" v-if="operate_list.length>0">
+                <ul style="list-style-type:none;" class="active opened main-menu-li">
+                    <li v-for="(item,index) in operate_list" style="margin-bottom:5px">
+                        -&nbsp;&nbsp;&nbsp;{{item.operate_time}}
+                        <p class="pull-right" data-toggle="collapse"
+                           v-bind:href="'#operate'+item.id" @click="get_li_index(index)">{{item.to_string}}</p>
+、
+                        <ul class="collapse" v-bind:id="'operate'+item.id" style="list-style-type:none">
+                            <div v-if="item.type === 'insert'">
+                                <li v-if="purchase_submit_list[li_index].bill_no !== null">单据号:  {{purchase_submit_list[li_index].bill_no}}</li>
+                                <li v-if="purchase_submit_list[li_index].code !== null "
+                                    v-for="(code,i) in purchase_submit_list[li_index].code.split('|')">
+                                    工夹具代码及数量:  {{code}}&nbsp;-&nbsp;{{purchase_submit_list[li_index].count.split('|')[i]}}件
+                                </li>
+                                <li v-if="purchase_submit_list[li_index].production_line_id !== null">产线id:  {{purchase_submit_list[li_index].production_line_id}}</li>
+                            </div>
+
+                            <div v-if="item.type === 'update' && item.old_value !== null">
+
+                                <li v-if="operate_update_info_list[li_index].status != null">
+                                    初审时间: {{operate_update_info_list[li_index].first_time.split('~')[0]}} ->
+                                    {{operate_update_info_list[li_index].first_time.split('~')[1]}}
+                                </li>
+                                <li v-if="operate_update_info_list[li_index].first_time != null">
+                                    初审时间: {{operate_update_info_list[li_index].first_time.split('~')[0]}} ->
+                                             {{operate_update_info_list[li_index].first_time.split('~')[1]}}
+                                </li>
+                                <li v-if="operate_update_info_list[li_index].first_acceptor != null">
+                                    初审人id: {{operate_update_info_list[li_index].first_acceptor.split('~')[0]}} ->
+                                    {{operate_update_info_list[li_index].first_acceptor.split('~')[1]}}
+                                </li>
+                                <li v-if="operate_update_info_list[li_index].first_reason != null">
+                                    初审人id: {{operate_update_info_list[li_index].first_reason.split('~')[0]}} ->
+                                    {{operate_update_info_list[li_index].first_reason.split('~')[1]}}
+                                </li>
+                                <li v-if="operate_update_info_list[li_index].final_time != null">
+                                    终审时间: {{operate_update_info_list[li_index].final_time.split('~')[0]}} ->
+                                    {{operate_update_info_list[li_index].final_time.split('~')[1]}}
+                                </li>
+                                <li v-if="operate_update_info_list[li_index].final_acceptor != null">
+                                    终审人id: {{operate_update_info_list[li_index].final_acceptor.split('~')[0]}} ->
+                                    {{operate_update_info_list[li_index].final_acceptor.split('~')[1]}}
+                                </li>
+                                <li v-if="operate_update_info_list[li_index].final_reason != null">
+                                    终审人id: {{operate_update_info_list[li_index].final_reason.split('~')[0]}} ->
+                                    {{operate_update_info_list[li_index].final_reason.split('~')[1]}}
+                                </li>
+                            </div>
+
+                    </li>
+
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div><!--/历史采购记录/查看历史操作记录-->
 
 <!--采购页面统计-->
 <!--新增采购单的查看更多-->
