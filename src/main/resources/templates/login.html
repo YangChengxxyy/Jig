@@ -8,7 +8,7 @@
     <meta name="description" content="Xenon Boostrap Admin Panel"/>
     <meta name="author" content=""/>
 
-    <title>Xenon - Login</title>
+    <title>工夹具管理系统 - Login</title>
 
     <link rel="stylesheet" href="css/googleapis.css">
     <link rel="stylesheet" href="assets/css/fonts/linecons/css/linecons.css">
@@ -50,22 +50,26 @@
                     // Validation and Ajax action
                     $("form#login").validate({
                         rules: {
-                            username: {
+                            id: {
                                 required: true
                             },
-
-                            passwd: {
+                            password: {
+                                required: true
+                            },
+                            workcell: {
                                 required: true
                             }
                         },
 
                         messages: {
-                            username: {
+                            id: {
                                 required: 'Please enter your username.'
                             },
-
-                            passwd: {
+                            password: {
                                 required: 'Please enter your password.'
+                            },
+                            workcell: {
+                                required: 'Please choose your workCell.'
                             }
                         },
 
@@ -94,6 +98,7 @@
                                 data: {
                                     id: $(form).find('#id').val(),
                                     password: $(form).find('#password').val(),
+                                    workcell_id: $("#workcell").val()
                                 },
                                 success: function (resp) {
                                     console.log(resp);
@@ -101,9 +106,9 @@
                                         delay: .5,
                                         pct: 100,
                                         finish: function () {
-                                            if(resp.stateCode === 0){
+                                            if (resp.stateCode === 0) {
                                                 window.location.href = "/";
-                                            }else{
+                                            } else {
                                                 alert(resp.message);
                                                 $("#password").val("").focus();
                                             }
@@ -151,6 +156,16 @@
                            autocomplete="off"/>
                 </div>
 
+                <div class="form-group" id="workcell_list">
+                    <label class="control-label" for="workcell"></label>
+                    <select class="form-control input-dark" name="workcell" id="workcell">
+                        <option value="">Choose Your WorkCell</option>
+                        <option v-for="item in workcell_list" :value="item.id">
+                            {{item.workcell}}
+                        </option>
+                    </select>
+                </div>
+
                 <div class="form-group">
                     <button type="submit" class="btn btn-dark  btn-block text-left">
                         <i class="fa-lock"></i>
@@ -169,26 +184,6 @@
                 </div>
 
             </form>
-
-            <!-- External login -->
-            <!--			<div class="external-login">-->
-            <!--				<a href="#" class="facebook">-->
-            <!--					<i class="fa-facebook"></i>-->
-            <!--					Facebook Login-->
-            <!--				</a>-->
-
-            <!--
-            <a href="#" class="twitter">
-                <i class="fa-twitter"></i>
-                Login with Twitter
-            </a>
-
-            <a href="#" class="gplus">
-                <i class="fa-google-plus"></i>
-                Login with Google Plus
-            </a>
-             -->
-            <!--			</div>-->
 
         </div>
 
@@ -210,6 +205,23 @@
 
 <!-- JavaScripts initializations and stuff -->
 <script src="assets/js/xenon-custom.js"></script>
+<script src="js/vue.js"></script>
+<script>
+    new Vue({
+        el: "#workcell_list",
+        data: {
+            workcell_list: []
+        },
+        created: function () {
+            let that = this;
+            $.ajax("get_workcell_list", {
+                success(data, textStatus, jqXHR) {
+                    that.workcell_list = data;
 
+                }
+            })
+        }
+    })
+</script>
 </body>
 </html>

@@ -119,9 +119,9 @@ public class JigService {
         return jigMapper.highGetRepairJigPage(id);
     }
 
-    public List<RepairJig> highSearchRepairHistory(String id,String code, String seq_id, String submit_name, String status, String start_date, String end_date, int page_number) {
-        page_number = (page_number - 1) * 5;
-        return jigMapper.highSearchRepairHistory(id,code, seq_id, submit_name, status, start_date, end_date, page_number);
+    public List<RepairJigHistory> highSearchRepairHistory(String id,String code, String seq_id, String submit_name, String status, String start_date, String end_date, int page_number,int page_size) {
+        page_number = (page_number - 1) * page_size;
+        return jigMapper.highSearchRepairHistory(id,code, seq_id, submit_name, status, start_date, end_date, page_number,page_size);
     }
 
     public int highSearchRepairHistoryPage(String id,String code, String seq_id, String submit_name, String status, String start_date, String end_date) {
@@ -151,7 +151,7 @@ public class JigService {
         return jigMapper.highSearchAllScrapHistory(code, seq_id, submit_name, scrap_reason, status, start_date, end_date);
     }
 
-    public List<RepairJig> highSearchAllRepairHistory(String id, String code, String seq_id, String submit_name, String status, String start_date, String end_date) {
+    public List<RepairJigHistory> highSearchAllRepairHistory(String id, String code, String seq_id, String submit_name, String status, String start_date, String end_date) {
         return jigMapper.highSearchAllRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date);
     }
 
@@ -199,4 +199,11 @@ public class JigService {
         return jigMapper.highGetRepairBasic(submit_id);
     }
 
+    public void highAgreeRepairSubmit(int id, String submit_id) {
+        jigMapper.highAgreeRepairSubmit(id,submit_id);
+    }
+
+    public void highDisagreeRepairSubmit(int id, String submit_id, String reason) {
+        jigMapper.highDisagreeRepairSubmit(id,submit_id,reason);
+    }
 }

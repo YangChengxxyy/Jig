@@ -154,6 +154,7 @@ public class JigJson {
             jigService.naiveOutgoJig(id, code, seq_id, rec_id);
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -183,6 +184,7 @@ public class JigJson {
             jigService.naiveReturnJig(id, code, seq_id, rec_id);
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -205,6 +207,7 @@ public class JigJson {
             jigService.highAddShoplist(submit_id, bill_no, production_line_id, codes, counts);
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -262,6 +265,7 @@ public class JigJson {
             jigService.highUpdatePurchaseIncomeSubmit(id, code, count, production_line_id);
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -305,6 +309,7 @@ public class JigJson {
             jigService.highDeletePurchaseSubmit(id);
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -337,7 +342,7 @@ public class JigJson {
     @RequestMapping("high/search_repair_history")
     public Map<String, Object> highSearchRepairHistory(@RequestParam("id") String id, @RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_name") String submit_name, @RequestParam("status") String status, @RequestParam("start_date") String start_date, @RequestParam("end_date") String end_date, @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
         int all = jigService.highSearchRepairHistoryPage(id, code, seq_id, submit_name, status, start_date, end_date);
-        Map<String, Object> map = getStringObjectMap(jigService.highSearchRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date, page_number)
+        Map<String, Object> map = getStringObjectMap(jigService.highSearchRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date, page_number,page_size)
                 , (int) Math.ceil(all / (double) all));
         map.put("all", all);
         return map;
@@ -439,6 +444,7 @@ public class JigJson {
             phoneUploadMap.remove(token);
             jigService.highSubmitScrap(code, seq_id, submit_id, scrap_reason, pathName);
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
         return true;
@@ -653,6 +659,7 @@ public class JigJson {
             phoneUploadMap.remove(token);
             jigService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, pathName);
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
         return true;
@@ -696,11 +703,27 @@ public class JigJson {
 
     /**
      * 定时清除无用对象
+     * 每一个小时
      */
     @Scheduled(cron = "0 0 * * * ?")
     public void removePhoneUploadMap() {
         phoneUploadMap = new HashMap<>();
         Log log = LogFactory.getLog(this.getClass());
         log.info(" => removePhoneUploadMap");
+    }
+
+    @RequestMapping("high/handle_repair_submit")
+    public boolean handleRepairSubmit(@RequestParam("id") int id, @RequestParam("submit_id") String submit_id, @RequestParam("state") boolean state, @RequestParam("reason") String reason) {
+        try {
+            if (state) {
+                jigService.highAgreeRepairSubmit(id, submit_id);
+            } else {
+                jigService.highDisagreeRepairSubmit(id, submit_id, reason);
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

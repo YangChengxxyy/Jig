@@ -20,8 +20,8 @@ public class UserJson {
     }
 
     @RequestMapping("login_check")
-    public LoginState loginCheck(@RequestParam(value = "id") String id, @RequestParam(value = "password") String password, HttpSession session) {
-        LoginState state = userService.loginCheck(id, password);
+    public LoginState loginCheck(@RequestParam(value = "id") String id, @RequestParam(value = "password") String password,@RequestParam(value = "workcell_id")String workcell_id, HttpSession session) {
+        LoginState state = userService.loginCheck(id, password,workcell_id);
         if (state.getStateCode() == 0) {
             session.setAttribute("loginState",state);
         }

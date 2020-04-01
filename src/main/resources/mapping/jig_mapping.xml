@@ -42,6 +42,35 @@
             production_line_id=#{production_line_id}
         where id = #{id}
     </update>
+    <insert id="highAgreeRepairSubmit">
+        update repair_submit
+        set acceptor_id   = #{submit_id},
+            acceptor_time = now(),
+            status        = 1
+        where id = #{id};
+        insert into repair_submit_history
+        select *
+        from repair_submit
+        where id = #{id};
+        delete
+        from repair_submit
+        where id = #{id};
+    </insert>
+    <insert id="highDisagreeRepairSubmit">
+        update repair_submit
+        set acceptor_id     = #{submit_id},
+            acceptor_time   = now(),
+            status          = 2,
+            acceptor_reason = #{reason}
+        where id = #{id};
+        insert into repair_submit_history
+        select *
+        from repair_submit
+        where id = #{id};
+        delete
+        from repair_submit
+        where id = #{id};
+    </insert>
     <delete id="naiveDeleteOutgoSubmit">
         delete
         from outgo_submit
@@ -262,6 +291,7 @@
                  left join `user` u1 on rs.submit_id = u1.id
                  left join `user` u2 on rs.acceptor_id = u2.id
         where u1.workcell_id in (select user.workcell_id from user where id = #{id})
+          and rs.status = 0
         limit #{page_number},#{page_size}
     </select>
     <select id="highGetRepairJigPage" resultType="java.lang.Integer">
@@ -270,8 +300,9 @@
                  left join `user` u1 on rs.submit_id = u1.id
                  left join `user` u2 on rs.acceptor_id = u2.id
         where u1.workcell_id in (select user.workcell_id from user where id = #{id})
+            and rs.status = 0
     </select>
-    <select id="highSearchRepairHistory" resultType="com.jig.entity.RepairJig">
+    <select id="highSearchRepairHistory" resultType="com.jig.entity.RepairJigHistory">
         select rh.*,u1.name submit_name,u2.name acceptor_name
         from repair_submit_history rh
         left join user u1 on rh.submit_id = u1.id
@@ -294,7 +325,7 @@
         </if>
         limit #{page_number},5
     </select>
-    <select id="highSearchAllRepairHistory" resultType="com.jig.entity.RepairJig">
+    <select id="highSearchAllRepairHistory" resultType="com.jig.entity.RepairJigHistory">
         select rh.*,u1.name submit_name,u2.name acceptor_name
         from repair_submit_history rh
         left join user u1 on rh.submit_id = u1.id
@@ -322,23 +353,21 @@
         left join user u1 on rh.submit_id = u1.id
         left join user u2 on rh.acceptor_id = u2.id
         where u1.workcell_id in (select user.workcell_id from user where id = #{id})
-        <where>
-            <if test="code != null and code != ''">
-                and rh.code like concat('%',#{code},'%')
-            </if>
-            <if test="seq_id != null and seq_id !=''">
-                and rh.seq_id = #{seq_id}
-            </if>
-            <if test="submit_name != null and submit_name != ''">
-                and u1.name like concat('%',#{submit_name},'%')
-            </if>
-            <if test="status != null and status != ''">
-                and rh.status = #{status}
-            </if>
-            <if test="start_date != end_date">
-                and rh.submit_time between #{start_date} and #{end_date}
-            </if>
-        </where>
+        <if test="code != null and code != ''">
+            and rh.code like concat('%',#{code},'%')
+        </if>
+        <if test="seq_id != null and seq_id !=''">
+            and rh.seq_id = #{seq_id}
+        </if>
+        <if test="submit_name != null and submit_name != ''">
+            and u1.name like concat('%',#{submit_name},'%')
+        </if>
+        <if test="status != null and status != ''">
+            and rh.status = #{status}
+        </if>
+        <if test="start_date != end_date">
+            and rh.submit_time between #{start_date} and #{end_date}
+        </if>
     </select>
     <select id="highGetScrap" resultType="com.jig.entity.ScrapSubmit">
         select ss.*, u1.name submit_name, u2.name first_acceptor_name
@@ -452,8 +481,8 @@
     </select>
     <insert id="naiveSubmitRepair">
         insert into repair_submit(code, seq_id, repair_reason, repair_photo_url, submit_time,
-                                  submit_id) value (#{code}, #{seq_id}, #{repair_reason}, #{pathName}, now(),
-                                                    #{submit_id})
+                                  submit_id,status) value (#{code}, #{seq_id}, #{repair_reason}, #{pathName}, now(),
+                                                    #{submit_id},0)
     </insert>
     <select id="naiveGetRepairHistory" resultType="com.jig.entity.RepairJigHistory">
         select rs.*, u1.name submit_name, u2.name accrptor_name
@@ -471,12 +500,14 @@
     <select id="highGetRepairCount" resultType="java.lang.Integer">
         select count(*)
         from repair_submit
-        where submit_id = #{submit_id}
+                 inner join user on submit_id = user.id
+        where workcell_id = (select workcell_id from user where id = #{submit_id})
     </select>
     <select id="highGetRepairBasic" resultType="java.util.Map">
         select code as name, count(0) as `value`
         from repair_submit
-        where submit_id = #{submit_id}
+                 inner join user on submit_id = user.id
+        where workcell_id = (select workcell_id from user where id = #{submit_id})
         group by code
     </select>
 </mapper>

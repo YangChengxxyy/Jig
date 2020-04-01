@@ -11,7 +11,7 @@
  Target Server Version : 50647
  File Encoding         : 65001
 
- Date: 10/03/2020 19:49:42
+ Date: 17/03/2020 17:37:10
 */
 
 SET NAMES utf8mb4;
@@ -26,7 +26,7 @@ CREATE TABLE `cn_en`  (
   `english` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `chinese` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `english`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1184 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 55 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of cn_en
@@ -204,6 +204,22 @@ CREATE TABLE `jig_family`  (
 INSERT INTO `jig_family` VALUES ('79', 'JABIL FU');
 
 -- ----------------------------
+-- Table structure for jig_model
+-- ----------------------------
+DROP TABLE IF EXISTS `jig_model`;
+CREATE TABLE `jig_model`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `model` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of jig_model
+-- ----------------------------
+INSERT INTO `jig_model` VALUES (1, 'MOD 3XM2');
+INSERT INTO `jig_model` VALUES (2, 'FU');
+
+-- ----------------------------
 -- Table structure for jig_part_no
 -- ----------------------------
 DROP TABLE IF EXISTS `jig_part_no`;
@@ -296,6 +312,21 @@ INSERT INTO `maintenance_type` VALUES (5, '夹具电路是否正常工作.');
 INSERT INTO `maintenance_type` VALUES (6, '夹具是否有不正常的响声.');
 INSERT INTO `maintenance_type` VALUES (7, '夹具是否牢固的固定在对应位置.');
 INSERT INTO `maintenance_type` VALUES (8, '使用抹布或者刷子进行夹具清洁.');
+
+-- ----------------------------
+-- Table structure for operate
+-- ----------------------------
+DROP TABLE IF EXISTS `operate`;
+CREATE TABLE `operate`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `operate_id` varchar(15) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `operate_time` datetime(0) NULL DEFAULT NULL,
+  `table_filed` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '形式\r\ntable_name@filed|filed\r\n',
+  `type` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `old_value` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '| 分割',
+  `new_value` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '| 分割',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for outgo_income_history
@@ -671,8 +702,9 @@ CREATE TABLE `user`  (
 -- ----------------------------
 INSERT INTO `user` VALUES ('1215072', 'Xianghai Zhang', '1215072', 7, 'naive', '123@qq.com', NULL, '仓管员', NULL, NULL);
 INSERT INTO `user` VALUES ('1230936', 'Lei Qian', '1230936', 7, 'high', '1111', NULL, '产线经理', NULL, NULL);
+INSERT INTO `user` VALUES ('123456', 'supervisor', '123456', 7, 'supervisor', '12@qq.ocm', NULL, NULL, NULL, NULL);
 INSERT INTO `user` VALUES ('1234567', 'Yang Cheng', '1234567', 7, 'manager', '853364106@qq.com', NULL, 'CEO', NULL, NULL);
-INSERT INTO `user` VALUES ('admin', 'Admin', 'admin', 7, 'admin', '853364106@qq.com', '19858198127', 'Boss', '2020-03-07', 'images/avatar_images/4.jpeg');
+INSERT INTO `user` VALUES ('admin', 'Admin', 'admin', 7, 'admin', '853364106@qq.com', '19858198127', 'Boss', '2020-03-07', '');
 
 -- ----------------------------
 -- Table structure for workcell

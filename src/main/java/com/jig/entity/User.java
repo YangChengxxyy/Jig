@@ -14,7 +14,7 @@ public class User {
     
     private String password;
     
-    private Integer workcell_id;
+    private String workcell_id;
 
     private String workcell;
     
@@ -59,11 +59,11 @@ public class User {
         this.password = password;
     }
 
-    public Integer getWorkcell_id() {
+    public String getWorkcell_id() {
         return workcell_id;
     }
 
-    public void setWorkcell_id(Integer workcell_id) {
+    public void setWorkcell_id(String workcell_id) {
         this.workcell_id = workcell_id;
     }
 
