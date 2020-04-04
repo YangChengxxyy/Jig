@@ -2,7 +2,7 @@ package com.jig.controller;
 
 import com.jig.entity.*;
 import com.jig.service.AdminService;
-import com.jig.utils.PoiUtils;
+import com.jig.utils.PoiUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -57,7 +57,7 @@ public class AdminJson {
                                     @RequestParam("id") String id, @RequestParam("name") String name, @RequestParam("workcell_id") String workcell_id,
                                     @RequestParam("start_date") String start_date, @RequestParam("end_date") String end_date, @RequestParam("file_name") String file_name) throws Exception {
         List<User> userList = adminService.searchUserInformation(submit_id, page_number,page_size, id, name, workcell_id, start_date, end_date);
-        PoiUtils.outputFile(response, file_name, userList);
+        PoiUtil.outputFile(response, file_name, userList);
     }
 
     @RequestMapping("download_all_user_info")
@@ -65,7 +65,7 @@ public class AdminJson {
                                     @RequestParam("id") String id, @RequestParam("name") String name, @RequestParam("workcell_id") String workcell_id,
                                     @RequestParam("start_date") String start_date, @RequestParam("end_date") String end_date, @RequestParam("file_name") String file_name) throws Exception {
         List<User> usersList = adminService.searchAllUserInformation(submit_id, id, name, workcell_id, start_date, end_date);
-        PoiUtils.outputFile(response, file_name, usersList);
+        PoiUtil.outputFile(response, file_name, usersList);
     }
 
     @RequestMapping("get_part")

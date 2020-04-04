@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.jig.utils.PoiUtils.outputFile;
+import static com.jig.utils.PoiUtil.outputFile;
 
 @Controller
 @Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.DEFAULT)

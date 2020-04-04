@@ -885,3 +885,26 @@ const repairStatistics = new Vue({
     computed: {},
     watch: {},
 });
+const message = new Vue({
+    el: "#message",
+    data: {
+        message:[]
+    },
+    created: function () {
+        this.getData();
+    },
+    methods: {
+        getData:function () {
+            $.ajax("get_message",{
+                data:{
+                    id:id
+                },
+                success(data, textStatus, jqXHR) {
+                    console.log(data);
+                }
+            })
+        }
+    },
+    computed: {},
+    watch: {}
+});
