@@ -3,11 +3,15 @@ package com.jig.controller;
 import com.jig.entity.*;
 import com.jig.service.JigService_zhs;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
 @RestController
+@Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.DEFAULT)
 public class jigJson_zhs {
     @Autowired
     private JigService_zhs jigService;

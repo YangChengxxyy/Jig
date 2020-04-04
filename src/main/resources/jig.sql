@@ -11,7 +11,7 @@
  Target Server Version : 50647
  File Encoding         : 65001
 
- Date: 17/03/2020 17:37:10
+ Date: 04/04/2020 16:01:06
 */
 
 SET NAMES utf8mb4;
@@ -26,7 +26,7 @@ CREATE TABLE `cn_en`  (
   `english` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `chinese` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `english`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 55 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 62 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of cn_en
@@ -82,6 +82,13 @@ INSERT INTO `cn_en` VALUES (51, 'entry_date', '入职时间');
 INSERT INTO `cn_en` VALUES (52, 'avatar_url', '头像照片');
 INSERT INTO `cn_en` VALUES (53, 'user_name', '用户名');
 INSERT INTO `cn_en` VALUES (54, 'type', '权限级别');
+INSERT INTO `cn_en` VALUES (55, 'repair_photo_url', '报修故障图片');
+INSERT INTO `cn_en` VALUES (56, 'repair_reason', '报修原因');
+INSERT INTO `cn_en` VALUES (57, 'acceptor_id', '处理人id');
+INSERT INTO `cn_en` VALUES (58, 'acceptor_name', '处理人');
+INSERT INTO `cn_en` VALUES (59, 'acceptor_time', '处理时间');
+INSERT INTO `cn_en` VALUES (60, 'acceptor_reason', '不通过原因');
+INSERT INTO `cn_en` VALUES (61, 'seq_id', '工夹具序列号');
 
 -- ----------------------------
 -- Table structure for jig_definition
@@ -541,7 +548,47 @@ CREATE TABLE `regular_maintenance`  (
   `pm_period` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   `last_time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of regular_maintenance
+-- ----------------------------
+INSERT INTO `regular_maintenance` VALUES (1, 'EF0789', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (2, 'EF0789', '2', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (3, 'EF0798', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (4, 'EF0798', '2', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (5, 'EF2184', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (6, 'EF2184', '2', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (7, 'EF2185', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (8, 'EF2185', '2', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (9, 'EF2186', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (10, 'EF2187', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (11, 'EF2188', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (12, 'EF2188', '2', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (13, 'EF2189', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (14, 'EF2189', '2', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (15, 'EF2189', '3', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (16, 'EF2190', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (17, 'EF2190', '2', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (18, 'EF2190', '3', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (19, 'EF2191', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (20, 'EF2192', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (21, 'EF2203', '3', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (22, 'EF2203', '4', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (23, 'EF2207', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (24, 'EF2208', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (25, 'EF2209', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (26, 'EF2210', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (27, 'EF2210', '2', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (28, 'EF2210', '3', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (29, 'EF2234', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (30, 'EF2235', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (31, 'EF2236', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (32, 'EF2237', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (33, 'EF2238', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (34, 'EF2239', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (35, 'EF2240', '1', '30', '2020-03-20 17:11:24');
+INSERT INTO `regular_maintenance` VALUES (36, 'EF2241', '1', '30', '2020-03-20 17:11:24');
 
 -- ----------------------------
 -- Table structure for regular_maintenance_history
@@ -569,6 +616,7 @@ CREATE TABLE `repair_submit`  (
   `submit_time` datetime(0) NULL DEFAULT NULL,
   `submit_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   `acceptor_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `acceptor_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   `acceptor_time` datetime(0) NULL DEFAULT NULL,
   `status` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
@@ -577,8 +625,8 @@ CREATE TABLE `repair_submit`  (
 -- ----------------------------
 -- Records of repair_submit
 -- ----------------------------
-INSERT INTO `repair_submit` VALUES (2, 'EF2189', 1, '123', 'images/repair_images/REPAIR-20200226083618645-c775a1e1-6c7e-42d4-a45f-45d53f01623c.png', '2020-02-26 08:36:18', '1215072', NULL, NULL, NULL);
-INSERT INTO `repair_submit` VALUES (3, 'EF2191', 1, '手机上传测试', 'images/repair_images/REPAIR-20200226084302934-8d7c0146-1cb4-4aad-8389-8cb2d00c15d1.jpeg', '2020-02-26 08:43:48', '1215072', NULL, NULL, NULL);
+INSERT INTO `repair_submit` VALUES (2, 'EF2189', 1, '12', 'images/repair_images/REPAIR-20200328202925742-d32933e3-e8dd-4ade-85fe-b29632e1253f.png', '2020-03-28 20:29:25', '1215072', '1230936', NULL, '2020-03-28 20:32:13', '1');
+INSERT INTO `repair_submit` VALUES (3, 'EF2191', 1, 'aadasd', 'images/repair_images/REPAIR-20200328202934302-45806d1a-0155-49f7-aa84-79345aab732c.png', '2020-03-28 20:29:34', '1215072', '1230936', NULL, '2020-03-28 20:32:45', '1');
 
 -- ----------------------------
 -- Table structure for repair_submit_history
@@ -593,10 +641,21 @@ CREATE TABLE `repair_submit_history`  (
   `submit_time` datetime(0) NULL DEFAULT NULL,
   `submit_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   `acceptor_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `acceptor_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   `acceptor_time` datetime(0) NULL DEFAULT NULL,
   `status` varchar(2) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '0待处理 1已处理',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of repair_submit_history
+-- ----------------------------
+INSERT INTO `repair_submit_history` VALUES (1, 'EF2191', 1, '1213', 'images/repair_images/REPAIR-20200328200132331-e6905537-6305-4ed0-9e83-da3628948ed9.png', '2020-03-28 20:01:32', '1215072', '1230936', NULL, '2020-03-28 20:23:08', '1');
+INSERT INTO `repair_submit_history` VALUES (2, 'EF2189', 1, '123', 'images/repair_images/REPAIR-20200226083618645-c775a1e1-6c7e-42d4-a45f-45d53f01623c.png', '2020-02-26 08:36:18', '1215072', '1230936', 'asd', '2020-03-19 15:01:21', '2');
+INSERT INTO `repair_submit_history` VALUES (3, 'EF2191', 1, '手机上传测试', 'images/repair_images/REPAIR-20200226084302934-8d7c0146-1cb4-4aad-8389-8cb2d00c15d1.jpeg', '2020-02-26 08:43:48', '1215072', '1230936', 'asdsa', '2020-03-19 15:01:25', '2');
+INSERT INTO `repair_submit_history` VALUES (4, 'EF2185', 1, 'adas', 'images/repair_images/REPAIR-20200328202952227-be97469f-c4c5-4a6b-960e-3db0f43d7731.png', '2020-03-28 20:29:52', '1215072', '1230936', NULL, '2020-03-28 20:34:13', '1');
+INSERT INTO `repair_submit_history` VALUES (5, 'EF2203', 3, '123', 'images/repair_images/REPAIR-20200328202959495-3dc39393-4e60-489f-ab39-01412122ba78.png', '2020-03-28 20:29:59', '1215072', '1230936', NULL, '2020-03-28 20:34:18', '1');
+INSERT INTO `repair_submit_history` VALUES (6, 'EF2189', 2, '123', 'images/repair_images/REPAIR-20200328203122429-9d37cf42-0e90-4ee1-8d5f-2eeeb25ba586.png', '2020-03-28 20:31:22', '1215072', '1230936', NULL, '2020-03-28 20:34:33', '1');
 
 -- ----------------------------
 -- Table structure for repairing_jig
@@ -700,9 +759,9 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1215072', 'Xianghai Zhang', '1215072', 7, 'naive', '123@qq.com', NULL, '仓管员', NULL, NULL);
-INSERT INTO `user` VALUES ('1230936', 'Lei Qian', '1230936', 7, 'high', '1111', NULL, '产线经理', NULL, NULL);
-INSERT INTO `user` VALUES ('123456', 'supervisor', '123456', 7, 'supervisor', '12@qq.ocm', NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES ('1215072', 'Xianghai Zhang', '1215072', 7, 'naive', '461583644@qq.com', NULL, '仓管员', NULL, NULL);
+INSERT INTO `user` VALUES ('1230936', 'Lei Qian', '1230936', 7, 'high', '461583644@qq.com', NULL, '产线经理', NULL, NULL);
+INSERT INTO `user` VALUES ('123456', 'supervisor', '123456', 7, 'supervisor', '461583644@qq.com', NULL, NULL, NULL, NULL);
 INSERT INTO `user` VALUES ('1234567', 'Yang Cheng', '1234567', 7, 'manager', '853364106@qq.com', NULL, 'CEO', NULL, NULL);
 INSERT INTO `user` VALUES ('admin', 'Admin', 'admin', 7, 'admin', '853364106@qq.com', '19858198127', 'Boss', '2020-03-07', '');
 

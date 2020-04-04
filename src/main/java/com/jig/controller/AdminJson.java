@@ -4,6 +4,9 @@ import com.jig.entity.*;
 import com.jig.service.AdminService;
 import com.jig.utils.PoiUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("admin")
+@Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.DEFAULT)
 public class AdminJson {
     @Autowired
     private AdminService adminService;
