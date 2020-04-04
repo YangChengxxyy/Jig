@@ -1,5 +1,7 @@
 package com.jig.utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TimeUtil {
@@ -45,7 +47,9 @@ public class TimeUtil {
             return (years <= 0 ? 1 : years) + ONE_YEAR_AGO;
         }
     }
-
+    public static String nowLocalFormat(String date,String format) throws ParseException {
+        return nowLocalFormat(stringToDate(date, format));
+    }
     private static long toSeconds(long date) {
         return date / 1000L;
     }
@@ -68,5 +72,17 @@ public class TimeUtil {
 
     private static long toYears(long date) {
         return toMonths(date) / 365L;
+    }
+
+    public static Date stringToDate(String time, String format) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        return simpleDateFormat.parse(time);
+    }
+
+    public static String oldToNew(String oldTime, String oldFormat, String newFormat) throws ParseException {
+        SimpleDateFormat o = new SimpleDateFormat(oldFormat);
+        SimpleDateFormat n = new SimpleDateFormat(newFormat);
+        Date oldDate = o.parse(oldTime);
+        return n.format(oldDate);
     }
 }
