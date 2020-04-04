@@ -22,7 +22,7 @@ import java.util.Random;
  *
  * @author YC
  */
-public class QrCodeUtils {
+public class QrCodeUtil {
     private static final String CHARSET = "utf-8";
 
     public static final String FORMAT = "JPG";
@@ -61,7 +61,7 @@ public class QrCodeUtils {
             return image;
         }
         // 插入图片
-        QrCodeUtils.insertImage(image, logoPath, needCompress);
+        QrCodeUtil.insertImage(image, logoPath, needCompress);
         return image;
     }
 
@@ -76,7 +76,7 @@ public class QrCodeUtils {
     private static void insertImage(BufferedImage source, String logoPath, boolean needCompress) throws IOException {
         InputStream inputStream = null;
         try {
-            inputStream = FileUtils.getResourceAsStream(logoPath);
+            inputStream = FileUtil.getResourceAsStream(logoPath);
             Image src = ImageIO.read(inputStream);
             int width = src.getWidth(null);
             int height = src.getHeight(null);
@@ -124,7 +124,7 @@ public class QrCodeUtils {
      * @throws Exception
      */
     public static String encode(String content, String logoPath, String destPath, boolean needCompress) throws Exception {
-        BufferedImage image = QrCodeUtils.createImage(content, logoPath, needCompress);
+        BufferedImage image = QrCodeUtil.createImage(content, logoPath, needCompress);
         mkdirs(destPath);
         String fileName = new Random().nextInt(99999999) + "." + FORMAT.toLowerCase();
         ImageIO.write(image, FORMAT, new File(destPath + "/" + fileName));
@@ -143,7 +143,7 @@ public class QrCodeUtils {
      * @throws Exception
      */
     public static String encode(String content, String logoPath, String destPath, String fileName, boolean needCompress) throws Exception {
-        BufferedImage image = QrCodeUtils.createImage(content, logoPath, needCompress);
+        BufferedImage image = QrCodeUtil.createImage(content, logoPath, needCompress);
         mkdirs(destPath);
         fileName = fileName.substring(0, fileName.indexOf(".") > 0 ? fileName.indexOf(".") : fileName.length())
                 + "." + FORMAT.toLowerCase();
@@ -173,7 +173,7 @@ public class QrCodeUtils {
      * @throws Exception
      */
     public static String encode(String content, String logoPath, String destPath) throws Exception {
-        return QrCodeUtils.encode(content, logoPath, destPath, false);
+        return QrCodeUtil.encode(content, logoPath, destPath, false);
     }
 
     /**
@@ -185,7 +185,7 @@ public class QrCodeUtils {
      * @throws Exception
      */
     public static String encode(String content, String destPath, boolean needCompress) throws Exception {
-        return QrCodeUtils.encode(content, null, destPath, needCompress);
+        return QrCodeUtil.encode(content, null, destPath, needCompress);
     }
 
     /**
@@ -196,7 +196,7 @@ public class QrCodeUtils {
      * @throws Exception
      */
     public static String encode(String content, String destPath) throws Exception {
-        return QrCodeUtils.encode(content, null, destPath, false);
+        return QrCodeUtil.encode(content, null, destPath, false);
     }
 
     /**
@@ -210,7 +210,7 @@ public class QrCodeUtils {
      */
     public static void encode(String content, String logoPath, OutputStream output, boolean needCompress)
             throws Exception {
-        BufferedImage image = QrCodeUtils.createImage(content, logoPath, needCompress);
+        BufferedImage image = QrCodeUtil.createImage(content, logoPath, needCompress);
         ImageIO.write(image, FORMAT, output);
     }
 
@@ -222,7 +222,7 @@ public class QrCodeUtils {
      * @throws Exception
      */
     public static void encode(String content, OutputStream output) throws Exception {
-        QrCodeUtils.encode(content, null, output, false);
+        QrCodeUtil.encode(content, null, output, false);
     }
 }
 

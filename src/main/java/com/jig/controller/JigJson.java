@@ -3,7 +3,7 @@ package com.jig.controller;
 import com.jig.entity.*;
 import com.jig.filter.SessionInterceptor;
 import com.jig.service.JigService;
-import com.jig.utils.QrCodeUtils;
+import com.jig.utils.QrCodeUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
@@ -512,7 +512,7 @@ public class JigJson {
         System.out.println(requestUrl);
         try {
             OutputStream os = response.getOutputStream();
-            QrCodeUtils.encode(requestUrl, os);
+            QrCodeUtil.encode(requestUrl, os);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -565,7 +565,7 @@ public class JigJson {
         System.out.println(requestUrl);
         try {
             OutputStream os = response.getOutputStream();
-            QrCodeUtils.encode(requestUrl, os);
+            QrCodeUtil.encode(requestUrl, os);
         } catch (Exception e) {
             e.printStackTrace();
         }
