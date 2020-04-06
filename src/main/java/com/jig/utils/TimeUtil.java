@@ -47,9 +47,11 @@ public class TimeUtil {
             return (years <= 0 ? 1 : years) + ONE_YEAR_AGO;
         }
     }
-    public static String nowLocalFormat(String date,String format) throws ParseException {
+
+    public static String nowLocalFormat(String date, String format) throws ParseException {
         return nowLocalFormat(stringToDate(date, format));
     }
+
     private static long toSeconds(long date) {
         return date / 1000L;
     }
@@ -79,6 +81,15 @@ public class TimeUtil {
         return simpleDateFormat.parse(time);
     }
 
+    /**
+     * 时间格式转化
+     *
+     * @param oldTime   旧时间
+     * @param oldFormat 旧时间格式化字符串
+     * @param newFormat 新时间格式化字符串
+     * @return 新时间
+     * @throws ParseException 转化错误
+     */
     public static String oldToNew(String oldTime, String oldFormat, String newFormat) throws ParseException {
         SimpleDateFormat o = new SimpleDateFormat(oldFormat);
         SimpleDateFormat n = new SimpleDateFormat(newFormat);

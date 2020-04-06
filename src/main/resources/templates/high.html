@@ -339,14 +339,14 @@
                 <li class="dropdown hover-line" id="message">
                     <a href="#" data-toggle="dropdown">
                         <i class="fa-bell-o"></i>
-                        <span class="badge badge-purple">7</span>
+                        <span class="badge badge-purple">{{other_message.length+new_message.length}}</span>
                     </a>
 
                     <ul class="dropdown-menu notifications">
                         <li class="top">
                             <p class="small">
                                 <a href="#" class="pull-right">Mark all Read</a>
-                                You have <strong>{{message.length}}</strong> new notifications.
+                                You have <strong>{{new_message.length}}</strong> new notifications.
                             </p>
                         </li>
 
@@ -433,6 +433,32 @@
                                         <span class="line small time">
 												last week
 											</span>
+                                    </a>
+                                </li>
+                                <li v-for="item in new_message" class="active notification-success" @click="showTab(item.tab_id,item.id)">
+                                    <a href="#">
+                                        <i class="fa-envelope-o"></i>
+
+                                        <span class="line">
+
+                                        </span>
+
+                                        <span class="line small time">
+                                            {{new_message.generate_time}}
+                                        </span>
+                                    </a>
+                                </li>
+                                <li v-for="item in other_message" class="notification-success">
+                                    <a href="#">
+                                        <i class="fa-envelope-o"></i>
+
+                                        <span class="line">
+
+                                        </span>
+
+                                        <span class="line small time">
+                                            {{other_message.generate_time}}
+                                        </span>
                                     </a>
                                 </li>
                             </ul>

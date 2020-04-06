@@ -1,9 +1,6 @@
 package com.jig.entity;
 
-import java.io.Serializable;
-
-public class Message implements Serializable {
-    private static final long serialVersionUID = 930729802261586410L;
+public class Message{
     /**
      * UUID生成
      */
@@ -21,17 +18,15 @@ public class Message implements Serializable {
 
     private String accept_time;
 
-    private String read_time;
+    private String read_user;
     /**
-     * 状态：00未读 01已读（未处理） 11通过 10不通过
+     * 状态：00未读 11通过 10不通过
      */
     private Integer status;
 
     private String message;
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
+    private String tab_id;
 
     public String getId() {
         return id;
@@ -89,6 +84,14 @@ public class Message implements Serializable {
         this.accept_time = accept_time;
     }
 
+    public String getRead_user() {
+        return read_user;
+    }
+
+    public void setRead_user(String read_user) {
+        this.read_user = read_user;
+    }
+
     public Integer getStatus() {
         return status;
     }
@@ -105,11 +108,11 @@ public class Message implements Serializable {
         this.message = message;
     }
 
-    public String getRead_time() {
-        return read_time;
+    public String getTab_id() {
+        return tab_id;
     }
 
-    public void setRead_time(String read_time) {
-        this.read_time = read_time;
+    public void setTab_id(String tab_id) {
+        this.tab_id = tab_id;
     }
 }

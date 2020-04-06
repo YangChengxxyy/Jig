@@ -317,8 +317,8 @@ const myrepair = new Vue({
         repair_list: [],
         repair: null,
 
-        reason:"",
-        disagree_id:""
+        reason: "",
+        disagree_id: ""
     },
     created: function () {
         this.getData();
@@ -369,14 +369,14 @@ const myrepair = new Vue({
         disagreeModal: function (table_id) {
             this.disagree_id = table_id;
         },
-        disagree:function(){
+        disagree: function () {
             let that = this;
-            if(this.reason === ""){
+            if (this.reason === "") {
                 $("#disagreeModal [style*='border-color: rgb(201, 48, 44);']:eq(0)").focus().shake(2, 10, 200);
                 return false;
             }
-            $.ajax("high/handle_repair_submit",{
-                data:{
+            $.ajax("high/handle_repair_submit", {
+                data: {
                     id: this.disagree_id,
                     submit_id: id,
                     state: true,
@@ -888,19 +888,58 @@ const repairStatistics = new Vue({
 const message = new Vue({
     el: "#message",
     data: {
-        message:[]
+        new_message: [],
+        other_message: []
     },
     created: function () {
         this.getData();
     },
     methods: {
-        getData:function () {
-            $.ajax("get_message",{
-                data:{
-                    id:id
+        getData: function () {
+            const that = this;
+            $.ajax("get_new_message", {
+                data: {
+                    id: id
                 },
                 success(data, textStatus, jqXHR) {
                     console.log(data);
+                    that.new_message = data;
+                }
+            });
+            $.ajax("get_other_message", {
+                data: {
+                    id: id
+                },
+                success(data, textStatus, jqXHR) {
+                    that.other_message = data;
+                }
+            })
+        },
+        showTab: function (tab_id,message_id) {
+            let $this = $("#" + tab_id);
+            let $main = $("#main-menu li[href*="+tab_id+"]");
+            //显示父亲tab
+            $this.parent("div").addClass("in active");
+            $this.parent("div").siblings().removeClass("in active");
+            //显示自身
+            $this.siblings().removeClass("in active");
+            $this.addClass("in active");
+            //设置.page-title下的显示
+            $this.siblings(".page-title").find(" ol li").removeClass("active");
+            $this.siblings(".page-title").find(" ol li[href*=" + tab_id + "]").addClass("active");
+            //设置#main-menu下的列表显示
+            $main.parents(".main-menu-li").siblings().removeClass("active opened expanded");
+            $main.parents(".main-menu-li").addClass("active opened expanded");
+            $main.siblings().removeClass("active");
+            $main.addClass("active");
+
+            $.ajax("read_message",{
+                data:{
+                    id:id,
+                    message_id:message_id
+                },
+                success(data, textStatus, jqXHR) {
+                    alert("服务器错误！");
                 }
             })
         }

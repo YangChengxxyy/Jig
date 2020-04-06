@@ -10,5 +10,7 @@ import java.util.List;
 @Repository
 @Mapper
 public interface MessageMapper {
-    List<Message> getMessage(@Param("id") String id);
+    List<Message> getNewMessage(@Param("id") String id, @Param("type") String type);
+
+    List<Message> getOtherMessage(@Param("id") String id, @Param("type") String type);
 }
