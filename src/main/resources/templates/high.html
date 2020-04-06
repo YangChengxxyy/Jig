@@ -440,24 +440,24 @@
                                         <i class="fa-envelope-o"></i>
 
                                         <span class="line">
-
+                                            {{item.generate_name+'#'+item.generate_id +item.message}}
                                         </span>
 
                                         <span class="line small time">
-                                            {{new_message.generate_time}}
+                                            {{item.generate_time}}
                                         </span>
                                     </a>
                                 </li>
-                                <li v-for="item in other_message" class="notification-success">
+                                <li v-for="item in other_message" class="notification-success" @click="showTab(item.tab_id,item.id)">
                                     <a href="#">
                                         <i class="fa-envelope-o"></i>
 
                                         <span class="line">
-
+                                            {{item.generate_name+'#'+item.generate_id +item.message}}
                                         </span>
 
                                         <span class="line small time">
-                                            {{other_message.generate_time}}
+                                            {{item.generate_time}}
                                         </span>
                                     </a>
                                 </li>
