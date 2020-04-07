@@ -915,9 +915,9 @@ const message = new Vue({
                 }
             })
         },
-        showTab: function (tab_id,message_id) {
+        showTab: function (tab_id, message_id) {
             let $this = $("#" + tab_id);
-            let $main = $("#main-menu li[href*="+tab_id+"]");
+            let $main = $("#main-menu li[href*=" + tab_id + "]");
             //显示父亲tab
             $this.parent("div").addClass("in active");
             $this.parent("div").siblings().removeClass("in active");
@@ -933,13 +933,15 @@ const message = new Vue({
             $main.siblings().removeClass("active");
             $main.addClass("active");
 
-            $.ajax("read_message",{
-                data:{
-                    id:id,
-                    message_id:message_id
+            $.ajax("read_message", {
+                data: {
+                    id: id,
+                    message_id: message_id
                 },
                 success(data, textStatus, jqXHR) {
-                    alert("服务器错误！");
+                    if (data) {
+                        alert("服务器错误！");
+                    }
                 }
             })
         }

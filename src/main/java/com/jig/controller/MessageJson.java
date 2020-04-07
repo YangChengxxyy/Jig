@@ -34,7 +34,7 @@ public class MessageJson {
         for (Message message : messages) {
             if (message.getGenerate_time() != null) {
                 try {
-                    message.setGenerate_time(TimeUtil.nowLocalFormat(message.getAccept_time(), "yyyy-MM-dd HH:mm:ss"));
+                    message.setGenerate_time(TimeUtil.nowLocalFormat(message.getGenerate_time(), "yyyy-MM-dd HH:mm:ss"));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -59,7 +59,7 @@ public class MessageJson {
         for (Message message : messages) {
             if (message.getGenerate_time() != null) {
                 try {
-                    message.setGenerate_time(TimeUtil.nowLocalFormat(message.getAccept_time(), "yyyy-MM-dd HH:mm:ss"));
+                    message.setGenerate_time(TimeUtil.nowLocalFormat(message.getGenerate_time(), "yyyy-MM-dd HH:mm:ss"));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

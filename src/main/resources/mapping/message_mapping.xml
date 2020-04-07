@@ -15,8 +15,8 @@
         from message
                  left join `user` u1 on u1.id = message.generate_id
                  left join `user` u2 on u2.id = message.accept_id
-        where message.accept_type = #{type}
-            and message.read_user like concat('%', #{id}, '%')
+        where (message.accept_type = #{type}
+            and message.read_user like concat('%', #{id}, '%'))
            or message.accept_id = #{id}
     </select>
 </mapper>
