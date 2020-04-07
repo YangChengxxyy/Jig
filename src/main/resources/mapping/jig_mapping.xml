@@ -24,6 +24,8 @@
             value (#{code}, #{seq_id}, now(), #{submit_id},
                    (select used_count from jig_entity where code = #{code} and seq_id = #{seq_id}), #{scrap_reason},
                    #{pathName}, 0);
+        insert into message(id, generate_id, generate_time, accept_type, status, message,tab_id)
+        values (UUID(), #{submit_id}, now(), 'supervisor', '00', '提交了新的报废申请','scrap_submit');
     </insert>
     <update id="naiveReturnJig">
         update jig_position
@@ -55,6 +57,8 @@
         delete
         from repair_submit
         where id = #{id};
+        insert into message(id, generate_id, generate_time, accept_type, status, message)
+        values (UUID(), #{submit_id}, now(), 'naive', '00', '同意了你的报修申请');
     </insert>
     <insert id="highDisagreeRepairSubmit">
         update repair_submit
@@ -70,6 +74,8 @@
         delete
         from repair_submit
         where id = #{id};
+        insert into message(id, generate_id, generate_time, accept_type, status, message)
+        values (UUID(), #{submit_id}, now(), 'naive', '00', ' 拒绝了你的报修申请');
     </insert>
     <delete id="naiveDeleteOutgoSubmit">
         delete
