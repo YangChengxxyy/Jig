@@ -63,8 +63,9 @@
         delete
         from repair_submit
         where id = #{id};
-        insert into message(id, generate_id, generate_time, accept_type, status, message)
-        values (UUID(), #{submit_id}, now(), 'naive', '00', '同意了你的报修申请');
+        insert into message(id, generate_id, generate_time, accept_id, accept_type, status, message)
+        values (UUID(), #{submit_id}, now(), (select submit_id from repair_submit where id = #{id}), 'naive', '00',
+                '同意了你的报修申请');
     </insert>
     <insert id="highDisagreeRepairSubmit">
         update repair_submit
@@ -83,8 +84,9 @@
         delete
         from repair_submit
         where id = #{id};
-        insert into message(id, generate_id, generate_time, accept_type, status, message)
-        values (UUID(), #{submit_id}, now(), 'naive', '00', ' 拒绝了你的报修申请');
+        insert into message(id, generate_id, generate_time, accept_id, accept_type, status, message)
+        values (UUID(), #{submit_id}, now(), (select submit_id from repair_submit where id = #{id}), 'naive', '00',
+                ' 拒绝了你的报修申请');
     </insert>
     <delete id="naiveDeleteOutgoSubmit">
         delete
