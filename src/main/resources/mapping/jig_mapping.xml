@@ -12,11 +12,13 @@
         update jig_position
         set status = 0
         where code = #{code}
-          and seq_id = #{seq_id}
+          and seq_id = #{seq_id};
     </insert>
     <insert id="highAddShoplist">
         insert into purchase_income_submit(submit_id, code, count, submit_time, status, production_line_id, bill_no)
-        values (#{submit_id}, #{code}, #{count}, now(), 0, #{production_line_id}, #{bill_no})
+        values (#{submit_id}, #{code}, #{count}, now(), 0, #{production_line_id}, #{bill_no});
+        insert into message(id, generate_id, generate_time, accept_type, status, message, tab_id)
+        values (uuid(), #{submit_id}, now(), 'supervisor', '00', '提交了新的入库申请', 'purchase_list')
     </insert>
     <insert id="highSubmitScrap">
         update jig_position
@@ -501,7 +503,8 @@
                                   submit_id, status)
         values (#{code}, #{seq_id}, #{repair_reason}, #{pathName}, now(),
                 #{submit_id}, 0);
-
+        insert into message(id, generate_id, generate_time, accept_type, status, message, tab_id)
+        values (uuid(), #{submit_id}, now(), 'high', '00', '提交了新的报修申请', 'myrepair')
     </insert>
     <select id="naiveGetRepairHistory" resultType="com.jig.entity.RepairJigHistory">
         select rs.*, u1.name submit_name, u2.name accrptor_name
