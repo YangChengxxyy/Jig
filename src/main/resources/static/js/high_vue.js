@@ -525,7 +525,7 @@ const myscrap = new Vue({
         },
         getSeqId: function () {
             let that = this;
-            $.ajax("code_get_seq_id", {
+            $.ajax("code_get_in_seq_id", {
                 data: {
                     code: this.submit_code
                 }, success: function (res) {

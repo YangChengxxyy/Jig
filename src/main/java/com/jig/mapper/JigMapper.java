@@ -408,4 +408,6 @@ public interface JigMapper {
     void highAgreeRepairSubmit(@Param("id") int id, @Param("submit_id") String submit_id);
 
     void highDisagreeRepairSubmit(@Param("id") int id, @Param("submit_id") String submit_id, @Param("reason") String reason);
+
+    List<String> codeGetInSeqId(String code);
 }

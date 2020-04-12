@@ -19,13 +19,17 @@
         values (#{submit_id}, #{code}, #{count}, now(), 0, #{production_line_id}, #{bill_no})
     </insert>
     <insert id="highSubmitScrap">
+        update jig_position
+        set status = 3
+        where seq_id = #{seq_id}
+          and code = #{code};
         insert into scrap_submit(code, seq_id, submit_time, submit_id, used_count, scrap_reason, scrap_photo_url,
                                  status)
             value (#{code}, #{seq_id}, now(), #{submit_id},
                    (select used_count from jig_entity where code = #{code} and seq_id = #{seq_id}), #{scrap_reason},
                    #{pathName}, 0);
-        insert into message(id, generate_id, generate_time, accept_type, status, message,tab_id)
-        values (UUID(), #{submit_id}, now(), 'supervisor', '00', '提交了新的报废申请','scrap_submit');
+        insert into message(id, generate_id, generate_time, accept_type, status, message, tab_id)
+        values (UUID(), #{submit_id}, now(), 'supervisor', '00', '提交了新的报废申请', 'scrap_submit');
     </insert>
     <update id="naiveReturnJig">
         update jig_position
@@ -66,6 +70,9 @@
             acceptor_time   = now(),
             status          = 2,
             acceptor_reason = #{reason}
+        where id = #{id};
+        update jig_position
+        set status = 1
         where id = #{id};
         insert into repair_submit_history
         select *
@@ -486,9 +493,15 @@
         where submit_id = #{submit_id};
     </select>
     <insert id="naiveSubmitRepair">
+        update jig_position
+        set status= 2
+        where code = #{code}
+          and seq_id = #{seq_id};
         insert into repair_submit(code, seq_id, repair_reason, repair_photo_url, submit_time,
-                                  submit_id, status) value (#{code}, #{seq_id}, #{repair_reason}, #{pathName}, now(),
-                                                            #{submit_id}, 0)
+                                  submit_id, status)
+        values (#{code}, #{seq_id}, #{repair_reason}, #{pathName}, now(),
+                #{submit_id}, 0);
+
     </insert>
     <select id="naiveGetRepairHistory" resultType="com.jig.entity.RepairJigHistory">
         select rs.*, u1.name submit_name, u2.name accrptor_name
@@ -515,5 +528,11 @@
                  inner join user on submit_id = user.id
         where workcell_id = (select workcell_id from user where id = #{submit_id})
         group by code
+    </select>
+    <select id="codeGetInSeqId" resultType="java.lang.String">
+        select seq_id
+        from jig_position
+        where code = #{code}
+          and status = 1
     </select>
 </mapper>

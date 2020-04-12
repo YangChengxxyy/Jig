@@ -474,11 +474,14 @@ public class JigJson {
      * @param code 工夹具代码
      * @return 序列号集合
      */
-    @RequestMapping("code_get_seq_id")
+    @RequestMapping("code_get_all_seq_id")
     public List<String> codeGetSeqId(@RequestParam("code") String code) {
         return jigService.codeGetSeqId(code);
     }
-
+    @RequestMapping("code_get_in_seq_id")
+    public List<String> codeGetInSeqId(@RequestParam("code") String code) {
+        return jigService.codeGetInSeqId(code);
+    }
     /**
      * base64传图片 测试
      *

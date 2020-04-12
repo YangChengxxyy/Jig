@@ -206,4 +206,8 @@ public class JigService {
     public void highDisagreeRepairSubmit(int id, String submit_id, String reason) {
         jigMapper.highDisagreeRepairSubmit(id,submit_id,reason);
     }
+
+    public List<String> codeGetInSeqId(String code) {
+        return jigMapper.codeGetInSeqId(code);
+    }
 }
