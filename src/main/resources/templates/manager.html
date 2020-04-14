@@ -324,7 +324,7 @@
                 <li class="dropdown user-profile">
                     <a href="#" data-toggle="dropdown">
                         <!--/*@thymesVar id="loginState" type="com.jig.entity.LoginState"*/-->
-                        <img th:src="${loginState.getData().getId()}" alt="user-image" class="img-circle img-inline userpic-32"
+                        <img th:src="${loginState.getData().getAvatar_url()}" alt="user-image" class="img-circle img-inline userpic-32"
                              width="28"/>
                         <span th:inline="text">
 								[[${loginState.getData().getName()}]]

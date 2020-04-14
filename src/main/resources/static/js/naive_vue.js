@@ -1,3 +1,4 @@
+Vue.component('my-pagination', page);
 function position(res) {
     return (res.jig_cabinet_id == null ? "" : ("" + res.jig_cabinet_id)) + (res.location_id == null ? "" : ("-" + res.location_id)) + (res.bin == null ? "" : ("-" + res.bin));
 }
@@ -118,8 +119,12 @@ const return_jig = new Vue({
         check2: false,
         check3: false,
         id: "",
+
+        max_page_number: 0,
         now_page_number: 1,
-        max_page_number: 0
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0
     },
     created: function () {
         this.getData();
@@ -137,6 +142,7 @@ const return_jig = new Vue({
                     });
                     that.outgoing_jig_list = res.data;
                     that.max_page_number = res.max;
+                    that.all_count = res['all'];
                 }
             });
         },
@@ -223,8 +229,12 @@ const jig_outgoing = new Vue({
         check1: false,
         check2: false,
         id: "",
+
+        max_page_number: 0,
         now_page_number: 1,
-        max_page_number: 0
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0
     },
     created: function () {
         this.getData();
@@ -238,7 +248,8 @@ const jig_outgoing = new Vue({
                 },
                 success: function (res) {
                     that.outgoing_submit_list = res.data;
-                    that.max_page_number = res.max;
+                    that.max_page_number = res['max'];
+                    that.all_count = res['all'];
                 }
             })
         },
@@ -319,8 +330,13 @@ const myRepair = new Vue({
     data: {
         repairList: [],
         repair: null,
-        now_page_number: 1,
+
         max_page_number: 0,
+        now_page_number: 1,
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0,
+
         //报修部分
         code_list: code_list,
         submit_code: "",
@@ -349,6 +365,7 @@ const myRepair = new Vue({
                 success: function (res) {
                     that.repairList = res["data"];
                     that.max_page_number = res["max"];
+                    that.all_count = res['all'];
                 }
             });
         },
@@ -487,8 +504,11 @@ const repairHistory = new Vue({
     el: "#repairHistory",
     data: {
         history_list: [],
-        now_page_number: 1,
         max_page_number: 0,
+        now_page_number: 1,
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0,
         repair: null
     },
     created: function () {
@@ -505,6 +525,7 @@ const repairHistory = new Vue({
                 success: function (res) {
                     that.history_list = res["data"];
                     that.max_page_number = res["max"];
+                    that.all_count = res['all'];
                 }
             })
         },

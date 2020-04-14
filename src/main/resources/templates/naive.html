@@ -272,7 +272,7 @@
                 <li class="dropdown user-profile">
                     <a href="#" data-toggle="dropdown">
                         <!--/*@thymesVar id="loginState" type="com.jig.entity.LoginState"*/-->
-                        <img th:src="${loginState.getData().getId()}" alt="user-image" class="img-circle img-inline userpic-32"
+                        <img th:src="${loginState.getData().getAvatar_url()}" alt="user-image" class="img-circle img-inline userpic-32"
                              width="28"/>
                         <span th:inline="text">
 								[[${loginState.getData().getName()}]]
@@ -485,8 +485,9 @@
                                         </div><!-- /.modal -->
                                     </div>
                                 </div>
-                                <my-pagination :now_page_number="now_page_number"
-                                               :max_page_number="max_page_number"></my-pagination>
+                                <my-pagination :now_page_number="now_page_number" :now_page_size="now_page_size" :max_page_number="max_page_number"
+                                               :page_size_list="page_size_list" :all_count="all_count"
+                                ></my-pagination>
 
                             </div>
                         </div>
@@ -657,8 +658,9 @@
                                     </div><!-- /.modal -->
                                 </div>
 
-                                <my-pagination :now_page_number="now_page_number"
-                                               :max_page_number="max_page_number"></my-pagination>
+                                <my-pagination :now_page_number="now_page_number" :now_page_size="now_page_size" :max_page_number="max_page_number"
+                                               :page_size_list="page_size_list" :all_count="all_count"
+                                ></my-pagination>
                             </div>
                         </div>
                     </div><!--  /归还工夹具  -->
@@ -1357,8 +1359,9 @@
                                         </div><!-- /.modal -->
                                     </div>
                                 </div>
-                                <my-pagination :now_page_number="now_page_number"
-                                               :max_page_number="max_page_number"></my-pagination>
+                                <my-pagination :now_page_number="now_page_number" :now_page_size="now_page_size" :max_page_number="max_page_number"
+                                               :page_size_list="page_size_list" :all_count="all_count"
+                                ></my-pagination>
                             </div>
                         </div>
                     </div>
@@ -1484,8 +1487,9 @@
                                         </div><!-- /.modal -->
                                     </div>
                                 </div>
-                                <my-pagination :now_page_number="now_page_number"
-                                               :max_page_number="max_page_number"></my-pagination>
+                                <my-pagination :now_page_number="now_page_number" :now_page_size="now_page_size" :max_page_number="max_page_number"
+                                               :page_size_list="page_size_list" :all_count="all_count"
+                                ></my-pagination>
                                 <div class="alert alert-warning" v-if="history_list.length == 0">
                                     <strong>暂时无数据！</strong>
                                 </div>
@@ -1547,7 +1551,7 @@
 
 <!-- JavaScripts initializations and stuff -->
 <script src="assets/js/xenon-custom.js"></script>
-<script src="js/pagination.js"></script>
+<script src="js/pagination-2.0.js"></script>
 <script src="js/naive_vue.js"></script>
 </body>
 </html>
