@@ -206,4 +206,105 @@ public class JigDefinition {
                 '}';
     }
 
+    public String[] compareTo(JigDefinition jig_info){//this是未修改的,jig_info是修改后的
+        String[] a = new String[3];//0表示field，1-old_value,2-new_value
+        for(int i=0;i<3;i++){
+            a[i] = "";
+        }
+        if(!this.code.equals(jig_info.code)){
+            a[0]+="code";
+            a[1]+=this.code;
+            a[2]+=jig_info.code;
+        }
+        if(!this.name.equals(jig_info.name)){
+            if(a[0].equals("")){
+                a[0]+="name";
+                a[1]+=this.name;
+                a[2]+=jig_info.name;
+            }else {
+                a[0]+="~name";
+                a[1]+="~"+this.name;
+                a[2]+="~"+jig_info.name;
+            }
+        }
+        if(!this.model.equals(jig_info.model)){
+            if(a[0].equals("")){
+                a[0]+="model";
+                a[1]+=this.model;
+                a[2]+=jig_info.model;
+            }else {
+                a[0]+="~name";
+                a[1]+="~"+this.model;
+                a[2]+="~"+jig_info.model;
+            }
+        }
+        if(!this.workcell_id.equals(jig_info.workcell_id)){
+            if(a[0].equals("")){
+                a[0]+="workcell_id";
+                a[1]+=this.workcell_id;
+                a[2]+=jig_info.workcell_id;
+            }else {
+                a[0]+="~workcell_id";
+                a[1]+="~"+this.workcell_id;
+                a[2]+="~"+jig_info.workcell_id;
+            }
+        }
+        if(!this.family_id.equals(jig_info.family_id)){
+            if(a[0].equals("")){
+                a[0]+="family_id";
+                a[1]+=this.family_id;
+                a[2]+=jig_info.family_id;
+            }else {
+                a[0]+="~family_id";
+                a[1]+="~"+this.family_id;
+                a[2]+="~"+jig_info.family_id;
+            }
+        }
+        if(!this.part_no.equals(jig_info.part_no)){
+            if(a[0].equals("")){
+                a[0]+="part_no";
+                a[1]+=this.part_no;
+                a[2]+=jig_info.part_no;
+            }else {
+                a[0]+="~part_no";
+                a[1]+="~"+this.part_no;
+                a[2]+="~"+jig_info.part_no;
+            }
+        }
+        if(!this.user_for.equals(jig_info.user_for)){
+            if(a[0].equals("")){
+                a[0]+="user_for";
+                a[1]+=this.user_for;
+                a[2]+=jig_info.user_for;
+            }else {
+                a[0]+="~user_for";
+                a[1]+="~"+this.user_for;
+                a[2]+="~"+jig_info.user_for;
+            }
+        }
+        if(!this.upl.equals(jig_info.upl)){
+            if(a[0].equals("")){
+                a[0]+="upl";
+                a[1]+=this.upl;
+                a[2]+=jig_info.upl;
+            }else {
+                a[0]+="~upl";
+                a[1]+="~"+this.upl;
+                a[2]+="~"+jig_info.upl;
+            }
+        }
+        if(!this.pm_period.equals(jig_info.pm_period)){
+            if(a[0].equals("")){
+                a[0]+="pm_period";
+                a[1]+=this.pm_period;
+                a[2]+=jig_info.pm_period;
+            }else {
+                a[0]+="~pm_period";
+                a[1]+="~"+this.pm_period;
+                a[2]+="~"+jig_info.pm_period;
+            }
+        }
+        return a;
+    }
+
 }

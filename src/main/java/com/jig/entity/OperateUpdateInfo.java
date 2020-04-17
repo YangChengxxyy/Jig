@@ -17,6 +17,22 @@ public class OperateUpdateInfo {
     private String update_bill_no;//单据号
     private String update_tool_photo_url;//工夹具照片路径
 
+    public OperateUpdateInfo() {
+        this.id = "";
+        this.update_code = "";
+        this.update_count = "";
+        this.update_first_time = "";
+        this.update_first_acceptor = "";
+        this.update_first_reason = "";
+        this.update_final_time = "";
+        this.update_final_acceptor = "";
+        this.update_final_reason = "";
+        this.update_status = "";
+        this.update_production_line_id = "";
+        this.update_bill_no = "";
+        this.update_tool_photo_url = "";
+    }
+
     public String getId() {
         return id;
     }

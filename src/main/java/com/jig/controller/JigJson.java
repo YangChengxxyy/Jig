@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -204,7 +205,20 @@ public class JigJson {
                                    @RequestParam("production_line_id") String production_line_id, @RequestParam("code") String codes,
                                    @RequestParam("count") String counts) {
         try {
-            jigService.highAddShoplist(submit_id, bill_no, production_line_id, codes, counts);
+            //jigService.highAddShoplist(submit_id, bill_no, production_line_id, codes, counts);
+
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+            String submit_time = df.format(new Date());
+
+            PurchaseIncomeSubmit purchaseIncomeSubmit = new PurchaseIncomeSubmit();
+            purchaseIncomeSubmit.setSubmit_id(submit_id);
+            purchaseIncomeSubmit.setProduction_line_id(Integer.valueOf(production_line_id));
+            purchaseIncomeSubmit.setBill_no(bill_no);
+            purchaseIncomeSubmit.setCode(codes);
+            purchaseIncomeSubmit.setCount(counts);
+            purchaseIncomeSubmit.setSubmit_time(submit_time);
+
+            jigService.highAddShoplist(purchaseIncomeSubmit);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -262,7 +276,14 @@ public class JigJson {
                                                   @RequestParam("count") String count,
                                                   @RequestParam("production_line_id") String production_line_id) {
         try {
-            jigService.highUpdatePurchaseIncomeSubmit(id, code, count, production_line_id);
+            String user_id = "1230936";
+
+            PurchaseIncomeSubmit submit = jigService.getPurchaseIncomeSubmitInfo(id);
+            String[] a = submit.getOperateUpdateInfo(code,count,production_line_id);
+            String field = a[0];
+            String old_value = a[1];
+            String new_value = a[2];
+            jigService.highUpdatePurchaseIncomeSubmit(id, code, count, production_line_id,user_id,field,old_value,new_value);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -306,7 +327,8 @@ public class JigJson {
     @RequestMapping("high/delete_purchase_submit")
     public boolean highDeletePurchaseSubmit(@RequestParam("id") String id) {
         try {
-            jigService.highDeletePurchaseSubmit(id);
+            String user_id = "1230936";
+            jigService.highDeletePurchaseSubmit(id,user_id);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -414,7 +436,14 @@ public class JigJson {
             FileUtils.writeByteArrayToFile
                     (new File(RESOURCE_URL + pathName), file.getBytes());
             System.out.println(RESOURCE_URL + pathName);
-            jigService.highSubmitScrap(code, seq_id, submit_id, scrap_reason, pathName);
+
+            ScrapSubmit scrapSubmit = new ScrapSubmit();
+            scrapSubmit.setCode(code);
+            scrapSubmit.setSeq_id(seq_id);
+            scrapSubmit.setSubmit_id(submit_id);
+            scrapSubmit.setScrap_reason(scrap_reason);
+
+            jigService.highSubmitScrap(scrapSubmit, pathName);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -442,7 +471,14 @@ public class JigJson {
             String pathName = phoneUpload.getFileName();
             pathName = SCRAP_IMAGE_NAME + pathName + phoneUpload.getUploadFileName().substring(phoneUpload.getUploadFileName().lastIndexOf('.'));
             phoneUploadMap.remove(token);
-            jigService.highSubmitScrap(code, seq_id, submit_id, scrap_reason, pathName);
+
+            ScrapSubmit scrapSubmit = new ScrapSubmit();
+            scrapSubmit.setCode(code);
+            scrapSubmit.setSeq_id(seq_id);
+            scrapSubmit.setSubmit_id(submit_id);
+            scrapSubmit.setScrap_reason(scrap_reason);
+
+            jigService.highSubmitScrap(scrapSubmit, pathName);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -461,7 +497,8 @@ public class JigJson {
     public boolean highDeleteScrap(@RequestParam("id") String id, @RequestParam("scrap_photo_url") String scrap_photo_url) {
         String fileName = RESOURCE_URL + scrap_photo_url;
         File file = new File(fileName);
-        return jigService.highDeleteScrap(id) && file.delete();
+        String user_id = "1230936";
+        return jigService.highDeleteScrap(id,user_id) && file.delete();
     }
 
     /**

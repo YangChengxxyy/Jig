@@ -29,10 +29,14 @@ public class JigService_zhs {
         return jigMapper.get_part_no_list();
     }
 
+    public JigDefinition get_jig_info(String id){return jigMapper.get_jig_info(id);}
 
-    public int addShoplist(String submit_id, String bill_no, String production_line_id, String code, String number, String submit_time) {
-        return jigMapper.addShoplist(submit_id, bill_no, production_line_id, code, number, submit_time);
+    public PurchaseIncomeSubmit get_purchase_submit(String id){return jigMapper.get_purchase_submit(id);}
+
+    public ScrapSubmit get_scrap_submit(String id){
+        return jigMapper.get_scrap_submit(id);
     }
+
     //获取经理模块下的采购管理下的采购审批清单及其页数
     public List<PurchaseIncomeSubmit> get_manager_purchase_submit_list(String user_id,int page_number,String workcell_id){
         return jigMapper.get_manager_purchase_submit_list(user_id,page_number,workcell_id);
@@ -171,54 +175,51 @@ public class JigService_zhs {
     }
 
     //监管者模式下编辑更改工夹具信息
-    public int supervisor_edit_jig_info(JigDefinition jig_info,String user_id){
-        return jigMapper.supervisor_edit_jig_info(jig_info,user_id);
+    public int supervisor_edit_jig_info(JigDefinition jig_info,String user_id,String field,String old_value,String new_value){
+        return jigMapper.supervisor_edit_jig_info(jig_info,user_id,field,old_value,new_value);
     }
 
     //监管者模式下获取我的采购审批
-    public List<PurchaseIncomeSubmit> supervisor_get_purchase_submit_list(int page_number){
-        return jigMapper.supervisor_get_purchase_submit_list(page_number);
+    public List<PurchaseIncomeSubmit> supervisor_get_purchase_submit_list(int page_number,int page_size){
+        return jigMapper.supervisor_get_purchase_submit_list(page_number,page_size);
     }
 
     //监管者模式下获取我的采购审批的最大页数
     public int supervisor_get_purchase_submit_list_pages(){
-        int max_page = jigMapper.supervisor_get_purchase_submit_list_pages();
-        return (int)Math.ceil(max_page/5.0);
+        return jigMapper.supervisor_get_purchase_submit_list_pages();
     }
 
     //监管者模式下初审通过我的采购审批
-    public int supervisor_pass_purchase_submit(String id,String status,String first_acceptor){
-        return jigMapper.supervisor_pass_purchase_submit(id,status,first_acceptor);
+    public int supervisor_pass_purchase_submit(String id,String status,String first_acceptor,String field,String old_value,String new_value){
+        return jigMapper.supervisor_pass_purchase_submit(id,status,first_acceptor,field,old_value,new_value);
     }
 
     //监管者模式下初审不通过采购审批
-    public int supervisor_no_pass_purchase_submit(String id,String status,String first_reason,String first_acceptor){
-        return jigMapper.supervisor_no_pass_purchase_submit(id,status,first_reason,first_acceptor);
+    public int supervisor_no_pass_purchase_submit(String id,String status,String first_reason,String first_acceptor,String old_status,String old_reason){
+        return jigMapper.supervisor_no_pass_purchase_submit(id,status,first_reason,first_acceptor,old_status,old_reason);
     }
 
     //监管者模式下获取历史采购记录及其最大页数
-    public List<PurchaseIncomeSubmit> supervisor_get_purchase_submit_list_history(String bill_no,String submit_name,String start_date,String end_date,String status,int page_number,String user_id){
-        return jigMapper.supervisor_get_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,status,page_number,user_id);
+    public List<PurchaseIncomeSubmit> supervisor_get_purchase_submit_list_history(String bill_no,String submit_name,String start_date,String end_date,String status,int page_number,int page_size,String user_id){
+        return jigMapper.supervisor_get_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,status,page_number,page_size,user_id);
     }
 
     public int supervisor_get_purchase_submit_list_history_pages(String bill_no,String submit_name,String start_date,String end_date,String status,String user_id){
-        int max_page = jigMapper.supervisor_get_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status,user_id);
-        return (int)Math.ceil(max_page/5.0);
+        return jigMapper.supervisor_get_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status,user_id);
     }
 
     //监管者模式下获取待处理的报废清单及其最大页数
-    public List<ScrapSubmit> supervisor_get_scrap_submit_list(int page_number,String workcell_id){
-        return jigMapper.supervisor_get_scrap_submit_list(page_number,workcell_id);
+    public List<ScrapSubmit> supervisor_get_scrap_submit_list(int page_number,int page_size,String workcell_id){
+        return jigMapper.supervisor_get_scrap_submit_list(page_number,page_size,workcell_id);
     }
 
     public int supervisor_get_scrap_submit_list_pages(String workcell_id){
-        int max_page = jigMapper.supervisor_get_scrap_submit_list_pages(workcell_id);
-        return (int)Math.ceil(max_page/5.0);
+        return jigMapper.supervisor_get_scrap_submit_list_pages(workcell_id);
     }
 
     //监管者模式下审批待处理的报废申请
-    public int supervisor_pass_scrap_submit(String id,String user_id){
-        return jigMapper.supervisor_pass_scrap_submit(id,user_id);
+    public int supervisor_pass_scrap_submit(String id,String user_id,String field,String old_value,String new_value){
+        return jigMapper.supervisor_pass_scrap_submit(id,user_id,field,old_value,new_value);
     }
 
     public int supervisor_no_pass_scrap_submit(String id,String no_pass_reason,String user_id){
@@ -226,13 +227,13 @@ public class JigService_zhs {
     }
 
     //监管者模式下获取历史报废记录
-    public List<ScrapSubmit> supervisor_get_scrap_submit_list_history(String code,String submit_name,String start_date,String end_date,String status,String scrap_reason,int page_number,String workcell_id){
-        return jigMapper.supervisor_get_scrap_submit_list_history(code,submit_name,start_date,end_date,status,scrap_reason,page_number,workcell_id);
+    public List<ScrapSubmit> supervisor_get_scrap_submit_list_history(String code,String submit_name,String start_date,String end_date,String status,String scrap_reason,int page_number,int page_size,String workcell_id){
+        return jigMapper.supervisor_get_scrap_submit_list_history(code,submit_name,start_date,end_date,status,scrap_reason,page_number,page_size,workcell_id);
     }
 
     public int supervisor_get_scrap_submit_list_history_pages(String code,String submit_name,String start_date,String end_date,String status,String scrap_reason,String workcell_id){
-        int max_page = jigMapper.supervisor_get_scrap_submit_list_history_pages(code,submit_name,start_date,end_date,status,scrap_reason,workcell_id);
-        return (int)Math.ceil(max_page/5.0);
+        return jigMapper.supervisor_get_scrap_submit_list_history_pages(code,submit_name,start_date,end_date,status,scrap_reason,workcell_id);
+
     }
 
 

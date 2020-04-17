@@ -132,7 +132,7 @@ public class Operate {
     }
 
     public void setPurchase_submit(){
-        this.purchase_submit = new PurchaseIncomeSubmit();
+        this.purchase_submit = new PurchaseIncomeSubmit("create");
         if(this.field != null && this.field != ""){
             String[] field_list = this.field.split("~");
             String[] value_list = this.new_value.split("~");
@@ -170,7 +170,15 @@ public class Operate {
             //存在隐患,如果old_value不为null，而new_value是null,现在先不考虑
 
             String[] field_list = this.field.split("~");
-            String[] old_value_list = this.old_value.split("~");
+            String[] old_value_list;
+            if(this.old_value == null || this.old_value.equals("")){//防止出现old_value_field的length只有1，与new_value_field不同,出现超出异常
+                old_value_list = new String[field_list.length];
+                for(int i=0;i<old_value_list.length;i++){
+                    old_value_list[i] = "";
+                }
+            }else{
+                old_value_list = this.old_value.split("~");
+            }
             String[] new_value_list = this.new_value.split("~");
 
             for(int i=0;i<field_list.length;i++) {
@@ -248,6 +256,14 @@ public class Operate {
                         break;
                 }
             }
+
+            /*if(updateInfo.getUpdate_code() == null){
+                updateInfo.setUpdate_code("");
+            }else if (updateInfo.getUpdate_count() == null){
+                updateInfo.setUpdate_count("");
+            }else if (updateInfo.getUpdate_status() == null){
+                updateInfo.
+            }*/
         }
 
 

@@ -13,12 +13,15 @@
     <select id="get_part_no_list" resultType="com.jig.entity.PartNo">
         select * from jig_part_no
     </select>
-    <insert id="addShoplist">
-        insert into purchase_income_submit(submit_id,code,count,submit_time,status,production_line_id,bill_no)
-        values (#{submit_id},#{code},#{count},#{submit_time},0,
-        (select id from production_line where name = #{production_line_id}),
-        #{bill_no})
-    </insert>
+    <select id="get_jig_info" resultType="com.jig.entity.JigDefinition">
+        select * from jig_definition where id = #{id}
+    </select>
+    <select id="get_purchase_submit" resultType="com.jig.entity.PurchaseIncomeSubmit">
+        select * from purchase_income_submit where id = #{id}
+    </select>
+    <select id="get_scrap_submit" resultType="com.jig.entity.ScrapSubmit">
+        select * from scrap_submit where id = #{id}
+    </select>
     <select id="get_manager_purchase_submit_list" resultType="com.jig.entity.PurchaseIncomeSubmit">
         select p.*,
         u.name submit_name,
@@ -291,7 +294,10 @@
             family_id = #{jig_info.family_id}, workcell_id = #{jig_info.workcell_id}, upl = #{jig_info.upl},
             user_for = #{jig_info.user_for}, pm_period = #{jig_info.pm_period}, edit_time = now(),edit_by = #{user_id}
         </set>
-        where id = #{jig_info.id}
+        where id = #{jig_info.id};
+
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
+        values(#{user_id},#{jig_info.id},now(),'jig_definition',#{field},'update',#{old_value},#{new_value})
     </update>
     <select id="supervisor_get_purchase_submit_list" resultType="com.jig.entity.PurchaseIncomeSubmit">
         select p.*,u.name 'submit_name',
@@ -303,7 +309,7 @@
                                       left join user u1 on p.first_acceptor = u1.id
                                       left join user u2 on p.final_acceptor = u2.id
         where p.status = 0 or p.status = 1 or p.status = 2
-        limit #{page_number},5
+        limit #{page_number},#{page_size}
     </select>
     <select id="supervisor_get_purchase_submit_list_pages" resultType="java.lang.Integer">
         select count(*) from purchase_income_submit
@@ -312,12 +318,18 @@
     <update id="supervisor_pass_purchase_submit">
         update purchase_income_submit
         set status = #{status},first_time = now(),first_acceptor = #{first_acceptor},first_reason = null
-        where id = #{id}
+        where id = #{id};
+
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
+        values(#{first_acceptor},#{id},now(),'purchase_income_submit',#{field},'update',#{old_value},#{new_value})
     </update>
     <update id="supervisor_no_pass_purchase_submit">
         update purchase_income_submit
         set status = #{status},first_time = now(),first_reason = #{first_reason},first_acceptor = #{first_acceptor}
-        where id = #{id}
+        where id = #{id};
+
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
+        values(#{first_acceptor},#{id},now(),'purchase_income_submit','status~first_reason','update','${old_status}~${old_reason}','1~${first_reason}')
     </update>
     <select id="supervisor_get_purchase_submit_list_history" resultType="com.jig.entity.PurchaseIncomeSubmit">
         select p.*,u.name 'submit_name',
@@ -329,7 +341,7 @@
                                       left join user u1 on p.first_acceptor = u1.id
                                       left join user u2 on p.final_acceptor = u2.id
         <where>
-            first_acceptor = #{user_id}
+            u.workcell_id in (select user.workcell_id from user where id = #{user_id})
             <if test="bill_no!=''">
                 and p.bill_no like concat('%',#{bill_no},'%')
             </if>
@@ -339,11 +351,9 @@
             <if test="start_date!='' and end_date !=''">
                 and (STR_TO_DATE(p.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
             </if>
-            <if test="status!=''">
-                and p.status = #{status}
-            </if>
+            and status = 1 or status = 2 or status = 0
         </where>
-        limit #{page_number},5
+        limit #{page_number},#{page_size}
     </select>
     <select id="supervisor_get_purchase_submit_list_history_pages" resultType="java.lang.Integer">
         select count(*)
@@ -359,9 +369,7 @@
             <if test="start_date!='' and end_date !=''">
                 and (STR_TO_DATE(p.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
             </if>
-            <if test="status!=''">
-                and p.status = #{status}
-            </if>
+            and status = 1 or status = 2 or status = 0
         </where>
     </select>
     <select id="supervisor_get_scrap_submit_list" resultType="com.jig.entity.ScrapSubmit">
@@ -373,7 +381,7 @@
                                       left join user u2 on s.final_acceptor = u2.id
 
         where u.workcell_id = #{workcell_id} and (s.status = 1 or s.status = 2 or s.status = 0)
-        limit #{page_number},5
+        limit #{page_number},#{page_size}
     </select>
     <select id="supervisor_get_scrap_submit_list_pages" resultType="java.lang.Integer">
         select count(*) from scrap_submit s
@@ -385,7 +393,10 @@
     <update id="supervisor_pass_scrap_submit">
         update scrap_submit
         set status = '2', first_acceptor = #{user_id},first_time = now()
-        where id = #{id}
+        where id = #{id};
+
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
+        values(#{user_id},#{id},now(),'scrap_submit',#{field},'update',#{old_value},#{new_value})
     </update>
     <update id="supervisor_no_pass_scrap_submit">
         update scrap_submit
@@ -418,7 +429,7 @@
                 and (STR_TO_DATE(s.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
             </if>
         </where>
-        limit #{page_number},5
+        limit #{page_number},#{page_size}
     </select>
     <select id="supervisor_get_scrap_submit_list_history_pages" resultType="java.lang.Integer">
         select count(*)

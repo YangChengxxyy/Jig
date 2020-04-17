@@ -39,6 +39,11 @@ public class JigService {
         return jigMapper.naiveGetOutgoingSubmit(page_number);
     }
 
+    //获取单个采购申请
+    public PurchaseIncomeSubmit getPurchaseIncomeSubmitInfo(String id){
+        return jigMapper.getPurchaseIncomeSubmitInfo(id);
+    }
+
     public int naiveGetOutgoingSubmitPage() {
         int a = jigMapper.naiveGetOutgoSubmitPage();
         return (int) Math.ceil(a / 5.0);
@@ -68,8 +73,12 @@ public class JigService {
         jigMapper.naiveDeleteOutgoingJig(id);
     }
 
-    public void highAddShoplist(String submit_id, String bill_no, String production_line_id, String code, String count) {
+    /*public void highAddShoplist(String submit_id, String bill_no, String production_line_id, String code, String count) {
         jigMapper.highAddShoplist(submit_id, bill_no, production_line_id, code, count);
+    }*/
+
+    public void highAddShoplist(PurchaseIncomeSubmit purchaseIncomeSubmit){
+        jigMapper.highAddShoplist(purchaseIncomeSubmit);
     }
 
     public List<ProductionLine> getProductionLineList() {
@@ -89,8 +98,8 @@ public class JigService {
         return jigMapper.highGetPurchaseIncomeSubmitListPage();
     }
 
-    public void highUpdatePurchaseIncomeSubmit(String id, String code, String count, String production_line_id) {
-        jigMapper.highUpdatePurchaseIncomeSubmit(id, code, count, production_line_id);
+    public void highUpdatePurchaseIncomeSubmit(String id, String code, String count, String production_line_id,String user_id,String field,String old_value,String new_value) {
+        jigMapper.highUpdatePurchaseIncomeSubmit(id, code, count, production_line_id,user_id,field,old_value,new_value);
     }
 
     public List<PurchaseIncomeHistory> highSearchPurchaseIncomeHistory(String bill_no, String submit_name, String code, String production_line_id, String status, String start_date, String end_date, int page_number,int page_size) {
@@ -106,8 +115,8 @@ public class JigService {
         return jigMapper.highSearchAllPurchaseIncomeHistory(bill_no, submit_name, code, production_line_id, status, start_date, end_date);
     }
 
-    public void highDeletePurchaseSubmit(String id) {
-        jigMapper.highDeletePurchaseSubmit(id);
+    public void highDeletePurchaseSubmit(String id,String user_id) {
+        jigMapper.highDeletePurchaseSubmit(id,user_id);
     }
 
     public List<RepairJig> highGetRepairJig(String id,int page_number,int page_size) {
@@ -155,12 +164,16 @@ public class JigService {
         return jigMapper.highSearchAllRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date);
     }
 
-    public void highSubmitScrap(String code, String seq_id, String submit_id, String scrap_reason, String pathName) {
+    /*public void highSubmitScrap(String code, String seq_id, String submit_id, String scrap_reason, String pathName) {
         jigMapper.highSubmitScrap(code, seq_id, submit_id, scrap_reason, pathName);
+    }*/
+
+    public void highSubmitScrap(ScrapSubmit scrapSubmit,String pathName){
+        jigMapper.highSubmitScrap(scrapSubmit,pathName);
     }
 
-    public boolean highDeleteScrap(String id) {
-        return jigMapper.highDeleteScrap(id) > 0;
+    public boolean highDeleteScrap(String id,String user_id) {
+        return jigMapper.highDeleteScrap(id,user_id) > 0;
     }
 
     public List<String> codeGetSeqId(String code) {

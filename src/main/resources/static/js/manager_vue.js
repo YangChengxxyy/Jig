@@ -15,7 +15,7 @@ var left_panel = new Vue({
         get_manager_left_message_submit_count:function () {
             var that = this;
             $.ajax({
-                url:"manager_get_left_message_submit_count",
+                url:"manager/get_left_message_submit_count",
                 data:{
 
                 },
@@ -66,7 +66,7 @@ var purchase_submit = new Vue({
         getData:function () {
             var that = this;
             $.ajax({
-                url:"manager_get_purchase_submit_list",
+                url:"manager/get_purchase_submit_list",
                 data: {
                     page_number:this.now_page_number,
                     user_id:"111111"
@@ -92,7 +92,7 @@ var purchase_submit = new Vue({
         pass_submit:function (id,pass) {
             var that = this;
             $.ajax({
-                url: "manager_check_purchase_submit",
+                url: "manager/check_purchase_submit",
                 data: {
                     id: id,
                     pass:pass
@@ -132,7 +132,7 @@ var purchase_submit_pass_reason = new Vue({
         dont_pass_purchase_submit:function () {
             const that = this;
             $.ajax({
-                url:"manager_dont_pass_purchase_submit",
+                url:"manager/dont_pass_purchase_submit",
                 data:{
                     id:this.purchase_submit_id,
                     final_reason:this.purchase_submit_pass_reason
@@ -171,7 +171,7 @@ var purchase_submit_history = new Vue({
     methods:{
         getData:function () {
             var that = this;
-            $.ajax("manager_get_purchase_submit_list_history",{
+            $.ajax("manager/get_purchase_submit_list_history",{
                 data:{
                     submit_name:this.submit_name,
                     submit_time:this.submit_time,
@@ -258,10 +258,9 @@ var purchase_submit_history_operate = new Vue({
     },
     methods:{
         get_li_index:function (index) {
-            if(this.purchase_submit_list[index].bill_no != null){
                 this.li_index = index;
-                console.log(this.li_index);
-            }
+                console.log("index"+index);
+                console.log("li_index"+this.li_index);
 
         }
     }
@@ -302,7 +301,7 @@ var purchase_total = new Vue({
         getData:function () {
             var that = this;
             $.ajax({
-                url:"manager_get_purchase_total_data",
+                url:"manager/get_purchase_total_data",
                 data:{
                     submit_name:this.submit_name,
                     submit_time:this.submit_time,
@@ -562,7 +561,7 @@ var scrap_submit = new Vue({
         getData:function () {
             var that = this;
             $.ajax({
-                url:"manager_get_scrap_submit_list",
+                url:"manager/get_scrap_submit_list",
                 data:{
                     page_number: this.now_page_number
                 },
@@ -582,7 +581,7 @@ var scrap_submit = new Vue({
         check_scrap_submit:function (submit_id,status) {
             var that = this;
             $.ajax({
-                url:"manager_check_scrap_submit",
+                url:"manager/check_scrap_submit",
                 data:{
                     submit_id:submit_id,
                     status:status
@@ -617,7 +616,7 @@ var scrap_no_pass_reason = new Vue({
         no_pass_scrap_submit:function() {
             const that = this;
             $.ajax({
-                url:"manager_no_pass_submit",
+                url:"manager/no_pass_submit",
                 data:{
                     submit_id:this.no_pass_submit_id,
                     no_pass_reason:""
@@ -657,7 +656,7 @@ var scrap_submit_history = new Vue({
         getData:function () {
             var that = this;
             $.ajax({
-                url:"manager_get_scrap_submit_list_history",
+                url:"manager/get_scrap_submit_list_history",
                 data:{
                     page_number:this.now_page_number,
                     code:this.code,
@@ -712,7 +711,7 @@ var jig_info = new Vue({
         getData:function () {
             var that = this;
             $.ajax({
-                url:"manager_get_jig_info_list",
+                url:"manager/get_jig_info_list",
                 data:{
                     now_page_number:this.now_page_number
                 },

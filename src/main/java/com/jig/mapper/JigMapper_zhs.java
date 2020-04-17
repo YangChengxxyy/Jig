@@ -4,6 +4,7 @@ import com.jig.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -19,13 +20,11 @@ public interface JigMapper_zhs {
 
     List<PartNo> get_part_no_list();
 
-    int addShoplist(@Param("submit_id") String submit_id,
-                    @Param("bill_no") String bill_no,
-                    @Param("production_line_id") String production_line_id,
-                    @Param("code") String code,
-                    @Param("count") String number,
-                    @Param("submit_time") String submit_time);
+    JigDefinition get_jig_info(@Param("id") String id);
 
+    PurchaseIncomeSubmit get_purchase_submit(@Param("id") String id);
+
+    ScrapSubmit get_scrap_submit(@Param("id") String id);
     /**获取经理模块下的采购管理菜单下的采购审批
      *
      * @param user_id
@@ -189,10 +188,14 @@ public interface JigMapper_zhs {
 
     //监管者模式下编辑更改工夹具信息
     int supervisor_edit_jig_info(@Param("jig_info") JigDefinition jig_info,
-                                 @Param("user_id") String user_id);
+                                 @Param("user_id") String user_id,
+                                 @Param("field") String field,
+                                 @Param("old_value") String old_value,
+                                 @Param("new_value") String new_value);
 
     //监管者模式下获取我的采购审批list
-    List<PurchaseIncomeSubmit> supervisor_get_purchase_submit_list(@Param("page_number") int page_number);
+    List<PurchaseIncomeSubmit> supervisor_get_purchase_submit_list(@Param("page_number") int page_number,
+                                                                   @Param("page_size") int page_size);
 
     //监管者模式下获取我的采购审批的最大页数
     int supervisor_get_purchase_submit_list_pages();
@@ -200,13 +203,18 @@ public interface JigMapper_zhs {
     //监管者模式下初审通过我的采购审批
     int supervisor_pass_purchase_submit(@Param("id") String id,
                                         @Param("status") String status,
-                                        @Param("first_acceptor") String first_acceptor);
+                                        @Param("first_acceptor") String first_acceptor,
+                                        @Param("field") String field,
+                                        @Param("old_value") String old_value,
+                                        @Param("new_value") String new_value);
 
     //监管者模式下初审不通过采购审批
     int supervisor_no_pass_purchase_submit(@Param("id") String id,
-                                        @Param("status") String status,
-                                        @Param("first_reason") String first_reason,
-                                        @Param("first_acceptor") String first_acceptor);
+                                           @Param("status") String status,
+                                           @Param("first_reason") String first_reason,
+                                           @Param("first_acceptor") String first_acceptor,
+                                           @Param("old_status") String old_status,
+                                           @Param("old_reason") String old_reason);
 
     /**监管者模式下获取历史采购记录
      *
@@ -218,6 +226,7 @@ public interface JigMapper_zhs {
                                                                       @Param("end_date") String end_date,
                                                                       @Param("status") String status,
                                                                       @Param("page_number") int page_number,
+                                                                      @Param("page_size") int page_size,
                                                                       @Param("user_id") String user_id);
 
     int supervisor_get_purchase_submit_list_history_pages(@Param("bill_no") String bill_no,
@@ -231,13 +240,17 @@ public interface JigMapper_zhs {
      *
      */
     List<ScrapSubmit> supervisor_get_scrap_submit_list(@Param("page_number") int page_number,
+                                                       @Param("page_size") int page_size,
                                                        @Param("workcell_id") String workcell_id);
 
     int supervisor_get_scrap_submit_list_pages(@Param("workcell_id") String workcell_id);
 
     //监管者模式下审批待处理的报废申请
     int supervisor_pass_scrap_submit(@Param("id") String id,
-                                     @Param("user_id") String user_id);
+                                     @Param("user_id") String user_id,
+                                     @Param("field") String field,
+                                     @Param("old_value") String old_value,
+                                     @Param("new_value") String new_value);
 
     int supervisor_no_pass_scrap_submit(@Param("id") String id,
                                         @Param("no_pass_reason") String no_pass_reason,
@@ -251,6 +264,7 @@ public interface JigMapper_zhs {
                                                             @Param("status") String status,
                                                             @Param("scrap_reason") String scrap_reason,
                                                             @Param("page_number") int page_number,
+                                                            @Param("page_size") int page_size,
                                                             @Param("workcell_id") String workcell_id);
 
     int supervisor_get_scrap_submit_list_history_pages(@Param("code") String code,

@@ -225,9 +225,9 @@
 
                 <!-- logo -->
                 <div class="logo">
-                    <a href="#" class="logo-expanded">
+                    <!--<a href="#" class="logo-expanded">
                         <img src="assets/images/logo@2x.png" width="80" alt=""/>
-                    </a>
+                    </a>-->
 
                     <a href="#" class="logo-collapsed">
                         <img src="assets/images/logo-collapsed@2x.png" width="40" alt=""/>
@@ -1717,48 +1717,47 @@
                 <ul style="list-style-type:none;" class="active opened main-menu-li">
                     <li v-for="(item,index) in operate_list" style="margin-bottom:5px">
                         -&nbsp;&nbsp;&nbsp;{{item.operate_time}}
-                        <p class="pull-right" data-toggle="collapse"
-                           v-bind:href="'#operate'+item.id" @click="get_li_index(index)">{{item.to_string}}</p>
-、
+                        <p class="pull-right"  data-toggle="collapse"
+                           v-bind:href="'#operate'+item.id" >{{item.to_string}}</p>
+
                         <ul class="collapse" v-bind:id="'operate'+item.id" style="list-style-type:none">
                             <div v-if="item.type === 'insert'">
-                                <li v-if="purchase_submit_list[li_index].bill_no !== null">单据号:  {{purchase_submit_list[li_index].bill_no}}</li>
-                                <li v-if="purchase_submit_list[li_index].code !== null "
-                                    v-for="(code,i) in purchase_submit_list[li_index].code.split('|')">
-                                    工夹具代码及数量:  {{code}}&nbsp;-&nbsp;{{purchase_submit_list[li_index].count.split('|')[i]}}件
+                                <li v-if="purchase_submit_list[index].bill_no !== ''">单据号:  {{purchase_submit_list[index].bill_no}}</li>
+                                <li v-if="purchase_submit_list[index].code !== '' "
+                                    v-for="(code,i) in purchase_submit_list[index].code.split('|')">
+                                    工夹具代码及数量:  {{code}}&nbsp;-&nbsp;{{purchase_submit_list[index].count.split('|')[i]}}件
                                 </li>
-                                <li v-if="purchase_submit_list[li_index].production_line_id !== null">产线id:  {{purchase_submit_list[li_index].production_line_id}}</li>
+                                <li v-if="purchase_submit_list[li_index].production_line_id !== ''">产线id:  {{purchase_submit_list[index].production_line_id}}</li>
                             </div>
 
-                            <div v-if="item.type === 'update' && item.old_value !== null">
-
-                                <li v-if="operate_update_info_list[li_index].status != null">
-                                    初审时间: {{operate_update_info_list[li_index].first_time.split('~')[0]}} ->
-                                    {{operate_update_info_list[li_index].first_time.split('~')[1]}}
+                            <div v-if="item.type === 'update' && item.old_value !== ''">
+                                <li v-if="operate_update_info_list[index].update_status != ''">
+                                    审批状态: {{operate_update_info_list[index].update_status.split('~')[0]}} ->
+                                    {{operate_update_info_list[index].update_status.split('~')[1]}}
                                 </li>
-                                <li v-if="operate_update_info_list[li_index].first_time != null">
-                                    初审时间: {{operate_update_info_list[li_index].first_time.split('~')[0]}} ->
-                                             {{operate_update_info_list[li_index].first_time.split('~')[1]}}
+                                <li v-if="operate_update_info_list[index].update_first_time != ''">
+                                    初审时间: {{operate_update_info_list[index].update_first_time.split('~')[0]}} ->
+                                             {{operate_update_info_list[index].update_first_time.split('~')[1]}}
                                 </li>
-                                <li v-if="operate_update_info_list[li_index].first_acceptor != null">
-                                    初审人id: {{operate_update_info_list[li_index].first_acceptor.split('~')[0]}} ->
-                                    {{operate_update_info_list[li_index].first_acceptor.split('~')[1]}}
+                                <li v-if="operate_update_info_list[index].update_first_acceptor != ''">
+                                    初审人id: {{operate_update_info_list[index].update_first_acceptor.split('~')[0]}} ->
+                                    {{operate_update_info_list[index].update_first_acceptor.split('~')[1]}}
                                 </li>
-                                <li v-if="operate_update_info_list[li_index].first_reason != null">
-                                    初审人id: {{operate_update_info_list[li_index].first_reason.split('~')[0]}} ->
-                                    {{operate_update_info_list[li_index].first_reason.split('~')[1]}}
+                                <li v-if="operate_update_info_list[index].update_first_reason != ''">
+                                    初审人id: {{operate_update_info_list[index].update_first_reason.split('~')[0]}} ->
+                                    {{operate_update_info_list[index].update_first_reason.split('~')[1]}}
                                 </li>
-                                <li v-if="operate_update_info_list[li_index].final_time != null">
-                                    终审时间: {{operate_update_info_list[li_index].final_time.split('~')[0]}} ->
-                                    {{operate_update_info_list[li_index].final_time.split('~')[1]}}
+                                <li v-if="operate_update_info_list[index].update_final_time != ''">
+                                    终审时间: {{operate_update_info_list[index].update_final_time.split('~')[0]}} ->
+                                    {{operate_update_info_list[index].update_final_time.split('~')[1]}}
                                 </li>
-                                <li v-if="operate_update_info_list[li_index].final_acceptor != null">
-                                    终审人id: {{operate_update_info_list[li_index].final_acceptor.split('~')[0]}} ->
-                                    {{operate_update_info_list[li_index].final_acceptor.split('~')[1]}}
+                                <li v-if="operate_update_info_list[index].update_final_acceptor != ''">
+                                    终审人id: {{operate_update_info_list[index].update_final_acceptor.split('~')[0]}} ->
+                                    {{operate_update_info_list[index].update_final_acceptor.split('~')[1]}}
                                 </li>
-                                <li v-if="operate_update_info_list[li_index].final_reason != null">
-                                    终审人id: {{operate_update_info_list[li_index].final_reason.split('~')[0]}} ->
-                                    {{operate_update_info_list[li_index].final_reason.split('~')[1]}}
+                                <li v-if="operate_update_info_list[index].update_final_reason != ''">
+                                    终审人id: {{operate_update_info_list[index].update_final_reason.split('~')[0]}} ->
+                                    {{operate_update_info_list[index].update_final_reason.split('~')[1]}}
                                 </li>
                             </div>
 

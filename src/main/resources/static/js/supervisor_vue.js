@@ -1,3 +1,5 @@
+Vue.component('my-pagination', page);
+
 let production_line_list = [];
 let workcell_list = [];
 let family_list = [];
@@ -74,17 +76,17 @@ var jig_info = new Vue({
         get_jig_family:function () {
             const that = this;
             $.ajax({
-                url:"supervisor_get_jig_family",
+                url:"supervisor/get_jig_family",
                 data:{},
                 success:function (res) {
                     that.jig_family_list = res;
                 }
             })
         },
-        add_jig_family:function () {
+        add_jig_family:function () {//多余的功能可以删除
                 const that = this;
                 $.ajax({
-                    url: "supervisor_add_jig_family",
+                    url: "supervisor/add_jig_family",
                     data: {
                         family: this.add_jig_family_info.family
                     },
@@ -100,7 +102,7 @@ var jig_info = new Vue({
         delete_jig_family:function () {
             const that = this;
             $.ajax({
-                url:"supervisor_delete_jig_family",
+                url:"supervisor/delete_jig_family",
                 data:{
                     jig_family_id:this.delete_jig_family_info.id,
                     jig_family:this.delete_jig_family_info.family
@@ -114,7 +116,7 @@ var jig_info = new Vue({
         get_all_jig_info_list:function () {
             const  that = this;
             $.ajax({
-                url: "supervisor_get_all_jig_info_list",
+                url: "supervisor/get_all_jig_info_list",
                 data:{},
                 success:function (res) {
                     that.all_jig_info_list = res;
@@ -171,7 +173,7 @@ var jig_info = new Vue({
         select_jig_info:function () {
             const that = this;
             $.ajax({
-                url:"supervisor_select_jig_info",
+                url:"supervisor/select_jig_info",
                 data:{
                     jig_code:this.select_jig_code,
                     jig_name:this.select_jig_name,
@@ -231,7 +233,7 @@ var edit_jig_info = new Vue({
             this.edit_jig_info_detail.part_no = edit_part_no;
 
             $.ajax({
-                url:"supervisor_edit_jig_info",
+                url:"supervisor/edit_jig_info",
                 dataType:"post",
                 data: this.edit_jig_info_detail
                 ,
@@ -248,11 +250,15 @@ var my_purchase_list = new Vue({
     el:"#purchase_list",
     data:{
         purchase_submit_list:[],
-        purchase_submit_detail:null,
+
         now_page_number:1,
         max_page_number:0,
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0,
+        /*purchase_submit_detail:null,
         no_pass_purchase_submit_id:"",//需要审批不通过的采购审批id
-        no_pass_reason:"",//审批不通过的原因
+        no_pass_reason:"",//审批不通过的原因*/
     },
     created:function () {
         this.getData();
@@ -261,20 +267,22 @@ var my_purchase_list = new Vue({
         getData:function () {
             const that = this;
             $.ajax({
-                url:"supervisor_get_purchase_submit_list",
+                url:"supervisor/get_purchase_submit_list",
                 data:{
-                    page_number:this.now_page_number
+                    page_number:this.now_page_number,
+                    page_size:this.now_page_size
                 },
                 success:function (res) {
                     that.purchase_submit_list = res.list;
                     that.max_page_number = res.max;
-                    console.log(res.list);
+                    that.all_count = res.all_count;
+
                 }
             })
         },
         get_purchase_submit_detail:function (index) {
             if(this.purchase_submit_list.length>0){
-                this.purchase_submit_detail = this.purchase_submit_list[index];
+                purchase_submit_detail.purchase_submit_detail = this.purchase_submit_list[index];
             }else{
                 alert("服务器异常!");
             }
@@ -282,7 +290,7 @@ var my_purchase_list = new Vue({
         pass_purchase_submit:function (id,status) {
             const that = this;
             $.ajax({
-                url:"supervisor_pass_purchase_submit",
+                url:"supervisor/pass_purchase_submit",
                 data:{
                     id:id,
                     status:status
@@ -299,12 +307,23 @@ var my_purchase_list = new Vue({
             })
         },
         get_no_pass_purchase_submit_id:function (id) {
-            this.no_pass_purchase_submit_id = id;
+            purchase_submit_no_pass_reason.no_pass_purchase_submit_id = id;
         },
+
+    }
+})
+
+var purchase_submit_no_pass_reason = new Vue({
+    el:"#purchase_submit_no_pass_reason",
+    data:{
+        no_pass_purchase_submit_id:"",
+        no_pass_reason:""
+    },
+    methods:{
         no_pass_purchase_submit:function () {
             const that = this;
             $.ajax({
-                url:"supervisor_no_pass_purchase_submit",
+                url:"supervisor/no_pass_purchase_submit",
                 data:{
                     id:this.no_pass_purchase_submit_id,
                     first_reason:this.no_pass_reason,
@@ -316,11 +335,18 @@ var my_purchase_list = new Vue({
                         return false;
                     }else {
                         alert("审批成功!");
-                        that.getData();
+                        my_purchase_list.getData();
                     }
                 }
             })
         }
+    }
+})
+
+var purchase_submit_detail = new Vue({
+    el:"#purchase_submit_detail",
+    data:{
+        purchase_submit_detail:null
     }
 })
 
@@ -330,6 +356,10 @@ var purchase_submit_history = new Vue({
     data:{
         now_page_number:1,
         max_page_number:0,
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0,
+
         sel_bill_no:"",
         sel_submit_name:"",
         sel_submit_time:"",
@@ -341,10 +371,10 @@ var purchase_submit_history = new Vue({
             {text:'终审未通过',value:'3'},
             {text:'终审通过',value:'4'}],
         purchase_submit_list:[],//搜索到的历史采购记录list
-        purchase_submit_detail:null,//采购记录细节
+        //purchase_submit_detail:null,//采购记录细节
     },
     created:function () {
-        //this.getData();
+        this.getData();
     },
     methods:{
         clear_date:function () {
@@ -353,23 +383,26 @@ var purchase_submit_history = new Vue({
         getData:function () {
             const that = this;
             $.ajax({
-                url:"supervisor_get_purchase_submit_list_history",
+                url:"supervisor/get_purchase_submit_list_history",
                 data:{
                     bill_no:this.sel_bill_no,
                     submit_name:this.sel_submit_name,
                     submit_time:this.sel_submit_time,
                     status:this.sel_status,
-                    page_number:this.now_page_number
+
+                    page_number:this.now_page_number,
+                    page_size:this.now_page_size
                 },
                 success:function (res) {
                     that.purchase_submit_list = res.list;
                     that.max_page_number = res.max;
+                    that.all_count = res.all_count;
                 }
             })
         },
         get_purchase_submit_detail:function (index) {
             if(this.purchase_submit_list.length>0){
-                this.purchase_submit_detail = this.purchase_submit_list[index];
+                purchase_submit_history_detail.purchase_submit_detail = this.purchase_submit_list[index];
             }else{
                 alert("服务器异常!");
             }
@@ -384,12 +417,24 @@ var purchase_submit_history = new Vue({
     }
 })
 
+//modal历史采购记录/查看审批明细
+var purchase_submit_history_detail = new Vue({
+    el:"#purchase_submit_history_detail",
+    data:{
+        purchase_submit_detail:null
+    }
+})
+
 //待处理的报废申请
 var scrap_submit = new Vue({
     el:"#scrap_submit",
     data:{
         now_page_number:1,
         max_page_number:0,
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0,
+
         scrap_submit_list:[],
     },
     created:function(){
@@ -399,14 +444,15 @@ var scrap_submit = new Vue({
         getData:function () {
             const that = this;
             $.ajax({
-                url:"supervisor_get_scrap_submit_list",
+                url:"supervisor/get_scrap_submit_list",
                 data:{
-                    page_number:this.now_page_number
+                    page_number:this.now_page_number,
+                    page_size:this.now_page_size
                 },
                 success:function (res) {
-                    console.log(res.list);
                     that.scrap_submit_list = res.list;
                     that.max_page_number = res.max;
+                    that.all_count = res.all_count;
                 }
             })
         },
@@ -420,7 +466,7 @@ var scrap_submit = new Vue({
         pass_scrap_submit:function (id) {
             const that = this;
             $.ajax({
-                url:"supervisor_pass_scrap_submit",
+                url:"supervisor/pass_scrap_submit",
                 data:{
                     id:id
                 },
@@ -469,7 +515,7 @@ var no_pass_scrap_submit_reason = new Vue({
         no_pass_scrap_submit:function () {
             const that = this;
             $.ajax({
-                url:"supervisor_no_pass_scrap_submit",
+                url:"supervisor/no_pass_scrap_submit",
                 data:{
                     id:this.id,
                     no_pass_reason:this.no_pass_reason
@@ -494,6 +540,10 @@ var scrap_submit_history = new Vue({
     data:{
         now_page_number:1,
         max_page_number:0,
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0,
+
         scrap_submit_list:[],
         sel_code:"",//搜索条件
         sel_submit_name:"",
@@ -514,9 +564,11 @@ var scrap_submit_history = new Vue({
         getData:function () {
             const that = this;
             $.ajax({
-                url:"supervisor_get_scrap_submit_list_history",
+                url:"supervisor/get_scrap_submit_list_history",
                 data:{
                     page_number:this.now_page_number,
+                    page_size:this.now_page_size,
+
                     code:this.sel_code,
                     submit_name:this.sel_submit_name,
                     submit_time:this.sel_submit_time,
@@ -529,6 +581,7 @@ var scrap_submit_history = new Vue({
                     }
                     that.scrap_submit_list = res.list;
                     that.max_page_number = res.max;
+                    that.all_count = res.all_count;
                 }
             })
         },

@@ -27,6 +27,31 @@ public class PurchaseIncomeSubmit {
         id = UUID.randomUUID().toString().replaceAll("-","");
     }
 
+    public PurchaseIncomeSubmit(String a){
+        id = UUID.randomUUID().toString().replaceAll("-","");
+        if(a.equals("create")){
+            this.submit_id = "";
+            this.submit_name = "";
+            this.submit_time = "";
+            this.code = "";
+            this.count = "";
+            this.first_time = "";
+            this.first_acceptor = "";
+            this.first_acceptor_name = "";
+            this.first_reason = "";
+            this.final_time = "";
+            this.final_acceptor = "";
+            this.final_acceptor_name = "";
+            this.final_reason = "";
+            this.status = "";
+            this.production_line_id = 0;
+            this.production_line_name = "";
+            this.bill_no = "";
+            this.tool_photo_url = "";
+        }
+
+    }
+
     public String getId() {
         return id;
     }
@@ -191,5 +216,46 @@ public class PurchaseIncomeSubmit {
                 ", production_line_id=" + production_line_id +
                 ", bill_no='" + bill_no + '\'' +
                 '}';
+    }
+
+    public String[] getOperateUpdateInfo(String code,String count,String production_line_id){
+        //通过修改前的submit与修改的值进行比较，获取field,old_value,new_value插入数据库
+
+        //这样设置是有点问题的，如果只修改了code,没有修改count，只会有code的信息
+        String[] a = new String[3];
+        String field = "";
+        String old_value = "";
+        String new_value = "";
+        if(!this.getCode().equals(code)){
+            old_value+=this.getCode();
+            new_value+=count;
+            field+="code";
+        }
+        if(!this.getCount().equals(count)){
+            if(old_value.equals("")){
+                old_value += this.getCount();
+                new_value += count;
+                field += "count";
+            }else {
+                old_value += "~" + this.getCount();
+                new_value += "~" + count;
+                field += "~count";
+            }
+        }
+        if(this.getProduction_line_id() != Integer.valueOf(production_line_id)) {
+            if (old_value.equals("")) {
+                old_value += this.getProduction_line_id();
+                new_value += production_line_id;
+                field += "production_line_id";
+            } else {
+                old_value += "~" + this.getProduction_line_id();
+                new_value += "~" + production_line_id;
+                field += "~production_line_id";
+            }
+        }
+        a[0] = field;
+        a[1] = old_value;
+        a[2] = new_value;
+        return a;
     }
 }

@@ -1,5 +1,7 @@
 package com.jig.entity;
 
+import java.util.UUID;
+
 public class ScrapSubmit {
     private String id;
     private String code;
@@ -19,6 +21,10 @@ public class ScrapSubmit {
     private String final_acceptor_name;//终审人
     private String final_reason;
     private String status;//审核状态 :0待审核 1初审未通过 2初审通过 3终审未通过 4终审通过
+
+    public ScrapSubmit(){
+        id = UUID.randomUUID().toString().replaceAll("-","");
+    }
 
     public String getId() {
         return id;
