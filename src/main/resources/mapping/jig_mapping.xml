@@ -25,10 +25,10 @@
         set status = 3
         where seq_id = #{seq_id}
           and code = #{code};
-        insert into scrap_submit(code, seq_id, submit_time, submit_id, used_count, scrap_reason, scrap_photo_url,
+        insert into scrap_submit(code, seq_id, submit_time, submit_id, used_count, scrap_reason,scrap_type, scrap_photo_url,
                                  status)
             value (#{code}, #{seq_id}, now(), #{submit_id},
-                   (select used_count from jig_entity where code = #{code} and seq_id = #{seq_id}), #{scrap_reason},
+                   (select used_count from jig_entity where code = #{code} and seq_id = #{seq_id}), #{scrap_reason},#{scrap_type},
                    #{pathName}, 0);
         insert into message(id, generate_id, generate_time, accept_type, status, message, tab_id)
         values (UUID(), #{submit_id}, now(), 'supervisor', '00', '提交了新的报废申请', 'scrap_submit');

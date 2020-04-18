@@ -494,6 +494,7 @@ const myscrap = new Vue({
         code_list: code_list,
         submit_code: "",
         submit_seq_id: "",
+        scrap_type: null,
         seq_list: [],
         submit_scrap_reason: "",
         submit_scrap_photo: "点击上传图片",
@@ -571,6 +572,7 @@ const myscrap = new Vue({
                     formData.append("code", this.submit_code);
                     formData.append("seq_id", this.submit_seq_id);
                     formData.append("scrap_reason", this.submit_scrap_reason);
+                    formData.append("scrap_type", this.scrap_type);
                     let that = this;
                     $.ajax("high/submit_scrap", {
                         type: "post",
@@ -583,6 +585,7 @@ const myscrap = new Vue({
                                 that.submit_code = "";
                                 that.submit_seq_id = "";
                                 that.submit_scrap_reason = "";
+                                that.scrap_type = null;
                                 $("#scrap_photo").files = null;
                                 that.submit_scrap_photo = "点击上传图片";
                                 that.now_page_number = 1;
@@ -601,7 +604,8 @@ const myscrap = new Vue({
                             code: that.submit_code,
                             seq_id: that.submit_seq_id,
                             scrap_reason: that.submit_scrap_reason,
-                            token: that.phone_token
+                            token: that.phone_token,
+                            scrap_type: that.scrap_type
                         },
                         success: function (res) {
                             if (res) {
@@ -939,7 +943,7 @@ const message = new Vue({
                     message_id: message_id
                 },
                 success(data, textStatus, jqXHR) {
-                    if (data) {
+                    if (!data) {
                         alert("服务器错误！");
                     }
                 }

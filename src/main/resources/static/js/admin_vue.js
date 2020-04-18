@@ -129,6 +129,7 @@ const information_manage = new Vue({
             let data = {
                 submit_id: id,
                 page_number: this.now_page_number,
+                page_size:this.now_page_size,
                 id: this.id,
                 name: this.name,
                 workcell_id: this.workcell_id,
@@ -146,6 +147,7 @@ const information_manage = new Vue({
             let data = {
                 submit_id: id,
                 page_number: this.now_page_number,
+                page_size:this.now_page_size,
                 id: this.id,
                 name: this.name,
                 workcell_id: this.workcell_id,

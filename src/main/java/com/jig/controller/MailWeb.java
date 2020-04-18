@@ -25,6 +25,9 @@ public class MailWeb {
     @Autowired
     private MailService mailService;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Value("${max-interval}")
@@ -37,7 +40,6 @@ public class MailWeb {
 //    @Scheduled(cron = "0 0 8 1/1 ? ?")
     public void check() throws ParseException {
         logger.info("开始查询是否需要点检");
-        JdbcTemplate jdbcTemplate = (JdbcTemplate) SpringUtil.applicationContext.getBean("jdbcTemplate");
         String sql = "select * from regular_maintenance";
         List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         for (Map<String, Object> map : maps) {

@@ -346,7 +346,7 @@ public interface JigMapper {
      * @param scrap_reason
      * @param pathName
      */
-    void highSubmitScrap(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_id") String submit_id, @Param("scrap_reason") String scrap_reason, @Param("pathName") String pathName);
+    void highSubmitScrap(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_id") String submit_id, @Param("scrap_reason") String scrap_reason, @Param("scrap_type") String scrap_type , @Param("pathName") String pathName);
 
     /**
      * 高级用户删除报废

@@ -234,89 +234,89 @@
 
                         <li>
                             <ul class="dropdown-menu-list list-unstyled ps-scrollbar">
-                                <li class="active notification-success">
-                                    <a href="#">
-                                        <i class="fa-user"></i>
+<!--                                <li class="active notification-success">-->
+<!--                                    <a href="#">-->
+<!--                                        <i class="fa-user"></i>-->
 
-                                        <span class="line">
-												<strong>New user registered</strong>
-											</span>
+<!--                                        <span class="line">-->
+<!--												<strong>New user registered</strong>-->
+<!--											</span>-->
 
-                                        <span class="line small time">
-												30 seconds ago
-											</span>
-                                    </a>
-                                </li>
+<!--                                        <span class="line small time">-->
+<!--												30 seconds ago-->
+<!--											</span>-->
+<!--                                    </a>-->
+<!--                                </li>-->
 
-                                <li class="active notification-secondary">
-                                    <a href="#">
-                                        <i class="fa-lock"></i>
+<!--                                <li class="active notification-secondary">-->
+<!--                                    <a href="#">-->
+<!--                                        <i class="fa-lock"></i>-->
 
-                                        <span class="line">
-												<strong>Privacy settings have been changed</strong>
-											</span>
+<!--                                        <span class="line">-->
+<!--												<strong>Privacy settings have been changed</strong>-->
+<!--											</span>-->
 
-                                        <span class="line small time">
-												3 hours ago
-											</span>
-                                    </a>
-                                </li>
+<!--                                        <span class="line small time">-->
+<!--												3 hours ago-->
+<!--											</span>-->
+<!--                                    </a>-->
+<!--                                </li>-->
 
-                                <li class="notification-primary">
-                                    <a href="#">
-                                        <i class="fa-thumbs-up"></i>
+<!--                                <li class="notification-primary">-->
+<!--                                    <a href="#">-->
+<!--                                        <i class="fa-thumbs-up"></i>-->
 
-                                        <span class="line">
-												<strong>Someone special liked this</strong>
-											</span>
+<!--                                        <span class="line">-->
+<!--												<strong>Someone special liked this</strong>-->
+<!--											</span>-->
 
-                                        <span class="line small time">
-												2 minutes ago
-											</span>
-                                    </a>
-                                </li>
+<!--                                        <span class="line small time">-->
+<!--												2 minutes ago-->
+<!--											</span>-->
+<!--                                    </a>-->
+<!--                                </li>-->
 
-                                <li class="notification-danger">
-                                    <a href="#">
-                                        <i class="fa-calendar"></i>
+<!--                                <li class="notification-danger">-->
+<!--                                    <a href="#">-->
+<!--                                        <i class="fa-calendar"></i>-->
 
-                                        <span class="line">
-												John cancelled the event
-											</span>
+<!--                                        <span class="line">-->
+<!--												John cancelled the event-->
+<!--											</span>-->
 
-                                        <span class="line small time">
-												9 hours ago
-											</span>
-                                    </a>
-                                </li>
+<!--                                        <span class="line small time">-->
+<!--												9 hours ago-->
+<!--											</span>-->
+<!--                                    </a>-->
+<!--                                </li>-->
 
-                                <li class="notification-info">
-                                    <a href="#">
-                                        <i class="fa-database"></i>
+<!--                                <li class="notification-info">-->
+<!--                                    <a href="#">-->
+<!--                                        <i class="fa-database"></i>-->
 
-                                        <span class="line">
-												The server is status is stable
-											</span>
+<!--                                        <span class="line">-->
+<!--												The server is status is stable-->
+<!--											</span>-->
 
-                                        <span class="line small time">
-												yesterday at 10:30am
-											</span>
-                                    </a>
-                                </li>
+<!--                                        <span class="line small time">-->
+<!--												yesterday at 10:30am-->
+<!--											</span>-->
+<!--                                    </a>-->
+<!--                                </li>-->
 
-                                <li class="notification-warning">
-                                    <a href="#">
-                                        <i class="fa-envelope-o"></i>
+<!--                                <li class="notification-warning">-->
+<!--                                    <a href="#">-->
+<!--                                        <i class="fa-envelope-o"></i>-->
 
-                                        <span class="line">
-												New comments waiting approval
-											</span>
+<!--                                        <span class="line">-->
+<!--												New comments waiting approval-->
+<!--											</span>-->
 
-                                        <span class="line small time">
-												last week
-											</span>
-                                    </a>
-                                </li>
+<!--                                        <span class="line small time">-->
+<!--												last week-->
+<!--											</span>-->
+<!--                                    </a>-->
+<!--                                </li>-->
                                 <li v-for="item in new_message" class="active notification-success" @click="showTab(item.tab_id,item.id)">
                                     <a href="#">
                                         <i class="fa-envelope-o"></i>
@@ -1486,7 +1486,21 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class="col-sm-3 control-label">故障原因</label>
+                                                        <label class="col-sm-3 control-label">故障类型</label>
+                                                        <div class="col-sm-8">
+                                                            <label class="radio-inline">
+                                                                <input type="radio" name="scrap_type" id="optionsRadios3" value="1" v-model="scrap_type">使用时间过长
+                                                            </label>
+                                                            <label class="radio-inline">
+                                                                <input type="radio" name="scrap_type" id="optionsRadios4" value="2" v-model="scrap_type">使用不当
+                                                            </label>
+                                                            <label class="radio-inline">
+                                                                <input type="radio" name="scrap_type" id="optionsRadios5" value="0" v-model="scrap_type">其他
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">故障描述</label>
                                                         <div class="col-sm-8">
                                                             <input type="text" class="form-control"
                                                                    v-model="submit_scrap_reason"
@@ -1618,7 +1632,15 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="control-label col-sm-3">故障原因</label>
+                                                    <label class="control-label col-sm-3">故障类型</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control">
+                                                            {{scrap.scrap_type}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">故障描述</label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control">
                                                             {{scrap.scrap_reason}}

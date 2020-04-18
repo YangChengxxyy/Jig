@@ -2,7 +2,9 @@ package com.jig.utils;
 
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,10 +20,11 @@ import java.util.Map;
 /**
  * @author YC
  */
+@Component
 public class PoiUtil {
-
-    public static <T> HSSFWorkbook getExcel(List<T> list) throws Exception {
-        JdbcTemplate jdbcTemplate = (JdbcTemplate) SpringUtil.applicationContext.getBean("jdbcTemplate");
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    public <T> HSSFWorkbook getExcel(List<T> list) throws Exception {
         String sql = "select * from cn_en";
         List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql);
         Map<String,String> chEnMap = new HashMap<>();
@@ -130,7 +133,7 @@ public class PoiUtil {
         System.out.println(ip);
     }
 
-    public static void outputFile(HttpServletResponse response, String fileName, List<?> list) throws Exception {
+    public void outputFile(HttpServletResponse response, String fileName, List<?> list) throws Exception {
         if (list.size() == 0) {
             return;
         }

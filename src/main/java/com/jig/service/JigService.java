@@ -155,8 +155,8 @@ public class JigService {
         return jigMapper.highSearchAllRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date);
     }
 
-    public void highSubmitScrap(String code, String seq_id, String submit_id, String scrap_reason, String pathName) {
-        jigMapper.highSubmitScrap(code, seq_id, submit_id, scrap_reason, pathName);
+    public void highSubmitScrap(String code, String seq_id, String submit_id, String scrap_reason,String scrap_type ,String pathName) {
+        jigMapper.highSubmitScrap(code, seq_id, submit_id, scrap_reason,scrap_type, pathName);
     }
 
     public boolean highDeleteScrap(String id) {

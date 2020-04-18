@@ -409,7 +409,7 @@ public class JigJson {
      * @return 成功与否
      */
     @RequestMapping(value = "high/submit_scrap", method = RequestMethod.POST)
-    public boolean highSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason, @RequestParam("file") MultipartFile file) {
+    public boolean highSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason,@RequestParam("scrap_type")String scrap_type ,@RequestParam("file") MultipartFile file) {
         String fileName = file.getOriginalFilename();
         try {
             assert fileName != null;
@@ -418,7 +418,7 @@ public class JigJson {
             FileUtils.writeByteArrayToFile
                     (new File(RESOURCE_URL + pathName), file.getBytes());
             System.out.println(RESOURCE_URL + pathName);
-            jigService.highSubmitScrap(code, seq_id, submit_id, scrap_reason, pathName);
+            jigService.highSubmitScrap(code, seq_id, submit_id, scrap_reason,scrap_type, pathName);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -438,7 +438,7 @@ public class JigJson {
      * @return 成功与否
      */
     @RequestMapping("high/phone_submit_scrap")
-    public boolean highPhoneSubmitScrap(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason, @RequestParam("token") String token, HttpServletRequest request) {
+    public boolean highPhoneSubmitScrap(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason, @RequestParam("token") String token,@RequestParam("scrap_type")String scrap_type, HttpServletRequest request) {
         try {
             HttpSession session = request.getSession();
             session.removeAttribute("scrap-" + submit_id);
@@ -446,7 +446,7 @@ public class JigJson {
             String pathName = phoneUpload.getFileName();
             pathName = SCRAP_IMAGE_NAME + pathName + phoneUpload.getUploadFileName().substring(phoneUpload.getUploadFileName().lastIndexOf('.'));
             phoneUploadMap.remove(token);
-            jigService.highSubmitScrap(code, seq_id, submit_id, scrap_reason, pathName);
+            jigService.highSubmitScrap(code, seq_id, submit_id, scrap_reason,scrap_type, pathName);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
