@@ -32,12 +32,12 @@
                                       inner join production_line pl on p.production_line_id = pl.id
                                       left join user u1 on p.first_acceptor = u1.id
                                       left join user u2 on p.final_acceptor = u2.id
-        where p.status = 2 and u.workcell_id = #{workcell_id}
+        where (p.status = 2  or p.status = 3 or p.status = 4) and u.workcell_id = #{workcell_id}
         limit #{page_number},5
     </select>
     <select id="get_manager_purchase_submit_list_pages" resultType="java.lang.Integer">
         select count(*) from purchase_income_submit p inner join user u on p.submit_id = u.id
-        where status = 2 and u.workcell_id = #{workcell_id}
+        where (status = 2 or status = 3 or status = 4) and u.workcell_id = #{workcell_id}
     </select>
     <select id="get_manager_purchase_detail" resultType="com.jig.entity.PurchaseIncomeSubmit">
         select p.*,u.name submit_name from purchase_income_submit p inner join user u on p.submit_id = u.id
@@ -45,21 +45,25 @@
     </select>
     <update id="manager_check_purchase_submit">
         update purchase_income_submit
-        set final_time = now(),status = #{pass},final_acceptor = #{user_id}
+        set final_time = now(),status = #{pass},final_acceptor = #{user_id},final_reason = null
         where id = #{id};
 
-        insert into purchase_income_submit_history select * from purchase_income_submit where id = #{id};
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
+        values(#{user_id},#{id},now(),'purchase_income_submit',#{field},'update',#{old_value},#{new_value})
+        <!--insert into purchase_income_submit_history select * from purchase_income_submit where id = #{id};
 
-        delete from purchase_income_submit where id = #{id}
+        delete from purchase_income_submit where id = #{id}-->
     </update>
     <update id="manager_dont_pass_purchase_submit">
         update purchase_income_submit
         set final_time = now(),status = #{status},final_acceptor=#{user_id},final_reason=#{final_reason}
         where id = #{id};
 
-        insert into purchase_income_submit_history select * from purchase_income_submit where id = #{id};
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
+        values(#{user_id},#{id},now(),'purchase_income_submit',#{field},'update',#{old_value},#{new_value})
+        <!--insert into purchase_income_submit_history select * from purchase_income_submit where id = #{id};
 
-        delete from purchase_income_submit where id = #{id}
+        delete from purchase_income_submit where id = #{id}-->
     </update>
     <select id="get_manager_jig_info_list" resultType="com.jig.entity.JigDefinition">
         select *  from jig_definition j inner join jig_family f on j.family_id = f.id
@@ -140,31 +144,37 @@
         from scrap_submit s INNER JOIN user u1 on u1.id = s.submit_id
                             LEFT JOIN user u2 on u2.id = s.first_acceptor
                             LEFT JOIN user u3 on u3.id = s.final_acceptor
-        where s.status = 2 and u1.workcell_id = #{workcell_id}
+        where (s.status = 2 or s.status = 3 or s.status = 4) and u1.workcell_id = #{workcell_id}
     </select>
     <select id="get_manager_scrap_submit_list_pages" resultType="java.lang.Integer">
         select count(*) from scrap_submit s INNER JOIN user u1 on u1.id = s.submit_id
-        where s.status = 2 and u1.workcell_id = #{workcell_id}
+        where (s.status = 2 or s.status = 3 or s.status = 4) and u1.workcell_id = #{workcell_id}
     </select>
     <update id="check_manager_scrap_submit">
         update scrap_submit
-        set status = #{status},final_time = now(),final_acceptor = #{user_id}
-        where id = #{submit_id};
+        set status = #{status},final_time = now(),final_acceptor = #{user_id},final_reason = null
+        where id = #{id};
 
-        insert into scrap_submit_history select * from scrap_submit where id = #{submit_id};
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
+        values(#{user_id},#{id},now(),'scrap_submit',#{field},'update',#{old_value},#{new_value})
+        <!--insert into scrap_submit_history select * from scrap_submit where id = #{submit_id};
 
-        delete from scrap_submit where id = #{submit_id}
+        delete from scrap_submit where id = #{submit_id}-->
+
 
 
     </update>
     <update id="manager_no_pass_submit">
         update scrap_submit
         set status = 3,final_time = now(),final_acceptor = #{user_id},final_reason = #{no_pass_reason}
-        where id = #{submit_id};
+        where id = #{id};
 
-        insert into scrap_submit_history select * from scrap_submit where id = #{submit_id};
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
+        values(#{user_id},#{id},now(),'scrap_submit',#{field},'update',#{old_value},#{new_value})
 
-        delete from scrap_submit where id = #{submit_id}
+        <!--insert into scrap_submit_history select * from scrap_submit where id = #{submit_id};
+
+        delete from scrap_submit where id = #{submit_id}-->
 
 
     </update>
@@ -329,7 +339,7 @@
         where id = #{id};
 
         insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
-        values(#{first_acceptor},#{id},now(),'purchase_income_submit','status~first_reason','update','${old_status}~${old_reason}','1~${first_reason}')
+        values(#{first_acceptor},#{id},now(),'purchase_income_submit',#{field},'update',#{old_value},#{new_value})
     </update>
     <select id="supervisor_get_purchase_submit_list_history" resultType="com.jig.entity.PurchaseIncomeSubmit">
         select p.*,u.name 'submit_name',
@@ -392,7 +402,7 @@
     </select>
     <update id="supervisor_pass_scrap_submit">
         update scrap_submit
-        set status = '2', first_acceptor = #{user_id},first_time = now()
+        set status = '2', first_acceptor = #{user_id},first_time = now(),first_reason = null
         where id = #{id};
 
         insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
@@ -401,7 +411,10 @@
     <update id="supervisor_no_pass_scrap_submit">
         update scrap_submit
         set status = '1', first_acceptor = #{user_id},first_time = now(),first_reason = #{no_pass_reason}
-        where id = #{id}
+        where id = #{id};
+
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
+        values(#{user_id},#{id},now(),'scrap_submit',#{field},'update',#{old_value},#{new_value})
     </update>
     <select id="supervisor_get_scrap_submit_list_history" resultType="com.jig.entity.ScrapSubmit">
         select s.*,

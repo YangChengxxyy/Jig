@@ -43,8 +43,7 @@ public class JigService_zhs {
     }
 
     public int get_manager_purchase_submit_list_pages(String workcell_id){
-        int max = jigMapper.get_manager_purchase_submit_list_pages(workcell_id);
-        return (int)Math.ceil(max/5.0);
+        return jigMapper.get_manager_purchase_submit_list_pages(workcell_id);
     }
 
     //经理模式下获取单个采购申请明细（弃用）
@@ -53,13 +52,13 @@ public class JigService_zhs {
     }
 
     //经理模式下审批通过采购单
-    public int manager_check_purchase_submit(String id,String pass,String user_id){
-        return jigMapper.manager_check_purchase_submit(id,pass,user_id);
+    public int manager_check_purchase_submit(String id,String pass,String user_id,String field,String old_value,String new_value){
+        return jigMapper.manager_check_purchase_submit(id,pass,user_id,field,old_value,new_value);
     }
 
     //经理模式采购审批的终审不通过的提交
-    public int manager_dont_pass_purchase_submit(String id,String status,String final_reason,String user_id){
-        return jigMapper.manager_dont_pass_purchase_submit(id,status,final_reason,user_id);
+    public int manager_dont_pass_purchase_submit(String id,String status,String final_reason,String user_id,String field,String old_value,String new_value){
+        return jigMapper.manager_dont_pass_purchase_submit(id,status,final_reason,user_id,field,old_value,new_value);
     }
 
     //
@@ -78,8 +77,7 @@ public class JigService_zhs {
     }
 
     public int get_manager_purchase_submit_list_history_pages(String bill_no,String submit_name,String start_date,String end_date,String status,String workcell_id){
-        int max =  jigMapper.get_manager_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status,workcell_id);
-        return (int)Math.ceil(max/5.0);
+        return jigMapper.get_manager_purchase_submit_list_history_pages(bill_no,submit_name,start_date,end_date,status,workcell_id);
     }
 
     //获取经理模块下/历史采购记录/查看历史操作记录
@@ -114,19 +112,18 @@ public class JigService_zhs {
     }
     //获取经理模块下的报废审批记录的最大页数
     public int get_manager_scrap_submit_list_pages(String workcell_id){
-        int max_page = jigMapper.get_manager_scrap_submit_list_pages(workcell_id);
-        return (int)Math.ceil(max_page/5.0);
+        return jigMapper.get_manager_scrap_submit_list_pages(workcell_id);
     }
 
     //经理模式审批的报废申请,status表示审批之后该scrap_submit的最终状态
-    public int check_manager_scrap_submit(String submit_id,String status,String user_id){
-        int flag = jigMapper.check_manager_scrap_submit(submit_id,status,user_id);
+    public int check_manager_scrap_submit(String submit_id,String status,String user_id,String field,String old_value,String new_value){
+        int flag = jigMapper.check_manager_scrap_submit(submit_id,status,user_id,field,old_value,new_value);
         return flag;
     }
 
     //经理模式/报废审批/不通过报废申请
-    public int manager_no_pass_submit(String submit_id,String no_pass_reason,String user_id){
-        return jigMapper.manager_no_pass_submit(submit_id,no_pass_reason,user_id);
+    public int manager_no_pass_submit(String submit_id,String no_pass_reason,String user_id,String field,String old_value,String new_value){
+        return jigMapper.manager_no_pass_submit(submit_id,no_pass_reason,user_id,field,old_value,new_value);
     }
 
 
@@ -137,8 +134,7 @@ public class JigService_zhs {
     }
 
     public int get_manager_scrap_submit_list_history_pages(String code,String submit_name,String start_date,String end_date,String status,String scrap_reason,String workcell_id){
-        int max_page = jigMapper.get_manager_scrap_submit_list_history_pages(code,submit_name,start_date,end_date,status,scrap_reason,workcell_id);
-        return (int)Math.ceil(max_page/5.0);
+        return jigMapper.get_manager_scrap_submit_list_history_pages(code,submit_name,start_date,end_date,status,scrap_reason,workcell_id);
     }
 
 
@@ -195,8 +191,8 @@ public class JigService_zhs {
     }
 
     //监管者模式下初审不通过采购审批
-    public int supervisor_no_pass_purchase_submit(String id,String status,String first_reason,String first_acceptor,String old_status,String old_reason){
-        return jigMapper.supervisor_no_pass_purchase_submit(id,status,first_reason,first_acceptor,old_status,old_reason);
+    public int supervisor_no_pass_purchase_submit(String id,String status,String first_reason,String first_acceptor,String field,String old_value,String new_value){
+        return jigMapper.supervisor_no_pass_purchase_submit(id,status,first_reason,first_acceptor,field,old_value,new_value);
     }
 
     //监管者模式下获取历史采购记录及其最大页数
@@ -222,8 +218,8 @@ public class JigService_zhs {
         return jigMapper.supervisor_pass_scrap_submit(id,user_id,field,old_value,new_value);
     }
 
-    public int supervisor_no_pass_scrap_submit(String id,String no_pass_reason,String user_id){
-        return jigMapper.supervisor_no_pass_scrap_submit(id,no_pass_reason,user_id);
+    public int supervisor_no_pass_scrap_submit(String id,String no_pass_reason,String user_id,String field,String old_value,String new_value){
+        return jigMapper.supervisor_no_pass_scrap_submit(id,no_pass_reason,user_id,field,old_value,new_value);
     }
 
     //监管者模式下获取历史报废记录

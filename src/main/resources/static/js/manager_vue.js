@@ -1,4 +1,4 @@
-
+Vue.component('my-pagination', page);
 //左侧菜单显示未读审批
 var left_panel = new Vue({
     el:"#main-menu",//新界面是这个下面 原来#left
@@ -56,8 +56,12 @@ var purchase_submit = new Vue({
         },
         purchase_submit_pass_reason:"",//终审不通过原因
         purchase_submit_id:"",
+        //分页所需
         now_page_number: 1,
-        max_page_number: 0
+        max_page_number: 0,
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0
     },
     created:function () {
         this.getData();
@@ -69,11 +73,13 @@ var purchase_submit = new Vue({
                 url:"manager/get_purchase_submit_list",
                 data: {
                     page_number:this.now_page_number,
+                    page_size:this.now_page_size,
                     user_id:"111111"
                 },
                 success:function (res) {
                     that.purchase_submit_list = res.data;
                     that.max_page_number = res.max;
+                    that.all_count = res.all_count;
                 }
             })
         },
@@ -162,8 +168,12 @@ var purchase_submit_history = new Vue({
                 {text:'初审通过',value:'2'},
                 {text:'终审未通过',value:'3'},
                 {text:'终审通过',value:'4'}],
+        //分页所需
         now_page_number: 1,
-        max_page_number: 0
+        max_page_number: 0,
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0
     },
     created:function () {
         //this.getData();
@@ -177,7 +187,9 @@ var purchase_submit_history = new Vue({
                     submit_time:this.submit_time,
                     bill_no:this.bill_no,
                     status:this.status,
-                    page_number:this.now_page_number
+                    //分页所需
+                    page_number:this.now_page_number,
+                    page_size:this.now_page_size
                 },
                 success:function (res) {
                     if(res.data.length === 0){
@@ -185,6 +197,7 @@ var purchase_submit_history = new Vue({
                     }
                     that.purchase_submit_list = res.data;
                     that.max_page_number = res.max;
+                    that.all_count = res.all_count;
                 }
             })
         },
@@ -551,8 +564,12 @@ var scrap_submit = new Vue({
     data:{
         scrap_submit_list:[],
         scrap_submit:null,
+        //分页所需
+        max_page_number: 0,
         now_page_number: 1,
-        max_page_number: 0
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0
     },
     created:function () {
         this.getData();
@@ -563,11 +580,13 @@ var scrap_submit = new Vue({
             $.ajax({
                 url:"manager/get_scrap_submit_list",
                 data:{
-                    page_number: this.now_page_number
+                    page_number: this.now_page_number,
+                    page_size:this.now_page_size
                 },
                 success:function (res) {
                     that.scrap_submit_list = res.data;
                     that.max_page_number = res.max;
+                    that.all_count = res.all_count;
                 }
             })
         },
@@ -583,7 +602,7 @@ var scrap_submit = new Vue({
             $.ajax({
                 url:"manager/check_scrap_submit",
                 data:{
-                    submit_id:submit_id,
+                    id:submit_id,
                     status:status
                 },
                 success:function (res) {
@@ -618,7 +637,7 @@ var scrap_no_pass_reason = new Vue({
             $.ajax({
                 url:"manager/no_pass_submit",
                 data:{
-                    submit_id:this.no_pass_submit_id,
+                    id:this.no_pass_submit_id,
                     no_pass_reason:""
                 },
                 success:function (res) {
@@ -646,8 +665,12 @@ var scrap_submit_history = new Vue({
             {text:'终审通过',value:'4'}],
         scrap_reason:"",
         submit_name:"",
+        //分页所需
         now_page_number:1,
-        max_page_number:0
+        max_page_number:0,
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0
     },
     created:function () {
         //this.getData();
@@ -659,11 +682,14 @@ var scrap_submit_history = new Vue({
                 url:"manager/get_scrap_submit_list_history",
                 data:{
                     page_number:this.now_page_number,
+                    page_size:this.now_page_size,
+
                     code:this.code,
                     status:this.status,
                     submit_name:this.submit_name,
                     scrap_reason: this.scrap_reason,
-                    submit_time:this.submit_time
+                    submit_time:this.submit_time,
+
                 },
                 success:function (res) {
                     if(res.data.length===0){
@@ -671,6 +697,7 @@ var scrap_submit_history = new Vue({
                     }
                     that.scrap_submit_list = res.data;
                     that.max_page_number = res.max;
+                    that.all_count = res.all_count;
                 }
             })
         },

@@ -46,12 +46,18 @@ public interface JigMapper_zhs {
      */
     int manager_check_purchase_submit(@Param("id") String id,
                                       @Param("pass") String pass,
-                                      @Param("user_id") String user_id);
+                                      @Param("user_id") String user_id,
+                                      @Param("field") String field,
+                                      @Param("old_value") String old_value,
+                                      @Param("new_value") String new_value);
 
     int manager_dont_pass_purchase_submit(@Param("id") String id,
                                           @Param("status") String status,
                                           @Param("final_reason") String final_reason,
-                                          @Param("user_id") String user_id);
+                                          @Param("user_id") String user_id,
+                                          @Param("field") String field,
+                                          @Param("old_value") String old_value,
+                                          @Param("new_value") String new_value);
 
     List<JigDefinition> get_manager_jig_info_list(@Param("page_number") int page_number);
 
@@ -115,11 +121,17 @@ public interface JigMapper_zhs {
      */
     int check_manager_scrap_submit(@Param("submit_id") String submit_id,
                                    @Param("status") String status,
-                                   @Param("user_id") String user_id);
+                                   @Param("user_id") String user_id,
+                                   @Param("field") String field,
+                                   @Param("old_value") String old_value,
+                                   @Param("new_value") String new_value);
 
     int manager_no_pass_submit(@Param("submit_id") String submit_id,
                                @Param("no_pass_reason") String no_pass_reason,
-                               @Param("user_id") String user_id);
+                               @Param("user_id") String user_id,
+                               @Param("field") String field,
+                               @Param("old_value") String old_value,
+                               @Param("new_value") String new_value);
 
     /**经理模式下历史报废审批记录的显示及其页数查询
      *
@@ -213,8 +225,9 @@ public interface JigMapper_zhs {
                                            @Param("status") String status,
                                            @Param("first_reason") String first_reason,
                                            @Param("first_acceptor") String first_acceptor,
-                                           @Param("old_status") String old_status,
-                                           @Param("old_reason") String old_reason);
+                                           @Param("field") String field,
+                                           @Param("old_value") String old_value,
+                                           @Param("new_value") String new_value);
 
     /**监管者模式下获取历史采购记录
      *
@@ -254,7 +267,10 @@ public interface JigMapper_zhs {
 
     int supervisor_no_pass_scrap_submit(@Param("id") String id,
                                         @Param("no_pass_reason") String no_pass_reason,
-                                        @Param("user_id") String user_id);
+                                        @Param("user_id") String user_id,
+                                        @Param("field") String field,
+                                        @Param("old_value") String old_value,
+                                        @Param("new_value") String new_value);
 
     //监管者模式下获取历史报废记录
     List<ScrapSubmit> supervisor_get_scrap_submit_list_history(@Param("code") String code,

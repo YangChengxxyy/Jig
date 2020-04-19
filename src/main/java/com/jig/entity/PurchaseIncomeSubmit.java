@@ -209,16 +209,27 @@ public class PurchaseIncomeSubmit {
         return "PurchaseIncomeSubmit{" +
                 "id='" + id + '\'' +
                 ", submit_id='" + submit_id + '\'' +
+                ", submit_name='" + submit_name + '\'' +
                 ", submit_time='" + submit_time + '\'' +
                 ", code='" + code + '\'' +
                 ", count='" + count + '\'' +
+                ", first_time='" + first_time + '\'' +
+                ", first_acceptor='" + first_acceptor + '\'' +
+                ", first_acceptor_name='" + first_acceptor_name + '\'' +
+                ", first_reason='" + first_reason + '\'' +
+                ", final_time='" + final_time + '\'' +
+                ", final_acceptor='" + final_acceptor + '\'' +
+                ", final_acceptor_name='" + final_acceptor_name + '\'' +
+                ", final_reason='" + final_reason + '\'' +
                 ", status='" + status + '\'' +
                 ", production_line_id=" + production_line_id +
+                ", production_line_name='" + production_line_name + '\'' +
                 ", bill_no='" + bill_no + '\'' +
+                ", tool_photo_url='" + tool_photo_url + '\'' +
                 '}';
     }
 
-    public String[] getOperateUpdateInfo(String code,String count,String production_line_id){
+    public String[] getOperateUpdateInfo(String code, String count, String production_line_id){
         //通过修改前的submit与修改的值进行比较，获取field,old_value,new_value插入数据库
 
         //这样设置是有点问题的，如果只修改了code,没有修改count，只会有code的信息
@@ -256,6 +267,88 @@ public class PurchaseIncomeSubmit {
         a[0] = field;
         a[1] = old_value;
         a[2] = new_value;
+        return a;
+    }
+
+    public String[] PassSubmitInfo(String new_status){
+        String[] a = new String[3];
+        String field = "";
+        String old_value = "";
+        String new_value = "";
+        if(!this.status.equals(new_status)){
+            field += "status";
+            old_value += this.status;
+            new_value += new_status;
+        }
+        if(new_status.equals("1") || new_status.equals("2")){
+            if(first_reason != null){
+                if(field.equals("")){
+                    field+="first_reason";
+                    old_value+=first_reason;
+                    new_value+="";
+                }else{
+                    field+="~first_reason";
+                    old_value+="~"+first_reason;
+                    new_value+="~";
+                }
+            }
+        }else if(new_status.equals("3") || new_status.equals("4")){
+            if(final_reason != null){
+                if(field.equals("")){
+                    field+="final_reason";
+                    old_value+=final_reason;
+                    new_value+="";
+                }else{
+                    field+="~final_reason";
+                    old_value+="~"+final_reason;
+                    new_value+="~";
+                }
+            }
+        }
+        a[0] = field;
+        a[1] = old_value;
+        a[2] = new_value;
+        //System.out.println("pass:" + Arrays.toString(a));
+        return a;
+    }
+
+    public String[] NoPassSubmitInfo(String new_status,String no_pass_reason){
+        String[] a = new String[3];
+        String field = "";
+        String old_value = "";
+        String new_value = "";
+        if(!this.status.equals(new_status)){
+            field += "status";
+            old_value += this.status;
+            new_value += new_status;
+        }
+        if (new_status.equals("1") || new_status.equals("2")){
+            if(field.equals("")){
+                field += "first_reason";
+                old_value += first_reason == null?"":first_reason;
+                new_value += no_pass_reason;
+            }else{
+                field += "~first_reason";
+                old_value += "~" + (first_reason == null?"":first_reason);
+                new_value += "~"+no_pass_reason;
+            }
+        }else if(new_status.equals("3") || new_status.equals("4")){
+            if(field.equals("")){
+                field += "final_reason";
+                old_value += final_reason == null?"":final_reason;
+                new_value += no_pass_reason;
+            }else{
+                field += "~final_reason";
+                old_value += "~" + (final_reason == null?"":final_reason);
+                new_value += "~"+no_pass_reason;
+            }
+        }
+
+
+        a[0] = field;
+        a[1] = old_value;
+        a[2] = new_value;
+        //System.out.println("no_pass:"+ Arrays.toString(a));
         return a;
     }
 }

@@ -591,10 +591,9 @@
                                 </table>
                             </div>
 
-                            <div class="text-center row" v-if="max_page_number != 0">
-                                <my-pagination :max_page_number="max_page_number"
-                                               :now_page_number="now_page_number"></my-pagination>
-                            </div>
+                            <my-pagination :now_page_number="now_page_number" :now_page_size="now_page_size" :max_page_number="max_page_number"
+                             :page_size_list="page_size_list" :all_count="all_count"
+                            ></my-pagination>
 
                         </div>
                     </div>
@@ -707,10 +706,9 @@
                                 </table>
                             </div>
 
-                            <div class="text-center row" v-if="max_page_number != 0">
-                                <my-pagination :max_page_number="max_page_number"
-                                               :now_page_number="now_page_number"></my-pagination>
-                            </div>
+                            <my-pagination :now_page_number="now_page_number" :now_page_size="now_page_size" :max_page_number="max_page_number"
+                                           :page_size_list="page_size_list" :all_count="all_count"
+                            ></my-pagination>
 
                         </div>
                     </div>
@@ -1023,7 +1021,9 @@
                                     </tbody>
                                 </table>
                             </div>
-
+                            <my-pagination :now_page_number="now_page_number" :now_page_size="now_page_size" :max_page_number="max_page_number"
+                                           :page_size_list="page_size_list" :all_count="all_count"
+                            ></my-pagination>
 
                         </div>
                     </div>
@@ -1128,10 +1128,10 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="text-center row" v-if="max_page_number != 0">
-                                <my-pagination :max_page_number="max_page_number"
-                                               :now_page_number="now_page_number"></my-pagination>
-                            </div>
+
+                            <my-pagination :now_page_number="now_page_number" :now_page_size="now_page_size" :max_page_number="max_page_number"
+                                           :page_size_list="page_size_list" :all_count="all_count"
+                            ></my-pagination>
 
 
                         </div>
@@ -2693,7 +2693,7 @@
 
 <!-- JavaScripts initializations and stuff -->
 <script src="assets/js/xenon-custom.js"></script>
-<script src="js/pagination.js"></script>
+<script src="js/pagination-2.0.js"></script>
 <script src="js/manager_vue.js"></script>
 
 </body>

@@ -1,5 +1,7 @@
 package com.jig.entity;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class ScrapSubmit {
@@ -173,11 +175,80 @@ public class ScrapSubmit {
     @Override
     public String toString() {
         return "ScrapSubmit{" +
-                "code='" + code + '\'' +
+                "id='" + id + '\'' +
+                ", code='" + code + '\'' +
                 ", seq_id='" + seq_id + '\'' +
+                ", submit_id='" + submit_id + '\'' +
                 ", submit_name='" + submit_name + '\'' +
                 ", submit_time='" + submit_time + '\'' +
+                ", used_count=" + used_count +
                 ", scrap_reason='" + scrap_reason + '\'' +
+                ", scrap_photo_url='" + scrap_photo_url + '\'' +
+                ", first_time='" + first_time + '\'' +
+                ", first_acceptor='" + first_acceptor + '\'' +
+                ", first_acceptor_name='" + first_acceptor_name + '\'' +
+                ", first_reason='" + first_reason + '\'' +
+                ", final_time='" + final_time + '\'' +
+                ", final_acceptor='" + final_acceptor + '\'' +
+                ", final_acceptor_name='" + final_acceptor_name + '\'' +
+                ", final_reason='" + final_reason + '\'' +
+                ", status='" + status + '\'' +
                 '}';
+    }
+
+    public String[] PassSubmitInfo(String new_status){
+        String[] a = new String[3];
+        String field = "";
+        String old_value = "";
+        String new_value = "";
+        if(!this.status.equals(new_status)){
+            field += "status";
+            old_value += this.status;
+            new_value += new_status;
+        }
+        if(first_reason != null){
+            if(field.equals("")){
+                field+="first_reason";
+                old_value+=first_reason;
+                new_value+="";
+            }else{
+                field+="~first_reason";
+                old_value+="~"+first_reason;
+                new_value+="~";
+            }
+
+        }
+        a[0] = field;
+        a[1] = old_value;
+        a[2] = new_value;
+        //System.out.println("pass:" + Arrays.toString(a));
+        return a;
+    }
+
+    public String[] NoPassSubmitInfo(String new_status,String no_pass_reason){
+        String[] a = new String[3];
+        String field = "";
+        String old_value = "";
+        String new_value = "";
+        if(!this.status.equals(new_status)){
+            field += "status";
+            old_value += this.status;
+            new_value += new_status;
+        }
+        if(field.equals("")){
+            field += "first_reason";
+            old_value += first_reason == null?"":first_reason;
+            new_value += no_pass_reason;
+        }else{
+            field += "~first_reason";
+            old_value += "~" + (first_reason == null?"":first_reason);
+            new_value += "~"+no_pass_reason;
+        }
+
+        a[0] = field;
+        a[1] = old_value;
+        a[2] = new_value;
+        //System.out.println("no_pass:"+ Arrays.toString(a));
+        return a;
     }
 }
