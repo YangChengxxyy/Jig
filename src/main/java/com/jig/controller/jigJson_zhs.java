@@ -7,6 +7,9 @@ import com.jig.service.JigService_zhs;
 import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.print.DocFlavor;
@@ -17,6 +20,7 @@ import java.util.*;
 import static org.apache.logging.log4j.message.MapMessage.MapFormat.JSON;
 
 @RestController
+@Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.DEFAULT)
 public class jigJson_zhs {
     @Autowired
     private JigService_zhs jigService;

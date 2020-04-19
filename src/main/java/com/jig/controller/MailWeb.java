@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,9 +20,13 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.DEFAULT)
 public class MailWeb {
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -33,7 +40,6 @@ public class MailWeb {
 //    @Scheduled(cron = "0 0 8 1/1 ? ?")
     public void check() throws ParseException {
         logger.info("开始查询是否需要点检");
-        JdbcTemplate jdbcTemplate = (JdbcTemplate) SpringUtil.applicationContext.getBean("jdbcTemplate");
         String sql = "select * from regular_maintenance";
         List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         for (Map<String, Object> map : maps) {

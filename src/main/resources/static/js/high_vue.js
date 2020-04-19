@@ -317,8 +317,8 @@ const myrepair = new Vue({
         repair_list: [],
         repair: null,
 
-        reason:"",
-        disagree_id:""
+        reason: "",
+        disagree_id: ""
     },
     created: function () {
         this.getData();
@@ -369,14 +369,14 @@ const myrepair = new Vue({
         disagreeModal: function (table_id) {
             this.disagree_id = table_id;
         },
-        disagree:function(){
+        disagree: function () {
             let that = this;
-            if(this.reason === ""){
+            if (this.reason === "") {
                 $("#disagreeModal [style*='border-color: rgb(201, 48, 44);']:eq(0)").focus().shake(2, 10, 200);
                 return false;
             }
-            $.ajax("high/handle_repair_submit",{
-                data:{
+            $.ajax("high/handle_repair_submit", {
+                data: {
                     id: this.disagree_id,
                     submit_id: id,
                     state: true,
@@ -494,6 +494,7 @@ const myscrap = new Vue({
         code_list: code_list,
         submit_code: "",
         submit_seq_id: "",
+        scrap_type: null,
         seq_list: [],
         submit_scrap_reason: "",
         submit_scrap_photo: "点击上传图片",
@@ -525,7 +526,7 @@ const myscrap = new Vue({
         },
         getSeqId: function () {
             let that = this;
-            $.ajax("code_get_seq_id", {
+            $.ajax("code_get_in_seq_id", {
                 data: {
                     code: this.submit_code
                 }, success: function (res) {
@@ -571,6 +572,7 @@ const myscrap = new Vue({
                     formData.append("code", this.submit_code);
                     formData.append("seq_id", this.submit_seq_id);
                     formData.append("scrap_reason", this.submit_scrap_reason);
+                    formData.append("scrap_type", this.scrap_type);
                     let that = this;
                     $.ajax("high/submit_scrap", {
                         type: "post",
@@ -583,6 +585,7 @@ const myscrap = new Vue({
                                 that.submit_code = "";
                                 that.submit_seq_id = "";
                                 that.submit_scrap_reason = "";
+                                that.scrap_type = null;
                                 $("#scrap_photo").files = null;
                                 that.submit_scrap_photo = "点击上传图片";
                                 that.now_page_number = 1;
@@ -601,7 +604,8 @@ const myscrap = new Vue({
                             code: that.submit_code,
                             seq_id: that.submit_seq_id,
                             scrap_reason: that.submit_scrap_reason,
-                            token: that.phone_token
+                            token: that.phone_token,
+                            scrap_type: that.scrap_type
                         },
                         success: function (res) {
                             if (res) {
@@ -884,4 +888,68 @@ const repairStatistics = new Vue({
     },
     computed: {},
     watch: {},
+});
+const message = new Vue({
+    el: "#message",
+    data: {
+        new_message: [],
+        other_message: []
+    },
+    created: function () {
+        this.getData();
+    },
+    methods: {
+        getData: function () {
+            const that = this;
+            $.ajax("get_new_message", {
+                data: {
+                    id: id
+                },
+                success(data, textStatus, jqXHR) {
+                    console.log(data);
+                    that.new_message = data;
+                }
+            });
+            $.ajax("get_other_message", {
+                data: {
+                    id: id
+                },
+                success(data, textStatus, jqXHR) {
+                    that.other_message = data;
+                }
+            })
+        },
+        showTab: function (tab_id, message_id) {
+            let $this = $("#" + tab_id);
+            let $main = $("#main-menu li[href*=" + tab_id + "]");
+            //显示父亲tab
+            $this.parent("div").addClass("in active");
+            $this.parent("div").siblings().removeClass("in active");
+            //显示自身
+            $this.siblings().removeClass("in active");
+            $this.addClass("in active");
+            //设置.page-title下的显示
+            $this.siblings(".page-title").find(" ol li").removeClass("active");
+            $this.siblings(".page-title").find(" ol li[href*=" + tab_id + "]").addClass("active");
+            //设置#main-menu下的列表显示
+            $main.parents(".main-menu-li").siblings().removeClass("active opened expanded");
+            $main.parents(".main-menu-li").addClass("active opened expanded");
+            $main.siblings().removeClass("active");
+            $main.addClass("active");
+
+            $.ajax("read_message", {
+                data: {
+                    id: id,
+                    message_id: message_id
+                },
+                success(data, textStatus, jqXHR) {
+                    if (!data) {
+                        alert("服务器错误！");
+                    }
+                }
+            })
+        }
+    },
+    computed: {},
+    watch: {}
 });

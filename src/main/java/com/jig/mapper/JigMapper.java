@@ -57,13 +57,6 @@ public interface JigMapper {
      */
     List<JigDefinition> searchAllJigDefinition(@Param("code") String code, @Param("name") String name, @Param("workcell") String workcell, @Param("family") String family, @Param("userFor") String userFor);
 
-    /**获取单个采购申请
-     *
-     * @param id 采购申请id
-     * @return 单个采购申请
-     */
-    PurchaseIncomeSubmit getPurchaseIncomeSubmitInfo(@Param("id") String id);
-
     /**
      * 获取出库申请集合
      *
@@ -147,7 +140,6 @@ public interface JigMapper {
     //void highAddShoplist(@Param("submit_id") String submit_id, @Param("bill_no") String bill_no, @Param("production_line_id") String production_line_id, @Param("code") String code, @Param("count") String count);
 
     void highAddShoplist(@Param("purchase_submit") PurchaseIncomeSubmit purchase_submit);
-
     /**
      * 获取产线列表
      *
@@ -176,12 +168,8 @@ public interface JigMapper {
      * @param code               工家具代码
      * @param count              数量
      * @param production_line_id 产线id
-     * @param user_id            用户id
-     * @param field              改变的表字段
-     * @param old_value
-     * @param new_value
      */
-    void highUpdatePurchaseIncomeSubmit(@Param("id") String id, @Param("code") String code, @Param("count") String count, @Param("production_line_id") String production_line_id,@Param("user_id") String user_id,@Param("field") String field,@Param("old_value") String old_value,@Param("new_value") String new_value);
+    void highUpdatePurchaseIncomeSubmit(@Param("id") String id, @Param("code") String code, @Param("count") String count, @Param("production_line_id") String production_line_id);
 
     /**
      * 获得入库申请单页数页数
@@ -244,8 +232,7 @@ public interface JigMapper {
      *
      * @param id purchase_submit表id
      */
-    void highDeletePurchaseSubmit(@Param("id") String id,
-                                  @Param("user_id") String user_id);
+    void highDeletePurchaseSubmit(@Param("id") String id);
 
     /**
      * high获取报修申请记录
@@ -354,19 +341,21 @@ public interface JigMapper {
     /**
      * 高级用户提交报废
      *
-     * @param scrapSubmit
+     * @param code
+     * @param seq_id
+     * @param submit_id
+     * @param scrap_reason
      * @param pathName
      */
-    void highSubmitScrap(@Param("scrap_submit") ScrapSubmit scrapSubmit, @Param("pathName") String pathName);
+    void highSubmitScrap(@Param("scrap_submit") ScrapSubmit scrap_submit, @Param("pathName") String pathName);
 
     /**
      * 高级用户删除报废
      *
      * @param id
-     * @param user_id 用户id
      * @return
      */
-    int highDeleteScrap(@Param("id") String id,@Param("user_id") String user_id);
+    int highDeleteScrap(@Param("id") String id);
 
     /**
      * 查询seq_id
@@ -420,4 +409,6 @@ public interface JigMapper {
     void highAgreeRepairSubmit(@Param("id") int id, @Param("submit_id") String submit_id);
 
     void highDisagreeRepairSubmit(@Param("id") int id, @Param("submit_id") String submit_id, @Param("reason") String reason);
+
+    List<String> codeGetInSeqId(String code);
 }

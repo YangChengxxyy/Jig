@@ -1,37 +1,31 @@
 package com.jig.entity;
 
-/**
- * (User)实体类
- *
- * @author yc
- * @since 2020-03-07 10:07:10
- */
 public class User {
 
     private String id;
-    
+
     private String name;
-    
+
     private String password;
-    
+
     private String workcell_id;
 
     private String workcell;
-    
+
     private String type;
-    
+
     private String email;
-    
+
     private String phone;
-    
+
     private String position;
     /**
-    * 入职时间
-    */
+     * 入职时间
+     */
     private String entry_date;
     /**
-    * 头像路径
-    */
+     * 头像路径
+     */
     private String avatar_url;
 
 

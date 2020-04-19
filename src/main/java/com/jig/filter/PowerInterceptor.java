@@ -31,7 +31,7 @@ public class PowerInterceptor implements HandlerInterceptor {
         if (obj == null) {
             String checkKey = request.getParameter("key") == null ? "" : request.getParameter("key");
             if (!checkKey.equals(key)) {
-                response.sendRedirect("/show_login");
+                response.sendRedirect("/login");
                 return false;
             } else {
                 return true;

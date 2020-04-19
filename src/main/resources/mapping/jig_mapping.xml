@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jig.mapper.JigMapper">
-    <select id="getPurchaseIncomeSubmitInfo" resultType="com.jig.entity.PurchaseIncomeSubmit">
-        select * from purchase_income_submit where id = #{id}
-    </select>
     <insert id="naiveOutgoJig">
         insert into outgo_income_history(submit_time, user_id, status, rec_id, rec_time, code, seq_id)
         values ((select submit_time from outgo_submit where outgo_submit.id = #{id}),
@@ -15,35 +12,37 @@
         update jig_position
         set status = 0
         where code = #{code}
-          and seq_id = #{seq_id}
+          and seq_id = #{seq_id};
     </insert>
-    <!--<insert id="highAddShoplist">
-        insert into purchase_income_submit(submit_id, code, count, submit_time, status, production_line_id, bill_no)
-        values (#{submit_id}, #{code}, #{count}, now(), 0, #{production_line_id}, #{bill_no})
-    </insert>-->
     <insert id="highAddShoplist" parameterType="com.jig.entity.PurchaseIncomeSubmit">
         insert into purchase_income_submit(id,submit_id, code, count, submit_time, status, production_line_id, bill_no)
         values (#{purchase_submit.id},#{purchase_submit.submit_id}, #{purchase_submit.code}, #{purchase_submit.count},
-         #{purchase_submit.submit_time}, 0, #{purchase_submit.production_line_id}, #{purchase_submit.bill_no});
+         now(), 0, #{purchase_submit.production_line_id}, #{purchase_submit.bill_no});
 
         insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,new_value)
-        values(#{purchase_submit.submit_id},#{purchase_submit.id},#{purchase_submit.submit_time},
+        values(#{purchase_submit.submit_id},#{purchase_submit.id},now(),
         'purchase_income_submit',
         'submit_id~code~count~submit_time~status~production_line_id~bill_no','insert',
         '${purchase_submit.submit_id}~${purchase_submit.code}~${purchase_submit.count}~${purchase_submit.submit_time}~0~${purchase_submit.production_line_id}~${purchase_submit.bill_no}')
     </insert>
-    <insert id="highSubmitScrap">
-        insert into scrap_submit(id,code, seq_id, submit_time, submit_id, used_count, scrap_reason, scrap_photo_url,
+    <insert id="highSubmitScrap" parameterType="com.jig.entity.ScrapSubmit">
+        update jig_position
+        set status = 3
+        where seq_id = #{scrap_submit.seq_id}
+          and code = #{scrap_submit.code};
+        insert into scrap_submit(code, seq_id, submit_time, submit_id, used_count, scrap_reason,scrap_type, scrap_photo_url,
                                  status)
-            value (#{scrap_submit.id},#{scrap_submit.code}, #{scrap_submit.seq_id}, now(), #{scrap_submit.submit_id},
-                   (select used_count from jig_entity where code = #{scrap_submit.code} and seq_id = #{scrap_submit.seq_id}), #{scrap_submit.scrap_reason},
+            value (#{scrap_submit.code}, #{scrap_submit.seq_id}, now(), #{scrap_submit.submit_id},
+                   (select used_count from jig_entity where code = #{scrap_submit.code} and seq_id = #{scrap_submit.seq_id}), #{scrap_submit.scrap_reason},#{scrap_submit.scrap_type},
                    #{pathName}, 0);
+        insert into message(id, generate_id, generate_time, accept_type, status, message, tab_id)
+        values (UUID(), #{scrap_submit.submit_id}, now(), 'supervisor', '00', '提交了新的报废申请', 'scrap_submit');
 
         insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,new_value)
         values(#{scrap_submit.submit_id},#{scrap_submit.id},now(),
         'scrap_submit',
-        'code~seq_id~submit_time~submit_id~scrap_reason~scrap_photo_url~status','insert',
-        concat('${scrap_submit.code}~${scrap_submit.seq_id}~',now(),'~${scrap_submit.submit_id}~${scrap_submit.scrap_reason}~${pathName}~0'))
+        'code~seq_id~submit_time~submit_id~scrap_reason~scrap_type~scrap_photo_url~status','insert',
+        concat('${scrap_submit.code}~${scrap_submit.seq_id}~',now(),'~${scrap_submit.submit_id}~${scrap_submit.scrap_reason}~${scrap_submit.scrap_type}~${pathName}~0'));
     </insert>
     <update id="naiveReturnJig">
         update jig_position
@@ -57,13 +56,10 @@
     </update>
     <update id="highUpdatePurchaseIncomeSubmit">
         update purchase_income_submit
-        set code = #{code},
-            count = #{count},
+        set code              = #{code},
+            count=#{count},
             production_line_id=#{production_line_id}
-        where id = #{id};
-
-        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
-        values(#{user_id},#{id},now(),'purchase_income_submit',#{field},'update',#{old_value},#{new_value})
+        where id = #{id}
     </update>
     <insert id="highAgreeRepairSubmit">
         update repair_submit
@@ -78,6 +74,9 @@
         delete
         from repair_submit
         where id = #{id};
+        insert into message(id, generate_id, generate_time, accept_id, accept_type, status, message)
+        values (UUID(), #{submit_id}, now(), (select submit_id from repair_submit where id = #{id}), 'naive', '00',
+                '同意了你的报修申请');
     </insert>
     <insert id="highDisagreeRepairSubmit">
         update repair_submit
@@ -86,6 +85,9 @@
             status          = 2,
             acceptor_reason = #{reason}
         where id = #{id};
+        update jig_position
+        set status = 1
+        where id = #{id};
         insert into repair_submit_history
         select *
         from repair_submit
@@ -93,6 +95,9 @@
         delete
         from repair_submit
         where id = #{id};
+        insert into message(id, generate_id, generate_time, accept_id, accept_type, status, message)
+        values (UUID(), #{submit_id}, now(), (select submit_id from repair_submit where id = #{id}), 'naive', '00',
+                ' 拒绝了你的报修申请');
     </insert>
     <delete id="naiveDeleteOutgoSubmit">
         delete
@@ -306,10 +311,7 @@
     <delete id="highDeletePurchaseSubmit">
         delete
         from purchase_income_submit
-        where id = #{id};
-
-        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,type)
-        values(#{user_id},#{id},now(),'purchase_income_submit','delete')
+        where id = #{id}
     </delete>
     <select id="highGetRepairJig" resultType="com.jig.entity.RepairJig">
         select rs.*, u1.name submit_name, u2.name acceptor_name
@@ -326,7 +328,7 @@
                  left join `user` u1 on rs.submit_id = u1.id
                  left join `user` u2 on rs.acceptor_id = u2.id
         where u1.workcell_id in (select user.workcell_id from user where id = #{id})
-            and rs.status = 0
+          and rs.status = 0
     </select>
     <select id="highSearchRepairHistory" resultType="com.jig.entity.RepairJigHistory">
         select rh.*,u1.name submit_name,u2.name acceptor_name
@@ -490,10 +492,7 @@
     <delete id="highDeleteScrap">
         delete
         from scrap_submit
-        where id = #{id};
-
-        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,type)
-        values(#{user_id},#{id},now(),'scrap_submit','delete')
+        where id = #{id}
     </delete>
     <select id="naiveGetRepairList" resultType="com.jig.entity.RepairJig">
         select rs.*, u1.name submit_name, u2.name accrptor_name
@@ -509,9 +508,16 @@
         where submit_id = #{submit_id};
     </select>
     <insert id="naiveSubmitRepair">
+        update jig_position
+        set status= 2
+        where code = #{code}
+          and seq_id = #{seq_id};
         insert into repair_submit(code, seq_id, repair_reason, repair_photo_url, submit_time,
-                                  submit_id,status) value (#{code}, #{seq_id}, #{repair_reason}, #{pathName}, now(),
-                                                    #{submit_id},0)
+                                  submit_id, status)
+        values (#{code}, #{seq_id}, #{repair_reason}, #{pathName}, now(),
+                #{submit_id}, 0);
+        insert into message(id, generate_id, generate_time, accept_type, status, message, tab_id)
+        values (uuid(), #{submit_id}, now(), 'high', '00', '提交了新的报修申请', 'myrepair')
     </insert>
     <select id="naiveGetRepairHistory" resultType="com.jig.entity.RepairJigHistory">
         select rs.*, u1.name submit_name, u2.name accrptor_name
@@ -538,5 +544,11 @@
                  inner join user on submit_id = user.id
         where workcell_id = (select workcell_id from user where id = #{submit_id})
         group by code
+    </select>
+    <select id="codeGetInSeqId" resultType="java.lang.String">
+        select seq_id
+        from jig_position
+        where code = #{code}
+          and status = 1
     </select>
 </mapper>

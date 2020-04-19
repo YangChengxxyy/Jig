@@ -13,6 +13,7 @@ public class ScrapSubmit {
     private String submit_time;
     private int used_count;
     private String scrap_reason;
+    private String scrap_type;
     private String scrap_photo_url;
     private String first_time;//初审时间
     private String first_acceptor;//初审人id
@@ -170,6 +171,14 @@ public class ScrapSubmit {
 
     public void setFinal_reason(String final_reason) {
         this.final_reason = final_reason;
+    }
+
+    public String getScrap_type() {
+        return scrap_type;
+    }
+
+    public void setScrap_type(String scrap_type) {
+        this.scrap_type = scrap_type;
     }
 
     @Override

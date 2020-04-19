@@ -3,7 +3,7 @@ package com.jig.controller;
 import com.jig.entity.*;
 import com.jig.filter.SessionInterceptor;
 import com.jig.service.JigService;
-import com.jig.utils.QrCodeUtils;
+import com.jig.utils.QrCodeUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
@@ -11,6 +11,9 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,13 +27,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.Base64.Encoder;
 
 @RestController
+@Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.DEFAULT)
 public class JigJson {
     @Autowired
     private JigService jigService;
@@ -205,18 +208,13 @@ public class JigJson {
                                    @RequestParam("production_line_id") String production_line_id, @RequestParam("code") String codes,
                                    @RequestParam("count") String counts) {
         try {
-            //jigService.highAddShoplist(submit_id, bill_no, production_line_id, codes, counts);
-
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-            String submit_time = df.format(new Date());
-
             PurchaseIncomeSubmit purchaseIncomeSubmit = new PurchaseIncomeSubmit();
             purchaseIncomeSubmit.setSubmit_id(submit_id);
             purchaseIncomeSubmit.setProduction_line_id(Integer.valueOf(production_line_id));
             purchaseIncomeSubmit.setBill_no(bill_no);
             purchaseIncomeSubmit.setCode(codes);
             purchaseIncomeSubmit.setCount(counts);
-            purchaseIncomeSubmit.setSubmit_time(submit_time);
+
 
             jigService.highAddShoplist(purchaseIncomeSubmit);
             return true;
@@ -276,14 +274,7 @@ public class JigJson {
                                                   @RequestParam("count") String count,
                                                   @RequestParam("production_line_id") String production_line_id) {
         try {
-            String user_id = "1230936";
-
-            PurchaseIncomeSubmit submit = jigService.getPurchaseIncomeSubmitInfo(id);
-            String[] a = submit.getOperateUpdateInfo(code,count,production_line_id);
-            String field = a[0];
-            String old_value = a[1];
-            String new_value = a[2];
-            jigService.highUpdatePurchaseIncomeSubmit(id, code, count, production_line_id,user_id,field,old_value,new_value);
+            jigService.highUpdatePurchaseIncomeSubmit(id, code, count, production_line_id);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -327,8 +318,7 @@ public class JigJson {
     @RequestMapping("high/delete_purchase_submit")
     public boolean highDeletePurchaseSubmit(@RequestParam("id") String id) {
         try {
-            String user_id = "1230936";
-            jigService.highDeletePurchaseSubmit(id,user_id);
+            jigService.highDeletePurchaseSubmit(id);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -427,7 +417,7 @@ public class JigJson {
      * @return 成功与否
      */
     @RequestMapping(value = "high/submit_scrap", method = RequestMethod.POST)
-    public boolean highSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason, @RequestParam("file") MultipartFile file) {
+    public boolean highSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason,@RequestParam("scrap_type")String scrap_type ,@RequestParam("file") MultipartFile file) {
         String fileName = file.getOriginalFilename();
         try {
             assert fileName != null;
@@ -442,6 +432,7 @@ public class JigJson {
             scrapSubmit.setSeq_id(seq_id);
             scrapSubmit.setSubmit_id(submit_id);
             scrapSubmit.setScrap_reason(scrap_reason);
+            scrapSubmit.setScrap_type(scrap_type);
 
             jigService.highSubmitScrap(scrapSubmit, pathName);
         } catch (IOException e) {
@@ -463,7 +454,7 @@ public class JigJson {
      * @return 成功与否
      */
     @RequestMapping("high/phone_submit_scrap")
-    public boolean highPhoneSubmitScrap(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason, @RequestParam("token") String token, HttpServletRequest request) {
+    public boolean highPhoneSubmitScrap(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason, @RequestParam("token") String token,@RequestParam("scrap_type")String scrap_type, HttpServletRequest request) {
         try {
             HttpSession session = request.getSession();
             session.removeAttribute("scrap-" + submit_id);
@@ -477,6 +468,7 @@ public class JigJson {
             scrapSubmit.setSeq_id(seq_id);
             scrapSubmit.setSubmit_id(submit_id);
             scrapSubmit.setScrap_reason(scrap_reason);
+            scrapSubmit.setScrap_type(scrap_type);
 
             jigService.highSubmitScrap(scrapSubmit, pathName);
         } catch (Exception e) {
@@ -497,8 +489,7 @@ public class JigJson {
     public boolean highDeleteScrap(@RequestParam("id") String id, @RequestParam("scrap_photo_url") String scrap_photo_url) {
         String fileName = RESOURCE_URL + scrap_photo_url;
         File file = new File(fileName);
-        String user_id = "1230936";
-        return jigService.highDeleteScrap(id,user_id) && file.delete();
+        return jigService.highDeleteScrap(id) && file.delete();
     }
 
     /**
@@ -507,11 +498,14 @@ public class JigJson {
      * @param code 工夹具代码
      * @return 序列号集合
      */
-    @RequestMapping("code_get_seq_id")
+    @RequestMapping("code_get_all_seq_id")
     public List<String> codeGetSeqId(@RequestParam("code") String code) {
         return jigService.codeGetSeqId(code);
     }
-
+    @RequestMapping("code_get_in_seq_id")
+    public List<String> codeGetInSeqId(@RequestParam("code") String code) {
+        return jigService.codeGetInSeqId(code);
+    }
     /**
      * base64传图片 测试
      *
@@ -545,7 +539,7 @@ public class JigJson {
         System.out.println(requestUrl);
         try {
             OutputStream os = response.getOutputStream();
-            QrCodeUtils.encode(requestUrl, os);
+            QrCodeUtil.encode(requestUrl, os);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -598,7 +592,7 @@ public class JigJson {
         System.out.println(requestUrl);
         try {
             OutputStream os = response.getOutputStream();
-            QrCodeUtils.encode(requestUrl, os);
+            QrCodeUtil.encode(requestUrl, os);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -4,7 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 
-public class FileUtils {
+public class FileUtil {
     /**
      * 得到图片字节流 数组大小
      */
@@ -81,7 +81,7 @@ public class FileUtils {
      * @return InputStream流
      */
     public static InputStream getResourceAsStream(String logoPath) {
-        return FileUtils.class.getResourceAsStream(logoPath);
+        return FileUtil.class.getResourceAsStream(logoPath);
     }
 
     /**
