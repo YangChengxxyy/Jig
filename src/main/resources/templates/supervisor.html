@@ -59,11 +59,15 @@
                 const href = $(this).attr("href");
                 $(".page-title li[href='" + href + "']").siblings().removeClass("active");
                 $(".page-title li[href='" + href + "']").addClass("active");
+                $("#main-menu ul li[href='" + href + "']").siblings().removeClass("active");
+                $("#main-menu ul li[href='" + href + "']").addClass("active");
             });
             $(".page-title li").on("click", function () {
                 const href = $(this).attr("href");
                 $("#main-menu ul li[href='" + href + "']").siblings().removeClass("active");
-                $("#main-menu ul li[href='" + href + "']").addClass("active")
+                $("#main-menu ul li[href='" + href + "']").addClass("active");
+                $(".page-title li[href='" + href + "']").siblings().removeClass("active");
+                $(".page-title li[href='" + href + "']").addClass("active");
             });
 
             /*$(".ul li").on('click', function (e) {

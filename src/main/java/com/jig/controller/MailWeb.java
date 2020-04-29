@@ -1,7 +1,6 @@
 package com.jig.controller;
 
 import com.jig.service.MailService;
-import com.jig.utils.SpringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.DEFAULT)
+@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 public class MailWeb {
     @Autowired
     private MailService mailService;

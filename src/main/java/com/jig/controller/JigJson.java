@@ -33,7 +33,7 @@ import java.util.*;
 import java.util.Base64.Encoder;
 
 @RestController
-@Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.DEFAULT)
+@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 public class JigJson {
     @Autowired
     private JigService jigService;
@@ -354,7 +354,7 @@ public class JigJson {
     @RequestMapping("high/search_repair_history")
     public Map<String, Object> highSearchRepairHistory(@RequestParam("id") String id, @RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_name") String submit_name, @RequestParam("status") String status, @RequestParam("start_date") String start_date, @RequestParam("end_date") String end_date, @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
         int all = jigService.highSearchRepairHistoryPage(id, code, seq_id, submit_name, status, start_date, end_date);
-        Map<String, Object> map = getStringObjectMap(jigService.highSearchRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date, page_number,page_size)
+        Map<String, Object> map = getStringObjectMap(jigService.highSearchRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date, page_number, page_size)
                 , (int) Math.ceil(all / (double) all));
         map.put("all", all);
         return map;
@@ -417,7 +417,7 @@ public class JigJson {
      * @return 成功与否
      */
     @RequestMapping(value = "high/submit_scrap", method = RequestMethod.POST)
-    public boolean highSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason,@RequestParam("scrap_type")String scrap_type ,@RequestParam("file") MultipartFile file) {
+    public boolean highSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason, @RequestParam("scrap_type") String scrap_type, @RequestParam("file") MultipartFile file) {
         String fileName = file.getOriginalFilename();
         try {
             assert fileName != null;
@@ -454,7 +454,7 @@ public class JigJson {
      * @return 成功与否
      */
     @RequestMapping("high/phone_submit_scrap")
-    public boolean highPhoneSubmitScrap(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason, @RequestParam("token") String token,@RequestParam("scrap_type")String scrap_type, HttpServletRequest request) {
+    public boolean highPhoneSubmitScrap(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason, @RequestParam("token") String token, @RequestParam("scrap_type") String scrap_type, HttpServletRequest request) {
         try {
             HttpSession session = request.getSession();
             session.removeAttribute("scrap-" + submit_id);
@@ -502,10 +502,12 @@ public class JigJson {
     public List<String> codeGetSeqId(@RequestParam("code") String code) {
         return jigService.codeGetSeqId(code);
     }
+
     @RequestMapping("code_get_in_seq_id")
     public List<String> codeGetInSeqId(@RequestParam("code") String code) {
         return jigService.codeGetInSeqId(code);
     }
+
     /**
      * base64传图片 测试
      *

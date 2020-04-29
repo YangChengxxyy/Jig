@@ -23,7 +23,7 @@ public class PowerInterceptor implements HandlerInterceptor {
         key = s;
     }
 
-    private Log log = LogFactory.getLog(this.getClass());
+    private final Log log = LogFactory.getLog(this.getClass());
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {

@@ -2,7 +2,6 @@ package com.jig.service;
 
 import com.jig.entity.Message;
 import com.jig.mapper.MessageMapper;
-import com.jig.utils.SpringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,7 @@ public class MessageService {
     private MessageMapper messageMapper;
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
     public List<Message> getNewMessage(String id, String type) {
         return messageMapper.getNewMessage(id, type);
     }

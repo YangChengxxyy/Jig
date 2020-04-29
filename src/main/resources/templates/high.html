@@ -44,7 +44,7 @@
     <script src="js/daterangepicker.js"></script>
     <link rel="stylesheet" href="css/daterangepicker.css">
 
-    <link rel="stylesheet" href="css/manager.css">
+    <link rel="stylesheet" href="css/mainStyle.css">
     <link rel="stylesheet" href="css/iconfont.css">
     <script>
         $(function () {
@@ -52,11 +52,15 @@
                 const href = $(this).attr("href");
                 $(".page-title li[href='" + href + "']").siblings().removeClass("active");
                 $(".page-title li[href='" + href + "']").addClass("active");
+                $("#main-menu ul li[href='" + href + "']").siblings().removeClass("active");
+                $("#main-menu ul li[href='" + href + "']").addClass("active");
             });
-            $(".page-title li").on("click",function () {
+            $(".page-title li").on("click", function () {
                 const href = $(this).attr("href");
-                $("#main-menu ul li[href='"+href+"']").siblings().removeClass("active");;
-                $("#main-menu ul li[href='"+href+"']").addClass("active")
+                $("#main-menu ul li[href='" + href + "']").siblings().removeClass("active");
+                $("#main-menu ul li[href='" + href + "']").addClass("active");
+                $(".page-title li[href='" + href + "']").siblings().removeClass("active");
+                $(".page-title li[href='" + href + "']").addClass("active");
             });
             $(".date").datetimepicker({
                 format: 'yyyy-mm-dd',
@@ -189,7 +193,7 @@
                 </li>
                 <li class="main-menu-li">
                     <a href="#main4" data-toggle="tab">
-                        <i class="fa-wrench"></i>
+                        <i class="fa-book"></i>
                         <span class="title">工夹具信息管理</span>
                     </a>
                     <ul>
@@ -2208,7 +2212,7 @@
                 <div class="footer-text">
                     &copy; 2020
                     <strong>Omega</strong>
-                    theme by <a href="http://laborator.co" target="_blank">YC</a>
+                    theme by <a href="" target="_blank">YC</a>
                 </div>
 
 

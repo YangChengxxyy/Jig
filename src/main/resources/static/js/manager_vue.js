@@ -728,8 +728,12 @@ var jig_info = new Vue({
     data:{
         jig_list:[],
         jig:"",
+
+        max_page_number: 0,
         now_page_number: 1,
-        max_page_number: 0
+        now_page_size: 5,
+        page_size_list: ['5', '10', '15', '20'],
+        all_count: 0
     },
     created:function(){
         this.getData();
@@ -740,11 +744,13 @@ var jig_info = new Vue({
             $.ajax({
                 url:"manager/get_jig_info_list",
                 data:{
-                    now_page_number:this.now_page_number
+                    page_number:this.now_page_number,
+                    page_size:this.now_page_size
                 },
                 success:function (res) {
                     that.jig_list = res.data;
                     that.max_page_number = res.max;
+                    that.all_count = res.all;
                 }
             })
         },

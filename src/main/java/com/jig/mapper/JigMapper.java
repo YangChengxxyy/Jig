@@ -140,6 +140,7 @@ public interface JigMapper {
     //void highAddShoplist(@Param("submit_id") String submit_id, @Param("bill_no") String bill_no, @Param("production_line_id") String production_line_id, @Param("code") String code, @Param("count") String count);
 
     void highAddShoplist(@Param("purchase_submit") PurchaseIncomeSubmit purchase_submit);
+
     /**
      * 获取产线列表
      *

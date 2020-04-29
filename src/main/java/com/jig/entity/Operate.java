@@ -1,7 +1,5 @@
 package com.jig.entity;
 
-import org.apache.ibatis.annotations.Insert;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -23,8 +21,8 @@ public class Operate {
     private List<String> field_list;
 
 
-    public Operate(){
-        id = UUID.randomUUID().toString().replaceAll("-","");
+    public Operate() {
+        id = UUID.randomUUID().toString().replaceAll("-", "");
     }
 
     public String getId() {
@@ -131,12 +129,12 @@ public class Operate {
         this.purchase_submit = purchase_submit;
     }
 
-    public void setPurchase_submit(){
+    public void setPurchase_submit() {
         this.purchase_submit = new PurchaseIncomeSubmit("create");
-        if(this.field != null && this.field != ""){
+        if (this.field != null && this.field != "") {
             String[] field_list = this.field.split("~");
             String[] value_list = this.new_value.split("~");
-            for(int i=0;i<field_list.length;i++) {
+            for (int i = 0; i < field_list.length; i++) {
                 switch (field_list[i]) {
                     case "id":
                         this.purchase_submit.setId(value_list[i]);
@@ -164,24 +162,24 @@ public class Operate {
         }
     }
 
-    public OperateUpdateInfo setOperateUpdateInfo(){
+    public OperateUpdateInfo setOperateUpdateInfo() {
         OperateUpdateInfo updateInfo = new OperateUpdateInfo();
-        if(this.field != null && this.field !=  "" && this.old_value != null && this.old_value !=  "") {
+        if (this.field != null && this.field != "" && this.old_value != null && this.old_value != "") {
             //存在隐患,如果old_value不为null，而new_value是null,现在先不考虑
 
             String[] field_list = this.field.split("~");
             String[] old_value_list;
-            if(this.old_value == null || this.old_value.equals("")){//防止出现old_value_field的length只有1，与new_value_field不同,出现超出异常
+            if (this.old_value == null || this.old_value.equals("")) {//防止出现old_value_field的length只有1，与new_value_field不同,出现超出异常
                 old_value_list = new String[field_list.length];
-                for(int i=0;i<old_value_list.length;i++){
+                for (int i = 0; i < old_value_list.length; i++) {
                     old_value_list[i] = "";
                 }
-            }else{
+            } else {
                 old_value_list = this.old_value.split("~");
             }
             String[] new_value_list = this.new_value.split("~");
 
-            for(int i=0;i<field_list.length;i++) {
+            for (int i = 0; i < field_list.length; i++) {
                 switch (field_list[i]) {
                     case "code":
                         updateInfo.setUpdate_code(old_value_list[i] + "~" + new_value_list[i]);
@@ -214,7 +212,7 @@ public class Operate {
                         String old_status = old_value_list[i];
                         String new_status = new_value_list[i];
 
-                        switch (old_value_list[i]){
+                        switch (old_value_list[i]) {
                             case "0":
                                 old_status = "待审批";
                                 break;
@@ -232,7 +230,7 @@ public class Operate {
                                 break;
                         }
 
-                        switch (new_value_list[i]){
+                        switch (new_value_list[i]) {
                             case "0":
                                 new_status = "待审批";
                                 break;
@@ -270,9 +268,9 @@ public class Operate {
         return updateInfo;
     }
 
-    public String toString(){
+    public String toString() {
         String str = "";
-        if(this.field != null && this.field !=  "") {
+        if (this.field != null && this.field != "") {
             String[] field_arr = this.field.split("/|");
         }
         /*if(field_arr.length>0) {
@@ -280,38 +278,38 @@ public class Operate {
             //String[] field = tablefield[1].split("/|");
         }*/
         String strType = "";
-        if(type.equals("delete")){
+        if (type.equals("delete")) {
             strType = "删除申请";
-        }else if (type.equals("update")){
-            if(old_value.equals("0")){
-                if(new_value.equals("1")){
+        } else if (type.equals("update")) {
+            if (old_value.equals("0")) {
+                if (new_value.equals("1")) {
                     strType = "初审不通过";
-                }else if(new_value.equals("2")){
+                } else if (new_value.equals("2")) {
                     strType = "初审通过";
                 }
-            }else if(old_value.equals("2")){
-                if(new_value.equals("3")){
+            } else if (old_value.equals("2")) {
+                if (new_value.equals("3")) {
                     strType = "终审不通过";
-                }else if(new_value.equals("4")){
+                } else if (new_value.equals("4")) {
                     strType = "终审通过";
                 }
-            }else {
+            } else {
                 strType = "修改申请信息";
             }
-        }else if(type.equals("insert")){
+        } else if (type.equals("insert")) {
             strType = "提交申请";
         }
         String str_operate_type = "";
-        if(operate_man_type.equals("naive")){
+        if (operate_man_type.equals("naive")) {
             str_operate_type = "初级用户";
-        }else if(operate_man_type.equals("high")){
+        } else if (operate_man_type.equals("high")) {
             str_operate_type = "高级用户";
-        }else if (operate_man_type.equals("manager")){
+        } else if (operate_man_type.equals("manager")) {
             str_operate_type = "经理";
-        }else if(operate_man_type.equals("supervisor")){
+        } else if (operate_man_type.equals("supervisor")) {
             str_operate_type = "监管员";
         }
-        str+=str_operate_type+" "+operate_man_name+"  "+strType;
+        str += str_operate_type + " " + operate_man_name + "  " + strType;
         this.setTo_string(str);
         this.setPurchase_submit();
         return str;

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Scanner;
 
 public class Shudu {
-    private int[][] matrix;
+    private final int[][] matrix;
 
     public Shudu(int[][] matrix) {
         this.matrix = matrix;

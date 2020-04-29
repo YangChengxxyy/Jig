@@ -5,6 +5,9 @@ import com.jig.entity.Message;
 import com.jig.service.MessageService;
 import com.jig.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +18,7 @@ import java.text.ParseException;
 import java.util.List;
 
 @RestController
+@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 public class MessageJson {
     @Autowired
     private MessageService messageService;
@@ -72,9 +76,9 @@ public class MessageJson {
     @RequestMapping("read_message")
     public boolean readMessage(@RequestParam("id") String id, @RequestParam("message_id") String message_id) {
         try {
-            messageService.readMessage(id,message_id);
+            messageService.readMessage(id, message_id);
             return true;
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;

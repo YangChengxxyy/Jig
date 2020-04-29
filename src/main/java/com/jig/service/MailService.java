@@ -24,6 +24,7 @@ public class MailService {
 
     @Autowired
     private JavaMailSender mailSender;
+
     /**
      * 简单文本邮件
      *

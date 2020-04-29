@@ -16,9 +16,9 @@ public class JigService {
     @Autowired
     private JigMapper jigMapper;
 
-    public List<JigDefinition> naiveSearchJigDefinition(String code, String name, String workcell, String family, String userFor, int pageNumber,int page_size) {
+    public List<JigDefinition> naiveSearchJigDefinition(String code, String name, String workcell, String family, String userFor, int pageNumber, int page_size) {
         pageNumber = (pageNumber - 1) * page_size;
-        return jigMapper.naiveSearchJigDefinition(code, name, workcell, family, userFor, pageNumber,page_size);
+        return jigMapper.naiveSearchJigDefinition(code, name, workcell, family, userFor, pageNumber, page_size);
     }
 
     public int naiveSearchJigDefinitionPage(String code, String name, String workcell, String family, String userFor) {
@@ -72,7 +72,7 @@ public class JigService {
         jigMapper.highAddShoplist(submit_id, bill_no, production_line_id, code, count);
     }*/
 
-    public void highAddShoplist(PurchaseIncomeSubmit purchaseIncomeSubmit){
+    public void highAddShoplist(PurchaseIncomeSubmit purchaseIncomeSubmit) {
         jigMapper.highAddShoplist(purchaseIncomeSubmit);
     }
 
@@ -84,9 +84,9 @@ public class JigService {
         return jigMapper.getCodeList();
     }
 
-    public List<PurchaseIncomeSubmit> highGetPurchaseIncomeSubmitList(int page_number,int page_size) {
+    public List<PurchaseIncomeSubmit> highGetPurchaseIncomeSubmitList(int page_number, int page_size) {
         page_number = (page_number - 1) * page_size;
-        return jigMapper.highGetPurchaseIncomeSubmitList(page_number,page_size);
+        return jigMapper.highGetPurchaseIncomeSubmitList(page_number, page_size);
     }
 
     public int highGetPurchaseIncomeSubmitListPage() {
@@ -97,9 +97,9 @@ public class JigService {
         jigMapper.highUpdatePurchaseIncomeSubmit(id, code, count, production_line_id);
     }
 
-    public List<PurchaseIncomeHistory> highSearchPurchaseIncomeHistory(String bill_no, String submit_name, String code, String production_line_id, String status, String start_date, String end_date, int page_number,int page_size) {
+    public List<PurchaseIncomeHistory> highSearchPurchaseIncomeHistory(String bill_no, String submit_name, String code, String production_line_id, String status, String start_date, String end_date, int page_number, int page_size) {
         page_number = (page_number - 1) * page_size;
-        return jigMapper.highSearchPurchaseIncomeHistory(bill_no, submit_name, code, production_line_id, status, start_date, end_date, page_number,page_size);
+        return jigMapper.highSearchPurchaseIncomeHistory(bill_no, submit_name, code, production_line_id, status, start_date, end_date, page_number, page_size);
     }
 
     public int highSearchPurchaseIncomeHistoryPage(String bill_no, String submit_name, String code, String production_line_id, String status, String start_date, String end_date) {
@@ -114,36 +114,36 @@ public class JigService {
         jigMapper.highDeletePurchaseSubmit(id);
     }
 
-    public List<RepairJig> highGetRepairJig(String id,int page_number,int page_size) {
+    public List<RepairJig> highGetRepairJig(String id, int page_number, int page_size) {
         page_number = (page_number - 1) * page_size;
-        return jigMapper.highGetRepairJig(id,page_number,page_size);
+        return jigMapper.highGetRepairJig(id, page_number, page_size);
     }
 
     public int highGetRepairJigPage(String id) {
         return jigMapper.highGetRepairJigPage(id);
     }
 
-    public List<RepairJigHistory> highSearchRepairHistory(String id,String code, String seq_id, String submit_name, String status, String start_date, String end_date, int page_number,int page_size) {
+    public List<RepairJigHistory> highSearchRepairHistory(String id, String code, String seq_id, String submit_name, String status, String start_date, String end_date, int page_number, int page_size) {
         page_number = (page_number - 1) * page_size;
-        return jigMapper.highSearchRepairHistory(id,code, seq_id, submit_name, status, start_date, end_date, page_number,page_size);
+        return jigMapper.highSearchRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date, page_number, page_size);
     }
 
-    public int highSearchRepairHistoryPage(String id,String code, String seq_id, String submit_name, String status, String start_date, String end_date) {
-        return jigMapper.highSearchRepairHistoryPage(id,code, seq_id, submit_name, status, start_date, end_date);
+    public int highSearchRepairHistoryPage(String id, String code, String seq_id, String submit_name, String status, String start_date, String end_date) {
+        return jigMapper.highSearchRepairHistoryPage(id, code, seq_id, submit_name, status, start_date, end_date);
     }
 
-    public List<ScrapSubmit> highGetScrap(String submit_id, int page_number,int page_size) {
+    public List<ScrapSubmit> highGetScrap(String submit_id, int page_number, int page_size) {
         page_number = (page_number - 1) * page_size;
-        return jigMapper.highGetScrap(submit_id, page_number,page_size);
+        return jigMapper.highGetScrap(submit_id, page_number, page_size);
     }
 
     public int highGetScrapPage(String submit_id) {
         return jigMapper.highGetScrapPage(submit_id);
     }
 
-    public List<ScrapHistory> highSearchScrapHistory(String code, String seq_id, String submit_id, String scrap_reason, String status, String start_date, String end_date, int page_number,int page_size) {
+    public List<ScrapHistory> highSearchScrapHistory(String code, String seq_id, String submit_id, String scrap_reason, String status, String start_date, String end_date, int page_number, int page_size) {
         page_number = (page_number - 1) * page_size;
-        return jigMapper.highSearchScrapHistory(code, seq_id, submit_id, scrap_reason, status, start_date, end_date, page_number,page_size);
+        return jigMapper.highSearchScrapHistory(code, seq_id, submit_id, scrap_reason, status, start_date, end_date, page_number, page_size);
     }
 
     public int highSearchScrapHistoryPage(String code, String seq_id, String submit_id, String scrap_reason, String status, String start_date, String end_date) {
@@ -159,7 +159,7 @@ public class JigService {
         return jigMapper.highSearchAllRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date);
     }
 
-    public void highSubmitScrap(ScrapSubmit scrapSubmit,String pathName) {
+    public void highSubmitScrap(ScrapSubmit scrapSubmit, String pathName) {
         jigMapper.highSubmitScrap(scrapSubmit, pathName);
     }
 
@@ -204,11 +204,11 @@ public class JigService {
     }
 
     public void highAgreeRepairSubmit(int id, String submit_id) {
-        jigMapper.highAgreeRepairSubmit(id,submit_id);
+        jigMapper.highAgreeRepairSubmit(id, submit_id);
     }
 
     public void highDisagreeRepairSubmit(int id, String submit_id, String reason) {
-        jigMapper.highDisagreeRepairSubmit(id,submit_id,reason);
+        jigMapper.highDisagreeRepairSubmit(id, submit_id, reason);
     }
 
     public List<String> codeGetInSeqId(String code) {

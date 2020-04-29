@@ -2,6 +2,7 @@ package com.jig.controller;
 
 import com.jig.entity.*;
 import com.jig.service.JigService;
+import com.jig.utils.PoiUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Isolation;
@@ -18,15 +19,14 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jig.utils.PoiUtil;
-
 @Controller
-@Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.DEFAULT)
+@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 public class JigWeb {
     @Autowired
     private JigService jigService;
     @Autowired
     private PoiUtil poiUtil;
+
     @RequestMapping(value = "show_demo", method = {RequestMethod.POST, RequestMethod.GET})
     public String showDemo(Model model) {
         List<DemoEntity> a = new ArrayList<>();
@@ -96,8 +96,8 @@ public class JigWeb {
 
 
     @RequestMapping("high/download_one_repair_history")
-    public void highDownloadOneRepairHistory(HttpServletResponse response, @RequestParam("id") String id, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number, @RequestParam(value = "file_name") String file_name,@RequestParam("page_size")int page_size) throws Exception {
-        List<RepairJigHistory> list = jigService.highSearchRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date, page_number,page_size);
+    public void highDownloadOneRepairHistory(HttpServletResponse response, @RequestParam("id") String id, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number, @RequestParam(value = "file_name") String file_name, @RequestParam("page_size") int page_size) throws Exception {
+        List<RepairJigHistory> list = jigService.highSearchRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date, page_number, page_size);
         poiUtil.outputFile(response, file_name, list);
     }
 

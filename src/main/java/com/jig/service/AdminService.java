@@ -12,13 +12,13 @@ public class AdminService {
     @Autowired
     private AdminMapper adminMapper;
 
-    public List<User> searchUserInformation(String submit_id, int page_number,int page_size, String id, String name, String workcell_id, String start_date, String end_date) {
+    public List<User> searchUserInformation(String submit_id, int page_number, int page_size, String id, String name, String workcell_id, String start_date, String end_date) {
         page_number = (page_number - 1) * page_size;
-        return adminMapper.getUserInformation(submit_id, page_number,page_size,id,name,workcell_id,start_date,end_date);
+        return adminMapper.getUserInformation(submit_id, page_number, page_size, id, name, workcell_id, start_date, end_date);
     }
 
     public int searchUserInformationPage(String submit_id, String id, String name, String workcell_id, String start_date, String end_date) {
-        return adminMapper.getUserInformationPage(submit_id,id,name,workcell_id,start_date,end_date);
+        return adminMapper.getUserInformationPage(submit_id, id, name, workcell_id, start_date, end_date);
     }
 
     public List<Workcell> getWorkcellList() {
@@ -34,7 +34,7 @@ public class AdminService {
     }
 
     public List<User> searchAllUserInformation(String submit_id, String id, String name, String workcell_id, String start_date, String end_date) {
-        return adminMapper.searchAllUserInformation(submit_id,id,name,workcell_id,start_date,end_date);
+        return adminMapper.searchAllUserInformation(submit_id, id, name, workcell_id, start_date, end_date);
     }
 
     public List<JigPart> getPart() {

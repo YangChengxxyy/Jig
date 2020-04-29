@@ -1,6 +1,6 @@
 package com.jig.entity;
 
-public class Message{
+public class Message {
     /**
      * UUID生成
      */

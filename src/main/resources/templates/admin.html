@@ -33,7 +33,8 @@
 
     <script src="js/vue.js"></script>
     <script src="js/echarts.js"></script>
-    <script src="js/vue-echarts@4.0.2.js"></script>
+    <script src="js/v-charts.min.js"></script>
+    <link rel="stylesheet" href="/css/v-charts.min.css">
     <script src="js/shake.js"></script>
     <!--    <script src="js/bootstrap.min.js"></script>-->
     <!--日期选择器-->
@@ -56,11 +57,15 @@
                 const href = $(this).attr("href");
                 $(".page-title li[href='" + href + "']").siblings().removeClass("active");
                 $(".page-title li[href='" + href + "']").addClass("active");
+                $("#main-menu ul li[href='" + href + "']").siblings().removeClass("active");
+                $("#main-menu ul li[href='" + href + "']").addClass("active");
             });
             $(".page-title li").on("click", function () {
                 const href = $(this).attr("href");
                 $("#main-menu ul li[href='" + href + "']").siblings().removeClass("active");
-                $("#main-menu ul li[href='" + href + "']").addClass("active")
+                $("#main-menu ul li[href='" + href + "']").addClass("active");
+                $(".page-title li[href='" + href + "']").siblings().removeClass("active");
+                $(".page-title li[href='" + href + "']").addClass("active");
             });
             $(".date").datetimepicker({
                 format: 'yyyy-mm-dd',
@@ -181,6 +186,30 @@
                             </a>
                         </li>
                     </ul>
+                </li>
+                <li class="main-menu-li">
+                    <a href="#main4" data-toggle="tab" onclick="resize()">
+                        <i class="fa-line-chart"></i>
+                        <span class="title">详细报表</span>
+                    </a>
+                    <ul>
+                        <li class="active" href="#jig_use_analysis" data-toggle="tab">
+                            <a class="active" href="#jig_use_analysis" data-toggle="tab" onclick="resize()">
+                                工夹具使用分析
+                            </a>
+                        </li>
+                        <li href="#jig_life_analysis" data-toggle="tab">
+                            <a href="#jig_life_analysis" data-toggle="tab" onclick="resize()">
+                                工夹具寿命以及损坏分析
+                            </a>
+                        </li>
+                        <li href="#provider_analysis" data-toggle="tab">
+                            <a href="#provider_analysis" data-toggle="tab" onclick="resize()">
+                                厂商统计分析
+                            </a>
+                        </li>
+                    </ul>
+
                 </li>
             </ul>
 
@@ -783,6 +812,193 @@
                                 </tr>
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="main4" class="tab-content tab-pane fade">
+                <div class="page-title">
+
+                    <div class="title-env">
+                        <h1 class="title">详细报表</h1>
+                    </div>
+
+                    <div class="breadcrumb-env">
+
+                        <ol class="breadcrumb bc-1">
+                            <li class="active" href="#jig_use_analysis" data-toggle="tab" onclick="resize()">
+                                <a onclick="resize()">工夹具使用分析</a>
+                            </li>
+                            <li href="#jig_life_analysis" data-toggle="tab" onclick="resize()">
+                                <a>工夹具寿命分析</a>
+                            </li>
+                            <li href="#provider_analysis" data-toggle="tab" onclick="resize()">
+                                <a>厂商统计分析</a>
+                            </li>
+                        </ol>
+
+                    </div>
+
+                </div>
+                <div id="jig_use_analysis" class="tab-pane in active">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        历年工夹具使用次数
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <ve-histogram :data="mnsycs" :extend="mnsycsExtend" :toolbox="toolbox" :data-zoom="mnsycsDataZoom"></ve-histogram>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        今年工夹具各个产线的使用占比
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <ve-pie :data="zb" :toolbox="toolbox"></ve-pie>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        历年各条产线的使用次数
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <ve-line :data="gtcx" :extend="mnsycsExtend" :data-zoom="mnsycsDataZoom" :toolbox="toolbox"></ve-line>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="jig_life_analysis" class="tab-pane">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        总体寿命分布图
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <ve-histogram :data="allLeft" :toolbox="toolbox" :extend="allLeftExtend" :data-zoom="dataZoom"></ve-histogram>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        每条产线的平均夹具寿命
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <ve-line :data="everyLeft" :toolbox="toolbox" :data-zoom="dataZoom"></ve-line>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        工夹具损坏占比统计
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <ve-pie :data="repairZb" :toolbox="toolbox"></ve-pie>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        各厂商的损坏统计
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <ve-histogram :data="repairCSTJ" :toolbox="toolbox" :data-zoom="dataZoom" :extend="allLeftExtend"></ve-histogram>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="provider_analysis" class="tab-pane">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        各厂商LRM
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <ve-line :data="lrm.data" :colors="lrm.colors" :extend="lrm.extend"></ve-line>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        厂商各维度分析
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <ve-pie :data="csbl.data"></ve-pie>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title form-inline">
+                                    具体厂商
+                                    <select class="form-control" style="display: inline-block">
+                                        <option>A公司</option>
+                                    </select>
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-sm-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">
+                                                厂商各维度分析
+                                            </h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <ve-radar :data="wdfx.data" :extend="wdfx.extend"></ve-radar>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">
+                                                往年供货量
+                                            </h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <ve-line :data="wnghl.data" :extend="wnghl.extend"></ve-line>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

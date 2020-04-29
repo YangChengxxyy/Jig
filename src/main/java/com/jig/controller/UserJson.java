@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpSession;
 
 @RestController
-@Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.DEFAULT)
+@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 public class UserJson {
     @Autowired
     private UserService userService;
@@ -24,10 +24,10 @@ public class UserJson {
     }
 
     @RequestMapping("login_check")
-    public LoginState loginCheck(@RequestParam(value = "id") String id, @RequestParam(value = "password") String password,@RequestParam(value = "workcell_id")String workcell_id, HttpSession session) {
-        LoginState state = userService.loginCheck(id, password,workcell_id);
+    public LoginState loginCheck(@RequestParam(value = "id") String id, @RequestParam(value = "password") String password, @RequestParam(value = "workcell_id") String workcell_id, HttpSession session) {
+        LoginState state = userService.loginCheck(id, password, workcell_id);
         if (state.getStateCode() == 0) {
-            session.setAttribute("loginState",state);
+            session.setAttribute("loginState", state);
         }
         return state;
     }

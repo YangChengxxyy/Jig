@@ -36,11 +36,15 @@
             const href = $(this).attr("href");
             $(".page-title li[href='" + href + "']").siblings().removeClass("active");
             $(".page-title li[href='" + href + "']").addClass("active");
+            $("#main-menu ul li[href='" + href + "']").siblings().removeClass("active");
+            $("#main-menu ul li[href='" + href + "']").addClass("active");
         });
-        $(".page-title li").on("click",function () {
+        $(".page-title li").on("click", function () {
             const href = $(this).attr("href");
-            $("#main-menu ul li[href='"+href+"']").siblings().removeClass("active");;
-            $("#main-menu ul li[href='"+href+"']").addClass("active")
+            $("#main-menu ul li[href='" + href + "']").siblings().removeClass("active");
+            $("#main-menu ul li[href='" + href + "']").addClass("active");
+            $(".page-title li[href='" + href + "']").siblings().removeClass("active");
+            $(".page-title li[href='" + href + "']").addClass("active");
         });
     </script>
 </head>
@@ -155,14 +159,14 @@
                 <li class="dropdown hover-line">
                     <a href="#" data-toggle="dropdown">
                         <i class="fa-bell-o"></i>
-                        <span class="badge badge-purple">7</span>
+                        <span class="badge badge-purple">1</span>
                     </a>
 
                     <ul class="dropdown-menu notifications">
                         <li class="top">
                             <p class="small">
-                                <a href="#" class="pull-right">Mark all Read</a>
-                                You have <strong>3</strong> new notifications.
+                                <a href="#" class="pull-right">标记所有为已读</a>
+                                你有<strong>1</strong>新消息
                             </p>
                         </li>
 
@@ -173,81 +177,11 @@
                                         <i class="fa-user"></i>
 
                                         <span class="line">
-												<strong>New user registered</strong>
+												<strong>你的报修申请得到了处理</strong>
 											</span>
 
                                         <span class="line small time">
-												30 seconds ago
-											</span>
-                                    </a>
-                                </li>
-
-                                <li class="active notification-secondary">
-                                    <a href="#">
-                                        <i class="fa-lock"></i>
-
-                                        <span class="line">
-												<strong>Privacy settings have been changed</strong>
-											</span>
-
-                                        <span class="line small time">
-												3 hours ago
-											</span>
-                                    </a>
-                                </li>
-
-                                <li class="notification-primary">
-                                    <a href="#">
-                                        <i class="fa-thumbs-up"></i>
-
-                                        <span class="line">
-												<strong>Someone special liked this</strong>
-											</span>
-
-                                        <span class="line small time">
-												2 minutes ago
-											</span>
-                                    </a>
-                                </li>
-
-                                <li class="notification-danger">
-                                    <a href="#">
-                                        <i class="fa-calendar"></i>
-
-                                        <span class="line">
-												John cancelled the event
-											</span>
-
-                                        <span class="line small time">
-												9 hours ago
-											</span>
-                                    </a>
-                                </li>
-
-                                <li class="notification-info">
-                                    <a href="#">
-                                        <i class="fa-database"></i>
-
-                                        <span class="line">
-												The server is status is stable
-											</span>
-
-                                        <span class="line small time">
-												yesterday at 10:30am
-											</span>
-                                    </a>
-                                </li>
-
-                                <li class="notification-warning">
-                                    <a href="#">
-                                        <i class="fa-envelope-o"></i>
-
-                                        <span class="line">
-												New comments waiting approval
-											</span>
-
-                                        <span class="line small time">
-												last week
+												30秒前
 											</span>
                                     </a>
                                 </li>
@@ -256,7 +190,7 @@
 
                         <li class="external">
                             <a href="#">
-                                <span>View all notifications</span>
+                                <span>查看所有消息</span>
                                 <i class="fa-link-ext"></i>
                             </a>
                         </li>

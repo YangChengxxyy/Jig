@@ -14,6 +14,7 @@ public class RepairJigHistory {
     private String acceptor_time;
     private String acceptor_reason;
     private String status;
+
     public String getId() {
         return id;
     }

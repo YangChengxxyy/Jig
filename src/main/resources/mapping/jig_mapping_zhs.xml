@@ -67,7 +67,7 @@
     </update>
     <select id="get_manager_jig_info_list" resultType="com.jig.entity.JigDefinition">
         select *  from jig_definition j inner join jig_family f on j.family_id = f.id
-        limit #{page_number},5
+        limit #{page_number},#{page_size}
     </select>
     <select id="get_manager_jig_info_list_pages" resultType="java.lang.Integer">
         SELECT count(*) from jig_definition

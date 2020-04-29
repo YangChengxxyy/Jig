@@ -1,7 +1,5 @@
 package com.jig.entity;
 
-import java.util.Arrays;
-
 public class OperateUpdateInfo {
     private String id;
     private String update_code;//多个用 | 分开

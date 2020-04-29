@@ -1,4 +1,3 @@
-Vue.component('v-chart', VueECharts);
 Vue.component('my-pagination', page);
 let production_line_list = [];
 let code_list = [];
@@ -129,7 +128,7 @@ const information_manage = new Vue({
             let data = {
                 submit_id: id,
                 page_number: this.now_page_number,
-                page_size:this.now_page_size,
+                page_size: this.now_page_size,
                 id: this.id,
                 name: this.name,
                 workcell_id: this.workcell_id,
@@ -147,7 +146,7 @@ const information_manage = new Vue({
             let data = {
                 submit_id: id,
                 page_number: this.now_page_number,
-                page_size:this.now_page_size,
+                page_size: this.now_page_size,
                 id: this.id,
                 name: this.name,
                 workcell_id: this.workcell_id,
@@ -311,6 +310,270 @@ const cn_en = new Vue({
             })
         }
     },
+    computed: {},
+    watch: {},
+});
+const jig_use_analysis = new Vue({
+    el: "#jig_use_analysis",
+    data: {
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        mnsycs: {
+            columns: ['时间', 'EF0789', 'EF0273', 'EF0972'],
+            rows: [
+                {'时间': '2012', 'EF0789': 180, 'EF0273': 180, 'EF0972': 380},
+                {'时间': '2013', 'EF0789': 270, 'EF0273': 210, 'EF0972': 310},
+                {'时间': '2014', 'EF0789': 210, 'EF0273': 45, 'EF0972': 150},
+                {'时间': '2015', 'EF0789': 180, 'EF0273': 570, 'EF0972': 230},
+                {'时间': '2016', 'EF0789': 100, 'EF0273': 170, 'EF0972': 230},
+                {'时间': '2017', 'EF0789': 123, 'EF0273': 190, 'EF0972': 310},
+                {'时间': '2018', 'EF0789': 256, 'EF0273': 110, 'EF0972': 380},
+                {'时间': '2019', 'EF0789': 89, 'EF0273': 423, 'EF0972': 240}
+            ]
+        },
+        mnsycsExtend: {
+            series: {
+                barWidth: '23%',
+                label: {show: true, position: "top"},
+            },
+            yAxis: {
+                axisLabel: {
+                    formatter: '{value}次'
+                }
+            }
+        },
+        mnsycsDataZoom: {
+            type: 'slider',
+            start: 0,
+            end: 100
+        },
+        zb: {
+            columns: ['产线', '使用次数'],
+            rows: [
+                {'产线': '一号产线', '使用次数': '2012'},
+                {'产线': '二号产线', '使用次数': '2912'},
+                {'产线': '三号产线', '使用次数': '1012'},
+                {'产线': '四号产线', '使用次数': '412'},
+                {'产线': '其他', '使用次数': '12'}
+            ]
+        },
+        gtcx: {
+            columns: ['时间', '一号产线', '二号产线', '三号产线'],
+            rows: [
+                {'时间': '2004', '一号产线': 256, '二号产线': 45, '三号产线': 380},
+                {'时间': '2005', '一号产线': 270, '二号产线': 210, '三号产线': 310},
+                {'时间': '2006', '一号产线': 210, '二号产线': 180, '三号产线': 500},
+                {'时间': '2007', '一号产线': 180, '二号产线': 57, '三号产线': 230},
+                {'时间': '2008', '一号产线': 100, '二号产线': 230, '三号产线': 170},
+                {'时间': '2009', '一号产线': 123, '二号产线': 190, '三号产线': 310},
+                {'时间': '2010', '一号产线': 180, '二号产线': 110, '三号产线': 380},
+                {'时间': '2011', '一号产线': 89, '二号产线': 423, '三号产线': 240},
+                {'时间': '2012', '一号产线': 180, '二号产线': 180, '三号产线': 380},
+                {'时间': '2013', '一号产线': 270, '二号产线': 210, '三号产线': 310},
+                {'时间': '2014', '一号产线': 210, '二号产线': 45, '三号产线': 150},
+                {'时间': '2015', '一号产线': 180, '二号产线': 570, '三号产线': 230},
+                {'时间': '2016', '一号产线': 100, '二号产线': 170, '三号产线': 230},
+                {'时间': '2017', '一号产线': 123, '二号产线': 190, '三号产线': 310},
+                {'时间': '2018', '一号产线': 256, '二号产线': 110, '三号产线': 380},
+                {'时间': '2019', '一号产线': 89, '二号产线': 423, '三号产线': 240}
+            ]
+        },
+        jjgtcxExtend: {
+            yAxis: {
+                axisLabel: {
+                    formatter: '{value}次'
+                }
+            }
+        }
+    },
+    created: function () {
+    },
+    mounted: function () {
+        // setInterval(()=>{
+        //     $.each(this.$children,(i,v)=>{
+        //         v.echarts.resize();
+        //     })
+        // },100)
+    },
+    methods: {
+        getData: function () {
+        }
+    },
+    computed: {},
+    watch: {},
+});
+
+function resize() {
+    setTimeout(() => {
+        $.each(jig_use_analysis.$children, (i, v) => {
+            v.echarts.resize();
+        })
+        $.each(jig_life_analysis.$children, (i, v) => {
+            v.echarts.resize();
+        })
+        $.each(provider_analysis.$children, (i, v) => {
+            v.echarts.resize();
+        })
+    }, 400)
+}
+
+const jig_life_analysis = new Vue({
+    el: "#jig_life_analysis",
+    data: {
+        toolbox: {
+            feature: {
+                saveAsImage: {},
+            }
+        },
+        allLeft: {
+            columns: ['range', '工夹具数量'],
+            rows: [
+                {'range': '<1000', '工夹具数量': '9'},
+                {'range': '1000~3000', '工夹具数量': '15'},
+                {'range': '3000~5000', '工夹具数量': '23'},
+                {'range': '5000~7000', '工夹具数量': '43'},
+                {'range': '>7000', '工夹具数量': '7'},
+            ]
+        },
+        allLeftExtend: {
+            series: {
+                label: {show: true, position: "top"},
+                barWidth: '30%'
+            },
+            yAxis: {
+                axisLabel: {
+                    formatter: '{value}件'
+                }
+            }
+        },
+        everyLeft: {
+            columns: ['range', '一号产线', '二号产线', '三号产线', '四号产线'],
+            rows: [
+                {'range': '<1000', '一号产线': '9', '二号产线': '3', '三号产线': '2', '四号产线': '6'},
+                {'range': '1000~3000', '一号产线': '14', '二号产线': '17', '三号产线': '19', '四号产线': '21'},
+                {'range': '3000~5000', '一号产线': '30', '二号产线': '23', '三号产线': '25', '四号产线': '33'},
+                {'range': '5000~7000', '一号产线': '37', '二号产线': '31', '三号产线': '32', '四号产线': '44'},
+                {'range': '>7000', '一号产线': '1', '二号产线': '3', '三号产线': '5', '四号产线': '9'},
+            ]
+        },
+        dataZoom: {
+            type: 'slider',
+            start: 0,
+            end: 100
+        },
+        repairZb: {
+            columns: ['分类', '数量'],
+            rows: [
+                {'分类': '外观磨损', '数量': 22},
+                {'分类': '夹具磨损', '数量': 21},
+                {'分类': '零件掉落', '数量': 33},
+                {'分类': '失去精准度', '数量': 26},
+            ]
+        },
+        repairCSTJ: {
+            columns: ['分类', 'A公司', 'B公司'],
+            rows: [
+                {'分类': '外观磨损', 'A公司': '15', 'B公司': '30'},
+                {'分类': '夹具磨损', 'A公司': '20', 'B公司': '22'},
+                {'分类': '零件掉落', 'A公司': '45', 'B公司': '24'},
+                {'分类': '失去精准度', 'A公司': '37', 'B公司': '14'},
+            ]
+        }
+    },
+    created: function () {
+    },
+    methods: {},
+    computed: {},
+    watch: {},
+});
+const provider_analysis = new Vue({
+    el: "#provider_analysis",
+    data: {
+        lrm: {
+            data: {
+                columns: ['公司', '夹具平均LRM', '最差LRM', '最优LRM'],
+                rows: [
+                    {'公司': 'A公司', '夹具平均LRM': 70, '最差LRM': 50, '最优LRM': 100},
+                    {'公司': 'B公司', '夹具平均LRM': 50, '最差LRM': 20, '最优LRM': 80},
+                    {'公司': 'C公司', '夹具平均LRM': 85, '最差LRM': 75, '最优LRM': 185},
+                    {'公司': 'D公司', '夹具平均LRM': 130, '最差LRM': 60, '最优LRM': 150}
+                ]
+            },
+            colors: ['#5AB1EF', '#fa6e86', '#5edb9d'],
+            extend: {
+                series: {
+                    label: {show: true, position: "top"},
+                }
+            }
+        },
+        csbl: {
+            data: {
+                columns: ['公司', '数量'],
+                rows: [
+                    {'公司': 'A公司', '数量': '42'},
+                    {'公司': 'B公司', '数量': '25'},
+                    {'公司': 'C公司', '数量': '16'},
+                    {'公司': 'D公司', '数量': '15'},
+                ]
+            }
+        },
+        wdfx: {
+            data: {
+                columns: ['公司', '可靠性', '依赖程度', '夹具质量', '夹具性价比'],
+                rows: [
+                    {'公司': 'A公司', '可靠性': '50', '依赖程度': '97', '夹具质量': '54', '夹具性价比': '90'},
+                ]
+            },
+            extend: {
+                radar: {
+                    indicator: [
+                        {
+                            text: '可靠性',
+                            max: 100,
+                        },
+                        {
+                            text: '依赖程度',
+                            max: 100,
+                        },
+                        {
+                            text: '夹具质量',
+                            max: 100,
+                        },
+                        {
+                            text: '夹具性价比',
+                            max: 100,
+                        }
+                    ]
+                }
+            }
+        },
+        wnghl: {
+            data: {
+                columns: ['time', '供货量'],
+                rows: [
+                    {'time': '2012', '供货量': 80},
+                    {'time': '2013', '供货量': 86},
+                    {'time': '2014', '供货量': 93},
+                    {'time': '2015', '供货量': 110},
+                    {'time': '2016', '供货量': 130},
+                    {'time': '2017', '供货量': 102},
+                    {'time': '2018', '供货量': 76},
+                    {'time': '2019', '供货量': 67},
+                ]
+            },
+            extend: {
+                series: {
+                    label: {show: true, position: "top"},
+                }
+            }
+        }
+    },
+    created: function () {
+    },
+    methods: {},
     computed: {},
     watch: {},
 });

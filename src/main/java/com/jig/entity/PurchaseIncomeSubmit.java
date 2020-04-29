@@ -23,13 +23,13 @@ public class PurchaseIncomeSubmit {
     private String bill_no;//单据号
     private String tool_photo_url;//工夹具照片路径
 
-    public PurchaseIncomeSubmit(){
-        id = UUID.randomUUID().toString().replaceAll("-","");
+    public PurchaseIncomeSubmit() {
+        id = UUID.randomUUID().toString().replaceAll("-", "");
     }
 
-    public PurchaseIncomeSubmit(String a){
-        id = UUID.randomUUID().toString().replaceAll("-","");
-        if(a.equals("create")){
+    public PurchaseIncomeSubmit(String a) {
+        id = UUID.randomUUID().toString().replaceAll("-", "");
+        if (a.equals("create")) {
             this.submit_id = "";
             this.submit_name = "";
             this.submit_time = "";
@@ -229,7 +229,7 @@ public class PurchaseIncomeSubmit {
                 '}';
     }
 
-    public String[] getOperateUpdateInfo(String code, String count, String production_line_id){
+    public String[] getOperateUpdateInfo(String code, String count, String production_line_id) {
         //通过修改前的submit与修改的值进行比较，获取field,old_value,new_value插入数据库
 
         //这样设置是有点问题的，如果只修改了code,没有修改count，只会有code的信息
@@ -237,23 +237,23 @@ public class PurchaseIncomeSubmit {
         String field = "";
         String old_value = "";
         String new_value = "";
-        if(!this.getCode().equals(code)){
-            old_value+=this.getCode();
-            new_value+=count;
-            field+="code";
+        if (!this.getCode().equals(code)) {
+            old_value += this.getCode();
+            new_value += count;
+            field += "code";
         }
-        if(!this.getCount().equals(count)){
-            if(old_value.equals("")){
+        if (!this.getCount().equals(count)) {
+            if (old_value.equals("")) {
                 old_value += this.getCount();
                 new_value += count;
                 field += "count";
-            }else {
+            } else {
                 old_value += "~" + this.getCount();
                 new_value += "~" + count;
                 field += "~count";
             }
         }
-        if(this.getProduction_line_id() != Integer.valueOf(production_line_id)) {
+        if (this.getProduction_line_id() != Integer.valueOf(production_line_id)) {
             if (old_value.equals("")) {
                 old_value += this.getProduction_line_id();
                 new_value += production_line_id;
@@ -270,38 +270,38 @@ public class PurchaseIncomeSubmit {
         return a;
     }
 
-    public String[] PassSubmitInfo(String new_status){
+    public String[] PassSubmitInfo(String new_status) {
         String[] a = new String[3];
         String field = "";
         String old_value = "";
         String new_value = "";
-        if(!this.status.equals(new_status)){
+        if (!this.status.equals(new_status)) {
             field += "status";
             old_value += this.status;
             new_value += new_status;
         }
-        if(new_status.equals("1") || new_status.equals("2")){
-            if(first_reason != null){
-                if(field.equals("")){
-                    field+="first_reason";
-                    old_value+=first_reason;
-                    new_value+="";
-                }else{
-                    field+="~first_reason";
-                    old_value+="~"+first_reason;
-                    new_value+="~";
+        if (new_status.equals("1") || new_status.equals("2")) {
+            if (first_reason != null) {
+                if (field.equals("")) {
+                    field += "first_reason";
+                    old_value += first_reason;
+                    new_value += "";
+                } else {
+                    field += "~first_reason";
+                    old_value += "~" + first_reason;
+                    new_value += "~";
                 }
             }
-        }else if(new_status.equals("3") || new_status.equals("4")){
-            if(final_reason != null){
-                if(field.equals("")){
-                    field+="final_reason";
-                    old_value+=final_reason;
-                    new_value+="";
-                }else{
-                    field+="~final_reason";
-                    old_value+="~"+final_reason;
-                    new_value+="~";
+        } else if (new_status.equals("3") || new_status.equals("4")) {
+            if (final_reason != null) {
+                if (field.equals("")) {
+                    field += "final_reason";
+                    old_value += final_reason;
+                    new_value += "";
+                } else {
+                    field += "~final_reason";
+                    old_value += "~" + final_reason;
+                    new_value += "~";
                 }
             }
         }
@@ -312,35 +312,35 @@ public class PurchaseIncomeSubmit {
         return a;
     }
 
-    public String[] NoPassSubmitInfo(String new_status,String no_pass_reason){
+    public String[] NoPassSubmitInfo(String new_status, String no_pass_reason) {
         String[] a = new String[3];
         String field = "";
         String old_value = "";
         String new_value = "";
-        if(!this.status.equals(new_status)){
+        if (!this.status.equals(new_status)) {
             field += "status";
             old_value += this.status;
             new_value += new_status;
         }
-        if (new_status.equals("1") || new_status.equals("2")){
-            if(field.equals("")){
+        if (new_status.equals("1") || new_status.equals("2")) {
+            if (field.equals("")) {
                 field += "first_reason";
-                old_value += first_reason == null?"":first_reason;
+                old_value += first_reason == null ? "" : first_reason;
                 new_value += no_pass_reason;
-            }else{
+            } else {
                 field += "~first_reason";
-                old_value += "~" + (first_reason == null?"":first_reason);
-                new_value += "~"+no_pass_reason;
+                old_value += "~" + (first_reason == null ? "" : first_reason);
+                new_value += "~" + no_pass_reason;
             }
-        }else if(new_status.equals("3") || new_status.equals("4")){
-            if(field.equals("")){
+        } else if (new_status.equals("3") || new_status.equals("4")) {
+            if (field.equals("")) {
                 field += "final_reason";
-                old_value += final_reason == null?"":final_reason;
+                old_value += final_reason == null ? "" : final_reason;
                 new_value += no_pass_reason;
-            }else{
+            } else {
                 field += "~final_reason";
-                old_value += "~" + (final_reason == null?"":final_reason);
-                new_value += "~"+no_pass_reason;
+                old_value += "~" + (final_reason == null ? "" : final_reason);
+                new_value += "~" + no_pass_reason;
             }
         }
 

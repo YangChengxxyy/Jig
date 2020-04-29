@@ -48,7 +48,7 @@ const search_jig = new Vue({
                     family: this.family,
                     user_for: this.user_for,
                     page_number: this.now_page_number,
-                    page_size: this.page_size
+                    page_size: this.now_page_size
                 },
                 success: function (res) {
                     if (res.data.length === 0) {
@@ -97,7 +97,7 @@ const search_jig = new Vue({
         //     }
         // },
         onePageUrl: function () {
-            return "naive/download_one_search?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&page_number=" + this.now_page_number + "&file_name=page" + this.now_page_number + ".xls&page_size=" + this.now_page_size;
+            return "naive/download_one_search?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&page_number=" + this.now_page_number + "&file_name=page-" + this.now_page_number + ".xls&page_size=" + this.now_page_size;
         },
         allPageUrl: function () {
             return "naive/download_all_search?code=" + this.code + "&name=" + this.name + "&workcell=" + this.workcell + "&family=" + this.family + "&user_for=" + this.user_for + "&file_name=page-all.xls";

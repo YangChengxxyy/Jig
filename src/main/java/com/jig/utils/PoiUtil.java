@@ -24,12 +24,13 @@ import java.util.Map;
 public class PoiUtil {
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
     public <T> HSSFWorkbook getExcel(List<T> list) throws Exception {
         String sql = "select * from cn_en";
         List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql);
-        Map<String,String> chEnMap = new HashMap<>();
+        Map<String, String> chEnMap = new HashMap<>();
         for (Map<String, Object> map : mapList) {
-            chEnMap.put(map.get("english").toString(),map.get("chinese").toString());
+            chEnMap.put(map.get("english").toString(), map.get("chinese").toString());
         }
         Object t = list.get(0);
         //获取对象的类对象

@@ -21,8 +21,8 @@ public class PurchaseIncomeHistory {
     private String bill_no;
     private String tool_photo_url;
 
-    public PurchaseIncomeHistory(){
-        id = UUID.randomUUID().toString().replaceAll("-","");
+    public PurchaseIncomeHistory() {
+        id = UUID.randomUUID().toString().replaceAll("-", "");
     }
 
     public String getId() {

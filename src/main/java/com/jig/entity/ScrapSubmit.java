@@ -1,7 +1,5 @@
 package com.jig.entity;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.UUID;
 
 public class ScrapSubmit {
@@ -25,8 +23,8 @@ public class ScrapSubmit {
     private String final_reason;
     private String status;//审核状态 :0待审核 1初审未通过 2初审通过 3终审未通过 4终审通过
 
-    public ScrapSubmit(){
-        id = UUID.randomUUID().toString().replaceAll("-","");
+    public ScrapSubmit() {
+        id = UUID.randomUUID().toString().replaceAll("-", "");
     }
 
     public String getId() {
@@ -205,25 +203,25 @@ public class ScrapSubmit {
                 '}';
     }
 
-    public String[] PassSubmitInfo(String new_status){
+    public String[] PassSubmitInfo(String new_status) {
         String[] a = new String[3];
         String field = "";
         String old_value = "";
         String new_value = "";
-        if(!this.status.equals(new_status)){
+        if (!this.status.equals(new_status)) {
             field += "status";
             old_value += this.status;
             new_value += new_status;
         }
-        if(first_reason != null){
-            if(field.equals("")){
-                field+="first_reason";
-                old_value+=first_reason;
-                new_value+="";
-            }else{
-                field+="~first_reason";
-                old_value+="~"+first_reason;
-                new_value+="~";
+        if (first_reason != null) {
+            if (field.equals("")) {
+                field += "first_reason";
+                old_value += first_reason;
+                new_value += "";
+            } else {
+                field += "~first_reason";
+                old_value += "~" + first_reason;
+                new_value += "~";
             }
 
         }
@@ -234,24 +232,24 @@ public class ScrapSubmit {
         return a;
     }
 
-    public String[] NoPassSubmitInfo(String new_status,String no_pass_reason){
+    public String[] NoPassSubmitInfo(String new_status, String no_pass_reason) {
         String[] a = new String[3];
         String field = "";
         String old_value = "";
         String new_value = "";
-        if(!this.status.equals(new_status)){
+        if (!this.status.equals(new_status)) {
             field += "status";
             old_value += this.status;
             new_value += new_status;
         }
-        if(field.equals("")){
+        if (field.equals("")) {
             field += "first_reason";
-            old_value += first_reason == null?"":first_reason;
+            old_value += first_reason == null ? "" : first_reason;
             new_value += no_pass_reason;
-        }else{
+        } else {
             field += "~first_reason";
-            old_value += "~" + (first_reason == null?"":first_reason);
-            new_value += "~"+no_pass_reason;
+            old_value += "~" + (first_reason == null ? "" : first_reason);
+            new_value += "~" + no_pass_reason;
         }
 
         a[0] = field;

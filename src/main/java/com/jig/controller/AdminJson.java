@@ -19,12 +19,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("admin")
-@Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.DEFAULT)
+@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 public class AdminJson {
     @Autowired
     private AdminService adminService;
     @Autowired
     private PoiUtil poiUtil;
+
     @RequestMapping("search_user_information")
     public Map<String, Object> searchUserInformation(@RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size,
                                                      @RequestParam("id") String id, @RequestParam("name") String name, @RequestParam("workcell_id") String workcell_id,
@@ -54,10 +55,10 @@ public class AdminJson {
 
     @RequestMapping("download_one_user_info")
     public void downloadOneUserInfo(HttpServletResponse response, @RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number,
-                                    @RequestParam("page_size")int page_size,
+                                    @RequestParam("page_size") int page_size,
                                     @RequestParam("id") String id, @RequestParam("name") String name, @RequestParam("workcell_id") String workcell_id,
                                     @RequestParam("start_date") String start_date, @RequestParam("end_date") String end_date, @RequestParam("file_name") String file_name) throws Exception {
-        List<User> userList = adminService.searchUserInformation(submit_id, page_number,page_size, id, name, workcell_id, start_date, end_date);
+        List<User> userList = adminService.searchUserInformation(submit_id, page_number, page_size, id, name, workcell_id, start_date, end_date);
         poiUtil.outputFile(response, file_name, userList);
     }
 

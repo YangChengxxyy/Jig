@@ -22,6 +22,11 @@ public class UserService {
         LoginState loginState = new LoginState();
         if (ids.size() > 0) {
             List<User> passwords = userMapper.searchPassword(id, password);
+            if(passwords.isEmpty()){
+                loginState.setStateCode(1);
+                loginState.setMessage("密码或者账户错误");
+                return loginState;
+            }
             String[] workecll_id_list = passwords.get(0).getWorkcell_id().split("[|]");
             String[] type_list = passwords.get(0).getType().split("[|]");
             String type = "";
