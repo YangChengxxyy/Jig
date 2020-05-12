@@ -14,10 +14,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -127,8 +124,10 @@ public class JigJson {
      * @return 出库申请
      */
     @RequestMapping("naive/get_outgoing_submit")
-    public Map<String, Object> getOutgoingSubmit(@RequestParam("page_number") int page_number) {
-        return getStringObjectMap(jigService.naiveGetOutgoingSubmit(page_number), jigService.naiveGetOutgoingSubmitPage());
+    public Map<String, Object> getOutgoingSubmit(@RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
+        Map<String, Object> map = getStringObjectMap(jigService.naiveGetOutgoingSubmit(page_number, page_size), (int) Math.ceil(jigService.naiveGetOutgoingSubmitPage() / page_size));
+        map.put("all", jigService.naiveGetOutgoingSubmitPage());
+        return map;
     }
 
     /**
@@ -169,8 +168,10 @@ public class JigJson {
      * @return 需要入库的工夹具信息
      */
     @RequestMapping("naive/get_outgoing_jig")
-    public Map<String, Object> naiveGetOutgoingJig(@RequestParam("page_number") int page_number) {
-        return getStringObjectMap(jigService.naiveGetOutgoingJig(page_number), jigService.naiveGetOutgoingJigPage());
+    public Map<String, Object> naiveGetOutgoingJig(@RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
+        Map<String, Object> map = getStringObjectMap(jigService.naiveGetOutgoingJig(page_number, page_size), (int) Math.ceil(jigService.naiveGetOutgoingJigPage() / (double) page_size));
+        map.put("all", jigService.naiveGetOutgoingJigPage());
+        return map;
     }
 
     /**
@@ -642,8 +643,10 @@ public class JigJson {
      * @return 报修列表
      */
     @RequestMapping("naive/get_repair_list")
-    public Map<String, Object> naiveGetRepairList(@RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number) {
-        return getStringObjectMap(jigService.naiveGetRepairList(submit_id, page_number), jigService.naiveGetRepairListPage(submit_id));
+    public Map<String, Object> naiveGetRepairList(@RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
+        Map<String, Object> map = getStringObjectMap(jigService.naiveGetRepairList(submit_id, page_number, page_size), (int) Math.ceil(jigService.naiveGetRepairListPage(submit_id) / (double) page_size));
+        map.put("all", jigService.naiveGetRepairListPage(submit_id));
+        return map;
     }
 
     /**
@@ -706,10 +709,12 @@ public class JigJson {
      * @return 保修历史
      */
     @RequestMapping("naive/get_repair_history")
-    public Map<String, Object> naiveGetRepairHistory(@RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number) {
-        List<RepairJigHistory> list = jigService.naiveGetRepairHistory(submit_id, page_number);
+    public Map<String, Object> naiveGetRepairHistory(@RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
+        List<RepairJigHistory> list = jigService.naiveGetRepairHistory(submit_id, page_number, page_size);
         int a = jigService.naiveGetRepairHistoryPage(submit_id);
-        return getStringObjectMap(list, a);
+        Map<String, Object> map = getStringObjectMap(list, (int) Math.ceil(a / (double) page_size));
+        map.put("all", a);
+        return map;
     }
 
     /**
@@ -757,6 +762,13 @@ public class JigJson {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    @RequestMapping("/test_file")
+    public void testFile(MultipartFile[] file) {
+        for (MultipartFile f : file) {
+            System.out.println(f.getOriginalFilename());
         }
     }
 }

@@ -842,6 +842,51 @@
                 </div>
                 <div id="jig_use_analysis" class="tab-pane in active">
                     <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel-title">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title form-inline">
+                                            各类工夹具使用情况分析
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-sm-6">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title form-inline">
+                                                    历年此类工夹具的使用次数
+                                                    <select class="form-control">
+                                                        <option>EF2078</option>
+                                                    </select>
+                                                </h3>
+                                            </div>
+                                            <div class="panel-body">
+                                                <ve-line :data="cljj.data"></ve-line>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title form-inline">
+                                                    2014年夹具EF2078在各个产线的使用情况
+                                                    <select class="form-control">
+                                                        <option>2014年</option>
+                                                    </select>
+                                                </h3>
+                                            </div>
+                                            <div class="panel-body">
+                                                <ve-pie :data="ggcx.data"></ve-pie>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-sm-8">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
@@ -884,7 +929,7 @@
                 </div>
                 <div id="jig_life_analysis" class="tab-pane">
                     <div class="row">
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">
@@ -896,7 +941,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">
@@ -908,7 +953,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">
@@ -920,8 +967,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-sm-6">
                             <div class="panel panel-default">
                                 <div class="panel-heading">

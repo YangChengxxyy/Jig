@@ -62,7 +62,7 @@ public interface JigMapper {
      *
      * @return 出库申请集合
      */
-    List<OutgoSubmit> naiveGetOutgoingSubmit(@Param("page_number") int page_number);
+    List<OutgoSubmit> naiveGetOutgoingSubmit(@Param("page_number") int page_number,@Param("page_size")int page_size);
 
     /**
      * 获取出库记录条数
@@ -102,7 +102,7 @@ public interface JigMapper {
      *
      * @return 已出库工夹具OutgoingJig对象
      */
-    List<OutgoingJig> naiveGetOutgoingJig(@Param("page_number") int page_number);
+    List<OutgoingJig> naiveGetOutgoingJig(@Param("page_number") int page_number, @Param("page_size") int page_size);
 
     /**
      * 获得已出库工夹具记录数
@@ -373,7 +373,7 @@ public interface JigMapper {
      * @param page_number
      * @return
      */
-    List<RepairJig> naiveGetRepairList(@Param("submit_id") String submit_id, @Param("page_number") int page_number);
+    List<RepairJig> naiveGetRepairList(@Param("submit_id") String submit_id, @Param("page_number") int page_number, @Param("page_size") int page_size);
 
     /**
      * @param submit_id
@@ -399,7 +399,7 @@ public interface JigMapper {
      * @param page_number
      * @return
      */
-    List<RepairJigHistory> naiveGetRepairHistory(@Param("submit_id") String submit_id, @Param("page_number") int page_number);
+    List<RepairJigHistory> naiveGetRepairHistory(@Param("submit_id") String submit_id, @Param("page_number") int page_number, @Param("page_size") int page_size);
 
     int naiveGetRepairHistoryPage(@Param("submit_id") String submit_id);
 

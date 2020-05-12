@@ -134,7 +134,8 @@ const return_jig = new Vue({
             const that = this;
             $.ajax("naive/get_outgoing_jig", {
                 data: {
-                    page_number: this.now_page_number
+                    page_number: this.now_page_number,
+                    page_size: this.now_page_size
                 },
                 success: function (res) {
                     $.each(res.data, function (i, v) {
@@ -244,12 +245,14 @@ const jig_outgoing = new Vue({
             const that = this;
             $.ajax("naive/get_outgoing_submit", {
                 data: {
-                    page_number: this.now_page_number
+                    page_number: this.now_page_number,
+                    page_size: this.now_page_size
                 },
                 success: function (res) {
-                    that.outgoing_submit_list = res.data;
+                    that.outgoing_submit_list = res['data'];
                     that.max_page_number = res['max'];
                     that.all_count = res['all'];
+                    console.log(res)
                 }
             })
         },
@@ -356,11 +359,12 @@ const myRepair = new Vue({
     },
     methods: {
         getData: function () {
-            let that = this;
+            const that = this;
             $.ajax("naive/get_repair_list", {
                 data: {
                     submit_id: id,
-                    page_number: that.now_page_number
+                    page_number: that.now_page_number,
+                    page_size:that.now_page_size
                 },
                 success: function (res) {
                     that.repairList = res["data"];
@@ -520,7 +524,8 @@ const repairHistory = new Vue({
             $.ajax("naive/get_repair_history", {
                 data: {
                     submit_id: id,
-                    page_number: this.now_page_number
+                    page_number: this.now_page_number,
+                    page_size:this.now_page_size
                 },
                 success: function (res) {
                     that.history_list = res["data"];

@@ -34,14 +34,13 @@ public class JigService {
         return jigMapper.searchAllJigDefinition(code, name, workcell, family, userFor);
     }
 
-    public List<OutgoSubmit> naiveGetOutgoingSubmit(int page_number) {
-        page_number = (page_number - 1) * 5;
-        return jigMapper.naiveGetOutgoingSubmit(page_number);
+    public List<OutgoSubmit> naiveGetOutgoingSubmit(int page_number, int page_size) {
+        page_number = (page_number - 1) * page_size;
+        return jigMapper.naiveGetOutgoingSubmit(page_number, page_size);
     }
 
     public int naiveGetOutgoingSubmitPage() {
-        int a = jigMapper.naiveGetOutgoSubmitPage();
-        return (int) Math.ceil(a / 5.0);
+        return jigMapper.naiveGetOutgoSubmitPage();
     }
 
     public Position getPosition(String code, String seq_id) {
@@ -53,14 +52,13 @@ public class JigService {
         jigMapper.naiveDeleteOutgoSubmit(id);
     }
 
-    public List<OutgoingJig> naiveGetOutgoingJig(int page_number) {
-        page_number = (page_number - 1) * 5;
-        return jigMapper.naiveGetOutgoingJig(page_number);
+    public List<OutgoingJig> naiveGetOutgoingJig(int page_number, int page_size) {
+        page_number = (page_number - 1) * page_size;
+        return jigMapper.naiveGetOutgoingJig(page_number, page_size);
     }
 
     public int naiveGetOutgoingJigPage() {
-        int a = jigMapper.getOutgoingJigPage();
-        return (int) Math.ceil(a / 5.0);
+        return jigMapper.getOutgoingJigPage();
     }
 
     public void naiveReturnJig(String id, String code, String seq_id, String rec_id) {
@@ -171,28 +169,26 @@ public class JigService {
         return jigMapper.codeGetSeqId(code);
     }
 
-    public List<RepairJig> naiveGetRepairList(String submit_id, int page_number) {
-        page_number = (page_number - 1) * 5;
-        return jigMapper.naiveGetRepairList(submit_id, page_number);
+    public List<RepairJig> naiveGetRepairList(String submit_id, int page_number,int page_size) {
+        page_number = (page_number - 1) * page_size;
+        return jigMapper.naiveGetRepairList(submit_id, page_number,page_size);
     }
 
     public int naiveGetRepairListPage(String submit_id) {
-        int a = jigMapper.naiveGetRepairListPage(submit_id);
-        return (int) Math.ceil(a / 5.0);
+        return jigMapper.naiveGetRepairListPage(submit_id);
     }
 
     public void naiveSubmitRepair(String code, String seq_id, String submit_id, String repair_reason, String pathName) {
         jigMapper.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, pathName);
     }
 
-    public List<RepairJigHistory> naiveGetRepairHistory(String submit_id, int page_number) {
-        page_number = (page_number - 1) * 5;
-        return jigMapper.naiveGetRepairHistory(submit_id, page_number);
+    public List<RepairJigHistory> naiveGetRepairHistory(String submit_id, int page_number,int page_size) {
+        page_number = (page_number - 1) * page_size;
+        return jigMapper.naiveGetRepairHistory(submit_id, page_number,page_size);
     }
 
     public int naiveGetRepairHistoryPage(String submit_id) {
-        int a = jigMapper.naiveGetRepairHistoryPage(submit_id);
-        return (int) Math.ceil(a / 5.0);
+        return jigMapper.naiveGetRepairHistoryPage(submit_id);
     }
 
     public int highGetRepairCount(String submit_id) {
