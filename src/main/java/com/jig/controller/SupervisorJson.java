@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/supervisor")
+@RequestMapping("/api/supervisor/")
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 public class SupervisorJson {
     @Autowired
@@ -26,18 +26,18 @@ public class SupervisorJson {
     private CommonService commonService;
 
     //监管者模式的工夹具信息管理的获取工夹具类别family
-    @RequestMapping(value = "supervisor/get_jig_family", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "get_jig_family", method = {RequestMethod.GET, RequestMethod.POST})
     public List<Family> supervisorGetJigFamily() {
         return supervisorService.supervisorGetJigFamily();
     }
 
     //监管者模式的工夹具信息管理的获取所有工夹具信息List
-    @RequestMapping(value = "supervisor/get_all_jig_info_list", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "get_all_jig_info_list", method = {RequestMethod.GET, RequestMethod.POST})
     public List<JigDefinition> supervisorGetAllJigInfoList() {
         return supervisorService.supervisorGetAllJigInfoList();
     }
 
-    @RequestMapping(value = "supervisor/add_jig_family", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "add_jig_family", method = {RequestMethod.GET, RequestMethod.POST})
     public String supervisorAddJigFamily(@RequestParam("family") String family) {
         int flag = supervisorService.supervisorAddJigFamily(family);
         if (flag < 0) {

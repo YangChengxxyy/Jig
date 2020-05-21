@@ -1,6 +1,7 @@
 package com.jig.service;
 
 import com.jig.entity.*;
+import com.jig.mapper.JigMapper;
 import com.jig.mapper.NaiveMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,5 +82,30 @@ public class NaiveService {
     //naive提交报修
     public void naiveSubmitRepair(String code, String seq_id, String submit_id, String repair_reason, String pathName) {
         naiveMapper.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, pathName);
+    }
+
+
+    public List<JigDefinition> naiveSearchJigDefinition(String code, String name, String workcell, String family, String userFor, int pageNumber, int page_size) {
+        pageNumber = (pageNumber - 1) * page_size;
+        return naiveMapper.naiveSearchJigDefinition(code, name, workcell, family, userFor, pageNumber, page_size);
+    }
+
+    public int naiveSearchJigDefinitionPage(String code, String name, String workcell, String family, String userFor) {
+        return naiveMapper.naiveSearchJigDefinitionPage(code, name, workcell, family, userFor);
+
+    }
+
+    public List<JigDefinition> searchAllJigDefinition(String code, String name, String workcell, String family, String userFor) {
+        return naiveMapper.searchAllJigDefinition(code, name, workcell, family, userFor);
+    }
+
+    public List<OutgoSubmit> naiveGetOutgoingSubmit(int page_number) {
+        page_number = (page_number - 1) * 5;
+        return naiveMapper.naiveGetOutgoingSubmit(page_number);
+    }
+
+    public int naiveGetOutgoingSubmitPage() {
+        int a = naiveMapper.naiveGetOutgoSubmitPage();
+        return (int) Math.ceil(a / 5.0);
     }
 }

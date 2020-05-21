@@ -1,9 +1,8 @@
 package com.jig.controller;
 
-import com.jig.entity.PhoneUpload;
-import com.jig.entity.PurchaseIncomeSubmit;
-import com.jig.entity.ScrapSubmit;
+import com.jig.entity.*;
 import com.jig.service.HighService;
+import com.jig.utils.PoiUtil;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("/api/high/")
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 public class HighJson {
 
@@ -36,7 +36,8 @@ public class HighJson {
 
     @Value("${file.resource-url}")
     public String RESOURCE_URL;
-
+    @Autowired
+    private PoiUtil poiUtil;
     public static final String SCRAP_IMAGE_NAME = "images/scrap_images/";
     public static final String REPAIR_IMAGE_NAME = "images/repair_images/";
     public static final String SCRAP = "SCRAP";
@@ -338,5 +339,57 @@ public class HighJson {
             e.printStackTrace();
             return false;
         }
+    }
+    @RequestMapping("high/download_one_purchase_history")
+    public void highDownloadOnePurchaseHistory(HttpServletResponse response, @RequestParam(value = "bill_no") String bill_no, @RequestParam(value = "submit_name") String submit_name,
+                                               @RequestParam(value = "code") String code, @RequestParam(value = "production_line_id") String production_line_id,
+                                               @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
+                                               @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number,
+                                               @RequestParam(value = "file_name") String file_name, @RequestParam("page_size") int page_size) throws Exception {
+        List<PurchaseIncomeHistory> list = highService.highSearchPurchaseIncomeHistory(bill_no, submit_name, code, production_line_id, status, start_date, end_date, page_number, page_size);
+        poiUtil.outputFile(response, file_name, list);
+    }
+
+    @RequestMapping("high/download_all_purchase_history")
+    public void highDownloadAllPurchaseHistory(HttpServletResponse response, @RequestParam(value = "bill_no") String bill_no, @RequestParam(value = "submit_name") String submit_name,
+                                               @RequestParam(value = "code") String code, @RequestParam(value = "production_line_id") String production_line_id,
+                                               @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
+                                               @RequestParam(value = "end_date") String end_date, @RequestParam(value = "file_name") String file_name) throws Exception {
+        List<PurchaseIncomeHistory> list = highService.highSearchAllPurchaseIncomeHistory(bill_no, submit_name, code, production_line_id, status, start_date, end_date);
+        poiUtil.outputFile(response, file_name, list);
+    }
+
+
+    @RequestMapping("high/download_one_repair_history")
+    public void highDownloadOneRepairHistory(HttpServletResponse response, @RequestParam("id") String id, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number, @RequestParam(value = "file_name") String file_name, @RequestParam("page_size") int page_size) throws Exception {
+        List<RepairJigHistory> list = highService.highSearchRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date, page_number, page_size);
+        poiUtil.outputFile(response, file_name, list);
+    }
+
+    @RequestMapping("high/download_all_repair_history")
+    public void highDownloadAllRepairHistory(HttpServletResponse response, @RequestParam("id") String id, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date, @RequestParam(value = "file_name") String file_name) throws Exception {
+        List<RepairJigHistory> list = highService.highSearchAllRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date);
+        poiUtil.outputFile(response, file_name, list);
+    }
+
+    @RequestMapping("high/download_one_scrap_history")
+    public void highDownloadOneScrapHistory(HttpServletResponse response, @RequestParam(value = "code") String code,
+                                            @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id,
+                                            @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
+                                            @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number,
+                                            @RequestParam("page_size") int page_size, @RequestParam(value = "scrap_reason") String scrap_reason,
+                                            @RequestParam(value = "file_name") String file_name) throws Exception {
+        List<ScrapHistory> list = highService.highSearchScrapHistory(code, seq_id, submit_id, scrap_reason, status, start_date, end_date, page_number, page_size);
+        poiUtil.outputFile(response, file_name, list);
+    }
+
+    @RequestMapping("high/download_all_scrap_history")
+    public void highDownloadAllScrapHistory(HttpServletResponse response, @RequestParam(value = "code") String code,
+                                            @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id,
+                                            @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
+                                            @RequestParam(value = "scrap_reason") String scrap_reason,
+                                            @RequestParam(value = "end_date") String end_date, @RequestParam(value = "file_name") String file_name) throws Exception {
+        List<ScrapHistory> list = highService.highSearchAllScrapHistory(code, seq_id, submit_id, scrap_reason, status, start_date, end_date);
+        poiUtil.outputFile(response, file_name, list);
     }
 }

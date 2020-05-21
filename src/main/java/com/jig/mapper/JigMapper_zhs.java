@@ -1,11 +1,7 @@
 package com.jig.mapper;
 
-import com.jig.entity.*;
-import org.apache.ibatis.annotations.*;
-import org.apache.ibatis.mapping.FetchType;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Mapper
 @Repository

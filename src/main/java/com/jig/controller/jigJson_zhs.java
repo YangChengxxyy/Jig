@@ -1,19 +1,12 @@
 package com.jig.controller;
 
-import com.jig.entity.*;
 import com.jig.service.CommonService;
 import com.jig.service.JigService_zhs;
-import com.jig.utils.LoginStatusUtil;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.*;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)

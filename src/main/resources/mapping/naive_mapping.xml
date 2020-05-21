@@ -140,4 +140,76 @@
         insert into message(id, generate_id, generate_time, accept_type, status, message, tab_id)
         values (uuid(), #{submit_id}, now(), 'high', '00', '提交了新的报修申请', 'myrepair')
     </insert>
+
+    <select id="naiveSearchJigDefinition" resultType="com.jig.entity.JigDefinition">
+        select * from jig_definition_entity_view
+        <where>
+            <if test="code != null and code != ''">
+                and code like concat('%',#{code},'%')
+            </if>
+            <if test="name != null and name != ''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="workcell != null and workcell != ''">
+                and workcell like concat('%',#{workcell},'%')
+            </if>
+            <if test="family != null and family != ''">
+                and family like concat('%',#{family},'%')
+            </if>
+            <if test="userFor != null and userFor != ''">
+                and user_for like concat('%',#{userFor},'%')
+            </if>
+        </where>
+        limit #{pageNumber},#{page_size}
+    </select>
+    <select id="naiveSearchJigDefinitionPage" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM jig_definition_entity_view
+        <where>
+            <if test="code != null and code != ''">
+                and code like concat('%',#{code},'%')
+            </if>
+            <if test="name != null and name != ''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="workcell != null and workcell != ''">
+                and workcell like concat('%',#{workcell},'%')
+            </if>
+            <if test="family != null and family != ''">
+                and family like concat('%',#{family},'%')
+            </if>
+            <if test="userFor != null and userFor != ''">
+                and user_for like concat('%',#{userFor},'%')
+            </if>
+        </where>
+    </select>
+    <select id="searchAllJigDefinition" resultType="com.jig.entity.JigDefinition">
+        SELECT * from jig_definition_entity_view
+        <where>
+            <if test="code != null">
+                and code like concat('%',#{code},'%')
+            </if>
+            <if test="name != null">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="workcell != null">
+                and workcell like concat('%',#{workcell},'%')
+            </if>
+            <if test="family != null">
+                and family like concat('%',#{family},'%')
+            </if>
+            <if test="userFor != null">
+                and user_for like concat('%',#{userFor},'%')
+            </if>
+        </where>
+    </select>
+    <select id="naiveGetOutgoingSubmit" resultType="com.jig.entity.OutgoSubmit">
+        select *
+        from outgo_submit_entity_view
+        limit #{page_number},5
+    </select>
+    <select id="naiveGetOutgoSubmitPage" resultType="java.lang.Integer">
+        select count(*)
+        from outgo_submit_entity_view
+    </select>
 </mapper>

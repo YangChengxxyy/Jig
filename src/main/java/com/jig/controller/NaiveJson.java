@@ -3,6 +3,7 @@ package com.jig.controller;
 import com.jig.entity.*;
 import com.jig.service.NaiveService;
 import com.jig.utils.LoginStatusUtil;
+import com.jig.utils.PoiUtil;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -33,7 +35,8 @@ public class NaiveJson {
     public String RESOURCE_URL;
     @Autowired
     private NaiveService naiveService;
-
+    @Autowired
+    private PoiUtil poiUtil;
     public static final String SCRAP_IMAGE_NAME = "images/scrap_images/";
     public static final String REPAIR_IMAGE_NAME = "images/repair_images/";
     public static final String SCRAP = "SCRAP";
@@ -213,5 +216,47 @@ public class NaiveJson {
         }
         return true;
     }
+    @RequestMapping("download_one_search")
+    public void naiveDownloadOneSearch(HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor, @RequestParam(value = "page_number") int pageNumber, @RequestParam("page_size") int page_size, @RequestParam(value = "file_name") String fileName) throws Exception {
+        List<JigDefinition> list = naiveService.naiveSearchJigDefinition(code, name, workcell, family, userFor, pageNumber, page_size);
+        if (list.size() == 0) {
+            return;
+        }
+        poiUtil.outputFile(response, fileName, list);
+    }
 
+    @RequestMapping("download_all_search")
+    public void naiveDownloadAllSearch(HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor, @RequestParam(value = "file_name") String fileName) throws Exception {
+        List<JigDefinition> list = naiveService.searchAllJigDefinition(code, name, workcell, family, userFor);
+        poiUtil.outputFile(response, fileName, list);
+    }
+
+    /**
+     * 搜索工夹具  (不需要了)
+     *
+     * @param code       工夹具代码
+     * @param name       工夹具名字
+     * @param workcell   工作部门
+     * @param family     类别
+     * @param userFor    用途
+     * @param pageNumber 页码
+     * @return 查询到的对应页数的Map对象 { data:数据 ,max:最大页数 }
+     */
+    @RequestMapping("search_jig_definition")
+    public Map<String, Object> naiveSearchJigDefinition(@RequestParam("code") String code, @RequestParam("name") String name, @RequestParam("workcell") String workcell, @RequestParam("family") String family, @RequestParam("user_for") String userFor, @RequestParam("page_number") int pageNumber, @RequestParam("page_size") int page_size) throws Exception {
+        int all = naiveService.naiveSearchJigDefinitionPage(code, name, workcell, family, userFor);
+        Map<String, Object> map = getStringObjectMap(naiveService.naiveSearchJigDefinition(code, name, workcell, family, userFor, pageNumber, page_size), (int) Math.ceil(all / (double) page_size));
+        map.put("all", all);
+        return map;
+    }
+
+    /**
+     * 获取出库申请 (不需要了)
+     *
+     * @return 出库申请
+     */
+    @RequestMapping("get_outgoing_submit")
+    public Map<String, Object> getOutgoingSubmit(@RequestParam("page_number") int page_number) {
+        return getStringObjectMap(naiveService.naiveGetOutgoingSubmit(page_number), naiveService.naiveGetOutgoingSubmitPage());
+    }
 }
