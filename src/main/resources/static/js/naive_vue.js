@@ -104,7 +104,26 @@ const search_jig = new Vue({
         }
     }
 });
-const return_jig = new Vue({
+
+/*const return_jig = new Vue({
+    el:"#return_jig",
+    data:{
+        outgoing_jig_list:[],
+        check_user_id:"",
+
+    },
+    created:function () {
+
+    },
+    methods:{
+        getData:function () {
+            const that = this;
+            $.ajax("navie/get_outgoing",{})
+        }
+    }
+})*/
+
+/*const return_jig = new Vue({
     el: "#return_jig",
     data: {
         outgoing_jig_list: [],
@@ -134,8 +153,7 @@ const return_jig = new Vue({
             const that = this;
             $.ajax("naive/get_outgoing_jig", {
                 data: {
-                    page_number: this.now_page_number,
-                    page_size: this.now_page_size
+                    page_number: this.now_page_number
                 },
                 success: function (res) {
                     $.each(res.data, function (i, v) {
@@ -216,8 +234,279 @@ const return_jig = new Vue({
             }
         }
     }
-});
+});*/
+
 const jig_outgoing = new Vue({
+    el:"#jig_outgoing",
+    data:{
+        location_list:[],
+        jig_list:[],
+
+        jig_cabinet_id:"",//对应数据库的jig_cabinet_id
+        jig_location_id:"",//对应数据库的location_id
+
+        //搜索条件
+        sel_code:"",
+        sel_name:"",
+        sel_user_for:""
+    },
+    created:function(){
+        this.get_location_list();
+    },
+    methods:{
+        get_location_list:function () {
+            const that = this;
+            $.ajax("navie/get_location_list",{
+                data:{
+                    
+                },
+                success:function (res) {
+                    that.location_list = res;
+                }
+            })
+        },
+        get_jig_list_by_location_id:function (jig_cabinet,location_id) {
+            if(this.jig_cabinet_id === jig_cabinet && this.jig_location_id === location_id){
+                this.jig_cabinet_id = "";
+                this.jig_location_id = "";
+                this.jig_list = [];
+                return false;
+            }else{
+                this.jig_cabinet_id = jig_cabinet;
+                this.jig_location_id = location_id;
+            }
+
+            const that = this;
+            $.ajax("navie/get_jig_list_by_location",{
+                data:{
+                    jig_cabinet_id:this.jig_cabinet_id,
+                    jig_location_id:this.jig_location_id
+                },
+                success:function(res) {
+                    that.jig_list = res;
+                    //console.log(res)
+                }
+            })
+        },
+        get_jig_detail_list:function (code) {
+            for (var i=0; i<this.jig_list.length; i++) {
+                if(this.jig_list[i].code === code){
+                    jig_detail.jig_detail_list = this.jig_list[i].jig_entity_list;
+                    break;
+                }
+            }
+            jig_detail.seq_id = jig_detail.jig_detail_list[0].seq_id;
+
+        },
+        get_chuku_modal_jig_detail_list:function(code){
+            for (var i=0; i<this.jig_list.length; i++) {
+                if(this.jig_list[i].code === code){
+                    chuku.jig_detail_list = this.jig_list[i].jig_entity_list;
+                    chuku.code = code;
+                    break;
+                }
+            }
+            chuku.seq_id = chuku.jig_detail_list[0].seq_id;
+        },
+        get_maintenance_jig_detail_list:function(code){
+            const that = this;
+            $.ajax("navie/get_maintenance_jig_detail_list",{
+                data:{
+                    jig_cabinet_id:this.jig_cabinet_id,
+                    jig_location_id:this.jig_location_id,
+                    code:code
+                },
+                success:function (res) {
+                    check_jig.jig_detail_list = res;
+                    check_jig.code = code;
+                    check_jig.seq_id = check_jig.jig_detail_list[0].seq_id;
+                }
+            })
+        },
+        get_jig_list_by_select:function () {
+            const that = this;
+            $.ajax("navie/get_jig_list_by_select",{
+                data:{
+                    jig_cabinet_id:this.jig_cabinet_id,
+                    jig_location_id:this.jig_location_id,
+                    code:this.sel_code,
+                    name:this.sel_name,
+                    user_for:this.sel_user_for
+                },
+                success:function (res) {
+                    if(res.length === 0){
+                        alert("没有结果!");
+                    }
+                    that.jig_list = res;
+                }
+            })
+        },
+        clear_select_condition:function () {
+            this.sel_code = "";
+            this.sel_name = "";
+            this.sel_user_for = "";
+        }
+    }
+})
+
+//仓库管理/查看工夹具
+var jig_detail = new Vue({
+    el:"#jig_detail",
+    data:{
+        seq_id:"",
+        jig_detail_list:[],
+        jig_detail:null
+    },
+    watch:{
+        seq_id(val){
+            for(var i=0;i<this.jig_detail_list.length;i++){
+                if(this.seq_id == this.jig_detail_list[i].seq_id){
+                    this.jig_detail = this.jig_detail_list[i];
+                }
+            }
+        }
+    }
+})
+
+const chuku = new Vue({
+    el:"#chuku",
+    data:{
+        code:"",
+        seq_id:"",
+        jig_detail_list:[],
+        jig_detail:null,
+
+        check_user_id:"",//输入的员工id
+        user_name:"",
+
+        check1:false,
+    },
+    methods:{
+        getUsername: function () {
+            const that = this;
+            $.ajax("get_user_name", {
+                data: {
+                    user_id: this.check_user_id
+                },
+                success: function (res) {
+                    if (res === null || res === '' || res.length === 0){
+                        that.user_name = "员工不存在!";
+                    }else{
+                        that.user_name = res;
+                        that.check1 = true;
+                    }
+                }
+            })
+        },
+        outgoing: function () {
+            if (this.check1) {
+                var that = this;
+                $.ajax("naive/outgo_jig", {
+                    data: {
+                        code: this.code,
+                        seq_id: this.seq_id,
+                        submit_id: this.check_user_id
+                    },
+                    success: function (res) {
+                        if (res) {
+                            alert("出库成功！");
+                            $("#chuku").modal("hide");
+                            this.user_id = "";
+                            jig_outgoing.get_jig_list_by_location_id(jig_outgoing.jig_cabinet_id,jig_outgoing.jig_location_id);
+                        } else {
+                            alert("服务器错误！");
+                        }
+                    }
+                });
+            }
+        }
+    },
+    watch:{
+        seq_id(val){
+            for(var i=0;i<this.jig_detail_list.length;i++){
+                if(this.seq_id == this.jig_detail_list[i].seq_id){
+                    this.jig_detail = this.jig_detail_list[i];
+                }
+            }
+        }
+    }
+})
+
+const check_jig = new Vue({
+    el:"#check_jig",
+    data:{
+        code:"",
+        seq_id:"",
+        jig_detail_list:[],
+        jig_detail:null,
+
+        user_id:"",
+        user_name:"",
+        check_user_id:false,
+
+
+        maintenance_type_list:[],
+        check_maintenance_list:[],
+        check_finish:false
+    },
+    created:function(){
+        this.get_maintenance_type_list();
+    },
+    methods:{
+        get_maintenance_type_list:function () {
+            const that = this;
+            $.ajax("get_maintenance_type_list",{
+                data:{
+
+                },
+                success:function (res) {
+                    that.maintenance_type_list = res;
+                }
+            })
+        },
+        getUsername: function () {
+            const that = this;
+            $.ajax("get_user_name", {
+                data: {
+                    user_id: this.user_id
+                },
+                success: function (res) {
+                    if (res === null || res === '' || res.length === 0){
+                        that.user_name = "员工不存在!";
+                    }else{
+                        that.user_name = res;
+                        that.check_user_id = true;
+                    }
+                }
+            })
+        },
+        maintenance_jig:function () {
+            const that = this;
+            if(this.check_finish){
+                /*$.ajax("navie/maintenance_jig",{
+                    data:{
+                        code:this.code,
+                        seq_id:this.seq_id,
+                    },
+                    success:function (res) {
+                        $("#check_jig").modal("hide");
+                    }
+                })*/
+            }
+
+        }
+    },
+    watch:{
+        seq_id(val){
+            for(var i=0;i<this.jig_detail_list.length;i++){
+                if(this.seq_id == this.jig_detail_list[i].seq_id){
+                    this.jig_detail = this.jig_detail_list[i];
+                }
+            }
+        }
+    }
+})
+/*const jig_outgoing = new Vue({
     el: "#jig_outgoing",
     data: {
         outgoing_submit_list: [],
@@ -245,14 +534,12 @@ const jig_outgoing = new Vue({
             const that = this;
             $.ajax("naive/get_outgoing_submit", {
                 data: {
-                    page_number: this.now_page_number,
-                    page_size: this.now_page_size
+                    page_number: this.now_page_number
                 },
                 success: function (res) {
-                    that.outgoing_submit_list = res['data'];
+                    that.outgoing_submit_list = res.data;
                     that.max_page_number = res['max'];
                     that.all_count = res['all'];
-                    console.log(res)
                 }
             })
         },
@@ -327,7 +614,7 @@ const jig_outgoing = new Vue({
             })
         }
     }
-});
+});*/
 const myRepair = new Vue({
     el: "#myRepair",
     data: {
@@ -359,12 +646,11 @@ const myRepair = new Vue({
     },
     methods: {
         getData: function () {
-            const that = this;
+            let that = this;
             $.ajax("naive/get_repair_list", {
                 data: {
                     submit_id: id,
-                    page_number: that.now_page_number,
-                    page_size:that.now_page_size
+                    page_number: that.now_page_number
                 },
                 success: function (res) {
                     that.repairList = res["data"];
@@ -524,8 +810,7 @@ const repairHistory = new Vue({
             $.ajax("naive/get_repair_history", {
                 data: {
                     submit_id: id,
-                    page_number: this.now_page_number,
-                    page_size:this.now_page_size
+                    page_number: this.now_page_number
                 },
                 success: function (res) {
                     that.history_list = res["data"];

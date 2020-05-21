@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpSession;
 
 @RestController
+@RequestMapping("api")
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 public class UserJson {
     @Autowired

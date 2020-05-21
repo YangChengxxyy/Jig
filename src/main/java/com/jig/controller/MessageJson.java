@@ -18,6 +18,7 @@ import java.text.ParseException;
 import java.util.List;
 
 @RestController
+@RequestMapping("api")
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 public class MessageJson {
     @Autowired

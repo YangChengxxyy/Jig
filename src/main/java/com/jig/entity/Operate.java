@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Operate {
-    //提醒:？？？写插入operate记录时如果修改的是code那么要把count记录同时加入(想不出来)
+    //提醒:？？？写插入operate记录时如果修改的是code那么要把count记录同时加入(还没想好)
     private String id;
     private String operate_man_id;//操作人id
     private String operate_man_name;
@@ -18,6 +18,8 @@ public class Operate {
     private String new_value;
     private String to_string;
     private PurchaseIncomeSubmit purchase_submit;
+    private OperateUpdateInfo operateUpdateInfo;
+    private String operate_string;
     private List<String> field_list;
 
 
@@ -160,6 +162,22 @@ public class Operate {
                 }
             }
         }
+    }
+
+    public OperateUpdateInfo getOperateUpdateInfo() {
+        return operateUpdateInfo;
+    }
+
+    public void setOperateUpdateInfo(OperateUpdateInfo operateUpdateInfo) {
+        this.operateUpdateInfo = operateUpdateInfo;
+    }
+
+    public String getOperate_string() {
+        return operate_string;
+    }
+
+    public void setOperate_string(String operate_string) {
+        this.operate_string = operate_string;
     }
 
     public OperateUpdateInfo setOperateUpdateInfo() {

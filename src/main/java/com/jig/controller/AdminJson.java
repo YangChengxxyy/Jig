@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("admin")
+@RequestMapping("/api/admin")
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 public class AdminJson {
     @Autowired
@@ -36,11 +36,6 @@ public class AdminJson {
         map.put("max", (int) Math.ceil(all / (double) page_size));
         map.put("all", all);
         return map;
-    }
-
-    @RequestMapping("get_workcell_list")
-    public List<Workcell> getWorkcellList() {
-        return adminService.getWorkcellList();
     }
 
     @RequestMapping("change_user")

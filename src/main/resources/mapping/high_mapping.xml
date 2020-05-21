@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jig.mapper.HighMapper">
+    <insert id="highAddShoplist" parameterType="com.jig.entity.PurchaseIncomeSubmit">
+        insert into purchase_income_submit(id,submit_id, code, count, submit_time, status, production_line_id, bill_no)
+        values (#{purchase_submit.id},#{purchase_submit.submit_id}, #{purchase_submit.code}, #{purchase_submit.count},
+         now(), 0, #{purchase_submit.production_line_id}, #{purchase_submit.bill_no});
+
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,new_value,operate_string)
+        values(#{purchase_submit.submit_id},#{purchase_submit.id},now(),
+        'purchase_income_submit',
+        'submit_id~code~count~submit_time~status~production_line_id~bill_no','insert',
+        '${purchase_submit.submit_id}~${purchase_submit.code}~${purchase_submit.count}~${purchase_submit.submit_time}~0~${purchase_submit.production_line_id}~${purchase_submit.bill_no}',
+        concat('高级用户',#{purchase_submit.submit_id},'提交采购入库申请'))
+    </insert>
+    <insert id="highSubmitScrap" parameterType="com.jig.entity.ScrapSubmit">
+        update jig_position
+        set status = 3
+        where seq_id = #{scrap_submit.seq_id}
+          and code = #{scrap_submit.code};
+        insert into scrap_submit(code, seq_id, submit_time, submit_id, used_count, scrap_reason,scrap_type, scrap_photo_url,
+                                 status)
+            value (#{scrap_submit.code}, #{scrap_submit.seq_id}, now(), #{scrap_submit.submit_id},
+                   (select used_count from jig_entity where code = #{scrap_submit.code} and seq_id = #{scrap_submit.seq_id}), #{scrap_submit.scrap_reason},#{scrap_submit.scrap_type},
+                   #{pathName}, 0);
+        insert into message(id, generate_id, generate_time, accept_type, status, message, tab_id)
+        values (UUID(), #{scrap_submit.submit_id}, now(), 'supervisor', '00', '提交了新的报废申请', 'scrap_submit');
+
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,new_value,operate_string)
+        values(#{scrap_submit.submit_id},#{scrap_submit.id},now(),
+        'scrap_submit',
+        'code~seq_id~submit_time~submit_id~scrap_reason~scrap_type~scrap_photo_url~status','insert',
+        concat('${scrap_submit.code}~${scrap_submit.seq_id}~',now(),'~${scrap_submit.submit_id}~${scrap_submit.scrap_reason}~${scrap_submit.scrap_type}~${pathName}~0'),
+        concat('高级用户',#{scrap_submit.submit_id},'提交报废申请'));
+    </insert>
+
+    <update id="highUpdatePurchaseIncomeSubmit">
+        update purchase_income_submit
+        set code              = #{code},
+            count=#{count},
+            production_line_id=#{production_line_id}
+        where id = #{id}
+    </update>
+    <insert id="highAgreeRepairSubmit">
+        update repair_submit
+        set acceptor_id   = #{submit_id},
+            acceptor_time = now(),
+            status        = 1
+        where id = #{id};
+        insert into repair_submit_history
+        select *
+        from repair_submit
+        where id = #{id};
+        delete
+        from repair_submit
+        where id = #{id};
+        insert into message(id, generate_id, generate_time, accept_id, accept_type, status, message)
+        values (UUID(), #{submit_id}, now(), (select submit_id from repair_submit where id = #{id}), 'naive', '00',
+                '同意了你的报修申请');
+    </insert>
+    <insert id="highDisagreeRepairSubmit">
+        update repair_submit
+        set acceptor_id     = #{submit_id},
+            acceptor_time   = now(),
+            status          = 2,
+            acceptor_reason = #{reason}
+        where id = #{id};
+        update jig_position
+        set status = 1
+        where id = #{id};
+        insert into repair_submit_history
+        select *
+        from repair_submit
+        where id = #{id};
+        delete
+        from repair_submit
+        where id = #{id};
+        insert into message(id, generate_id, generate_time, accept_id, accept_type, status, message)
+        values (UUID(), #{submit_id}, now(), (select submit_id from repair_submit where id = #{id}), 'naive', '00',
+                ' 拒绝了你的报修申请');
+    </insert>
+    <select id="highGetPurchaseIncomeSubmitList" resultType="com.jig.entity.PurchaseIncomeSubmit">
+        select ps.*,
+               production_line.name production_line_name,
+               u1.name              submit_name,
+               u2.name              first_acceptor_name,
+               u3.name              final_acceptor_name
+        from purchase_income_submit ps
+                 left join user u1 on ps.submit_id = u1.id
+                 left join user u2 on
+            ps.first_acceptor = u2.id
+                 left join `user` u3 on ps.final_acceptor = u3.id,
+             production_line
+        where ps.production_line_id = production_line.id
+        limit #{page_number},5
+    </select>
+    <select id="highGetPurchaseIncomeSubmitListPage" resultType="java.lang.Integer">
+        select count(*)
+        from purchase_income_submit ps
+                 left join user u1 on ps.submit_id = u1.id
+                 left join user u2 on
+            ps.first_acceptor = u2.id
+                 left join `user` u3 on ps.final_acceptor = u3.id,
+             production_line
+        where ps.production_line_id = production_line.id
+    </select>
+    <select id="highSearchPurchaseIncomeHistory" resultType="com.jig.entity.PurchaseIncomeHistory">
+        select ph.*, production_line.name production_line_name, u1.name submit_name,u2.name first_acceptor_name,u3.name
+        final_acceptor_name
+        from purchase_income_submit_history ph left join user u1 on ph.submit_id = u1.id left join user u2 on
+        ph.first_acceptor = u2.id left join `user` u3 on ph.final_acceptor = u3.id,production_line
+        WHERE ph.production_line_id = production_line.id
+        <if test="bill_no != null and bill_no != ''">
+            and ph.bill_no like concat('%',#{bill_no},'%')
+        </if>
+        <if test="submit_name != null and submit_name != ''">
+            and u1.name like concat('%',#{submit_name},'%')
+        </if>
+        <if test="code != null and code != ''">
+            and ph.code like concat('%',#{code},'%')
+        </if>
+        <if test="production_line_id != null and production_line_id != ''">
+            and ph.production_line_id = #{production_line_id}
+        </if>
+        <if test="status != null and status != ''">
+            and ph.status = #{status}
+        </if>
+        <if test="start_date != end_date">
+            and ph.submit_time between #{start_date} and #{end_date}
+        </if>
+        limit #{page_number},#{page_size}
+    </select>
+    <select id="highSearchPurchaseIncomeHistoryPage" resultType="java.lang.Integer">
+        select count(*)
+        from purchase_income_submit_history ph left join user u1 on ph.submit_id = u1.id left join user u2 on
+        ph.first_acceptor = u2.id left join `user` u3 on ph.final_acceptor = u3.id,production_line
+        WHERE ph.production_line_id = production_line.id
+        <if test="bill_no != null and bill_no != ''">
+            and ph.bill_no like concat('%',#{bill_no},'%')
+        </if>
+        <if test="submit_name != null and submit_name != ''">
+            and u1.name like concat('%',#{submit_name},'%')
+        </if>
+        <if test="code != null and code != ''">
+            and ph.code like concat('%',#{code},'%')
+        </if>
+        <if test="production_line_id != null and production_line_id != ''">
+            and ph.production_line_id = #{production_line_id}
+        </if>
+        <if test="status != null and status != ''">
+            and ph.status = #{status}
+        </if>
+        <if test="start_date != end_date">
+            and ph.submit_time between #{start_date} and #{end_date}
+        </if>
+    </select>
+    <select id="highSearchAllPurchaseIncomeHistory" resultType="com.jig.entity.PurchaseIncomeHistory">
+        select ph.*, production_line.name production_line_name, u1.name submit_name,u2.name first_acceptor_name,u3.name
+        final_acceptor_name
+        from purchase_income_submit_history ph left join user u1 on ph.submit_id = u1.id left join user u2 on
+        ph.first_acceptor = u2.id left join `user` u3 on ph.final_acceptor = u3.id,production_line
+        WHERE ph.production_line_id = production_line.id
+        <if test="bill_no != null and bill_no != ''">
+            and ph.bill_no like concat('%',#{bill_no},'%')
+        </if>
+        <if test="submit_name != null and submit_name != ''">
+            and u1.name like concat('%',#{submit_name},'%')
+        </if>
+        <if test="code != null and code != ''">
+            and ph.code like concat('%',#{code},'%')
+        </if>
+        <if test="production_line_id != null and production_line_id != ''">
+            and ph.production_line_id = #{production_line_id}
+        </if>
+        <if test="status != null and status != ''">
+            and ph.status = #{status}
+        </if>
+        <if test="start_date != end_date">
+            and ph.submit_time between #{start_date} and #{end_date}
+        </if>
+    </select>
+    <delete id="highDeletePurchaseSubmit">
+        delete
+        from purchase_income_submit
+        where id = #{id}
+    </delete>
+    <select id="highGetRepairJig" resultType="com.jig.entity.RepairJig">
+        select rs.*, u1.name submit_name, u2.name acceptor_name
+        from repair_submit rs
+                 left join `user` u1 on rs.submit_id = u1.id
+                 left join `user` u2 on rs.acceptor_id = u2.id
+        where u1.workcell_id in (select user.workcell_id from user where id = #{id})
+          and rs.status = 0
+        limit #{page_number},#{page_size}
+    </select>
+    <select id="highGetRepairJigPage" resultType="java.lang.Integer">
+        select count(*)
+        from repair_submit rs
+                 left join `user` u1 on rs.submit_id = u1.id
+                 left join `user` u2 on rs.acceptor_id = u2.id
+        where u1.workcell_id in (select user.workcell_id from user where id = #{id})
+          and rs.status = 0
+    </select>
+    <select id="highSearchRepairHistory" resultType="com.jig.entity.RepairJigHistory">
+        select rh.*,u1.name submit_name,u2.name acceptor_name
+        from repair_submit_history rh
+        left join user u1 on rh.submit_id = u1.id
+        left join user u2 on rh.acceptor_id = u2.id
+        where u1.workcell_id in (select user.workcell_id from user where id = #{id})
+        <if test="code != null and code != ''">
+            and rh.code like concat('%',#{code},'%')
+        </if>
+        <if test="seq_id != null and seq_id !=''">
+            and rh.seq_id = #{seq_id}
+        </if>
+        <if test="submit_name != null and submit_name != ''">
+            and u1.name like concat('%',#{submit_name},'%')
+        </if>
+        <if test="status != null and status != ''">
+            and rh.status = #{status}
+        </if>
+        <if test="start_date != end_date">
+            and rh.submit_time between #{start_date} and #{end_date}
+        </if>
+        limit #{page_number},5
+    </select>
+    <select id="highSearchAllRepairHistory" resultType="com.jig.entity.RepairJigHistory">
+        select rh.*,u1.name submit_name,u2.name acceptor_name
+        from repair_submit_history rh
+        left join user u1 on rh.submit_id = u1.id
+        left join user u2 on rh.acceptor_id = u2.id
+        where u1.workcell_id in (select user.workcell_id from user where id = #{id})
+        <if test="code != null and code != ''">
+            and rh.code like concat('%',#{code},'%')
+        </if>
+        <if test="seq_id != null and seq_id !=''">
+            and rh.seq_id = #{seq_id}
+        </if>
+        <if test="submit_name != null and submit_name != ''">
+            and u1.name like concat('%',#{submit_name},'%')
+        </if>
+        <if test="status != null and status != ''">
+            and rh.status = #{status}
+        </if>
+        <if test="start_date != end_date">
+            and rh.submit_time between #{start_date} and #{end_date}
+        </if>
+    </select>
+    <select id="highSearchRepairHistoryPage" resultType="java.lang.Integer">
+        select count(*)
+        from repair_submit_history rh
+        left join user u1 on rh.submit_id = u1.id
+        left join user u2 on rh.acceptor_id = u2.id
+        where u1.workcell_id in (select user.workcell_id from user where id = #{id})
+        <if test="code != null and code != ''">
+            and rh.code like concat('%',#{code},'%')
+        </if>
+        <if test="seq_id != null and seq_id !=''">
+            and rh.seq_id = #{seq_id}
+        </if>
+        <if test="submit_name != null and submit_name != ''">
+            and u1.name like concat('%',#{submit_name},'%')
+        </if>
+        <if test="status != null and status != ''">
+            and rh.status = #{status}
+        </if>
+        <if test="start_date != end_date">
+            and rh.submit_time between #{start_date} and #{end_date}
+        </if>
+    </select>
+    <select id="highGetScrap" resultType="com.jig.entity.ScrapSubmit">
+        select ss.*, u1.name submit_name, u2.name first_acceptor_name
+        from scrap_submit ss
+                 left join `user` u1 on ss.submit_id = u1.id
+                 left join `user` u2 on ss.first_acceptor = u2.id
+                 left join `user` u3 on ss.final_acceptor = u3.id
+        where ss.submit_id = #{submit_id}
+        limit #{page_number},#{page_size}
+    </select>
+    <select id="highGetScrapPage" resultType="java.lang.Integer">
+        select count(*)
+        from scrap_submit ss
+                 left join `user` u1 on ss.submit_id = u1.id
+                 left join `user` u2 on ss.first_acceptor = u2.id
+                 left join `user` u3 on ss.final_acceptor = u3.id
+        where ss.submit_id = #{submit_id}
+    </select>
+    <select id="highSearchScrapHistory" resultType="com.jig.entity.ScrapHistory">
+        select ss.*,u1.name submit_name,u2.name first_acceptor_name
+        from scrap_submit_history ss
+        left join `user` u1 on ss.submit_id = u1.id
+        left join `user` u2 on ss.first_acceptor = u2.id
+        left join `user` u3 on ss.final_acceptor = u3.id
+        where ss.submit_id = #{submit_id}
+        <if test="code != null and code != ''">
+            and ss.code like concat('%',#{code},'%')
+        </if>
+        <if test="scrap_reason != null and scrap_reason != ''">
+            and ss.scrap_reason like concat('%',#{scrap_reason},'%')
+        </if>
+        <if test="seq_id != null and seq_id !=''">
+            and ss.seq_id = #{seq_id}
+        </if>
+        <if test="status != null and status != ''">
+            and ss.status = #{status}
+        </if>
+        <if test="start_date != end_date">
+            and ss.submit_time between #{start_date} and #{end_date}
+        </if>
+        limit #{page_number},5
+    </select>
+    <select id="highSearchScrapHistoryPage" resultType="java.lang.Integer">
+        select count(*)
+        from scrap_submit_history ss
+        left join `user` u1 on ss.submit_id = u1.id
+        left join `user` u2 on ss.first_acceptor = u2.id
+        left join `user` u3 on ss.final_acceptor = u3.id
+        where ss.submit_id = #{submit_id}
+        <if test="code != null and code != ''">
+            and ss.code like concat('%',#{code},'%')
+        </if>
+        <if test="scrap_reason != null and scrap_reason != ''">
+            and ss.scrap_reason like concat('%',#{scrap_reason},'%')
+        </if>
+        <if test="seq_id != null and seq_id !=''">
+            and ss.seq_id = #{seq_id}
+        </if>
+        <if test="status != null and status != ''">
+            and ss.status = #{status}
+        </if>
+        <if test="start_date != end_date">
+            and ss.submit_time between #{start_date} and #{end_date}
+        </if>
+    </select>
+    <select id="highSearchAllScrapHistory" resultType="com.jig.entity.ScrapHistory">
+        select ss.*,u1.name submit_name,u2.name first_acceptor_name
+        from scrap_submit_history ss
+        left join `user` u1 on ss.submit_id = u1.id
+        left join `user` u2 on ss.first_acceptor = u2.id
+        left join `user` u3 on ss.final_acceptor = u3.id
+        where ss.submit_id = #{submit_id}
+        <if test="code != null and code != ''">
+            and ss.code like concat('%',#{code},'%')
+        </if>
+        <if test="scrap_reason != null and scrap_reason != ''">
+            and ss.scrap_reason like concat('%',#{scrap_reason},'%')
+        </if>
+        <if test="seq_id != null and seq_id !=''">
+            and ss.seq_id = #{seq_id}
+        </if>
+        <if test="status != null and status != ''">
+            and ss.status = #{status}
+        </if>
+        <if test="start_date != end_date">
+            and ss.submit_time between #{start_date} and #{end_date}
+        </if>
+    </select>
+
+    <delete id="highDeleteScrap">
+        delete
+        from scrap_submit
+        where id = #{id}
+    </delete>
+
+    <select id="highGetRepairCount" resultType="java.lang.Integer">
+        select count(*)
+        from repair_submit
+                 inner join user on submit_id = user.id
+        where workcell_id = (select workcell_id from user where id = #{submit_id})
+    </select>
+    <select id="highGetRepairBasic" resultType="java.util.Map">
+        select code as name, count(0) as `value`
+        from repair_submit
+                 inner join user on submit_id = user.id
+        where workcell_id = (select workcell_id from user where id = #{submit_id})
+        group by code
+    </select>
+</mapper>

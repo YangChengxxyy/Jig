@@ -387,32 +387,6 @@ const jig_use_analysis = new Vue({
                     formatter: '{value}次'
                 }
             }
-        },
-        cljj:{
-            data:{
-                columns:['time','次数'],
-                rows:[
-                    {'time':'2012','次数':25},
-                    {'time':'2013','次数':30},
-                    {'time':'2014','次数':45},
-                    {'time':'2015','次数':25},
-                    {'time':'2016','次数':37},
-                    {'time':'2017','次数':5},
-                    {'time':'2018','次数':20},
-                    {'time':'2019','次数':12}
-                ]
-            }
-        },
-        ggcx:{
-            data:{
-                columns:['产线','次数'],
-                rows:[
-                    {'产线':'一号产线','次数':12},
-                    {'产线':'二号产线','次数':4},
-                    {'产线':'三号产线','次数':7},
-                    {'产线':'四号产线','次数':2},
-                ]
-            }
         }
     },
     created: function () {
@@ -532,9 +506,6 @@ const provider_analysis = new Vue({
             extend: {
                 series: {
                     label: {show: true, position: "top"},
-                },
-                title:{
-                    subtext:'LRM=(夹具寿命/(夹具维修次数*夹具的价格))'
                 }
             }
         },

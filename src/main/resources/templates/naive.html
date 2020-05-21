@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:v-for="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,6 +20,9 @@
     <link rel="stylesheet" href="assets/css/xenon-components.css">
     <link rel="stylesheet" href="assets/css/xenon-skins.css">
     <link rel="stylesheet" href="assets/css/custom.css">
+
+    <!--自己写的一些css-->
+    <link rel="stylesheet" href="css/mainStyle.css">
 
     <link rel="stylesheet" href="assets/css/fonts/elusive/css/elusive.css">
 
@@ -256,7 +260,7 @@
 
             <div class="tab-content">
 
-                <div id="main1" class="tab-content tab-pane fade in active">
+                <div id="main1" class="tab-content tab-pane fade in active" >
                     <div class="page-title">
 
                         <div class="title-env">
@@ -275,10 +279,49 @@
                             </ol>
 
                         </div>
-
                     </div>
+
+
                     <div id="jig_outgoing" class="tab-pane fade in active">
-                        <div class="panel panel-default"><!-- Add class "collapsed" to minimize the panel -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">搜索</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="form-group col-sm-3">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">工夹具代码</span>
+                                            <input class="form-control" type="text" v-model="sel_code">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-3">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">工夹具名字</span>
+                                            <input class="form-control" type="text" v-model="sel_name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-3">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">用途</span>
+                                            <input class="form-control" type="text" v-model="sel_user_for">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <button class="btn btn-dark" @click="clear_select_condition"><i class="el-trash"></i>清空</button>
+                                        <button class="btn btn-primary" type="button"
+                                                @click="get_jig_list_by_select"><i class="el-search"></i>查询
+                                        </button>
+                                        <!--<a class="btn btn-default" :href="onePageUrl"
+                                           :class="{'disabled': jig_list.length === 0}"><i
+                                                class="el-export"></i>导出本页</a>-->
+                                        <button class="btn btn-default">导出</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" style="height: 600px"><!-- Add class "collapsed" to minimize the panel -->
                             <div class="panel-heading">
                                 <h3 class="panel-title">工夹具出库</h3>
 
@@ -289,139 +332,75 @@
                                         <span class="expand-icon">+</span>
                                     </a>
 
-                                    <a href="#" data-toggle="reload" @click="getData">
+                                    <a href="#" data-toggle="reload" >
                                         <i class="fa-rotate-right"></i>
                                     </a>
-
                                 </div>
                             </div>
-                            <div class="panel-body">
+                            <div class="panel-body" style="height: 525px" >
+                                <div class="col-sm-2" style="height:500px;background-color: #F8F8F8;margin-right: 10px">
+                                    <ul id="main-nav" class="nav nav-stacked" style="">
+                                        <li class="active">
+                                            <a href="#">
+                                                <i class="glyphicon glyphicon-th-large"></i>
+                                                存放库位
+                                            </a>
+                                        </li>
+                                        <li v-for="item in location_list">
+                                            <a :href="'#jig_cabinet'+item.jig_cabinet_id" class="nav-header collapsed" data-toggle="collapse">
+                                                <i class="glyphicon glyphicon-credit-card"></i>
+                                                {{item.jig_cabinet_id}}夹具柜
+                                                <span class="pull-right glyphicon glyphicon-chevron-down"></span>
+                                            </a>
+                                            <ul :id="'jig_cabinet'+item.jig_cabinet_id" class="nav nav-list collapse secondmenu" style="height: 0px;">
+                                                <li v-for="location in item.location_id"
+                                                    :class="{'choosen':item.jig_cabinet_id == jig_cabinet_id && location == jig_location_id}"
+                                                    @click="get_jig_list_by_location_id(item.jig_cabinet_id,location)"><a>{{location}}区</a></li>
+                                            </ul>
+                                        </li>
 
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-hover table-bordered" role="table">
-                                        <thead>
-                                        <tr>
-                                            <th>
-                                                工夹具代码
-                                            </th>
-                                            <th>
-                                                工夹具名字
-                                            </th>
-                                            <th>
-                                                使用人
-                                            </th>
-                                            <th>
-                                                用途
-                                            </th>
-                                            <th>
-                                                申请时间
-                                            </th>
-                                            <th>
-                                                库存
-                                            </th>
-                                            <th>
-                                                操作
-                                            </th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr v-for="item in outgoing_submit_list" v-bind:key="item.id">
-                                            <td>
-                                                {{item.code}}
-                                            </td>
-                                            <td>
-                                                {{item.name}}
-                                            </td>
-                                            <td>
-                                                {{item.user_name}}
-                                            </td>
-                                            <td>
-                                                {{item.user_for}}
-                                            </td>
-                                            <td>
-                                                {{item.submit_time}}
-                                            </td>
-                                            <td>
-                                                {{item.count}}
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-primary" data-toggle="modal" data-target="#chuku"
-                                                        @click="changeCheck(item.user_id,item.code,item.id)">出库
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                                    </ul>
                                 </div>
-                                <div>
-                                    <div class="modal fade" id="chuku" role="dialog" data-backdrop="false"
-                                         aria-labelledby="chukuLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                            aria-hidden="true">&times;
-                                                    </button>
-                                                    <h4 class="modal-title" id="myModalLabel">确认信息</h4>
+                                <div class="col-sm-9" style="height:500px;background-color: #F8F8F8;margin-left: 20px">
+                                    <ul id="jig_position_list" class="nav nav-stacked" style="margin-bottom: 4px">
+                                        <li class="active">
+                                            <a href="#">
+                                                <i class="glyphicon glyphicon-th-large"></i>
+                                                仓库详情
+                                            </a>
+                                        </li>
+                                    </ul>
+
+                                        <ul class="list-group pre-scrollable" style="height: 435px">
+                                            <li class="list-group-item" v-for="item in jig_list">{{item.code}} {{item.name}} &nbsp;&nbsp;&nbsp;&nbsp;{{item.count}}件
+                                                <div class="pull-right btn-group btn-group-sm"
+                                                     style="position: relative;top: -5px">
+                                                    <button class="btn btn-primary"
+                                                            data-toggle="modal"
+                                                            data-target="#jig_detail"
+                                                            @click="get_jig_detail_list(item.code)">查看</button>
+                                                    <button class="btn btn-success"
+                                                            data-toggle="modal"
+                                                            data-target="#chuku"
+                                                            @click="get_chuku_modal_jig_detail_list(item.code)">出库</button>
+                                                    <button class="btn btn-warning"
+                                                            data-toggle="modal"
+                                                            data-target="#check_jig"
+                                                            @click="get_maintenance_jig_detail_list(item.code)">检点</button>
                                                 </div>
-                                                <div class="modal-body">
-                                                    <form role="form" class="form-horizontal">
-                                                        <div class="form-group row">
-                                                            <label for="no" class="col-sm-3 control-label">刷卡或者输入工号</label>
-                                                            <div class="col-sm-6">
-                                                                <div class="input-group">
-                                                                    <input type="text" class="form-control" id="no"
-                                                                           v-model.trim="check_user_id"
-                                                                           @change="getUsername">
-                                                                    <span class="input-group-addon"><span
-                                                                            class="glyphicon glyphicon-qrcode"></span></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-3 control-label"
-                                                                 style="text-align: left">{{user_name}}
-                                                                <span v-if="check1"
-                                                                      class="glyphicon glyphicon-ok pull-right text-success"></span>
-                                                                <span v-else
-                                                                      class="glyphicon glyphicon-remove pull-right text-danger"></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label for="seq_id"
-                                                                   class="col-sm-3 control-label">扫描工夹具二维码</label>
-                                                            <div class="col-sm-6">
-                                                                <div class="input-group">
-                                                                    <input type="text" class="form-control" id="seq_id"
-                                                                           v-model.trim="code_seq_id" @change="getPosition">
-                                                                    <span class="input-group-addon"><span
-                                                                            class="glyphicon glyphicon-qrcode"></span></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-3 control-label"
-                                                                 style="text-align: left">{{position}}
-                                                                <span v-if="check2"
-                                                                      class="glyphicon glyphicon-ok pull-right text-success"></span>
-                                                                <span v-else
-                                                                      class="glyphicon glyphicon-remove pull-right text-danger"></span>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default"
-                                                            data-dismiss="modal">关闭
-                                                    </button>
-                                                    <button type="button" class="btn btn-primary" @click="outgoing"
-                                                            :class="{'disabled': !(user_id != null && check1 && check2)}">
-                                                        提交出库
-                                                    </button>
-                                                </div>
-                                            </div><!-- /.modal-content -->
-                                        </div><!-- /.modal -->
+                                            </li>
+                                        </ul>
                                     </div>
-                                </div>
-                                <my-pagination :now_page_number="now_page_number" :now_page_size="now_page_size" :max_page_number="max_page_number"
+
+
+
+                                <!--
+                                <div>
+
+                                </div>-->
+                                <!--<my-pagination :now_page_number="now_page_number" :now_page_size="now_page_size" :max_page_number="max_page_number"
                                                :page_size_list="page_size_list" :all_count="all_count"
-                                ></my-pagination>
+                                ></my-pagination>-->
 
                             </div>
                         </div>
@@ -595,6 +574,7 @@
                                 <my-pagination :now_page_number="now_page_number" :now_page_size="now_page_size" :max_page_number="max_page_number"
                                                :page_size_list="page_size_list" :all_count="all_count"
                                 ></my-pagination>
+
                             </div>
                         </div>
                     </div><!--  /归还工夹具  -->
@@ -677,121 +657,7 @@
                                             <button class="btn btn-primary" data-toggle="modal" data-target="#jianxiu">
                                                 检修
                                             </button>
-                                            <div class="modal fade" id="jianxiu" tabindex="-1" role="dialog"  data-backdrop="false"
-                                                 aria-labelledby="jianxiuLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-hidden="true">&times;
-                                                            </button>
-                                                            <h4 class="modal-title" id="jianxiuLabel">确认信息</h4>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="row clearfix">
-                                                                <div class="col-sm-2"></div>
-                                                                <div class="col-sm-8"><h5>
-                                                                    &nbsp;&nbsp;&nbsp;&nbsp;是否存在以下问题:</h5></div>
-                                                                <div class="col-sm-2"></div>
-                                                            </div>
-                                                            <div class="row clearfix">
-                                                                <div class="col-sm-2"></div>
-                                                                <div class="col-sm-8">
-                                                                    <div class="input-group">
-                                                                        <div class="form-control">夹具是否有螺丝松动.</div>
-                                                                        <span class="input-group-addon"><label><input
-                                                                                type="checkbox"></label></span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-2"></div>
-                                                            </div>
-                                                            <div class="row clearfix">
-                                                                <div class="col-sm-2"></div>
-                                                                <div class="col-sm-8">
-                                                                    <div class="input-group">
-                                                                        <div class="form-control">夹具是否有部件损坏.</div>
-                                                                        <span class="input-group-addon"><label><input
-                                                                                type="checkbox"></label></span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-2"></div>
-                                                            </div>
-                                                            <div class="row clearfix">
-                                                                <div class="col-sm-2"></div>
-                                                                <div class="col-sm-8">
-                                                                    <div class="input-group">
-                                                                        <div class="form-control">夹具是否有钢套损坏掉落等不良.</div>
-                                                                        <span class="input-group-addon"><label><input
-                                                                                type="checkbox"></label></span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-2"></div>
-                                                            </div>
-                                                            <div class="row clearfix">
-                                                                <div class="col-sm-2"></div>
-                                                                <div class="col-sm-8">
-                                                                    <div class="input-group">
-                                                                        <div class="form-control">夹具是否有机械部件松动.</div>
-                                                                        <span class="input-group-addon"><label><input
-                                                                                type="checkbox"></label></span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-2"></div>
-                                                            </div>
-                                                            <div class="row clearfix">
-                                                                <div class="col-sm-2"></div>
-                                                                <div class="col-sm-8">
-                                                                    <div class="input-group">
-                                                                        <div class="form-control">夹具电路是否正常工作.</div>
-                                                                        <span class="input-group-addon"><label><input
-                                                                                type="checkbox"></label></span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-2"></div>
-                                                            </div>
-                                                            <div class="row clearfix">
-                                                                <div class="col-sm-2"></div>
-                                                                <div class="col-sm-8">
-                                                                    <div class="input-group">
-                                                                        <div class="form-control">夹具是否有不正常的响声.</div>
-                                                                        <span class="input-group-addon"><label><input
-                                                                                type="checkbox"></label></span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-2"></div>
-                                                            </div>
-                                                            <div class="row clearfix">
-                                                                <div class="col-sm-2"></div>
-                                                                <div class="col-sm-8">
-                                                                    <div class="input-group">
-                                                                        <div class="form-control">夹具是否牢固的固定在对应位置.</div>
-                                                                        <span class="input-group-addon"><label><input
-                                                                                type="checkbox"></label></span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-2"></div>
-                                                            </div>
-                                                            <div class="row clearfix">
-                                                                <div class="col-sm-2"></div>
-                                                                <div class="col-sm-8">
-                                                                    <div class="input-group">
-                                                                        <div class="form-control">是否没使用抹布或者刷子进行夹具清洁.</div>
-                                                                        <span class="input-group-addon"><label><input
-                                                                                type="checkbox"></label></span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-2"></div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default"
-                                                                    data-dismiss="modal">关闭
-                                                            </button>
-                                                            <button type="button" class="btn btn-primary">提交</button>
-                                                        </div>
-                                                    </div><!-- /.modal-content -->
-                                                </div><!-- /.modal -->
-                                            </div>
+
                                         </td>
                                     </tr>
                                     <tr>
@@ -1294,7 +1160,8 @@
                                     </div>
                                 </div>
                                 <my-pagination :now_page_number="now_page_number" :now_page_size="now_page_size" :max_page_number="max_page_number"
-                                               :page_size_list="page_size_list" :all_count="all_count"></my-pagination>
+                                               :page_size_list="page_size_list" :all_count="all_count"
+                                ></my-pagination>
                             </div>
                         </div>
                     </div>
@@ -1460,6 +1327,228 @@
 
 </div>
 
+<!--仓库管理/查看工夹具详情-->
+<div class="modal fade" id="jig_detail" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">工夹具详情</h4>
+            </div>
+            <div class="modal-body" v-if="jig_detail != null">
+                <form role="form" class="form-horizontal">
+                    <div class="form-group row">
+                        <label class="col-sm-3 control-label">工夹具序列号</label>
+                        <div class="col-sm-6">
+                            <select class="form-control " v-model="seq_id">
+                                <option v-for="item in jig_detail_list" :value="item.seq_id">
+                                    {{item.code}}-{{item.seq_id}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 control-label">入库时间</label>
+                        <div class="col-sm-6">
+                            <div class="form-control">{{jig_detail.reg_date}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 control-label">单据号</label>
+                        <div class="col-sm-6">
+                            <div class="form-control">{{jig_detail.bill_no}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 control-label">存放位置</label>
+                        <div class="col-sm-6">
+                            <div class="form-control" v-if="jig_detail.bin != null">{{jig_detail.jig_cabinet_id}}-{{jig_detail.location_id}}-{{jig_detail.bin}}</div>
+                            <div class="form-control" v-if="jig_detail.bin == null">{{jig_detail.jig_cabinet_id}}-{{jig_detail.location_id}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 control-label">使用次数</label>
+                        <div class="col-sm-6">
+                            <div class="form-control">{{jig_detail.used_count}}</div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--仓库管理/出库-->
+<div class="modal fade" id="chuku" role="dialog" data-backdrop="false"
+     aria-labelledby="chukuLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;
+                </button>
+                <h4 class="modal-title">确认信息</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="form-horizontal">
+                    <div class="form-group row">
+                        <label class="col-sm-3 control-label">工夹具序列号</label>
+                        <div class="col-sm-6">
+                            <select class="form-control " v-model="seq_id">
+                                <option v-for="item in jig_detail_list" :value="item.seq_id">
+                                    {{item.code}}-{{item.seq_id}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="no" class="col-sm-3 control-label">刷卡或者输入工号</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="no"
+                                       v-model.trim="check_user_id"
+                                       @change="getUsername">
+                                <span class="input-group-addon"><span
+                                        class="glyphicon glyphicon-qrcode"></span></span>
+                            </div>
+                        </div>
+                        <div :class="check1?'col-sm-3 control-label text-success':'col-sm-3 control-label text-danger'"
+                             style="text-align: left">{{user_name}}
+                            <!--<span v-if="check1"
+                                  class="glyphicon glyphicon-ok pull-right text-success"></span>
+                            <span v-else
+                                  class="glyphicon glyphicon-remove pull-right text-danger"></span>-->
+                        </div>
+                    </div>
+                    <!--<div class="form-group row">
+                        <label for="seq_id"
+                               class="col-sm-3 control-label">扫描工夹具二维码</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="seq_id"
+                                       v-model.trim="code_seq_id" @change="getPosition">
+                                <span class="input-group-addon"><span
+                                        class="glyphicon glyphicon-qrcode"></span></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 control-label"
+                             style="text-align: left">{{position}}
+                            <span v-if="check2"
+                                  class="glyphicon glyphicon-ok pull-right text-success"></span>
+                            <span v-else
+                                  class="glyphicon glyphicon-remove pull-right text-danger"></span>
+                        </div>
+                    </div>-->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">关闭
+                </button>
+                <button type="button" class="btn btn-primary" @click="outgoing"
+                        :class="{'disabled': !(check_user_id != null && check1)}">
+                    提交出库
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--仓库管理/工夹具检点-->
+<div class="modal fade" id="check_jig" tabindex="-1" role="dialog"  data-backdrop="false"
+     aria-labelledby="jianxiuLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;
+                </button>
+                <h4 class="modal-title" id="jianxiuLabel">确认信息</h4>
+            </div>
+
+            <div class="modal-body">
+                <form role="form" class="form-horizontal">
+                    <div class="form-group row">
+                        <label class="col-sm-3 control-label">工夹具序列号</label>
+                        <div class="col-sm-6">
+                            <select class="form-control " v-model="seq_id">
+                                <option v-for="item in jig_detail_list" :value="item.seq_id">
+                                    {{item.code}}-{{item.seq_id}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 control-label">检点周期</label>
+                        <div class="col-sm-6">
+                            <div class="form-control">{{jig_detail.pm_period}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 control-label">上次检点时间</label>
+                        <div class="col-sm-6">
+                            <div class="form-control">{{jig_detail.last_time}}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="no" class="col-sm-3 control-label">刷卡或者输入工号</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control"
+                                       v-model.trim="user_id"
+                                       @change="getUsername">
+                                <span class="input-group-addon"><span
+                                        class="glyphicon glyphicon-qrcode"></span></span>
+                            </div>
+                        </div>
+                        <div :class="check_user_id?'col-sm-3 control-label text-success':'col-sm-3 control-label text-danger'"
+                             style="text-align: left">{{user_name}}
+                        </div>
+                    </div>
+
+                    <div class="row clearfix">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-6"><h5>
+                            &nbsp;&nbsp;&nbsp;&nbsp;是否存在以下问题:</h5></div>
+                        <div class="col-sm-3"></div>
+                    </div>
+                    <div class="row clearfix" v-for="item in maintenance_type_list">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <div class="form-control">{{item.description}}</div>
+                                <span class="input-group-addon"><label><input
+                                        type="checkbox" :value="item.id" v-model="check_maintenance_list"></label></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-6"></div>
+                        <div class="col-sm-4 checkbox">
+                            <label>
+                                <input type="checkbox" v-model="check_finish">
+                                检点完毕
+                            </label>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">关闭
+                </button>
+                <button type="button" class="btn btn-primary"
+                        :class="{'disabled': !(user_id != null && check_user_id && check_finish)}">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 
 <div class="page-loading-overlay">
     <div class="loader-2"></div>

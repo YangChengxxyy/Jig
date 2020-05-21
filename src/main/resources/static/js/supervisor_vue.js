@@ -576,9 +576,9 @@ var scrap_submit_history = new Vue({
                     scrap_reason:this.sel_scrap_reason,
                 },
                 success:function (res) {
-                    if(res.list.length === 0){
+                    /*if(res.list.length === 0){
                         alert("没有结果!");
-                    }
+                    }*/
                     that.scrap_submit_list = res.list;
                     that.max_page_number = res.max;
                     that.all_count = res.all_count;

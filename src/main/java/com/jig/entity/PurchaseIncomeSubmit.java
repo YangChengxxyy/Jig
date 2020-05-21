@@ -22,6 +22,7 @@ public class PurchaseIncomeSubmit {
     private String production_line_name;
     private String bill_no;//单据号
     private String tool_photo_url;//工夹具照片路径
+    private String code_count;
 
     public PurchaseIncomeSubmit() {
         id = UUID.randomUUID().toString().replaceAll("-", "");
@@ -202,6 +203,14 @@ public class PurchaseIncomeSubmit {
 
     public void setFinal_reason(String final_reason) {
         this.final_reason = final_reason;
+    }
+
+    public String getCode_count() {
+        return code_count;
+    }
+
+    public void setCode_count(String code_count) {
+        this.code_count = code_count;
     }
 
     @Override
