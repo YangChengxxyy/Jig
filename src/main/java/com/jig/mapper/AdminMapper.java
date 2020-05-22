@@ -1,6 +1,10 @@
 package com.jig.mapper;
 
-import com.jig.entity.*;
+import com.jig.entity.common.CnEn;
+import com.jig.entity.common.User;
+import com.jig.entity.common.Workcell;
+import com.jig.entity.jig.JigModel;
+import com.jig.entity.jig.JigPart;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

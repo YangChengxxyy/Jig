@@ -1,6 +1,11 @@
 package com.jig.controller;
 
 import com.jig.entity.*;
+import com.jig.entity.purchase.PurchaseIncomeHistory;
+import com.jig.entity.purchase.PurchaseIncomeSubmit;
+import com.jig.entity.repair.RepairJigHistory;
+import com.jig.entity.scrap.ScrapHistory;
+import com.jig.entity.scrap.ScrapSubmit;
 import com.jig.service.HighService;
 import com.jig.utils.PoiUtil;
 import org.apache.commons.io.FileUtils;
@@ -42,7 +47,6 @@ public class HighJson {
     public static final String REPAIR_IMAGE_NAME = "images/repair_images/";
     public static final String SCRAP = "SCRAP";
     public static final String REPAIR = "REPAIR";
-    public static Map<String, PhoneUpload> phoneUploadMap = new HashMap<>();//存放扫码上传的map对象
 
     @NotNull
     private Map<String, Object> getStringObjectMap(List<?> data, int max) {

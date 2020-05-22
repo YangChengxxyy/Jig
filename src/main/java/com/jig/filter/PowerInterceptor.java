@@ -1,7 +1,7 @@
 package com.jig.filter;
 
-import com.jig.entity.LoginState;
-import com.jig.entity.Role;
+import com.jig.entity.common.LoginState;
+import com.jig.entity.common.Role;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;

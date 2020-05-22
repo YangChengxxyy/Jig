@@ -1,6 +1,12 @@
 package com.jig.service;
 
-import com.jig.entity.*;
+import com.jig.entity.common.*;
+import com.jig.entity.jig.JigDefinition;
+import com.jig.entity.jig.JigModel;
+import com.jig.entity.jig.JigPart;
+import com.jig.entity.operate.MaintenanceType;
+import com.jig.entity.purchase.PurchaseIncomeSubmit;
+import com.jig.entity.scrap.ScrapSubmit;
 import com.jig.mapper.CommonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,11 +47,11 @@ public class CommonService {
         return commonMapper.getFamilyList();
     }
 
-    public List<Model> getModelList() {
+    public List<JigModel> getModelList() {
         return commonMapper.getModelList();
     }
 
-    public List<PartNo> getPartNoList() {
+    public List<JigPart> getPartNoList() {
         return commonMapper.getPartNoList();
     }
 

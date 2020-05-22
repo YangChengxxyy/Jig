@@ -1,6 +1,6 @@
 package com.jig.controller;
 
-import com.jig.entity.LoginState;
+import com.jig.entity.common.LoginState;
 import com.jig.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Isolation;

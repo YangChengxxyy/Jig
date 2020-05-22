@@ -1,6 +1,13 @@
 package com.jig.mapper;
 
-import com.jig.entity.*;
+import com.jig.entity.jig.JigDefinition;
+import com.jig.entity.jig.JigEntity;
+import com.jig.entity.jig.JigPosition;
+import com.jig.entity.jig.JigStock;
+import com.jig.entity.out.OutgoSubmit;
+import com.jig.entity.out.OutgoingJig;
+import com.jig.entity.repair.RepairJig;
+import com.jig.entity.repair.RepairJigHistory;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -31,8 +38,8 @@ public interface NaiveMapper {
      * @return
      */
     List<JigStock> navieGetJigListByLocation(@Param("jig_cabinet_id") String jig_cabinet_id,
-                                                  @Param("jig_location_id") String jig_location_id,
-                                                  @Param("workcell_id") String workcell_id);
+                                             @Param("jig_location_id") String jig_location_id,
+                                             @Param("workcell_id") String workcell_id);
 
     /**
      * 初级用户 根据选择的 夹具柜号和区号 确定该code的工夹具list
@@ -42,8 +49,8 @@ public interface NaiveMapper {
      * @return
      */
     List<JigEntity> navieGetJigEntityListByLocation(@Param("jig_cabinet_id") String jig_cabinet_id,
-                                                          @Param("jig_location_id") String jig_location_id,
-                                                          @Param("code") String code);
+                                                    @Param("jig_location_id") String jig_location_id,
+                                                    @Param("code") String code);
 
     /**
      * 初级用户 根据选择的工夹具存放区域 和 搜索条件来 确定工夹具list

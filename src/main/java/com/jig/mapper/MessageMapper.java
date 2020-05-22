@@ -1,6 +1,6 @@
 package com.jig.mapper;
 
-import com.jig.entity.Message;
+import com.jig.entity.common.Message;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

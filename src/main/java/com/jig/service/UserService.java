@@ -1,7 +1,7 @@
 package com.jig.service;
 
-import com.jig.entity.LoginState;
-import com.jig.entity.User;
+import com.jig.entity.common.LoginState;
+import com.jig.entity.common.User;
 import com.jig.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

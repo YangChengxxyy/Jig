@@ -1,6 +1,11 @@
 package com.jig.mapper;
 
-import com.jig.entity.*;
+import com.jig.entity.purchase.PurchaseIncomeHistory;
+import com.jig.entity.purchase.PurchaseIncomeSubmit;
+import com.jig.entity.repair.RepairJig;
+import com.jig.entity.repair.RepairJigHistory;
+import com.jig.entity.scrap.ScrapHistory;
+import com.jig.entity.scrap.ScrapSubmit;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

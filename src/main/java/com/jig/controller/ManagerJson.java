@@ -1,6 +1,11 @@
 package com.jig.controller;
 
-import com.jig.entity.*;
+import com.jig.entity.common.User;
+import com.jig.entity.jig.JigDefinition;
+import com.jig.entity.operate.Operate;
+import com.jig.entity.operate.OperateUpdateInfo;
+import com.jig.entity.purchase.PurchaseIncomeSubmit;
+import com.jig.entity.scrap.ScrapSubmit;
 import com.jig.service.CommonService;
 import com.jig.service.ManagerService;
 import com.jig.utils.LoginStatusUtil;

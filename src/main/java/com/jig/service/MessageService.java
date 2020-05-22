@@ -1,6 +1,6 @@
 package com.jig.service;
 
-import com.jig.entity.Message;
+import com.jig.entity.common.Message;
 import com.jig.mapper.MessageMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

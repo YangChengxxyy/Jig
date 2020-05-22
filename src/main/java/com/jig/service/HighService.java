@@ -1,6 +1,11 @@
 package com.jig.service;
 
-import com.jig.entity.*;
+import com.jig.entity.purchase.PurchaseIncomeHistory;
+import com.jig.entity.purchase.PurchaseIncomeSubmit;
+import com.jig.entity.repair.RepairJig;
+import com.jig.entity.repair.RepairJigHistory;
+import com.jig.entity.scrap.ScrapHistory;
+import com.jig.entity.scrap.ScrapSubmit;
 import com.jig.mapper.HighMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

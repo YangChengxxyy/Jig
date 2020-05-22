@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jig.mapper.ManagerMapper">
-    <select id="get_manager_purchase_submit_list" resultType="com.jig.entity.PurchaseIncomeSubmit">
+    <select id="get_manager_purchase_submit_list" resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
         select p.*,
         u.name submit_name,
         pl.name production_line_name,
@@ -18,7 +18,7 @@
         select count(*) from purchase_income_submit p inner join user u on p.submit_id = u.id
         where (status = 2 or p.final_acceptor = #{user_id}) and u.workcell_id = #{workcell_id}
     </select>
-    <select id="get_manager_purchase_detail" resultType="com.jig.entity.PurchaseIncomeSubmit">
+    <select id="get_manager_purchase_detail" resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
         select p.*,u.name submit_name from purchase_income_submit p inner join user u on p.submit_id = u.id
         where p.id = #{id}
     </select>
@@ -47,14 +47,14 @@
 
         delete from purchase_income_submit where id = #{id}-->
     </update>
-    <select id="get_manager_jig_info_list" resultType="com.jig.entity.JigDefinition">
+    <select id="get_manager_jig_info_list" resultType="com.jig.entity.jig.JigDefinition">
         select *  from jig_definition j inner join jig_family f on j.family_id = f.id
         limit #{page_number},#{page_size}
     </select>
     <select id="get_manager_jig_info_list_pages" resultType="java.lang.Integer">
         SELECT count(*) from jig_definition
     </select>
-    <select id="get_manager_purchase_submit_list_history" resultType="com.jig.entity.PurchaseIncomeSubmit">
+    <select id="get_manager_purchase_submit_list_history" resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
         select p.*,
         pl.name production_line_name,
         u.name submit_name,
@@ -108,7 +108,7 @@
             </if>
         </where>
     </select>
-    <select id="manager_get_purchase_submit_history_operate" resultType="com.jig.entity.Operate">
+    <select id="manager_get_purchase_submit_history_operate" resultType="com.jig.entity.operate.Operate">
         select o.*,
         u.name 'operate_man_name',
         u.type 'operate_man_type'
@@ -123,7 +123,7 @@
     <select id="get_manager_scrap_submit_count" resultType="java.lang.Integer">
         select count(*) from scrap_submit
     </select>
-    <select id="manager_get_scrap_submit_list" resultType="com.jig.entity.ScrapSubmit">
+    <select id="manager_get_scrap_submit_list" resultType="com.jig.entity.scrap.ScrapSubmit">
         select s.*,
         u1.name submit_name,
         u2.name first_acceptor_name,
@@ -168,7 +168,7 @@
 
 
     </update>
-    <select id="get_manager_scrap_submit_list_history" resultType="com.jig.entity.ScrapSubmit">
+    <select id="get_manager_scrap_submit_list_history" resultType="com.jig.entity.scrap.ScrapSubmit">
         select s.*,
         u1.name submit_name,
         u2.name first_acceptor_name,
@@ -219,10 +219,10 @@
             </if>
         </where>
     </select>
-    <select id="get_manager_store_jig_list" resultType="com.jig.entity.JigEntity">
+    <select id="get_manager_store_jig_list" resultType="com.jig.entity.jig.JigEntity">
         select *,count(code) as 'count' from jig_position group by code
     </select>
-    <select id="get_manager_purchase_total_submit_man" resultType="com.jig.entity.PurchaseTotalSubmitManDetail">
+    <select id="get_manager_purchase_total_submit_man" resultType="com.jig.entity.purchase.PurchaseTotalSubmitManDetail">
         select p.submit_id,u.name 'submit_name',count(u.name) as 'submit_count'
         from purchase_income_submit_history p inner join user u on u.id = p.submit_id
         <where>

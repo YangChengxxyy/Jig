@@ -1,6 +1,12 @@
 package com.jig.service;
 
-import com.jig.entity.*;
+import com.jig.entity.common.User;
+import com.jig.entity.jig.JigDefinition;
+import com.jig.entity.jig.JigEntity;
+import com.jig.entity.operate.Operate;
+import com.jig.entity.purchase.PurchaseIncomeSubmit;
+import com.jig.entity.purchase.PurchaseTotalSubmitManDetail;
+import com.jig.entity.scrap.ScrapSubmit;
 import com.jig.mapper.ManagerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

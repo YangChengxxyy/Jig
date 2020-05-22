@@ -1,6 +1,12 @@
 package com.jig.mapper;
 
-import com.jig.entity.*;
+import com.jig.entity.common.*;
+import com.jig.entity.jig.JigDefinition;
+import com.jig.entity.jig.JigModel;
+import com.jig.entity.jig.JigPart;
+import com.jig.entity.operate.MaintenanceType;
+import com.jig.entity.purchase.PurchaseIncomeSubmit;
+import com.jig.entity.scrap.ScrapSubmit;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -45,9 +51,9 @@ public interface CommonMapper {
 
     List<Family> getFamilyList();
 
-    List<Model> getModelList();
+    List<JigModel> getModelList();
 
-    List<PartNo> getPartNoList();
+    List<JigPart> getPartNoList();
 
     /**
      * 获取工夹具代码列表

@@ -1,7 +1,7 @@
 package com.jig.controller;
 
-import com.jig.entity.LoginState;
-import com.jig.entity.Message;
+import com.jig.entity.common.LoginState;
+import com.jig.entity.common.Message;
 import com.jig.service.MessageService;
 import com.jig.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;

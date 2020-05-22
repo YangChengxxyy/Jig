@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jig.mapper.SupervisorMapper">
-    <select id="supervisorGetJigFamily" resultType="com.jig.entity.Family">
+    <select id="supervisorGetJigFamily" resultType="com.jig.entity.common.Family">
         select * from jig_family
     </select>
-    <select id="supervisorGetAllJigInfoList" resultType="com.jig.entity.JigDefinition">
+    <select id="supervisorGetAllJigInfoList" resultType="com.jig.entity.jig.JigDefinition">
         select *,u1.name 'owner_name',u2.name 'rec_by_name',u3.name 'edit_by_name'
         from jig_definition jd inner join jig_family jf on jd.family_id = jf.id
                                inner join workcell w on jd.workcell_id = w.id
@@ -12,7 +12,7 @@
                                left join user u2 on jd.rec_by = u2.id
                                left join user u3 on jd.edit_by = u3.id
     </select>
-    <insert id="supervisorAddJigFamily" parameterType="com.jig.entity.Family">
+    <insert id="supervisorAddJigFamily" parameterType="com.jig.entity.common.Family">
         insert into jig_family (family) values (#{family});
     </insert>
     <select id="supervisorGetDeleteJigFamilyCount" resultType="java.lang.Integer">
@@ -21,7 +21,7 @@
     <delete id="supervisorDeleteJigFamily">
         delete from jig_family where id = #{id}
     </delete>
-    <select id="supervisor_get_jig_definition_list" resultType="com.jig.entity.JigDefinition">
+    <select id="supervisor_get_jig_definition_list" resultType="com.jig.entity.jig.JigDefinition">
         select jd.*,u1.name 'owner_name',u2.name 'rec_by_name',u3.name 'edit_by_name',jf.family 'family',w.workcell 'workcell'
         from jig_definition jd left join jig_family jf on jd.family_id = jf.id
         left join workcell w on jd.workcell_id = w.id
@@ -71,7 +71,7 @@
             </if>
         </where>
     </select>
-    <select id="supervisorSelectJigInfo" resultType="com.jig.entity.JigDefinition">
+    <select id="supervisorSelectJigInfo" resultType="com.jig.entity.jig.JigDefinition">
         select *,u1.name 'owner_name',u2.name 'rec_by_name',u3.name 'edit_by_name'
         from jig_definition jd left join jig_family jf on jd.family_id = jf.id
         left join workcell w on jd.workcell_id = w.id
@@ -93,7 +93,7 @@
             </if>
         </where>
     </select>
-    <update id="supervisorEditJigInfo" parameterType="com.jig.entity.JigDefinition">
+    <update id="supervisorEditJigInfo" parameterType="com.jig.entity.jig.JigDefinition">
         update jig_definition
         <set>
             name = #{jig_info.name}, code = #{jig_info.code}, model = #{jig_info.model},
@@ -108,7 +108,7 @@
         insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
         values(#{user_id},#{jig_info.id},now(),'jig_definition',#{field},'update',#{old_value},#{new_value})
     </update>
-    <select id="supervisorGetPurchaseSubmitList" resultType="com.jig.entity.PurchaseIncomeSubmit">
+    <select id="supervisorGetPurchaseSubmitList" resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
         select p.*,u.name 'submit_name',
                pl.name 'production_line_name',
                u1.name 'first_acceptor_name',
@@ -140,7 +140,7 @@
         insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
         values(#{first_acceptor},#{id},now(),'purchase_income_submit',#{field},'update',#{old_value},#{new_value})
     </update>
-    <select id="supervisorGetPurchaseSubmitHistory" resultType="com.jig.entity.PurchaseIncomeSubmit">
+    <select id="supervisorGetPurchaseSubmitHistory" resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
         select p.*,u.name 'submit_name',
         pl.name 'production_line_name',
         u1.name 'first_acceptor_name',
@@ -186,7 +186,7 @@
             and (status = 1 or status = 2 or status = 0)
         </where>
     </select>
-    <select id="supervisorGetScrapSubmitList" resultType="com.jig.entity.ScrapSubmit">
+    <select id="supervisorGetScrapSubmitList" resultType="com.jig.entity.scrap.ScrapSubmit">
        select s.*,u.name 'submit_name',
                u1.name 'first_acceptor_name',
                u2.name 'final_acceptor_name'
@@ -220,7 +220,7 @@
         insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
         values(#{user_id},#{id},now(),'scrap_submit',#{field},'update',#{old_value},#{new_value})
     </update>
-    <select id="supervisorGetScrapSubmitListHistory" resultType="com.jig.entity.ScrapSubmit">
+    <select id="supervisorGetScrapSubmitListHistory" resultType="com.jig.entity.scrap.ScrapSubmit">
         select s.*,
         u1.name submit_name,
         u2.name first_acceptor_name,

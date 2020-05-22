@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jig.mapper.NaiveMapper">
-    <resultMap id="jig_position_map" type="com.jig.entity.JigPosition">
+    <resultMap id="jig_position_map" type="com.jig.entity.jig.JigPosition">
         <result property="jig_cabinet_id" column="jig_cabinet_id"></result>
         <collection property="location_id" ofType="string">
             <result column="location_id"></result>
@@ -13,14 +13,14 @@
         where jd.workcell_id = #{workcell_id}
         ORDER BY jig_cabinet_id+0 asc,location_id asc
     </select>
-    <select id="navieGetJigListByLocation" resultType="com.jig.entity.JigStock">
+    <select id="navieGetJigListByLocation" resultType="com.jig.entity.jig.JigStock">
         select *,count(jp.code) as 'count'
         from jig_position jp inner join jig_entity je on jp.code = je.code and jp.seq_id = je.seq_id
                              inner join jig_definition jd on jp.code = jd.code
         where jd.workcell_id = #{workcell_id} and jp.jig_cabinet_id = #{jig_cabinet_id} and jp.location_id = #{jig_location_id} and jp.status = 1
         group by jp.code
     </select>
-    <select id="navieGetJigEntityListByLocation" resultType="com.jig.entity.JigEntity">
+    <select id="navieGetJigEntityListByLocation" resultType="com.jig.entity.jig.JigEntity">
         select * from jig_position jp inner join jig_definition jd on jp.code = jd.code
         inner join jig_entity je on jp.code = je.code and je.seq_id = jp.seq_id
         where jd.code = #{code} and jp.status = 1
@@ -31,7 +31,7 @@
             and jp.location_id = #{jig_location_id}
         </if>
     </select>
-    <select id="navieGetJigListBySelect" resultType="com.jig.entity.JigStock">
+    <select id="navieGetJigListBySelect" resultType="com.jig.entity.jig.JigStock">
         select *,count(jp.code) as 'count'
         from jig_position jp inner join jig_entity je on jp.code = je.code and jp.seq_id = je.seq_id
         inner join jig_definition jd on jp.code = jd.code
@@ -55,7 +55,7 @@
         </where>
         group by jp.code
     </select>
-    <select id="navieGetMaintenanceJigDetailList" resultType="com.jig.entity.JigEntity">
+    <select id="navieGetMaintenanceJigDetailList" resultType="com.jig.entity.jig.JigEntity">
         select * from jig_position jp inner join regular_maintenance rm on jp.code = rm.code and jp.seq_id = rm.seq_id
 
         where jp.code = #{code} and jp.status = 1
@@ -78,7 +78,7 @@
         where code = #{code}
           and seq_id = #{seq_id};
     </insert>
-    <select id="naiveGetOutgoingJig" resultType="com.jig.entity.OutgoingJig">
+    <select id="naiveGetOutgoingJig" resultType="com.jig.entity.out.OutgoingJig">
         select *
         from outgoing_jig_entity_view
         limit #{page_number},5
@@ -102,7 +102,7 @@
         from outgoing_jig
         where id = #{id}
     </delete>
-    <select id="naiveGetRepairHistory" resultType="com.jig.entity.RepairJigHistory">
+    <select id="naiveGetRepairHistory" resultType="com.jig.entity.repair.RepairJigHistory">
         select rs.*, u1.name submit_name, u2.name accrptor_name
         from repair_submit_history rs
                  left join user u1 on rs.submit_id = u1.id
@@ -115,7 +115,7 @@
         from repair_submit_history
         where submit_id = #{submit_id};
     </select>
-    <select id="naiveGetRepairList" resultType="com.jig.entity.RepairJig">
+    <select id="naiveGetRepairList" resultType="com.jig.entity.repair.RepairJig">
         select rs.*, u1.name submit_name, u2.name accrptor_name
         from repair_submit rs
                  left join user u1 on rs.submit_id = u1.id
@@ -141,7 +141,7 @@
         values (uuid(), #{submit_id}, now(), 'high', '00', '提交了新的报修申请', 'myrepair')
     </insert>
 
-    <select id="naiveSearchJigDefinition" resultType="com.jig.entity.JigDefinition">
+    <select id="naiveSearchJigDefinition" resultType="com.jig.entity.jig.JigDefinition">
         select * from jig_definition_entity_view
         <where>
             <if test="code != null and code != ''">
@@ -183,7 +183,7 @@
             </if>
         </where>
     </select>
-    <select id="searchAllJigDefinition" resultType="com.jig.entity.JigDefinition">
+    <select id="searchAllJigDefinition" resultType="com.jig.entity.jig.JigDefinition">
         SELECT * from jig_definition_entity_view
         <where>
             <if test="code != null">
@@ -203,7 +203,7 @@
             </if>
         </where>
     </select>
-    <select id="naiveGetOutgoingSubmit" resultType="com.jig.entity.OutgoSubmit">
+    <select id="naiveGetOutgoingSubmit" resultType="com.jig.entity.out.OutgoSubmit">
         select *
         from outgo_submit_entity_view
         limit #{page_number},5

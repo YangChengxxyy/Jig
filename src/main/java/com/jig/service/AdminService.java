@@ -1,6 +1,10 @@
 package com.jig.service;
 
-import com.jig.entity.*;
+import com.jig.entity.common.CnEn;
+import com.jig.entity.common.User;
+import com.jig.entity.common.Workcell;
+import com.jig.entity.jig.JigModel;
+import com.jig.entity.jig.JigPart;
 import com.jig.mapper.AdminMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

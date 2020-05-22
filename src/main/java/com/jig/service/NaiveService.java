@@ -1,7 +1,13 @@
 package com.jig.service;
 
-import com.jig.entity.*;
-import com.jig.mapper.JigMapper;
+import com.jig.entity.jig.JigDefinition;
+import com.jig.entity.jig.JigEntity;
+import com.jig.entity.jig.JigPosition;
+import com.jig.entity.jig.JigStock;
+import com.jig.entity.out.OutgoSubmit;
+import com.jig.entity.out.OutgoingJig;
+import com.jig.entity.repair.RepairJig;
+import com.jig.entity.repair.RepairJigHistory;
 import com.jig.mapper.NaiveMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +30,7 @@ public class NaiveService {
     }
 
     //初级用户 根据选择的 夹具柜号和区号 确定该code的工夹具list
-    public List<JigEntity> navieGetJigEntityListByLocation(String jig_cabinet_id,String jig_location_id,String code){
+    public List<JigEntity> navieGetJigEntityListByLocation(String jig_cabinet_id, String jig_location_id, String code){
         return naiveMapper.navieGetJigEntityListByLocation(jig_cabinet_id,jig_location_id,code);
     }
 

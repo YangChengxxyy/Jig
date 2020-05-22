@@ -1,12 +1,6 @@
 package com.jig.service;
 
-import com.jig.entity.JigDefinition;
-import com.jig.entity.OutgoSubmit;
-import com.jig.mapper.JigMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @author yc

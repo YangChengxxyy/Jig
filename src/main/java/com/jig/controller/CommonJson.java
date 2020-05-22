@@ -1,6 +1,10 @@
 package com.jig.controller;
 
-import com.jig.entity.*;
+import com.jig.entity.common.*;
+import com.jig.entity.jig.JigDefinition;
+import com.jig.entity.jig.JigModel;
+import com.jig.entity.jig.JigPart;
+import com.jig.entity.operate.MaintenanceType;
 import com.jig.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Isolation;
@@ -75,7 +79,7 @@ public class CommonJson {
      * @return
      */
     @RequestMapping(value = "get_model_list", method = {RequestMethod.GET, RequestMethod.POST})
-    public List<Model> getModelList() {
+    public List<JigModel> getModelList() {
         return commonService.getModelList();
     }
 
@@ -84,7 +88,7 @@ public class CommonJson {
      * @return
      */
     @RequestMapping(value = "get_part_no_list", method = {RequestMethod.GET, RequestMethod.POST})
-    public List<PartNo> getPartNoList() {
+    public List<JigPart> getPartNoList() {
         return commonService.getPartNoList();
     }
 

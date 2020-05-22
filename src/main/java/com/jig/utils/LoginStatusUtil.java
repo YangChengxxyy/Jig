@@ -1,7 +1,7 @@
 package com.jig.utils;
 
-import com.jig.entity.LoginState;
-import com.jig.entity.User;
+import com.jig.entity.common.LoginState;
+import com.jig.entity.common.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

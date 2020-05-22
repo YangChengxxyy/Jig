@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jig.mapper.HighMapper">
-    <insert id="highAddShoplist" parameterType="com.jig.entity.PurchaseIncomeSubmit">
+    <insert id="highAddShoplist" parameterType="com.jig.entity.purchase.PurchaseIncomeSubmit">
         insert into purchase_income_submit(id,submit_id, code, count, submit_time, status, production_line_id, bill_no)
         values (#{purchase_submit.id},#{purchase_submit.submit_id}, #{purchase_submit.code}, #{purchase_submit.count},
          now(), 0, #{purchase_submit.production_line_id}, #{purchase_submit.bill_no});
@@ -13,7 +13,7 @@
         '${purchase_submit.submit_id}~${purchase_submit.code}~${purchase_submit.count}~${purchase_submit.submit_time}~0~${purchase_submit.production_line_id}~${purchase_submit.bill_no}',
         concat('高级用户',#{purchase_submit.submit_id},'提交采购入库申请'))
     </insert>
-    <insert id="highSubmitScrap" parameterType="com.jig.entity.ScrapSubmit">
+    <insert id="highSubmitScrap" parameterType="com.jig.entity.scrap.ScrapSubmit">
         update jig_position
         set status = 3
         where seq_id = #{scrap_submit.seq_id}
@@ -79,7 +79,7 @@
         values (UUID(), #{submit_id}, now(), (select submit_id from repair_submit where id = #{id}), 'naive', '00',
                 ' 拒绝了你的报修申请');
     </insert>
-    <select id="highGetPurchaseIncomeSubmitList" resultType="com.jig.entity.PurchaseIncomeSubmit">
+    <select id="highGetPurchaseIncomeSubmitList" resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
         select ps.*,
                production_line.name production_line_name,
                u1.name              submit_name,
@@ -104,7 +104,7 @@
              production_line
         where ps.production_line_id = production_line.id
     </select>
-    <select id="highSearchPurchaseIncomeHistory" resultType="com.jig.entity.PurchaseIncomeHistory">
+    <select id="highSearchPurchaseIncomeHistory" resultType="com.jig.entity.purchase.PurchaseIncomeHistory">
         select ph.*, production_line.name production_line_name, u1.name submit_name,u2.name first_acceptor_name,u3.name
         final_acceptor_name
         from purchase_income_submit_history ph left join user u1 on ph.submit_id = u1.id left join user u2 on
@@ -154,7 +154,7 @@
             and ph.submit_time between #{start_date} and #{end_date}
         </if>
     </select>
-    <select id="highSearchAllPurchaseIncomeHistory" resultType="com.jig.entity.PurchaseIncomeHistory">
+    <select id="highSearchAllPurchaseIncomeHistory" resultType="com.jig.entity.purchase.PurchaseIncomeHistory">
         select ph.*, production_line.name production_line_name, u1.name submit_name,u2.name first_acceptor_name,u3.name
         final_acceptor_name
         from purchase_income_submit_history ph left join user u1 on ph.submit_id = u1.id left join user u2 on
@@ -184,7 +184,7 @@
         from purchase_income_submit
         where id = #{id}
     </delete>
-    <select id="highGetRepairJig" resultType="com.jig.entity.RepairJig">
+    <select id="highGetRepairJig" resultType="com.jig.entity.repair.RepairJig">
         select rs.*, u1.name submit_name, u2.name acceptor_name
         from repair_submit rs
                  left join `user` u1 on rs.submit_id = u1.id
@@ -201,7 +201,7 @@
         where u1.workcell_id in (select user.workcell_id from user where id = #{id})
           and rs.status = 0
     </select>
-    <select id="highSearchRepairHistory" resultType="com.jig.entity.RepairJigHistory">
+    <select id="highSearchRepairHistory" resultType="com.jig.entity.repair.RepairJigHistory">
         select rh.*,u1.name submit_name,u2.name acceptor_name
         from repair_submit_history rh
         left join user u1 on rh.submit_id = u1.id
@@ -224,7 +224,7 @@
         </if>
         limit #{page_number},5
     </select>
-    <select id="highSearchAllRepairHistory" resultType="com.jig.entity.RepairJigHistory">
+    <select id="highSearchAllRepairHistory" resultType="com.jig.entity.repair.RepairJigHistory">
         select rh.*,u1.name submit_name,u2.name acceptor_name
         from repair_submit_history rh
         left join user u1 on rh.submit_id = u1.id
@@ -268,7 +268,7 @@
             and rh.submit_time between #{start_date} and #{end_date}
         </if>
     </select>
-    <select id="highGetScrap" resultType="com.jig.entity.ScrapSubmit">
+    <select id="highGetScrap" resultType="com.jig.entity.scrap.ScrapSubmit">
         select ss.*, u1.name submit_name, u2.name first_acceptor_name
         from scrap_submit ss
                  left join `user` u1 on ss.submit_id = u1.id
@@ -285,7 +285,7 @@
                  left join `user` u3 on ss.final_acceptor = u3.id
         where ss.submit_id = #{submit_id}
     </select>
-    <select id="highSearchScrapHistory" resultType="com.jig.entity.ScrapHistory">
+    <select id="highSearchScrapHistory" resultType="com.jig.entity.scrap.ScrapHistory">
         select ss.*,u1.name submit_name,u2.name first_acceptor_name
         from scrap_submit_history ss
         left join `user` u1 on ss.submit_id = u1.id
@@ -332,7 +332,7 @@
             and ss.submit_time between #{start_date} and #{end_date}
         </if>
     </select>
-    <select id="highSearchAllScrapHistory" resultType="com.jig.entity.ScrapHistory">
+    <select id="highSearchAllScrapHistory" resultType="com.jig.entity.scrap.ScrapHistory">
         select ss.*,u1.name submit_name,u2.name first_acceptor_name
         from scrap_submit_history ss
         left join `user` u1 on ss.submit_id = u1.id

@@ -1,6 +1,12 @@
 package com.jig.controller;
 
 import com.jig.entity.*;
+import com.jig.entity.common.User;
+import com.jig.entity.jig.JigDefinition;
+import com.jig.entity.jig.JigEntity;
+import com.jig.entity.jig.JigPosition;
+import com.jig.entity.jig.JigStock;
+import com.jig.entity.repair.RepairJigHistory;
 import com.jig.service.NaiveService;
 import com.jig.utils.LoginStatusUtil;
 import com.jig.utils.PoiUtil;
@@ -41,7 +47,6 @@ public class NaiveJson {
     public static final String REPAIR_IMAGE_NAME = "images/repair_images/";
     public static final String SCRAP = "SCRAP";
     public static final String REPAIR = "REPAIR";
-    public static Map<String, PhoneUpload> phoneUploadMap = new HashMap<>();//存放扫码上传的map对象
 
     private String getRepairPathName(String fileName) {
         UUID uuid = UUID.randomUUID();
