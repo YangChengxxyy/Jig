@@ -23,6 +23,7 @@ import java.util.List;
 public class CommonJson {
     @Autowired
     private CommonService commonService;
+
     /**
      * 获取单个JigDefinition对象
      *
@@ -58,6 +59,7 @@ public class CommonJson {
 
     /**
      * 获取工作部门列表
+     *
      * @return
      */
     @RequestMapping("get_workcell_list")
@@ -67,6 +69,7 @@ public class CommonJson {
 
     /**
      * 获取工夹具类别列表
+     *
      * @return
      */
     @RequestMapping(value = "get_family_list", method = {RequestMethod.GET, RequestMethod.POST})
@@ -76,6 +79,7 @@ public class CommonJson {
 
     /**
      * 获取工夹具模组列表
+     *
      * @return
      */
     @RequestMapping(value = "get_model_list", method = {RequestMethod.GET, RequestMethod.POST})
@@ -85,6 +89,7 @@ public class CommonJson {
 
     /**
      * 获取工夹具料号列表
+     *
      * @return
      */
     @RequestMapping(value = "get_part_no_list", method = {RequestMethod.GET, RequestMethod.POST})
@@ -121,11 +126,12 @@ public class CommonJson {
 
     //获取 检点工夹具的检点类型
     @RequestMapping("get_maintenance_type_list")
-    public List<MaintenanceType> naiveGetMaintenanceTypeList(){
+    public List<MaintenanceType> naiveGetMaintenanceTypeList() {
         return commonService.get_maintenance_type_list();
     }
 
+    @RequestMapping("log_out")
+    public void logOUt() {
 
-
-
+    }
 }

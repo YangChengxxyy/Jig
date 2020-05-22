@@ -12,13 +12,13 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
+@Deprecated
 @Component
 public class PowerInterceptor implements HandlerInterceptor {
 
     public static String key;
 
-    @Value("${h5.key}")
+    @Value("${key}")
     public void setKey(String s) {
         key = s;
     }

@@ -9,27 +9,14 @@ import javax.annotation.Resource;
 @Configuration
 public class InterceptorConfigurer implements WebMvcConfigurer {
     @Resource
-    private SessionInterceptor sessionInterceptor;
-    @Resource
-    private PowerInterceptor powerInterceptor;
+    private KeyInterceptor keyInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(sessionInterceptor)
-//                .addPathPatterns("/**")
-//                .excludePathPatterns("/error",
-//                        "/login",
-//                        "/login_check",
-//                        "/css/**",
-//                        "/js/**",
-//                        "/fonts/**",
-//                        "/assets/**",
-//                        "/images/**",
-//                        "/phone_upload_success",
-//                        "/show_demo",
-//                        "/get_demo_list",
-//                        "/get_workcell_list");
-//        registry.addInterceptor(powerInterceptor)
-//                .addPathPatterns("/naive/**", "/high/**", "/supervisor/**", "/manager/**", "/admin/**");
+        registry.addInterceptor(keyInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/api/get_workcell_list")
+                .excludePathPatterns("/api/login_check")
+                .excludePathPatterns("/images/**");
     }
 }
