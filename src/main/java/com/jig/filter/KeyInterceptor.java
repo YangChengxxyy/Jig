@@ -1,6 +1,8 @@
 package com.jig.filter;
 
 import com.jig.entity.common.LoginState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,9 +18,10 @@ public class KeyInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
-        System.out.println(request.getRequestURI());
+        Logger logger = LoggerFactory.getLogger(this.getClass());
         String checkKey = request.getParameter("key")!=null?request.getParameter("key").toString():null;
-        System.out.println(checkKey);
+        logger.info(request.getRequestURI());
+        logger.info(checkKey);
         return key.equals(checkKey);
     }
 }
