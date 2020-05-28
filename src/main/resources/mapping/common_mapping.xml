@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jig.mapper.CommonMapper">
+    <select id="getSimpleJigDefinition" resultType="com.jig.entity.jig.JigDefinition">
+        select *
+        from jig_definition_entity_view
+        where `id` = #{id}
+    </select>
+    <select id="get_jig_info" resultType="com.jig.entity.jig.JigDefinition">
+        select * from jig_definition where id = #{id}
+    </select>
+    <select id="getPosition" resultType="com.jig.entity.common.Position">
+        select jig_cabinet_id, location_id, bin, status
+        from jig_position
+        where code = #{code}
+          and seq_id = #{seq_id}
+    </select>
+    <select id="getProductionLineList" resultType="com.jig.entity.common.ProductionLine">
+        select *
+        from production_line
+    </select>
+    <select id="getWorkcellList" resultType="com.jig.entity.common.Workcell">
+        select * from workcell
+    </select>
+    <select id="getFamilyList" resultType="com.jig.entity.common.Family">
+        select * from jig_family
+    </select>
+    <select id="getModelList" resultType="com.jig.entity.jig.JigModel">
+        select model from jig_definition group by model
+    </select>
+    <select id="getPartNoList" resultType="com.jig.entity.jig.JigPart">
+        select * from jig_part_no
+    </select>
+
+    <select id="getCodeList" resultType="java.lang.String">
+        select code
+        from jig_definition
+    </select>
+    <select id="codeGetSeqId" resultType="java.lang.String">
+        select seq_id
+        from jig_entity
+        where code = #{code}
+    </select>
+    <select id="codeGetInSeqId" resultType="java.lang.String">
+        select seq_id
+        from jig_position
+        where code = #{code}
+          and status = 1
+    </select>
+    <select id="get_maintenance_type_list" resultType="com.jig.entity.operate.MaintenanceType">
+        select * from maintenance_type
+    </select>
+
+    <!--方便其他controller调用的-->
+    <select id="getScrapSubmit" resultType="com.jig.entity.scrap.ScrapSubmit">
+        select * from scrap_submit where id = #{id}
+    </select>
+    <select id="getPurchaseSubmit" resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
+        select * from purchase_income_submit where id = #{id}
+    </select>
+</mapper>

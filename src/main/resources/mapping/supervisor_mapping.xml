@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jig.mapper.SupervisorMapper">
+    <select id="supervisorGetJigFamily" resultType="com.jig.entity.common.Family">
+        select * from jig_family
+    </select>
+    <select id="supervisorGetAllJigInfoList" resultType="com.jig.entity.jig.JigDefinition">
+        select *,u1.name 'owner_name',u2.name 'rec_by_name',u3.name 'edit_by_name'
+        from jig_definition jd inner join jig_family jf on jd.family_id = jf.id
+                               inner join workcell w on jd.workcell_id = w.id
+                               left join user u1 on jd.owner= u1.id
+                               left join user u2 on jd.rec_by = u2.id
+                               left join user u3 on jd.edit_by = u3.id
+    </select>
+    <insert id="supervisorAddJigFamily" parameterType="com.jig.entity.common.Family">
+        insert into jig_family (family) values (#{family});
+    </insert>
+    <select id="supervisorGetDeleteJigFamilyCount" resultType="java.lang.Integer">
+        select count(family_id) from jig_definition where family_id = #{jig_family_id}
+    </select>
+    <delete id="supervisorDeleteJigFamily">
+        delete from jig_family where id = #{id}
+    </delete>
+    <select id="supervisor_get_jig_definition_list" resultType="com.jig.entity.jig.JigDefinition">
+        select jd.*,u1.name 'owner_name',u2.name 'rec_by_name',u3.name 'edit_by_name',jf.family 'family',w.workcell 'workcell'
+        from jig_definition jd left join jig_family jf on jd.family_id = jf.id
+        left join workcell w on jd.workcell_id = w.id
+        left join user u1 on jd.owner= u1.id
+        left join user u2 on jd.rec_by = u2.id
+        left join user u3 on jd.edit_by = u3.id
+        <where>
+            <if test="family_id!=''">
+                and jd.family_id = #{family_id}
+            </if>
+            <if test="code!=''">
+                and jd.code like concat('%',#{code},'%')
+            </if>
+            <if test="name!=''">
+                and jd.name like concat('%',#{name},'%')
+            </if>
+            <if test="user_for!=''">
+                and jd.user_for like concat('%',#{user_for},'%')
+            </if>
+            <if test="workcell_id!=''">
+                and jd.workcell_id = #{workcell_id}
+            </if>
+        </where>
+        limit #{page_number},#{page_size}
+    </select>
+    <select id="supervisor_get_jig_definition_list_all" resultType="java.lang.Integer">
+        select count(*) from jig_definition jd left join jig_family jf on jd.family_id = jf.id
+        left join workcell w on jd.workcell_id = w.id
+        left join user u1 on jd.owner= u1.id
+        left join user u2 on jd.rec_by = u2.id
+        left join user u3 on jd.edit_by = u3.id
+        <where>
+            <if test="family_id!=''">
+                and jd.family_id = #{family_id}
+            </if>
+            <if test="code!=''">
+                and jd.code like concat('%',#{code},'%')
+            </if>
+            <if test="name!=''">
+                and jd.name like concat('%',#{name},'%')
+            </if>
+            <if test="user_for!=''">
+                and jd.user_for like concat('%',#{user_for},'%')
+            </if>
+            <if test="workcell_id!=''">
+                and jd.workcell_id = #{workcell_id}
+            </if>
+        </where>
+    </select>
+    <select id="supervisorSelectJigInfo" resultType="com.jig.entity.jig.JigDefinition">
+        select *,u1.name 'owner_name',u2.name 'rec_by_name',u3.name 'edit_by_name'
+        from jig_definition jd left join jig_family jf on jd.family_id = jf.id
+        left join workcell w on jd.workcell_id = w.id
+        left join user u1 on jd.owner= u1.id
+        left join user u2 on jd.rec_by = u2.id
+        left join user u3 on jd.edit_by = u3.id
+        <where>
+            <if test="jig_code!=''">
+                and jd.code like concat('%',#{jig_code},'%')
+            </if>
+            <if test="jig_name!=''">
+                and jd.name like concat('%',#{jig_name},'%')
+            </if>
+            <if test="jig_model!=''">
+                and jd.model = #{jig_model}
+            </if>
+            <if test="jig_workcell!=''">
+                and w.workcell like concat('%',#{jig_workcell},'%')
+            </if>
+        </where>
+    </select>
+    <update id="supervisorEditJigInfo" parameterType="com.jig.entity.jig.JigDefinition">
+        update jig_definition
+        <set>
+            name = #{jig_info.name}, code = #{jig_info.code}, model = #{jig_info.model},
+            <if test="jig_info.part_no != null and jig_info.part_no != 'undefined'">
+                part_no = #{jig_info.part_no},
+            </if>
+            family_id = #{jig_info.family_id}, workcell_id = #{jig_info.workcell_id}, upl = #{jig_info.upl},
+            user_for = #{jig_info.user_for}, pm_period = #{jig_info.pm_period}, edit_time = now(),edit_by = #{user_id}
+        </set>
+        where id = #{jig_info.id};
+
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
+        values(#{user_id},#{jig_info.id},now(),'jig_definition',#{field},'update',#{old_value},#{new_value})
+    </update>
+    <select id="supervisorGetPurchaseSubmitList" resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
+        select p.*,u.name 'submit_name',
+               pl.name 'production_line_name',
+               u1.name 'first_acceptor_name',
+               u2.name 'final_acceptor_name'
+        from purchase_income_submit p inner join user u on p.submit_id = u.id
+                                      inner join production_line pl on p.production_line_id = pl.id
+                                      left join user u1 on p.first_acceptor = u1.id
+                                      left join user u2 on p.final_acceptor = u2.id
+        where (p.status = 0 or p.status = 1 or p.status = 2)
+        limit #{page_number},#{page_size}
+    </select>
+    <select id="supervisorGetPurchaseSubmitListPages" resultType="java.lang.Integer">
+        select count(*) from purchase_income_submit
+        where status = 0 or status = 1 or status = 2
+    </select>
+    <update id="supervisorPassPurchaseSubmit">
+        update purchase_income_submit
+        set status = #{status},first_time = now(),first_acceptor = #{first_acceptor},first_reason = null
+        where id = #{id};
+
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
+        values(#{first_acceptor},#{id},now(),'purchase_income_submit',#{field},'update',#{old_value},#{new_value})
+    </update>
+    <update id="supervisorNoPassPurchaseSubmit">
+        update purchase_income_submit
+        set status = #{status},first_time = now(),first_reason = #{first_reason},first_acceptor = #{first_acceptor}
+        where id = #{id};
+
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
+        values(#{first_acceptor},#{id},now(),'purchase_income_submit',#{field},'update',#{old_value},#{new_value})
+    </update>
+    <select id="supervisorGetPurchaseSubmitHistory" resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
+        select p.*,u.name 'submit_name',
+        pl.name 'production_line_name',
+        u1.name 'first_acceptor_name',
+        u2.name 'final_acceptor'
+        from purchase_income_submit_history p inner join user u on p.submit_id = u.id
+        inner join production_line pl on p.production_line_id = pl.id
+        left join user u1 on p.first_acceptor = u1.id
+        left join user u2 on p.final_acceptor = u2.id
+        <where>
+            u.workcell_id in (select user.workcell_id from user where id = #{user_id})
+            and first_acceptor = #{user_id}
+            <if test="bill_no!=''">
+                and p.bill_no like concat('%',#{bill_no},'%')
+            </if>
+            <if test="submit_name!=''">
+                and u.name like concat('%',#{submit_name},'%')
+            </if>
+            <if test="start_date!='' and end_date !=''">
+                and (STR_TO_DATE(p.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
+            </if>
+            and (status = 1 or status = 2 or status = 0)
+        </where>
+        limit #{page_number},#{page_size}
+    </select>
+    <select id="supervisorGetPurchaseSubmitHistoryPages" resultType="java.lang.Integer">
+        select count(*)
+        from purchase_income_submit_history p inner join user u on p.submit_id = u.id
+                                              inner join production_line pl on p.production_line_id = pl.id
+                                              left join user u1 on p.first_acceptor = u1.id
+                                              left join user u2 on p.final_acceptor = u2.id
+        <where>
+            u.workcell_id in (select user.workcell_id from user where id = #{user_id})
+            and first_acceptor = #{user_id}
+            <if test="bill_no!=''">
+                and p.bill_no like concat('%',#{bill_no},'%')
+            </if>
+            <if test="submit_name!=''">
+                and u.name like concat('%',#{submit_name},'%')
+            </if>
+            <if test="start_date!='' and end_date !=''">
+                and (STR_TO_DATE(p.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
+            </if>
+            and (status = 1 or status = 2 or status = 0)
+        </where>
+    </select>
+    <select id="supervisorGetScrapSubmitList" resultType="com.jig.entity.scrap.ScrapSubmit">
+       select s.*,u.name 'submit_name',
+               u1.name 'first_acceptor_name',
+               u2.name 'final_acceptor_name'
+        from scrap_submit s inner join user u on s.submit_id = u.id
+                                      left join user u1 on s.first_acceptor = u1.id
+                                      left join user u2 on s.final_acceptor = u2.id
+
+        where u.workcell_id = #{workcell_id} and (s.status = 1 or s.status = 2 or s.status = 0)
+        limit #{page_number},#{page_size}
+    </select>
+    <select id="supervisorGetScrapSubmitListPages" resultType="java.lang.Integer">
+        select count(*) from scrap_submit s
+        inner join user u on s.submit_id = u.id
+                                      left join user u1 on s.first_acceptor = u1.id
+                                      left join user u2 on s.final_acceptor = u2.id
+        where u.workcell_id = #{workcell_id} and (s.status = 1 or s.status = 2 or s.status = 0)
+    </select>
+    <update id="supervisorPassScrapSubmit">
+        update scrap_submit
+        set status = '2', first_acceptor = #{user_id},first_time = now(),first_reason = null
+        where id = #{id};
+
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
+        values(#{user_id},#{id},now(),'scrap_submit',#{field},'update',#{old_value},#{new_value})
+    </update>
+    <update id="supervisorNoPassScrapSubmit">
+        update scrap_submit
+        set status = '1', first_acceptor = #{user_id},first_time = now(),first_reason = #{no_pass_reason}
+        where id = #{id};
+
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
+        values(#{user_id},#{id},now(),'scrap_submit',#{field},'update',#{old_value},#{new_value})
+    </update>
+    <select id="supervisorGetScrapSubmitListHistory" resultType="com.jig.entity.scrap.ScrapSubmit">
+        select s.*,
+        u1.name submit_name,
+        u2.name first_acceptor_name,
+        u3.name final_acceptor_name
+        from scrap_submit_history s INNER JOIN user u1 on u1.id = s.submit_id
+        LEFT JOIN user u2 on u2.id = s.first_acceptor
+        LEFT JOIN user u3 on u3.id = s.final_acceptor
+        <where>
+            u1.workcell_id = #{workcell_id}
+            <if test="code!=''">
+                and s.code like concat('%',#{code},'%')
+            </if>
+            <if test="seq_id!=''">
+                and s.seq_id like concat('%',#{seq_id},'%')
+            </if>
+            <if test="status!=''">
+                and s.status = #{status}
+            </if>
+            <if test="scrap_reason!=''">
+                and s.scrap_reason like concat('%',#{scrap_reason},'%')
+            </if>
+            <if test="start_date!='' and end_date !=''">
+                and (STR_TO_DATE(s.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
+            </if>
+        </where>
+        limit #{page_number},#{page_size}
+    </select>
+    <select id="supervisorGetScrapSubmitListHistoryPages" resultType="java.lang.Integer">
+        select count(*)
+        from scrap_submit_history s INNER JOIN user u1 on u1.id = s.submit_id
+        LEFT JOIN user u2 on u2.id = s.first_acceptor
+        LEFT JOIN user u3 on u3.id = s.final_acceptor
+        <where>
+            u1.workcell_id = #{workcell_id}
+            <if test="code!=''">
+                and s.code like concat('%',#{code},'%')
+            </if>
+            <if test="seq_id!=''">
+                and s.seq_id like concat('%',#{seq_id},'%')
+            </if>
+            <if test="status!=''">
+                and s.status = #{status}
+            </if>
+            <if test="scrap_reason!=''">
+                and s.scrap_reason like concat('%',#{scrap_reason},'%')
+            </if>
+            <if test="start_date!='' and end_date !=''">
+                and (STR_TO_DATE(s.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
+            </if>
+        </where>
+    </select>
+</mapper>

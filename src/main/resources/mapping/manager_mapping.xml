@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jig.mapper.ManagerMapper">
+    <select id="get_manager_purchase_submit_list" resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
+        select p.*,
+        u.name submit_name,
+        pl.name production_line_name,
+        u1.name 'first_acceptor_name',
+        u2.name 'final_acceptor_name'
+        from purchase_income_submit p inner join user u on p.submit_id = u.id
+                                      inner join production_line pl on p.production_line_id = pl.id
+                                      left join user u1 on p.first_acceptor = u1.id
+                                      left join user u2 on p.final_acceptor = u2.id
+        where (status = 2 or p.final_acceptor = #{user_id}) and u.workcell_id = #{workcell_id}
+        limit #{page_number},#{page_size}
+    </select>
+    <select id="get_manager_purchase_submit_list_pages" resultType="java.lang.Integer">
+        select count(*) from purchase_income_submit p inner join user u on p.submit_id = u.id
+        where (status = 2 or p.final_acceptor = #{user_id}) and u.workcell_id = #{workcell_id}
+    </select>
+    <select id="get_manager_purchase_detail" resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
+        select p.*,u.name submit_name from purchase_income_submit p inner join user u on p.submit_id = u.id
+        where p.id = #{id}
+    </select>
+    <update id="manager_pass_purchase_submit">
+        update purchase_income_submit
+        set final_time = now(),status = #{pass},final_acceptor = #{user.id},final_reason = null
+        where id = #{id};
+
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value,operate_string)
+        values(#{user.id},#{id},now(),'purchase_income_submit',#{field},'update',#{old_value},#{new_value},
+                concat('经理',#{user.name},'终审通过'))
+        <!--insert into purchase_income_submit_history select * from purchase_income_submit where id = #{id};
+
+        delete from purchase_income_submit where id = #{id}-->
+    </update>
+    <update id="manager_no_pass_purchase_submit">
+        update purchase_income_submit
+        set final_time = now(),status = #{status},final_acceptor=#{user.id},final_reason=#{final_reason}
+        where id = #{id};
+
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value,operate_string)
+        values(#{user.id},#{id},now(),'purchase_income_submit',#{field},'update',#{old_value},#{new_value},
+                concat('经理',#{user.name},'终审不通过~原因:',#{final_reason}))
+
+        <!--insert into purchase_income_submit_history select * from purchase_income_submit where id = #{id};
+
+        delete from purchase_income_submit where id = #{id}-->
+    </update>
+    <select id="get_manager_jig_info_list" resultType="com.jig.entity.jig.JigDefinition">
+        select *  from jig_definition j inner join jig_family f on j.family_id = f.id
+        limit #{page_number},#{page_size}
+    </select>
+    <select id="get_manager_jig_info_list_pages" resultType="java.lang.Integer">
+        SELECT count(*) from jig_definition
+    </select>
+    <select id="get_manager_purchase_submit_list_history" resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
+        select p.*,
+        pl.name production_line_name,
+        u.name submit_name,
+        u1.name first_acceptor_name,
+        u2.name final_acceptor_name
+
+        from purchase_income_submit_history p inner join production_line pl on p.production_line_id = pl.id
+                                    left join user u on p.submit_id = u.id
+                                    left join user u1 on p.first_acceptor = u1.id
+                                    left join user u2 on p.final_acceptor = u2.id
+
+        <where>
+            u.workcell_id = #{workcell_id}
+            <if test="bill_no!=''">
+                and p.bill_no like concat('%',#{bill_no},'%')
+            </if>
+            <if test="submit_name!=''">
+                and u.name like concat('%',#{submit_name},'%')
+            </if>
+            <if test="status!=''">
+                and p.status = #{status}
+            </if>
+            <if test="start_date!='' and end_date !=''">
+                and (STR_TO_DATE(p.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
+            </if>
+        </where>
+        <if test="page_number!='-1'.toString()">
+            limit #{page_number},#{page_size}
+        </if>
+
+    </select>
+    <select id="get_manager_purchase_submit_list_history_pages" resultType="java.lang.Integer">
+        select count(*) from purchase_income_submit_history p inner join production_line pl on p.production_line_id = pl.id
+                                                                    left join user u on p.submit_id = u.id
+                                                                    left join user u1 on p.first_acceptor = u1.id
+                                                                    left join user u2 on p.final_acceptor = u2.id
+
+        <where>
+            u.workcell_id = #{workcell_id}
+            <if test="bill_no!=''">
+                and p.bill_no like concat('%',#{bill_no},'%')
+            </if>
+            <if test="submit_name!=''">
+                and u.name like concat('%',#{submit_name},'%')
+            </if>
+            <if test="status!=''">
+                and p.status = #{status}
+            </if>
+            <if test="start_date!='' and end_date !=''">
+                and (STR_TO_DATE(p.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
+            </if>
+        </where>
+    </select>
+    <select id="manager_get_purchase_submit_history_operate" resultType="com.jig.entity.operate.Operate">
+        select o.*,
+        u.name 'operate_man_name',
+        u.type 'operate_man_type'
+        from operate o inner join user u on o.operate_man_id = u.id
+        where u.workcell_id = #{workcell_id}  and o.operate_key_id = #{submit_id}
+        order by o.operate_time
+    </select>
+    <select id="get_manager_purchase_submit_count" resultType="java.lang.Integer">
+        select count(*) from purchase_income_submit
+        where status = 2
+    </select>
+    <select id="get_manager_scrap_submit_count" resultType="java.lang.Integer">
+        select count(*) from scrap_submit
+    </select>
+    <select id="manager_get_scrap_submit_list" resultType="com.jig.entity.scrap.ScrapSubmit">
+        select s.*,
+        u1.name submit_name,
+        u2.name first_acceptor_name,
+        u3.name final_acceptor_name
+        from scrap_submit s INNER JOIN user u1 on u1.id = s.submit_id
+                            LEFT JOIN user u2 on u2.id = s.first_acceptor
+                            LEFT JOIN user u3 on u3.id = s.final_acceptor
+        where (s.status = 2 or s.final_acceptor = #{user_id}) and u1.workcell_id = #{workcell_id}
+        limit #{page_number},#{page_size}
+    </select>
+    <select id="manager_get_scrap_submit_list_pages" resultType="java.lang.Integer">
+        select count(*) from scrap_submit s INNER JOIN user u1 on u1.id = s.submit_id
+        where (s.status = 2 or s.final_acceptor = #{user_id}) and u1.workcell_id = #{workcell_id}
+    </select>
+    <update id="manager_pass_scrap_submit">
+        update scrap_submit
+        set status = #{status},final_time = now(),final_acceptor = #{user.id},final_reason = null
+        where id = #{submit_id};
+
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value,operate_string)
+        values(#{user.id},#{submit_id},now(),'scrap_submit',#{field},'update',#{old_value},#{new_value},
+        concat('经理',#{user.name},'终审通过'))
+        <!--insert into scrap_submit_history select * from scrap_submit where id = #{submit_id};
+
+        delete from scrap_submit where id = #{submit_id}-->
+
+
+
+    </update>
+    <update id="manager_no_pass_scrap_submit">
+        update scrap_submit
+        set status = 3,final_time = now(),final_acceptor = #{user.id},final_reason = #{no_pass_reason}
+        where id = #{submit_id};
+
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value,operate_string)
+        values(#{user.id},#{submit_id},now(),'scrap_submit',#{field},'update',#{old_value},#{new_value},
+        concat('经理',#{user.name},'终审不通过~原因:',#{no_pass_reason}))
+
+        <!--insert into scrap_submit_history select * from scrap_submit where id = #{submit_id};
+
+        delete from scrap_submit where id = #{submit_id}-->
+
+
+    </update>
+    <select id="get_manager_scrap_submit_list_history" resultType="com.jig.entity.scrap.ScrapSubmit">
+        select s.*,
+        u1.name submit_name,
+        u2.name first_acceptor_name,
+        u3.name final_acceptor_name
+        from scrap_submit_history s INNER JOIN user u1 on u1.id = s.submit_id
+        LEFT JOIN user u2 on u2.id = s.first_acceptor
+        LEFT JOIN user u3 on u3.id = s.final_acceptor
+        <where>
+            u1.workcell_id = #{workcell_id}
+            <if test="code!=''">
+                and s.code like concat('%',#{code},'%')
+            </if>
+            <if test="seq_id!=''">
+                and s.seq_id like #{seq_id}
+            </if>
+            <if test="status!=''">
+                and s.status = #{status}
+            </if>
+            <if test="scrap_reason!=''">
+                and s.scrap_reason like concat('%',#{scrap_reason},'%')
+            </if>
+            <if test="start_date!='' and end_date !=''">
+                and (STR_TO_DATE(s.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
+            </if>
+        </where>
+        limit #{page_number},#{page_size}
+    </select>
+    <select id="get_manager_scrap_submit_list_history_pages" resultType="java.lang.Integer">
+        select count(*) from scrap_submit_history s
+        INNER JOIN user u1 on u1.id = s.submit_id
+        LEFT JOIN user u2 on u2.id = s.first_acceptor
+        <where>
+            u1.workcell_id = #{workcell_id}
+            <if test="code!=''">
+                and s.code like concat('%',#{code},'%')
+            </if>
+            <if test="seq_id!=''">
+                and s.seq_id = #{seq_id}
+            </if>
+            <if test="status!=''">
+                and s.status = #{status}
+            </if>
+            <if test="scrap_reason!=''">
+                and s.scrap_reason like concat('%',#{scrap_reason},'%')
+            </if>
+            <if test="start_date!='' and end_date !=''">
+                and (STR_TO_DATE(s.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
+            </if>
+        </where>
+    </select>
+    <select id="get_manager_store_jig_list" resultType="com.jig.entity.jig.JigEntity">
+        select *,count(code) as 'count' from jig_position group by code
+    </select>
+    <select id="get_manager_purchase_total_submit_man" resultType="com.jig.entity.purchase.PurchaseTotalSubmitManDetail">
+        select p.submit_id,u.name 'submit_name',count(u.name) as 'submit_count'
+        from purchase_income_submit_history p inner join user u on u.id = p.submit_id
+        <where>
+            <if test="bill_no!=''">
+                and p.bill_no like concat('%',#{bill_no},'%')
+            </if>
+            <if test="submit_name!=''">
+                and p.submit_name like concat('%',#{submit_name},'%')
+            </if>
+            <if test="status!=''">
+                and p.status = #{status}
+            </if>
+            <if test="start_date!='' and end_date !=''">
+                and (STR_TO_DATE(p.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
+            </if>
+        </where>
+        group by u.name
+    </select>
+</mapper>

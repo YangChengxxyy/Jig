@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jig.mapper.NaiveMapper">
+    <resultMap id="jig_position_map" type="com.jig.entity.jig.JigPosition">
+        <result property="jig_cabinet_id" column="jig_cabinet_id"></result>
+        <collection property="location_id" ofType="string">
+            <result column="location_id"></result>
+        </collection>
+    </resultMap>
+    <select id="navieGetLocationList" resultMap="jig_position_map">
+        select jp.jig_cabinet_id,jp.location_id,jd.workcell_id
+        from jig_position jp inner join jig_definition jd on jp.code = jd.code
+        where jd.workcell_id = #{workcell_id}
+        ORDER BY jig_cabinet_id+0 asc,location_id asc
+    </select>
+    <select id="navieGetJigListByLocation" resultType="com.jig.entity.jig.JigStock">
+        select *,count(jp.code) as 'count'
+        from jig_position jp inner join jig_entity je on jp.code = je.code and jp.seq_id = je.seq_id
+                             inner join jig_definition jd on jp.code = jd.code
+        where jd.workcell_id = #{workcell_id} and jp.jig_cabinet_id = #{jig_cabinet_id} and jp.location_id = #{jig_location_id} and jp.status = 1
+        group by jp.code
+    </select>
+    <select id="navieGetJigEntityListByLocation" resultType="com.jig.entity.jig.JigEntity">
+        select * from jig_position jp inner join jig_definition jd on jp.code = jd.code
+        inner join jig_entity je on jp.code = je.code and je.seq_id = jp.seq_id
+        where jd.code = #{code} and jp.status = 1
+        <if test="jig_cabinet_id != '' ">
+            and jp.jig_cabinet_id = #{jig_cabinet_id}
+        </if>
+        <if test="jig_location_id != ''">
+            and jp.location_id = #{jig_location_id}
+        </if>
+    </select>
+    <select id="navieGetJigListBySelect" resultType="com.jig.entity.jig.JigStock">
+        select *,count(jp.code) as 'count'
+        from jig_position jp inner join jig_entity je on jp.code = je.code and jp.seq_id = je.seq_id
+        inner join jig_definition jd on jp.code = jd.code
+        <where>
+            jd.workcell_id = #{workcell_id} and jp.status = 1
+            <if test="jig_cabinet_id != '' ">
+                and jp.jig_cabinet_id = #{jig_cabinet_id}
+            </if>
+            <if test="jig_location_id != '' ">
+                and jp.location_id = #{jig_location_id}
+            </if>
+            <if test="code != '' ">
+                and jp.code like concat('%',#{code},'%')
+            </if>
+            <if test="name != '' ">
+                and jd.name like concat('%',#{name},'%')
+            </if>
+            <if test="user_for != '' ">
+                and jd.user_for like concat('%',#{user_for},'%')
+            </if>
+        </where>
+        group by jp.code
+    </select>
+    <select id="navieGetMaintenanceJigDetailList" resultType="com.jig.entity.jig.JigEntity">
+        select * from jig_position jp inner join regular_maintenance rm on jp.code = rm.code and jp.seq_id = rm.seq_id
+
+        where jp.code = #{code} and jp.status = 1
+        <if test="jig_cabinet_id != '' ">
+            and jp.jig_cabinet_id = #{jig_cabinet_id}
+        </if>
+        <if test="jig_location_id != ''">
+            and jp.location_id = #{jig_location_id}
+        </if>
+    </select>
+    <insert id="naiveOutgoJig">
+        insert into outgo_income_history(code, seq_id, submit_id, outgo_time, rec_id, status)
+        values (#{code}, #{seq_id}, #{submit_id}, now(), #{rec_id}, 0);
+
+        insert into outgoing_jig(code, seq_id, user_id, outgo_time)
+        values (#{code}, #{seq_id}, #{submit_id}, now());
+
+        update jig_position
+        set status = 0
+        where code = #{code}
+          and seq_id = #{seq_id};
+    </insert>
+    <select id="naiveGetOutgoingJig" resultType="com.jig.entity.out.OutgoingJig">
+        select *
+        from outgoing_jig_entity_view
+        limit #{page_number},5
+    </select>
+    <select id="getOutgoingJigPage" resultType="java.lang.Integer">
+        select count(*)
+        from outgoing_jig_entity_view
+    </select>
+    <update id="naiveReturnJig">
+        update jig_position
+        set status = 1
+        where code = #{code}
+          and seq_id = #{seq_id};
+        insert into outgo_income_history(submit_time, user_id, status, rec_id, rec_time, code, seq_id)
+        values ((select submit_time from outgoing_jig where outgoing_jig.id = #{id}),
+                (select user_id from outgoing_jig where outgoing_jig.id = #{id}),
+                1, #{rec_id}, now(), #{code}, #{seq_id})
+    </update>
+    <delete id="naiveDeleteOutgoingJig">
+        delete
+        from outgoing_jig
+        where id = #{id}
+    </delete>
+    <select id="naiveGetRepairHistory" resultType="com.jig.entity.repair.RepairJigHistory">
+        select rs.*, u1.name submit_name, u2.name accrptor_name
+        from repair_submit_history rs
+                 left join user u1 on rs.submit_id = u1.id
+                 left join user u2 on acceptor_id = u2.id
+        where submit_id = #{submit_id}
+        limit #{page_number},5
+    </select>
+    <select id="naiveGetRepairHistoryPage" resultType="java.lang.Integer">
+        select count(*)
+        from repair_submit_history
+        where submit_id = #{submit_id};
+    </select>
+    <select id="naiveGetRepairList" resultType="com.jig.entity.repair.RepairJig">
+        select rs.*, u1.name submit_name, u2.name accrptor_name
+        from repair_submit rs
+                 left join user u1 on rs.submit_id = u1.id
+                 left join user u2 on acceptor_id = u2.id
+        where submit_id = #{submit_id}
+        limit #{page_number},5
+    </select>
+    <select id="naiveGetRepairListPage" resultType="java.lang.Integer">
+        select count(*)
+        from repair_submit
+        where submit_id = #{submit_id};
+    </select>
+    <insert id="naiveSubmitRepair">
+        update jig_position
+        set status= 2
+        where code = #{code}
+          and seq_id = #{seq_id};
+        insert into repair_submit(code, seq_id, repair_reason, repair_photo_url, submit_time,
+                                  submit_id, status)
+        values (#{code}, #{seq_id}, #{repair_reason}, #{pathName}, now(),
+                #{submit_id}, 0);
+        insert into message(id, generate_id, generate_time, accept_type, status, message, tab_id)
+        values (uuid(), #{submit_id}, now(), 'high', '00', '提交了新的报修申请', 'myrepair')
+    </insert>
+
+    <select id="naiveSearchJigDefinition" resultType="com.jig.entity.jig.JigDefinition">
+        select * from jig_definition_entity_view
+        <where>
+            <if test="code != null and code != ''">
+                and code like concat('%',#{code},'%')
+            </if>
+            <if test="name != null and name != ''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="workcell != null and workcell != ''">
+                and workcell like concat('%',#{workcell},'%')
+            </if>
+            <if test="family != null and family != ''">
+                and family like concat('%',#{family},'%')
+            </if>
+            <if test="userFor != null and userFor != ''">
+                and user_for like concat('%',#{userFor},'%')
+            </if>
+        </where>
+        limit #{pageNumber},#{page_size}
+    </select>
+    <select id="naiveSearchJigDefinitionPage" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM jig_definition_entity_view
+        <where>
+            <if test="code != null and code != ''">
+                and code like concat('%',#{code},'%')
+            </if>
+            <if test="name != null and name != ''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="workcell != null and workcell != ''">
+                and workcell like concat('%',#{workcell},'%')
+            </if>
+            <if test="family != null and family != ''">
+                and family like concat('%',#{family},'%')
+            </if>
+            <if test="userFor != null and userFor != ''">
+                and user_for like concat('%',#{userFor},'%')
+            </if>
+        </where>
+    </select>
+    <select id="searchAllJigDefinition" resultType="com.jig.entity.jig.JigDefinition">
+        SELECT * from jig_definition_entity_view
+        <where>
+            <if test="code != null">
+                and code like concat('%',#{code},'%')
+            </if>
+            <if test="name != null">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="workcell != null">
+                and workcell like concat('%',#{workcell},'%')
+            </if>
+            <if test="family != null">
+                and family like concat('%',#{family},'%')
+            </if>
+            <if test="userFor != null">
+                and user_for like concat('%',#{userFor},'%')
+            </if>
+        </where>
+    </select>
+    <select id="naiveGetOutgoingSubmit" resultType="com.jig.entity.out.OutgoSubmit">
+        select *
+        from outgo_submit_entity_view
+        limit #{page_number},5
+    </select>
+    <select id="naiveGetOutgoSubmitPage" resultType="java.lang.Integer">
+        select count(*)
+        from outgo_submit_entity_view
+    </select>
+</mapper>

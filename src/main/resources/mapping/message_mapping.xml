@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jig.mapper.MessageMapper">
+    <select id="getNewMessage" resultType="com.jig.entity.common.Message">
+        select message.*, u1.name generate_name, u2.name accept_name
+        from message
+                 left join `user` u1 on u1.id = message.generate_id
+                 left join `user` u2 on u2.id = message.accept_id
+        where message.accept_type = #{type}
+            and message.read_user not like concat('%', #{id}, '%')
+           or message.accept_id = #{id}
+    </select>
+    <select id="getOtherMessage" resultType="com.jig.entity.common.Message">
+        select message.*, u1.name generate_name, u2.name accept_name
+        from message
+                 left join `user` u1 on u1.id = message.generate_id
+                 left join `user` u2 on u2.id = message.accept_id
+        where (message.accept_type = #{type}
+            and message.read_user like concat('%', #{id}, '%'))
+           or message.accept_id = #{id}
+    </select>
+</mapper>
