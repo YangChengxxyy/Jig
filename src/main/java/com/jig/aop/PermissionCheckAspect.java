@@ -37,10 +37,11 @@ public class PermissionCheckAspect {
         Permission methodAnnotation = method.getAnnotation(Permission.class);
         if (methodAnnotation != null) {
             logger.info(("请求的方法上面的注解:" + Arrays.toString(methodAnnotation.value())));
-        }
-        Permission classAnnotation = target.getClass().getAnnotation(Permission.class);
-        if (classAnnotation != null) {
-            logger.info("请求的类上面的注解:" + Arrays.toString(classAnnotation.value()));
+        } else {
+            Permission classAnnotation = target.getClass().getAnnotation(Permission.class);
+            if (classAnnotation != null) {
+                logger.info("请求的类上面的注解:" + Arrays.toString(classAnnotation.value()));
+            }
         }
         return pjp.proceed();
     }
