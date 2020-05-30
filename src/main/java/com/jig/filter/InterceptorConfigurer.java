@@ -8,16 +8,17 @@ import javax.annotation.Resource;
 
 @Configuration
 public class InterceptorConfigurer implements WebMvcConfigurer {
-    @Resource
-    private KeyInterceptor keyInterceptor;
 
+    @Resource
+    private PowerInterceptor powerInterceptor;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(keyInterceptor)
+        registry.addInterceptor(powerInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/api/get_workcell_list")
                 .excludePathPatterns("/api/login_check")
-                .excludePathPatterns("/images/**");
-//        registry.addInterceptor(powerInterceptor).addPathPatterns("/**");
+                .excludePathPatterns("/api/get_workcell_list")
+                .excludePathPatterns("/images/**")
+                .excludePathPatterns("/favicon.ico")
+                .excludePathPatterns("/error");
     }
 }
