@@ -18,5 +18,6 @@ public class InterceptorConfigurer implements WebMvcConfigurer {
                 .excludePathPatterns("/api/get_workcell_list")
                 .excludePathPatterns("/api/login_check")
                 .excludePathPatterns("/images/**");
+//        registry.addInterceptor(powerInterceptor).addPathPatterns("/**");
     }
 }

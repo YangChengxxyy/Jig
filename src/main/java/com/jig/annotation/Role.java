@@ -1,6 +1,7 @@
-package com.jig.entity.common;
+package com.jig.annotation;
 
 public enum Role {
+    common(0, "所有人"),
     naive(1, "初级用户"),
     high(2, "高级用户"),
     supervisor(3, "监管员"),
@@ -20,5 +21,10 @@ public enum Role {
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String toString() {
+        return "id:" + id + ",name:" + name;
     }
 }
