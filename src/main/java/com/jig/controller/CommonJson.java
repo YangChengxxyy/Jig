@@ -1,7 +1,7 @@
 package com.jig.controller;
 
 import com.jig.annotation.Permission;
-import com.jig.annotation.Role;
+import com.jig.entity.common.Role;
 import com.jig.entity.common.Family;
 import com.jig.entity.common.Position;
 import com.jig.entity.common.ProductionLine;
@@ -137,7 +137,5 @@ public class CommonJson {
     }
 
     @RequestMapping("log_out")
-    public void logOUt() {
-
-    }
+    public void logOUt() {}
 }

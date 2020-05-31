@@ -1,7 +1,7 @@
 package com.jig.controller;
 
 import com.jig.annotation.Permission;
-import com.jig.annotation.Role;
+import com.jig.entity.common.Role;
 import com.jig.entity.purchase.PurchaseIncomeHistory;
 import com.jig.entity.purchase.PurchaseIncomeSubmit;
 import com.jig.entity.repair.RepairJigHistory;

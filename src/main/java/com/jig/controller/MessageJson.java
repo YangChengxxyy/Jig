@@ -33,7 +33,7 @@ public class MessageJson {
         if (type == null) {
             HttpSession session = request.getSession();
             LoginState loginState = (LoginState) session.getAttribute("loginState");
-            type = loginState.getData().getType();
+            type = loginState.getUser().getType();
         }
         List<Message> messages = messageService.getNewMessage(id, type);
         for (Message message : messages) {
@@ -58,7 +58,7 @@ public class MessageJson {
         if (type == null) {
             HttpSession session = request.getSession();
             LoginState loginState = (LoginState) session.getAttribute("loginState");
-            type = loginState.getData().getType();
+            type = loginState.getUser().getType();
         }
         List<Message> messages = messageService.getOtherMessage(id, type);
         for (Message message : messages) {

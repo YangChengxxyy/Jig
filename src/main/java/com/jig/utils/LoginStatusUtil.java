@@ -10,7 +10,7 @@ public class LoginStatusUtil {
     public static User getUserInfo(HttpServletRequest request){
         HttpSession session = request.getSession();
         LoginState state = (LoginState) session.getAttribute("loginState");
-        User user = state.getData();
+        User user = state.getUser();
         return user;
     }
 }

@@ -1,16 +1,17 @@
 package com.jig.entity.common;
 
 public class LoginState {
-    private User data;
+    private User user;
     private int stateCode;//0：登陆成功，1：密码或者账户错误，2：账户不存在
     private String message;
+    private String token;
 
-    public User getData() {
-        return data;
+    public User getUser() {
+        return user;
     }
 
-    public void setData(User data) {
-        this.data = data;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public int getStateCode() {
@@ -27,5 +28,13 @@ public class LoginState {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
