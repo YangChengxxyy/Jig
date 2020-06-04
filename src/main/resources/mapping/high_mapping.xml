@@ -307,7 +307,7 @@
         <if test="start_date != end_date">
             and ss.submit_time between #{start_date} and #{end_date}
         </if>
-        limit #{page_number},5
+        limit #{page_number},#{page_size}
     </select>
     <select id="highSearchScrapHistoryPage" resultType="java.lang.Integer">
         select count(*)

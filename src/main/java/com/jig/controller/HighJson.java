@@ -191,6 +191,7 @@ public class HighJson {
     /**
      * high搜索历史报修记录
      *
+     * @param id          员工id
      * @param code        工夹具代码
      * @param seq_id      工夹具序列号
      * @param submit_name 申请时间
@@ -262,7 +263,7 @@ public class HighJson {
      * @param seq_id       工夹具序列号
      * @param submit_id    申请人id
      * @param scrap_reason 报废原因
-     * @param file         文件
+     * @param files        文件
      * @return 成功与否
      */
     @RequestMapping(value = "submit_scrap", method = RequestMethod.POST)
@@ -352,6 +353,7 @@ public class HighJson {
             return false;
         }
     }
+
     @RequestMapping("download_one_purchase_history")
     public void highDownloadOnePurchaseHistory(HttpServletResponse response, @RequestParam(value = "bill_no") String bill_no, @RequestParam(value = "submit_name") String submit_name,
                                                @RequestParam(value = "code") String code, @RequestParam(value = "production_line_id") String production_line_id,

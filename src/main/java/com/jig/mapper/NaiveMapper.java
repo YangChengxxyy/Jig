@@ -89,18 +89,45 @@ public interface NaiveMapper {
                        @Param("rec_id") String rec_id);
 
     /**
+     * 工夹具检点
+     * @param code
+     * @param seq_id
+     * @param reason 出现的问题,多个用|分开
+     * @param user_id
+     * @return
+     */
+    int naive_maintenance_jig(@Param("code") String code,
+                              @Param("seq_id") String seq_id,
+                              @Param("reason") String reason,
+                              @Param("user_id") String user_id);
+
+    /**
      * 获得已出库工夹具OutgoingJig对象
      *
      * @return 已出库工夹具OutgoingJig对象
      */
-    List<OutgoingJig> naiveGetOutgoingJig(@Param("page_number") int page_number);
+    List<OutgoingJig> naiveGetOutgoingJigList(@Param("code") String code,
+                                              @Param("name") String name,
+                                              @Param("start_date") String start_date,
+                                              @Param("end_date") String end_date,
+                                              @Param("user_for") String user_for,
+                                              @Param("page_number") int page_number,
+                                              @Param("page_size") int page_size,
+                                              @Param("workcell_id") String workcell_id);
+
+
 
     /**
      * 获得已出库工夹具记录数
      *
      * @return 已出库工夹具记录数
      */
-    int getOutgoingJigPage();
+    int getOutgoingJigListPage(@Param("code") String code,
+                               @Param("name") String name,
+                               @Param("start_date") String start_date,
+                               @Param("end_date") String end_date,
+                               @Param("user_for") String user_for,
+                               @Param("workcell_id") String workcell_id);
 
     /**
      * 工夹具入库
@@ -110,7 +137,11 @@ public interface NaiveMapper {
      * @param seq_id 工夹具序列号
      * @param rec_id 记录人id
      */
-    void naiveReturnJig(@Param("id") String id, @Param("code") String code, @Param("seq_id") String seq_id, @Param("rec_id") String rec_id);
+    void naiveReturnJig(@Param("id") String id,
+                        @Param("code") String code,
+                        @Param("seq_id") String seq_id,
+                        @Param("submit_id") String submit_id,
+                        @Param("rec_id") String rec_id);
 
     /**
      * 删除对应的记录
@@ -119,7 +150,7 @@ public interface NaiveMapper {
      */
     void naiveDeleteOutgoingJig(@Param("id") String id);
 
-    List<RepairJigHistory> naiveGetRepairHistory(@Param("submit_id") String submit_id, @Param("page_number") int page_number, @Param("page_size") int page_size);
+    List<RepairJigHistory> naiveGetRepairHistory(@Param("submit_id") String submit_id, @Param("page_number") int page_number);
 
     int naiveGetRepairHistoryPage(@Param("submit_id") String submit_id);
 
@@ -130,7 +161,7 @@ public interface NaiveMapper {
      * @param page_number
      * @return
      */
-    List<RepairJig> naiveGetRepairList(@Param("submit_id") String submit_id, @Param("page_number") int page_number, @Param("page_size") int page_size);
+    List<RepairJig> naiveGetRepairList(@Param("submit_id") String submit_id, @Param("page_number") int page_number);
 
     /**
      * @param submit_id
