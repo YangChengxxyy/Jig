@@ -20,46 +20,52 @@ public class NaiveService {
     private NaiveMapper naiveMapper;
 
     //初级用户获取 工夹具出库页面的工夹具存放位置list
-    public List<JigPosition> navieGetLocationList(String workcell_id){
+    public List<JigPosition> navieGetLocationList(String workcell_id) {
         return naiveMapper.navieGetLocationList(workcell_id);
     }
 
     //初级用户 根据选择的 夹具柜号和区号确定 工夹具list
-    public List<JigStock> navieGetJigListByLocation(String jig_cabinet_id, String jig_location_id, String workcell){
-        return naiveMapper.navieGetJigListByLocation(jig_cabinet_id,jig_location_id,workcell);
+    public List<JigStock> navieGetJigListByLocation(String jig_cabinet_id, String jig_location_id, String workcell) {
+        return naiveMapper.navieGetJigListByLocation(jig_cabinet_id, jig_location_id, workcell);
     }
 
     //初级用户 根据选择的 夹具柜号和区号 确定该code的工夹具list
-    public List<JigEntity> navieGetJigEntityListByLocation(String jig_cabinet_id, String jig_location_id, String code){
-        return naiveMapper.navieGetJigEntityListByLocation(jig_cabinet_id,jig_location_id,code);
+    public List<JigEntity> navieGetJigEntityListByLocation(String jig_cabinet_id, String jig_location_id, String code) {
+        return naiveMapper.navieGetJigEntityListByLocation(jig_cabinet_id, jig_location_id, code);
     }
 
     //初级用户 根据选择的工夹具存放区域 和 搜索条件来 确定工夹具list
-    public List<JigStock> navieGetJigListBySelect(String jig_cabinet_id,String jig_location_id,String code,String name,String user_for,String workcell){
-        return naiveMapper.navieGetJigListBySelect(jig_cabinet_id,jig_location_id,code,name,user_for,workcell);
+    public List<JigStock> navieGetJigListBySelect(String jig_cabinet_id, String jig_location_id, String code, String name, String user_for, String workcell) {
+        return naiveMapper.navieGetJigListBySelect(jig_cabinet_id, jig_location_id, code, name, user_for, workcell);
     }
 
     //初级用户 根据夹具柜号和区号确定 检点的工夹具list
-    public List<JigEntity> navieGetMaintenanceJigDetailList(String jig_cabinet_id,String jig_location_id,String code){
-        return naiveMapper.navieGetMaintenanceJigDetailList(jig_cabinet_id,jig_location_id,code);
+    public List<JigEntity> navieGetMaintenanceJigDetailList(String jig_cabinet_id, String jig_location_id, String code) {
+        return naiveMapper.navieGetMaintenanceJigDetailList(jig_cabinet_id, jig_location_id, code);
     }
 
-    public void naiveOutgoJig(String code, String seq_id, String submit_id,String rec_id) {
-        naiveMapper.naiveOutgoJig(code, seq_id, submit_id,rec_id);
+    //工夹具出库
+    public void naiveOutgoJig(String code, String seq_id, String submit_id, String rec_id) {
+        naiveMapper.naiveOutgoJig(code, seq_id, submit_id, rec_id);
     }
 
-    public List<OutgoingJig> naiveGetOutgoingJig(int page_number) {
-        page_number = (page_number - 1) * 5;
-        return naiveMapper.naiveGetOutgoingJig(page_number);
+    //工夹具检点
+    public int naive_maintenance_jig(String code, String seq_id, String reason, String user_id) {
+        return naiveMapper.naive_maintenance_jig(code, seq_id, reason, user_id);
     }
 
-    public int naiveGetOutgoingJigPage() {
-        int a = naiveMapper.getOutgoingJigPage();
-        return (int) Math.ceil(a / 5.0);
+    //获取已经出库的工夹具list
+    public List<OutgoingJig> naiveGetOutgoingJigList(String code, String name, String start_date, String end_date, String user_for,int page_number, int page_size, String workcell_id) {
+        return naiveMapper.naiveGetOutgoingJigList(code, name, start_date, end_date, user_for,page_number,page_size,workcell_id);
     }
 
-    public void naiveReturnJig(String id, String code, String seq_id, String rec_id) {
-        naiveMapper.naiveReturnJig(id, code, seq_id, rec_id);
+    public int naiveGetOutgoingJigListPage(String code, String name, String start_date, String end_date, String user_for, String workcell_id) {
+        return naiveMapper.getOutgoingJigListPage(code, name, start_date, end_date, user_for, workcell_id);
+    }
+
+
+    public void naiveReturnJig(String id, String code, String seq_id, String submit_id, String rec_id) {
+        naiveMapper.naiveReturnJig(id, code, seq_id, submit_id, rec_id);
         naiveMapper.naiveDeleteOutgoingJig(id);
     }
 
