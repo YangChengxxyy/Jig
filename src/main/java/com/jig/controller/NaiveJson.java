@@ -292,7 +292,7 @@ public class NaiveJson {
     }
 
     /**
-     * 获取出库申请 (不需要了)
+     * 获取出库申请
      *
      * @return 出库申请
      */
