@@ -1,5 +1,7 @@
 package com.jig.controller;
 
+import com.jig.annotation.Permission;
+import com.jig.entity.common.Role;
 import com.jig.entity.purchase.PurchaseIncomeHistory;
 import com.jig.entity.purchase.PurchaseIncomeSubmit;
 import com.jig.entity.repair.RepairJigHistory;
@@ -23,13 +25,12 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+@Permission(Role.high)
 @RestController
 @RequestMapping("/api/high/")
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
@@ -58,11 +59,8 @@ public class HighJson {
     private String getScrapPathName(String fileName) {
         UUID uuid = UUID.randomUUID();
         String uuidString = uuid.toString();
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");//设置日期格式
-        String nowTime = LocalDateTime.now().format(fmt);
-        assert fileName != null;
         String after = fileName.substring(fileName.lastIndexOf('.'));
-        return SCRAP_IMAGE_NAME + SCRAP + "-" + nowTime + "-" + uuidString + after;
+        return SCRAP_IMAGE_NAME + SCRAP + "-" + uuidString + after;
     }
 
     /**
@@ -82,7 +80,7 @@ public class HighJson {
         try {
             PurchaseIncomeSubmit purchaseIncomeSubmit = new PurchaseIncomeSubmit();
             purchaseIncomeSubmit.setSubmit_id(submit_id);
-            purchaseIncomeSubmit.setProduction_line_id(Integer.valueOf(production_line_id));
+            purchaseIncomeSubmit.setProduction_line_id(Integer.parseInt(production_line_id));
             purchaseIncomeSubmit.setBill_no(bill_no);
             purchaseIncomeSubmit.setCode(codes);
             purchaseIncomeSubmit.setCount(counts);
@@ -268,15 +266,26 @@ public class HighJson {
      * @return 成功与否
      */
     @RequestMapping(value = "submit_scrap", method = RequestMethod.POST)
-    public boolean highSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason, @RequestParam("scrap_type") String scrap_type, @RequestParam("file") MultipartFile file) {
-        String fileName = file.getOriginalFilename();
+    public boolean highSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason, @RequestParam("scrap_type") String scrap_type, @RequestParam("file") MultipartFile[] files) {
         try {
-            assert fileName != null;
-            String pathName = getScrapPathName(fileName);
-            System.out.println(pathName);//pathName存入数据库
-            FileUtils.writeByteArrayToFile
-                    (new File(RESOURCE_URL + pathName), file.getBytes());
-            System.out.println(RESOURCE_URL + pathName);
+            StringBuilder pathName = new StringBuilder("");
+            if (files.length == 1) {
+                String fileName = getScrapPathName(files[0].getOriginalFilename());
+                FileUtils.writeByteArrayToFile
+                        (new File(RESOURCE_URL + fileName), files[0].getBytes());
+                pathName.append(fileName);
+            } else {
+                for (int i = 0; i < files.length - 1; i++) {
+                    String fileName = getScrapPathName(files[i].getOriginalFilename());
+                    FileUtils.writeByteArrayToFile
+                            (new File(RESOURCE_URL + fileName), files[i].getBytes());
+                    pathName.append(fileName).append('|');
+                }
+                String fileName = getScrapPathName(files[files.length - 1].getOriginalFilename());
+                FileUtils.writeByteArrayToFile
+                        (new File(RESOURCE_URL + fileName), files[files.length - 1].getBytes());
+                pathName.append(fileName);
+            }
 
             ScrapSubmit scrapSubmit = new ScrapSubmit();
             scrapSubmit.setCode(code);
@@ -285,7 +294,7 @@ public class HighJson {
             scrapSubmit.setScrap_reason(scrap_reason);
             scrapSubmit.setScrap_type(scrap_type);
 
-            highService.highSubmitScrap(scrapSubmit, pathName);
+            highService.highSubmitScrap(scrapSubmit, pathName.toString());
         } catch (IOException e) {
             e.printStackTrace();
             return false;

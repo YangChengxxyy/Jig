@@ -41,7 +41,7 @@ public class UserService {
                 User user = passwords.get(0);
                 user.setWorkcell_id(set_workcell_id);
                 user.setType(type);
-                loginState.setData(user);
+                loginState.setUser(user);
                 loginState.setMessage("登录成功！");
                 loginState.setStateCode(0);
             } else {

@@ -1,5 +1,7 @@
 package com.jig.controller;
 
+import com.jig.annotation.Permission;
+import com.jig.entity.common.Role;
 import com.jig.entity.common.User;
 import com.jig.entity.jig.JigDefinition;
 import com.jig.entity.operate.Operate;
@@ -25,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Permission(Role.manager)
 @RestController
 @RequestMapping("/api/manager")
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)

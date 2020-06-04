@@ -1,9 +1,11 @@
 package com.jig.controller;
 
+import com.jig.annotation.Permission;
 import com.jig.entity.common.CnEn;
+import com.jig.entity.common.Role;
+import com.jig.entity.common.User;
 import com.jig.entity.jig.JigModel;
 import com.jig.entity.jig.JigPart;
-import com.jig.entity.common.User;
 import com.jig.service.AdminService;
 import com.jig.utils.PoiUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Permission(Role.admin)
 @RestController
 @RequestMapping("/api/admin")
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)

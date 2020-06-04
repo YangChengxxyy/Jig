@@ -1,12 +1,13 @@
 package com.jig.controller;
 
-import com.jig.entity.*;
+import com.jig.annotation.Permission;
+import com.jig.entity.common.Role;
 import com.jig.entity.common.User;
 import com.jig.entity.jig.JigDefinition;
 import com.jig.entity.jig.JigEntity;
 import com.jig.entity.jig.JigPosition;
 import com.jig.entity.jig.JigStock;
-import com.jig.entity.out.OutgoingJig;
+import com.jig.entity.repair.RepairJig;
 import com.jig.entity.repair.RepairJigHistory;
 import com.jig.service.NaiveService;
 import com.jig.utils.LoginStatusUtil;
@@ -23,19 +24,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import javax.print.DocFlavor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+@Permission(Role.naive)
 @RestController
 @RequestMapping("/api/naive")
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
@@ -54,11 +52,8 @@ public class NaiveJson {
     private String getRepairPathName(String fileName) {
         UUID uuid = UUID.randomUUID();
         String uuidString = uuid.toString();
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");//设置日期格式
-        String nowTime = LocalDateTime.now().format(fmt);
-        assert fileName != null;
         String after = fileName.substring(fileName.lastIndexOf('.'));
-        return REPAIR_IMAGE_NAME + REPAIR + "-" + nowTime + "-" + uuidString + after;
+        return REPAIR_IMAGE_NAME + REPAIR + "-" + uuidString + after;
     }
 
     @NotNull
@@ -121,22 +116,6 @@ public class NaiveJson {
     }
 
     /**
-     * @param code   检点完成的工夹具代码
-     * @param seq_id
-     * @param reason 原因id 多个用|分开
-     * @return
-     */
-    @RequestMapping("maintenance_jig")
-    public int naiveMaintenanceJig(HttpServletRequest request,
-                                   @RequestParam("code") String code,
-                                   @RequestParam("seq_id") String seq_id,
-                                   @RequestParam("reason") String reason) {
-        User user = LoginStatusUtil.getUserInfo(request);
-        String user_id = user.getId();
-        return naiveService.naive_maintenance_jig(code, seq_id, reason, user_id);
-    }
-
-    /**
      * naive工夹具出库
      *
      * @param code      工夹具代码
@@ -164,41 +143,24 @@ public class NaiveJson {
      *
      * @return 需要入库的工夹具信息
      */
-    @RequestMapping("get_outgoing_jig_list")
-    public Map<String, Object> naiveGetOutgoingJigList(HttpServletRequest request,
-                                                       @RequestParam("code") String code,
-                                                       @RequestParam("name") String name,
-                                                       @RequestParam("start_date") String start_date,
-                                                       @RequestParam("end_date") String end_date,
-                                                       @RequestParam("user_for") String user_for,
-                                                       @RequestParam("page_number") int page_number,
-                                                       @RequestParam("page_size") int page_size) {
-        User user = LoginStatusUtil.getUserInfo(request);
-        String workcell_id = user.getWorkcell_id();
-        page_number = (page_number - 1) * page_size;
-        Map<String, Object> map = new HashMap<>();
-        List<OutgoingJig> list = naiveService.naiveGetOutgoingJigList(code, name, start_date, end_date, user_for, page_number, page_size, workcell_id);
-        int all = naiveService.naiveGetOutgoingJigListPage(code, name, start_date, end_date, user_for, workcell_id);
-        map.put("data", list);
-        map.put("all", all);
-        return map;
+    @RequestMapping("get_outgoing_jig")
+    public Map<String, Object> naiveGetOutgoingJig(@RequestParam("page_number") int page_number) {
+        return getStringObjectMap(naiveService.naiveGetOutgoingJig(page_number), naiveService.naiveGetOutgoingJigPage());
     }
 
     /**
      * naive工夹具入库
      *
-     * @param code      工夹具代码
-     * @param seq_id    工夹具序列号
-     * @param submit_id 归还人id
-     * @param id        outgoing_jig表id
+     * @param code   工夹具代码
+     * @param seq_id 工夹具序列号
+     * @param rec_id 记录人id
+     * @param id     outgoing_jig表id
      * @return 是否入库成功
      */
     @RequestMapping("return_jig")
-    public boolean naiveReturnJig(HttpServletRequest request, @RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("id") String id) {
+    public boolean naiveReturnJig(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("rec_id") String rec_id, @RequestParam("id") String id) {
         try {
-            User user = LoginStatusUtil.getUserInfo(request);
-            String rec_id = user.getId(); // 记录人Id
-            naiveService.naiveReturnJig(id, code, seq_id, submit_id, rec_id);
+            naiveService.naiveReturnJig(id, code, seq_id, rec_id);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -214,10 +176,13 @@ public class NaiveJson {
      * @return 保修历史
      */
     @RequestMapping("get_repair_history")
-    public Map<String, Object> naiveGetRepairHistory(@RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number) {
-        List<RepairJigHistory> list = naiveService.naiveGetRepairHistory(submit_id, page_number);
-        int a = naiveService.naiveGetRepairHistoryPage(submit_id);
-        return getStringObjectMap(list, a);
+    public Map<String, Object> naiveGetRepairHistory(@RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
+        List<RepairJigHistory> list = naiveService.naiveGetRepairHistory(submit_id, page_number, page_size);
+        int all = naiveService.naiveGetRepairHistoryPage(submit_id);
+        Map<String, Object> map = new HashMap<>();
+        map.put("data", list);
+        map.put("all", all);
+        return map;
     }
 
     /**
@@ -228,8 +193,13 @@ public class NaiveJson {
      * @return 报修列表
      */
     @RequestMapping("get_repair_list")
-    public Map<String, Object> naiveGetRepairList(@RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number) {
-        return getStringObjectMap(naiveService.naiveGetRepairList(submit_id, page_number), naiveService.naiveGetRepairListPage(submit_id));
+    public Map<String, Object> naiveGetRepairList(@RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
+        List<RepairJig> list = naiveService.naiveGetRepairList(submit_id, page_number, page_size);
+        int all = naiveService.naiveGetRepairListPage(submit_id);
+        Map<String, Object> map = new HashMap<>();
+        map.put("data", list);
+        map.put("all", all);
+        return map;
     }
 
     /**
@@ -239,18 +209,31 @@ public class NaiveJson {
      * @param seq_id        工夹具序列号
      * @param submit_id     申请人id
      * @param repair_reason 报修原因
-     * @param file          文件
+     * @param files         文件
      * @return 成功与否
      */
     @RequestMapping("submit_repair")
-    public boolean naiveSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("repair_reason") String repair_reason, @RequestParam("file") MultipartFile file) {
-        String fileName = file.getOriginalFilename();
+    public boolean naiveSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("repair_reason") String repair_reason, @RequestParam("file") MultipartFile[] files) {
         try {
-            assert fileName != null;
-            String pathName = getRepairPathName(fileName);
-            FileUtils.writeByteArrayToFile
-                    (new File(RESOURCE_URL + pathName), file.getBytes());
-            naiveService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, pathName);
+            StringBuilder pathName = new StringBuilder("");
+            if (files.length == 1) {
+                String fileName = getRepairPathName(files[0].getOriginalFilename());
+                FileUtils.writeByteArrayToFile
+                        (new File(RESOURCE_URL + fileName), files[0].getBytes());
+                pathName.append(fileName);
+            } else {
+                for (int i = 0; i < files.length - 1; i++) {
+                    String fileName = getRepairPathName(files[i].getOriginalFilename());
+                    FileUtils.writeByteArrayToFile
+                            (new File(RESOURCE_URL + fileName), files[i].getBytes());
+                    pathName.append(fileName).append('|');
+                }
+                String fileName = getRepairPathName(files[files.length - 1].getOriginalFilename());
+                FileUtils.writeByteArrayToFile
+                        (new File(RESOURCE_URL + fileName), files[files.length - 1].getBytes());
+                pathName.append(fileName);
+            }
+            naiveService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, pathName.toString());
         } catch (IOException e) {
             e.printStackTrace();
             return false;

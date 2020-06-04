@@ -69,26 +69,24 @@ public class NaiveService {
         naiveMapper.naiveDeleteOutgoingJig(id);
     }
 
-    public List<RepairJigHistory> naiveGetRepairHistory(String submit_id, int page_number) {
-        page_number = (page_number - 1) * 5;
-        return naiveMapper.naiveGetRepairHistory(submit_id, page_number);
+    public List<RepairJigHistory> naiveGetRepairHistory(String submit_id, int page_number,int page_size) {
+        page_number = (page_number - 1) * page_size;
+        return naiveMapper.naiveGetRepairHistory(submit_id, page_number,page_size);
     }
 
     public int naiveGetRepairHistoryPage(String submit_id) {
-        int a = naiveMapper.naiveGetRepairHistoryPage(submit_id);
-        return (int) Math.ceil(a / 5.0);
+        return naiveMapper.naiveGetRepairHistoryPage(submit_id);
     }
 
     //naive获取报修列表
-    public List<RepairJig> naiveGetRepairList(String submit_id, int page_number) {
-        page_number = (page_number - 1) * 5;
-        return naiveMapper.naiveGetRepairList(submit_id, page_number);
+    public List<RepairJig> naiveGetRepairList(String submit_id, int page_number,int page_size) {
+        page_number = (page_number - 1) * page_size;
+        return naiveMapper.naiveGetRepairList(submit_id, page_number,page_size);
     }
 
-    //naive获取报修列表页数
+    //naive获取报修列表条数
     public int naiveGetRepairListPage(String submit_id) {
-        int a = naiveMapper.naiveGetRepairListPage(submit_id);
-        return (int) Math.ceil(a / 5.0);
+        return naiveMapper.naiveGetRepairListPage(submit_id);
     }
 
     //naive提交报修

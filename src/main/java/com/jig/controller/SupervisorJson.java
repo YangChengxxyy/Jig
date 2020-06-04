@@ -1,5 +1,7 @@
 package com.jig.controller;
 
+import com.jig.annotation.Permission;
+import com.jig.entity.common.Role;
 import com.jig.entity.common.Family;
 import com.jig.entity.jig.JigDefinition;
 import com.jig.entity.purchase.PurchaseIncomeSubmit;
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@Permission(Role.supervisor)
 @RestController
 @RequestMapping("/api/supervisor/")
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
