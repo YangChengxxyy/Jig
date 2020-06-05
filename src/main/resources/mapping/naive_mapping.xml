@@ -78,24 +78,59 @@
         where code = #{code}
           and seq_id = #{seq_id};
     </insert>
-    <select id="naiveGetOutgoingJig" resultType="com.jig.entity.out.OutgoingJig">
+    <insert id="naive_maintenance_jig">
+        insert into regular_maintenance_history(code, seq_id, reason, check_id, check_time)
+        values(#{code}, #{seq_id}, #{reason}, #{user_id}, now());
+
+        update regular_maintenance
+        set last_time = now()
+        where code = #{code} and seq_id = #{seq_id}
+    </insert>
+    <select id="naiveGetOutgoingJigList" resultType="com.jig.entity.out.OutgoingJig">
         select *
         from outgoing_jig_entity_view
-        limit #{page_number},5
+        <where>
+            workcell_id = #{workcell_id}
+            <if test="code != ''">
+                and code like concat('%',#{code},'%')
+            </if>
+            <if test="user_for != ''">
+                and user_for like concat('%',#{user_for},'%')
+            </if>
+            <if test="name != ''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="start_date != '' and end_date !='' ">
+                and (STR_TO_DATE(outgo_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
+            </if>
+        </where>
+        limit #{page_number},#{page_size}
     </select>
-    <select id="getOutgoingJigPage" resultType="java.lang.Integer">
+    <select id="getOutgoingJigListPage" resultType="java.lang.Integer">
         select count(*)
         from outgoing_jig_entity_view
+        <where>
+            workcell_id = #{workcell_id}
+            <if test="code != ''">
+                and code like concat('%',#{code},'%')
+            </if>
+            <if test="user_for != ''">
+                and user_for like concat('%',#{user_for},'%')
+            </if>
+            <if test="name != ''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="start_date != '' and end_date !='' ">
+                and (STR_TO_DATE(outgo_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
+            </if>
+        </where>
     </select>
     <update id="naiveReturnJig">
         update jig_position
         set status = 1
-        where code = #{code}
-          and seq_id = #{seq_id};
-        insert into outgo_income_history(submit_time, user_id, status, rec_id, rec_time, code, seq_id)
-        values ((select submit_time from outgoing_jig where outgoing_jig.id = #{id}),
-                (select user_id from outgoing_jig where outgoing_jig.id = #{id}),
-                1, #{rec_id}, now(), #{code}, #{seq_id})
+        where code = #{code}and seq_id = #{seq_id};
+        insert into outgo_income_history(code, seq_id, submit_id, outgo_time, rec_id, status)
+        values (#{code}, #{seq_id}, ${submit_id}, now(), #{rec_id}, 1)
     </update>
     <delete id="naiveDeleteOutgoingJig">
         delete
@@ -108,7 +143,7 @@
                  left join user u1 on rs.submit_id = u1.id
                  left join user u2 on acceptor_id = u2.id
         where submit_id = #{submit_id}
-        limit #{page_number},#{page_size}
+        limit #{page_number},5
     </select>
     <select id="naiveGetRepairHistoryPage" resultType="java.lang.Integer">
         select count(*)
@@ -121,7 +156,7 @@
                  left join user u1 on rs.submit_id = u1.id
                  left join user u2 on acceptor_id = u2.id
         where submit_id = #{submit_id}
-        limit #{page_number},#{page_size}
+        limit #{page_number},5
     </select>
     <select id="naiveGetRepairListPage" resultType="java.lang.Integer">
         select count(*)

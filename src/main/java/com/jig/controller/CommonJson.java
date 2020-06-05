@@ -29,7 +29,6 @@ import java.util.List;
 public class CommonJson {
     @Autowired
     private CommonService commonService;
-
     /**
      * 获取单个JigDefinition对象
      *

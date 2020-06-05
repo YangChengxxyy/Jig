@@ -150,7 +150,7 @@ public interface NaiveMapper {
      */
     void naiveDeleteOutgoingJig(@Param("id") String id);
 
-    List<RepairJigHistory> naiveGetRepairHistory(@Param("submit_id") String submit_id, @Param("page_number") int page_number, @Param("page_size") int page_size);
+    List<RepairJigHistory> naiveGetRepairHistory(@Param("submit_id") String submit_id, @Param("page_number") int page_number);
 
     int naiveGetRepairHistoryPage(@Param("submit_id") String submit_id);
 
@@ -161,7 +161,7 @@ public interface NaiveMapper {
      * @param page_number
      * @return
      */
-    List<RepairJig> naiveGetRepairList(@Param("submit_id") String submit_id, @Param("page_number") int page_number, @Param("page_size") int page_size);
+    List<RepairJig> naiveGetRepairList(@Param("submit_id") String submit_id, @Param("page_number") int page_number);
 
     /**
      * @param submit_id
