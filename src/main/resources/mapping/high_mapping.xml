@@ -2,41 +2,49 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jig.mapper.HighMapper">
     <insert id="highAddShoplist" parameterType="com.jig.entity.purchase.PurchaseIncomeSubmit">
-        insert into purchase_income_submit(id,submit_id, code, count, submit_time, status, production_line_id, bill_no)
-        values (#{purchase_submit.id},#{purchase_submit.submit_id}, #{purchase_submit.code}, #{purchase_submit.count},
-         now(), 0, #{purchase_submit.production_line_id}, #{purchase_submit.bill_no});
+        insert into purchase_income_submit(id, submit_id, code, count, submit_time, status, production_line_id, bill_no)
+        values (#{purchase_submit.id}, #{purchase_submit.submit_id}, #{purchase_submit.code}, #{purchase_submit.count},
+                now(), 0, #{purchase_submit.production_line_id}, #{purchase_submit.bill_no});
 
-        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,new_value,operate_string)
-        values(#{purchase_submit.submit_id},#{purchase_submit.id},now(),
-        'purchase_income_submit',
-        'submit_id~code~count~submit_time~status~production_line_id~bill_no','insert',
-        '${purchase_submit.submit_id}~${purchase_submit.code}~${purchase_submit.count}~${purchase_submit.submit_time}~0~${purchase_submit.production_line_id}~${purchase_submit.bill_no}',
-        concat('高级用户',#{purchase_submit.submit_id},'提交采购入库申请'))
+        insert into operate(operate_man_id, operate_key_id, operate_time, table_name, field, type, new_value,
+                            operate_string)
+        values (#{purchase_submit.submit_id}, #{purchase_submit.id}, now(),
+                'purchase_income_submit',
+                'submit_id~code~count~submit_time~status~production_line_id~bill_no', 'insert',
+                '${purchase_submit.submit_id}~${purchase_submit.code}~${purchase_submit.count}~${purchase_submit.submit_time}~0~${purchase_submit.production_line_id}~${purchase_submit.bill_no}',
+                concat('高级用户', #{purchase_submit.submit_id}, '提交采购入库申请'))
     </insert>
     <insert id="highSubmitScrap" parameterType="com.jig.entity.scrap.ScrapSubmit">
         update jig_position
         set status = 3
         where seq_id = #{scrap_submit.seq_id}
           and code = #{scrap_submit.code};
-        insert into scrap_submit(code, seq_id, submit_time, submit_id, used_count, scrap_reason,scrap_type, scrap_photo_url,
+        insert into scrap_submit(code, seq_id, submit_time, submit_id, used_count, scrap_reason, scrap_type,
+                                 scrap_photo_url,
                                  status)
             value (#{scrap_submit.code}, #{scrap_submit.seq_id}, now(), #{scrap_submit.submit_id},
-                   (select used_count from jig_entity where code = #{scrap_submit.code} and seq_id = #{scrap_submit.seq_id}), #{scrap_submit.scrap_reason},#{scrap_submit.scrap_type},
+                   (select used_count
+                    from jig_entity
+                    where code = #{scrap_submit.code}
+                      and seq_id = #{scrap_submit.seq_id}),
+                   #{scrap_submit.scrap_reason}, #{scrap_submit.scrap_type},
                    #{pathName}, 0);
         insert into message(id, generate_id, generate_time, accept_type, status, message, tab_id)
         values (UUID(), #{scrap_submit.submit_id}, now(), 'supervisor', '00', '提交了新的报废申请', 'scrap_submit');
 
-        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,new_value,operate_string)
-        values(#{scrap_submit.submit_id},#{scrap_submit.id},now(),
-        'scrap_submit',
-        'code~seq_id~submit_time~submit_id~scrap_reason~scrap_type~scrap_photo_url~status','insert',
-        concat('${scrap_submit.code}~${scrap_submit.seq_id}~',now(),'~${scrap_submit.submit_id}~${scrap_submit.scrap_reason}~${scrap_submit.scrap_type}~${pathName}~0'),
-        concat('高级用户',#{scrap_submit.submit_id},'提交报废申请'));
+        insert into operate(operate_man_id, operate_key_id, operate_time, table_name, field, type, new_value,
+                            operate_string)
+        values (#{scrap_submit.submit_id}, #{scrap_submit.id}, now(),
+                'scrap_submit',
+                'code~seq_id~submit_time~submit_id~scrap_reason~scrap_type~scrap_photo_url~status', 'insert',
+                concat('${scrap_submit.code}~${scrap_submit.seq_id}~', now(),
+                       '~${scrap_submit.submit_id}~${scrap_submit.scrap_reason}~${scrap_submit.scrap_type}~${pathName}~0'),
+                concat('高级用户', #{scrap_submit.submit_id}, '提交报废申请'));
     </insert>
 
     <update id="highUpdatePurchaseIncomeSubmit">
         update purchase_income_submit
-        set code              = #{code},
+        set code=#{code},
             count=#{count},
             production_line_id=#{production_line_id}
         where id = #{id}

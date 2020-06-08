@@ -54,11 +54,8 @@ public class NaiveJson {
     private String getRepairPathName(String fileName) {
         UUID uuid = UUID.randomUUID();
         String uuidString = uuid.toString();
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");//设置日期格式
-        String nowTime = LocalDateTime.now().format(fmt);
-        assert fileName != null;
         String after = fileName.substring(fileName.lastIndexOf('.'));
-        return REPAIR_IMAGE_NAME + REPAIR + "-" + nowTime + "-" + uuidString + after;
+        return REPAIR_IMAGE_NAME + REPAIR + "-" + uuidString + after;
     }
 
     @NotNull
@@ -262,18 +259,31 @@ public class NaiveJson {
      * @param seq_id        工夹具序列号
      * @param submit_id     申请人id
      * @param repair_reason 报修原因
-     * @param file          文件
+     * @param files         文件
      * @return 成功与否
      */
     @RequestMapping("submit_repair")
-    public boolean naiveSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("repair_reason") String repair_reason, @RequestParam("file") MultipartFile file) {
-        String fileName = file.getOriginalFilename();
+    public boolean naiveSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("repair_reason") String repair_reason, @RequestParam("file") MultipartFile[] files) {
         try {
-            assert fileName != null;
-            String pathName = getRepairPathName(fileName);
-            FileUtils.writeByteArrayToFile
-                    (new File(RESOURCE_URL + pathName), file.getBytes());
-            naiveService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, pathName);
+            StringBuilder pathName = new StringBuilder("");
+            if (files.length == 1) {
+                String fileName = getRepairPathName(files[0].getOriginalFilename());
+                FileUtils.writeByteArrayToFile
+                        (new File(RESOURCE_URL + fileName), files[0].getBytes());
+                pathName.append(fileName);
+            } else {
+                for (int i = 0; i < files.length - 1; i++) {
+                    String fileName = getRepairPathName(files[i].getOriginalFilename());
+                    FileUtils.writeByteArrayToFile
+                            (new File(RESOURCE_URL + fileName), files[i].getBytes());
+                    pathName.append(fileName).append('|');
+                }
+                String fileName = getRepairPathName(files[files.length - 1].getOriginalFilename());
+                FileUtils.writeByteArrayToFile
+                        (new File(RESOURCE_URL + fileName), files[files.length - 1].getBytes());
+                pathName.append(fileName);
+            }
+            naiveService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, pathName.toString());
         } catch (IOException e) {
             e.printStackTrace();
             return false;

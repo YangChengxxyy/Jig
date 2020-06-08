@@ -24,9 +24,6 @@ public class MessageJson {
     @Autowired
     private MessageService messageService;
 
-    /**
-     * request参数如果没有type则为web端 有则为移动端
-     */
     @RequestMapping("get_new_message")
     public List<Message> getNewMessage(HttpServletRequest request, @RequestParam("id") String id) {
         String type = request.getParameter("type");
