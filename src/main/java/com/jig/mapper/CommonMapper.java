@@ -10,6 +10,7 @@ import com.jig.entity.jig.JigPart;
 import com.jig.entity.operate.MaintenanceType;
 import com.jig.entity.purchase.PurchaseIncomeSubmit;
 import com.jig.entity.scrap.ScrapSubmit;
+import com.jig.entity.warehouse.JigCabinet;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -82,4 +83,6 @@ public interface CommonMapper {
     ScrapSubmit getScrapSubmit(@Param("id") String id);
 
     PurchaseIncomeSubmit getPurchaseSubmit(@Param("id") String id);
+
+    List<JigCabinet> get_jig_cabinet_list();
 }

@@ -10,6 +10,8 @@ import com.jig.entity.jig.JigDefinition;
 import com.jig.entity.jig.JigModel;
 import com.jig.entity.jig.JigPart;
 import com.jig.entity.operate.MaintenanceType;
+import com.jig.entity.warehouse.JigCabinet;
+import com.jig.entity.warehouse.JigLocation;
 import com.jig.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Isolation;
@@ -20,15 +22,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Permission(Role.common)
 @RestController
 @RequestMapping("/api")
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 public class CommonJson {
+    private static int ALL_BIN_COUNT = 9;
     @Autowired
     private CommonService commonService;
+
     /**
      * 获取单个JigDefinition对象
      *
@@ -135,6 +142,45 @@ public class CommonJson {
         return commonService.get_maintenance_type_list();
     }
 
+    //获取仓库信息，工夹具号、存放区域、空余bin位信息的综合
+    @RequestMapping("get_jig_cabinet_list")
+    public List<JigCabinet> getJigCabinetList() {
+        List<JigCabinet> jigCabinetList = commonService.get_jig_cabinet_list();
+        Map<String, String> map = new HashMap<>();
+        List<String> all_bin_list = resetAllBinList();
+
+        for (JigCabinet jc : jigCabinetList) { // 对获取到的工夹具柜jigCabinetList进行循环
+            for (JigLocation jl : jc.getLocation_id_list()) {
+                all_bin_list = resetAllBinList(); // 复原all_bin_list
+                if (jl.getFull_bin_list().size() == 0) { // 如果该location的已使用bin位数为0，直接设置
+                    jl.setFree_bin_list(all_bin_list);
+                    jl.setFree_bin_count(ALL_BIN_COUNT);
+                    continue;
+                }
+                for (String bin : jl.getFull_bin_list()) {
+                    for (int j = 0; j < all_bin_list.size(); j++) {
+                        if (bin.equals(all_bin_list.get(j))) {
+                            all_bin_list.remove(j);
+                            break;
+                        }
+                    }
+                }
+                jl.setFree_bin_list(all_bin_list);
+                jl.setFree_bin_count(all_bin_list.size());
+            }
+        }
+        return jigCabinetList;
+    }
+
+    public static List<String> resetAllBinList(){
+        List<String> all_bin_list = new ArrayList<>();
+        for (int i = 1; i <= ALL_BIN_COUNT; i++) {
+            all_bin_list.add("" + i);
+        }
+        return all_bin_list;
+    }
+
     @RequestMapping("log_out")
-    public void logOUt() {}
+    public void logOUt() {
+    }
 }

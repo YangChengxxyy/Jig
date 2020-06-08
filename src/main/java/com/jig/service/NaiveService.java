@@ -19,6 +19,18 @@ public class NaiveService {
     @Autowired
     private NaiveMapper naiveMapper;
 
+    /**
+     * 将采购入库的工夹具入库
+     *
+     * @param bill_no
+     * @param code
+     * @param seq_id
+     * @return
+     */
+    public int naiveInputJigEntity(String bill_no, String code, int seq_id, String jig_cabinet, String location, String bin) {
+        return naiveMapper.naiveInputJigEntity(bill_no, code, seq_id, jig_cabinet, location, bin);
+    }
+
     //初级用户获取 工夹具出库页面的工夹具存放位置list
     public List<JigPosition> navieGetLocationList(String workcell_id) {
         return naiveMapper.navieGetLocationList(workcell_id);
@@ -55,8 +67,8 @@ public class NaiveService {
     }
 
     //获取已经出库的工夹具list
-    public List<OutgoingJig> naiveGetOutgoingJigList(String code, String name, String start_date, String end_date, String user_for,int page_number, int page_size, String workcell_id) {
-        return naiveMapper.naiveGetOutgoingJigList(code, name, start_date, end_date, user_for,page_number,page_size,workcell_id);
+    public List<OutgoingJig> naiveGetOutgoingJigList(String code, String name, String start_date, String end_date, String user_for, int page_number, int page_size, String workcell_id) {
+        return naiveMapper.naiveGetOutgoingJigList(code, name, start_date, end_date, user_for, page_number, page_size, workcell_id);
     }
 
     public int naiveGetOutgoingJigListPage(String code, String name, String start_date, String end_date, String user_for, String workcell_id) {
@@ -119,5 +131,15 @@ public class NaiveService {
     public int naiveGetOutgoingSubmitPage() {
         int a = naiveMapper.naiveGetOutgoSubmitPage();
         return (int) Math.ceil(a / 5.0);
+    }
+
+    /**
+     * 通过code获取该工夹具代码code的最大序列号seq_id
+     *
+     * @param code
+     * @return seq_id
+     */
+    public int getMaxSeqId(String code) {
+        return naiveMapper.getMaxSeqId(code);
     }
 }

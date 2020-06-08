@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jig.mapper.CommonMapper">
+    <resultMap id="jig_cabinet_list_map" type="com.jig.entity.warehouse.JigCabinet">
+        <result property="jig_cabinet_id" column="jig_cabinet_id"></result>
+        <collection property="location_id_list" ofType="com.jig.entity.warehouse.JigLocation">
+            <result column="location_id" property="location_id"></result>
+            <collection property="full_bin_list" ofType="string">
+                <result column="bin"></result>
+            </collection>
+        </collection>
+    </resultMap>
     <select id="getSimpleJigDefinition" resultType="com.jig.entity.jig.JigDefinition">
         select *
         from jig_definition_entity_view
@@ -57,5 +66,11 @@
     </select>
     <select id="getPurchaseSubmit" resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
         select * from purchase_income_submit where id = #{id}
+    </select>
+    <select id="get_jig_cabinet_list" resultMap="jig_cabinet_list_map">
+        select jc.jig_cabinet_id,l.location_id,jp.bin
+        from jig_cabinet jc left join location l on l.jig_cabinet = jc.id
+                            left join jig_position jp on jc.jig_cabinet_id = jp.jig_cabinet_id and l.location_id = jp.location_id
+        ORDER BY jc.jig_cabinet_id+0 asc,l.location_id asc,jp.bin+0 asc
     </select>
 </mapper>

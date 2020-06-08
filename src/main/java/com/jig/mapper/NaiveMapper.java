@@ -19,6 +19,21 @@ import java.util.List;
 public interface NaiveMapper {
 
     /**
+     * 将采购入库的工夹具入库
+     *
+     * @param bill_no
+     * @param code
+     * @param seq_id
+     * @return
+     */
+    int naiveInputJigEntity(@Param("bill_no") String bill_no,
+                            @Param("code") String code,
+                            @Param("seq_id") int seq_id,
+                            @Param("jig_cabinet") String jig_cabinet,
+                            @Param("location") String location,
+                            @Param("bin") String bin);
+
+    /**
      * 初级用户获取 工夹具出库页面的工夹具存放位置list
      * @param workcell_id 工作部门
      * @return
@@ -229,4 +244,5 @@ public interface NaiveMapper {
      */
     int naiveGetOutgoSubmitPage();
 
+    int getMaxSeqId(@Param("code") String code);
 }

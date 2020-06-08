@@ -7,6 +7,13 @@
             <result column="location_id"></result>
         </collection>
     </resultMap>
+    <insert id="naiveInputJigEntity">
+        insert into jig_entity(code, seq_id, bill_no, reg_date, used_count)
+        values(#{code}, #{seq_id}, #{bill_no}, now(), 0);
+
+        insert into jig_position(code, seq_id, jig_cabinet_id, location_id, bin, status)
+        values(#{code}, #{seq_id}, #{jig_cabinet}, #{location}, #{bin}, 1)
+    </insert>
     <select id="navieGetLocationList" resultMap="jig_position_map">
         select jp.jig_cabinet_id,jp.location_id,jd.workcell_id
         from jig_position jp inner join jig_definition jd on jp.code = jd.code
@@ -246,5 +253,9 @@
     <select id="naiveGetOutgoSubmitPage" resultType="java.lang.Integer">
         select count(*)
         from outgo_submit_entity_view
+    </select>
+    <select id="getMaxSeqId" resultType="java.lang.Integer">
+        select MAX(seq_id) from jig_entity
+        where code = #{code}
     </select>
 </mapper>

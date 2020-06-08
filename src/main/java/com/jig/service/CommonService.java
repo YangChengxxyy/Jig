@@ -10,6 +10,7 @@ import com.jig.entity.jig.JigPart;
 import com.jig.entity.operate.MaintenanceType;
 import com.jig.entity.purchase.PurchaseIncomeSubmit;
 import com.jig.entity.scrap.ScrapSubmit;
+import com.jig.entity.warehouse.JigCabinet;
 import com.jig.mapper.CommonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -94,5 +95,7 @@ public class CommonService {
         return commonMapper.getPurchaseSubmit(id);
     }
 
-
+    public List<JigCabinet> get_jig_cabinet_list(){
+        return commonMapper.get_jig_cabinet_list();
+    }
 }
