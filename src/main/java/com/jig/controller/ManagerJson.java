@@ -10,6 +10,7 @@ import com.jig.entity.purchase.PurchaseIncomeSubmit;
 import com.jig.entity.scrap.ScrapSubmit;
 import com.jig.service.CommonService;
 import com.jig.service.ManagerService;
+import com.jig.service.UserService;
 import com.jig.utils.LoginStatusUtil;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,15 +37,14 @@ public class ManagerJson {
     private ManagerService managerService;
     @Autowired
     private CommonService commonService;
-
+    @Autowired
+    private UserService userService;
     //获取经理模块下的采购审批记录
     @RequestMapping(value = "get_purchase_submit_list", method = {RequestMethod.GET, RequestMethod.POST})
-    public Map<Object, Object> getManagerPurchaseSubmitList(HttpServletRequest request,
-                                                            @RequestParam(value = "page_number") int page_number,
-                                                            @RequestParam(value = "page_size") int page_size) {
-        User user = (User) LoginStatusUtil.getUserInfo(request);
-        String user_id = user.getId();
-        String workcell_id = user.getWorkcell_id();
+    public Map<Object, Object> getManagerPurchaseSubmitList(@RequestParam("page_number") int page_number,
+                                                            @RequestParam("page_size") int page_size,
+                                                            @RequestParam("user_id") String user_id,
+                                                            @RequestParam("workcell_id") String workcell_id) {
 
         page_number = (page_number - 1) * page_size;
         List<PurchaseIncomeSubmit> list = managerService.get_manager_purchase_submit_list(user_id, page_number, page_size, workcell_id);
@@ -64,13 +64,11 @@ public class ManagerJson {
 
     //经理模块下的终审审批，@RequestParam pass 相当于经过终审审批后的采购审批单的状态
     @RequestMapping(value = "pass_purchase_submit", method = {RequestMethod.GET, RequestMethod.POST})
-    public String managerCheckPurchase(HttpServletRequest request,
-                                       @RequestParam(value = "id") String id) {
-
-        User user = LoginStatusUtil.getUserInfo(request);
-        String user_id = user.getId();
-        String workcell_id = user.getWorkcell_id();
-
+    public String managerCheckPurchase(@RequestParam("id") String id,
+                                       @RequestParam("user_id") String user_id) {
+        User user = new User();
+        user.setId(user_id);
+        user.setName(userService.getUserName(user_id));
         PurchaseIncomeSubmit purchaseIncomeSubmit = commonService.getPurchaseSubmit(id);
         String[] a = purchaseIncomeSubmit.PassSubmitInfo("4");
         String field = a[0];
@@ -88,8 +86,12 @@ public class ManagerJson {
     @RequestMapping(value = "no_pass_purchase_submit", method = {RequestMethod.GET, RequestMethod.POST})
     public String dontPassManagerPurchaseSubmit(HttpServletRequest request,
                                                 @RequestParam(value = "id") String id,
-                                                @RequestParam(value = "final_reason") String final_reason) {
-        User user = LoginStatusUtil.getUserInfo(request);
+                                                @RequestParam(value = "final_reason") String final_reason,
+                                                @RequestParam("user_id") String user_id) {
+        User user = new User();
+        user.setId(user_id);
+        user.setName(userService.getUserName(user_id));
+
         PurchaseIncomeSubmit purchaseIncomeSubmit = commonService.getPurchaseSubmit(id);
         String[] a = purchaseIncomeSubmit.NoPassSubmitInfo("3", final_reason);
         String field = a[0];
@@ -104,8 +106,6 @@ public class ManagerJson {
 
     @RequestMapping(value = "get_jig_info_list", method = {RequestMethod.GET, RequestMethod.POST})
     public Map<Object, Object> getManagerJigInfoList(@RequestParam(value = "page_number") int page_number, @RequestParam("page_size") int page_size) {
-        System.out.println(page_number);
-        System.out.println(page_size);
         page_number = (page_number - 1) * page_size;
         Map<Object, Object> map = new HashMap<>(2);
         List<JigDefinition> list = managerService.get_manager_jig_info_list(page_number, page_size);
@@ -126,9 +126,9 @@ public class ManagerJson {
                                                                    @RequestParam(value = "end_date") String end_date,
                                                                    @RequestParam(value = "status") String status,
                                                                    @RequestParam(value = "page_number") int page_number,
-                                                                   @RequestParam(value = "page_size") int page_size) {
-        User user = LoginStatusUtil.getUserInfo(request);
-        String workcell_id = user.getWorkcell_id();
+                                                                   @RequestParam(value = "page_size") int page_size,
+                                                                   @RequestParam(value = "workcell_id") String workcell_id) {
+
         page_number = (page_number - 1) * page_size;
 
 
@@ -280,10 +280,9 @@ public class ManagerJson {
     @RequestMapping(value = "get_scrap_submit_list", method = {RequestMethod.GET, RequestMethod.POST})
     public Map<Object, Object> getManagerScrapSubmitList(HttpServletRequest request,
                                                          @RequestParam("page_number") int page_number,
-                                                         @RequestParam("page_size") int page_size) {
-        User user = LoginStatusUtil.getUserInfo(request);
-        String user_id = user.getId();
-        String workcell_id = user.getWorkcell_id();
+                                                         @RequestParam("page_size") int page_size,
+                                                         @RequestParam("user_id") String user_id,
+                                                         @RequestParam("workcell_id") String workcell_id) {
         List<ScrapSubmit> list = managerService.manager_get_scrap_submit_list(user_id, (page_number - 1) * page_size, page_size, workcell_id);
         int all_count = managerService.manager_get_scrap_submit_list_pages(user_id, workcell_id);
 
@@ -295,9 +294,12 @@ public class ManagerJson {
 
     //经理模式下审批通过 报废申请 操作
     @RequestMapping(value = "pass_scrap_submit", method = {RequestMethod.GET, RequestMethod.POST})
-    public String checkManagerScrapSubmit(HttpServletRequest request,
-                                          @RequestParam(value = "id") String id) {
-        User user = LoginStatusUtil.getUserInfo(request);
+    public String checkManagerScrapSubmit(@RequestParam(value = "id") String id,
+                                          @RequestParam(value = "user_id") String user_id) {
+        User user = new User();
+        user.setId(user_id);
+        user.setName(userService.getUserName(user_id));
+
         ScrapSubmit scrapSubmit = commonService.getScrapSubmit(id);
         String[] a = scrapSubmit.PassSubmitInfo("4");
         String field = a[0];
@@ -313,10 +315,13 @@ public class ManagerJson {
 
     //经理模式/报废审批/不通过报废申请
     @RequestMapping(value = "no_pass_scrap_submit")
-    public String managerNoPassSubmit(HttpServletRequest request,
-                                      @Param("id") String id,
-                                      @Param("no_pass_reason") String no_pass_reason) {
-        User user = LoginStatusUtil.getUserInfo(request);
+    public String managerNoPassSubmit(@RequestParam("id") String id,
+                                      @RequestParam("no_pass_reason") String no_pass_reason,
+                                      @RequestParam("user_id") String user_id) {
+        User user = new User();
+        user.setId(user_id);
+        user.setName(userService.getUserName(user_id));
+
         ScrapSubmit scrapSubmit = commonService.getScrapSubmit(id);
         String[] a = scrapSubmit.NoPassSubmitInfo("3", no_pass_reason);
         String field = a[0];
@@ -338,10 +343,8 @@ public class ManagerJson {
                                                                 @RequestParam("status") String status,
                                                                 @RequestParam("scrap_reason") String scrap_reason,
                                                                 @RequestParam("page_number") int page_number,
-                                                                @RequestParam("page_size") int page_size) {
-        User user = LoginStatusUtil.getUserInfo(request);
-        String user_id = user.getId();
-        String workcell_id = user.getWorkcell_id();
+                                                                @RequestParam("page_size") int page_size,
+                                                                @RequestParam("workcell_id") String workcell_id) {
 
         Map<Object, Object> map = new HashMap<>(2);
         page_number = (page_number - 1) * page_size;

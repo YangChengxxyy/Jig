@@ -3,6 +3,7 @@ package com.jig.controller;
 import com.jig.annotation.Permission;
 import com.jig.entity.common.Role;
 import com.jig.entity.common.Family;
+import com.jig.entity.common.User;
 import com.jig.entity.jig.JigDefinition;
 import com.jig.entity.purchase.PurchaseIncomeSubmit;
 import com.jig.entity.scrap.ScrapSubmit;
@@ -68,16 +69,18 @@ public class SupervisorJson {
     //通过jig_family和搜索条件 选择工夹具定义list
     @RequestMapping(value = "get_jig_definition_list")
     public Map<Object,Object> supervisorGetJigDifinitionList(@RequestParam("family_id") String family_id,
-                                                              @RequestParam("code") String code,
-                                                              @RequestParam("name") String name,
-                                                              @RequestParam("user_for") String user_for,
-                                                              @RequestParam("workcell_id") String workcell_id,
-                                                              @RequestParam("page_size") int page_size,
-                                                              @RequestParam("page_number") int page_number){
+                                                             @RequestParam("code") String code,
+                                                             @RequestParam("name") String name,
+                                                             @RequestParam("user_for") String user_for,
+                                                             @RequestParam("workcell_id") String workcell_id,
+                                                             @RequestParam("page_size") int page_size,
+                                                             @RequestParam("page_number") int page_number){
+
+
         Map<Object,Object> map = new HashMap<>();
         List<JigDefinition> list = supervisorService.supervisor_get_jig_definition_list(family_id,code,name,user_for,workcell_id,page_size,(page_number - 1)*page_size);
         int all = supervisorService.supervisor_get_jig_definition_list_all(family_id,code,name,user_for,workcell_id);
-        map.put("list",list);
+        map.put("data",list);
         map.put("all",all);
         return map;
     }
@@ -111,11 +114,11 @@ public class SupervisorJson {
                                                                @RequestParam("page_size") int page_size) {
         page_number = (page_number - 1) * page_size;
         Map<Object, Object> map = new HashMap<>();
-        List<PurchaseIncomeSubmit> list = supervisorService.supervisorGetPurchaseSubmitList(page_number, page_size);
+        List<PurchaseIncomeSubmit> data = supervisorService.supervisorGetPurchaseSubmitList(page_number, page_size);
         int all_count = supervisorService.supervisorGetPurchaseSubmitListPages();
         int max = (int) Math.ceil(all_count / (double) page_size);
 
-        map.put("list", list);
+        map.put("data", data);
         map.put("max", max);
         map.put("all_count", all_count);
         return map;
@@ -124,8 +127,9 @@ public class SupervisorJson {
     //监管者模式下初审通过采购审批
     @RequestMapping(value = "pass_purchase_submit", method = {RequestMethod.GET, RequestMethod.POST})
     public int supervisorPassPurchaseSubmit(@RequestParam("id") String id,
-                                            @RequestParam("status") String status) {
-        String first_acceptor = "123456";
+                                            @RequestParam("status") String status,
+                                            @RequestParam("user_id") String first_acceptor) {
+
         PurchaseIncomeSubmit purchaseIncomeSubmit = commonService.getPurchaseSubmit(id);
 
         String[] a = purchaseIncomeSubmit.PassSubmitInfo("2");
@@ -140,8 +144,9 @@ public class SupervisorJson {
     @RequestMapping(value = "no_pass_purchase_submit", method = {RequestMethod.GET, RequestMethod.POST})
     public int supervisorNoPassPurchaseSubmit(@RequestParam("id") String id,
                                               @RequestParam("status") String status,
-                                              @RequestParam("first_reason") String first_reason) {
-        String fisrt_acceptor = "123456";
+                                              @RequestParam("first_reason") String first_reason,
+                                              @RequestParam("user_id") String fisrt_acceptor) {
+
         PurchaseIncomeSubmit purchaseIncomeSubmit = commonService.getPurchaseSubmit(id);
         String[] a = purchaseIncomeSubmit.NoPassSubmitInfo("1", first_reason);
         String field = a[0];
@@ -159,7 +164,8 @@ public class SupervisorJson {
                                                                   @RequestParam("end_date") String end_date,
                                                                   @RequestParam("status") String status,
                                                                   @RequestParam("page_number") int page_number,
-                                                                  @RequestParam("page_size") int page_size) {
+                                                                  @RequestParam("page_size") int page_size,
+                                                                  @RequestParam("user_id") String user_id) {
         Map<Object, Object> map = new HashMap<>();
         page_number = (page_number - 1) * page_size;
         /*String start_date = "";
@@ -169,11 +175,10 @@ public class SupervisorJson {
             end_date = submit_time.substring(13);
         }*/
 
-        String user_id = "123456";
         List<PurchaseIncomeSubmit> list = supervisorService.supervisorGetPurchaseSubmitHistory(bill_no, submit_name, start_date, end_date, status, page_number, page_size, user_id);
         int all_count = supervisorService.supervisorGetPurchaseSubmitHistoryPages(bill_no, submit_name, start_date, end_date, status, user_id);
 
-        map.put("list", list);
+        map.put("data", list);
         map.put("all_count", all_count);
         return map;
     }
@@ -181,18 +186,17 @@ public class SupervisorJson {
     //监管者模式下获取待处理的报废清单
     @RequestMapping(value = "get_scrap_submit_list", method = {RequestMethod.GET, RequestMethod.POST})
     public Map<Object, Object> supervisorGetScrapSubmitList(@RequestParam("page_number") int page_number,
-                                                            @RequestParam("page_size") int page_size) {
+                                                            @RequestParam("page_size") int page_size,
+                                                            @RequestParam("workcell_id") String workcell_id) {
         page_number = (page_number - 1) * page_size;
         Map<Object, Object> map = new HashMap<>();
 
-        String user_id = "123456";
-        String workcell_id = "7";
 
         List<ScrapSubmit> list = supervisorService.supervisorGetScrapSubmitList(page_number, page_size, workcell_id);
         int all_count = supervisorService.supervisorGetScrapSubmitListPages(workcell_id);
         int max = (int) Math.ceil(all_count / (double) page_size);
 
-        map.put("list", list);
+        map.put("data", list);
         map.put("max", max);
         map.put("all_count", all_count);
         return map;
@@ -200,9 +204,8 @@ public class SupervisorJson {
 
     //监管者模式下审批待处理的报废申请
     @RequestMapping(value = "pass_scrap_submit", method = {RequestMethod.GET, RequestMethod.POST})
-    public int supervisorPassScrapSubmit(@RequestParam("id") String id) {
-        String workcell = "7";
-        String user_id = "123456";
+    public int supervisorPassScrapSubmit(@RequestParam("id") String id,
+                                         @RequestParam("user_id") String user_id) {
 
         ScrapSubmit scrapSubmit = commonService.getScrapSubmit(id);
 
@@ -217,8 +220,8 @@ public class SupervisorJson {
 
     @RequestMapping(value = "no_pass_scrap_submit", method = {RequestMethod.GET, RequestMethod.POST})
     public int supervisorNoPassScrapSubmit(@RequestParam("id") String id,
-                                           @RequestParam("no_pass_reason") String no_pass_reason) {
-        String user_id = "123456";
+                                           @RequestParam("no_pass_reason") String no_pass_reason,
+                                           @RequestParam("user_id") String user_id) {
 
         ScrapSubmit scrapSubmit = commonService.getScrapSubmit(id);
 
@@ -240,7 +243,8 @@ public class SupervisorJson {
                                                                    @RequestParam("status") String status,
                                                                    @RequestParam("scrap_reason") String scrap_reason,
                                                                    @RequestParam("page_number") int page_number,
-                                                                   @RequestParam("page_size") int page_size) {
+                                                                   @RequestParam("page_size") int page_size,
+                                                                   @RequestParam("workcell_id") String workcell_id) {
         Map<Object, Object> map = new HashMap<>();
         page_number = (page_number - 1) * page_size;
 
@@ -250,13 +254,13 @@ public class SupervisorJson {
             start_date = submit_time.substring(0, 10);
             end_date = submit_time.substring(13);
         }*/
-        String workcell_id = "7";
+
 
         List<ScrapSubmit> list = supervisorService.supervisorGetScrapSubmitListHistory(code, seq_id, start_date, end_date, status, scrap_reason, page_number, page_size, workcell_id);
         int all_count = supervisorService.supervisorGetScrapSubmitListHistoryPages(code, seq_id, start_date, end_date, status, scrap_reason, workcell_id);
         int max = (int) Math.ceil(all_count / (double) page_size);
 
-        map.put("list", list);
+        map.put("data", list);
         map.put("max", max);
         map.put("all_count", all_count);
         return map;

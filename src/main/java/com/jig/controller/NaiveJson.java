@@ -195,7 +195,6 @@ public class NaiveJson {
                                                        @RequestParam("page_number") int page_number,
                                                        @RequestParam("page_size") int page_size,
                                                        @RequestParam("workcell_id") String workcell_id) {
-
         page_number = (page_number - 1) * page_size;
         Map<String, Object> map = new HashMap<>();
         List<OutgoingJig> list = naiveService.naiveGetOutgoingJigList(code, name, start_date, end_date, user_for, page_number, page_size, workcell_id);
@@ -222,7 +221,6 @@ public class NaiveJson {
                                   @RequestParam("id") String id,
                                   @RequestParam("rec_id") String rec_id) {
         try {
-
             naiveService.naiveReturnJig(id, code, seq_id, submit_id, rec_id);
             return true;
         } catch (Exception e) {
