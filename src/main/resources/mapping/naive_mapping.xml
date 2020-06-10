@@ -9,22 +9,27 @@
     </resultMap>
     <insert id="naiveInputJigEntity">
         insert into jig_entity(code, seq_id, bill_no, reg_date, used_count)
-        values(#{code}, #{seq_id}, #{bill_no}, now(), 0);
+        values (#{code}, #{seq_id}, #{bill_no}, now(), 0);
 
         insert into jig_position(code, seq_id, jig_cabinet_id, location_id, bin, status)
-        values(#{code}, #{seq_id}, #{jig_cabinet}, #{location}, #{bin}, 1)
+        values (#{code}, #{seq_id}, #{jig_cabinet}, #{location}, #{bin}, 1)
     </insert>
     <select id="navieGetLocationList" resultMap="jig_position_map">
-        select jp.jig_cabinet_id,jp.location_id,jd.workcell_id
-        from jig_position jp inner join jig_definition jd on jp.code = jd.code
+        select jp.jig_cabinet_id, jp.location_id, jd.workcell_id
+        from jig_position jp
+                 inner join jig_definition jd on jp.code = jd.code
         where jd.workcell_id = #{workcell_id}
-        ORDER BY jig_cabinet_id+0 asc,location_id asc
+        ORDER BY jig_cabinet_id + 0 asc, location_id asc
     </select>
     <select id="navieGetJigListByLocation" resultType="com.jig.entity.jig.JigStock">
-        select *,count(jp.code) as 'count'
-        from jig_position jp inner join jig_entity je on jp.code = je.code and jp.seq_id = je.seq_id
-                             inner join jig_definition jd on jp.code = jd.code
-        where jd.workcell_id = #{workcell_id} and jp.jig_cabinet_id = #{jig_cabinet_id} and jp.location_id = #{jig_location_id} and jp.status = 1
+        select *, count(jp.code) as 'count'
+        from jig_position jp
+                 inner join jig_entity je on jp.code = je.code and jp.seq_id = je.seq_id
+                 inner join jig_definition jd on jp.code = jd.code
+        where jd.workcell_id = #{workcell_id}
+          and jp.jig_cabinet_id = #{jig_cabinet_id}
+          and jp.location_id = #{jig_location_id}
+          and jp.status = 1
         group by jp.code
     </select>
     <select id="navieGetJigEntityListByLocation" resultType="com.jig.entity.jig.JigEntity">
@@ -87,17 +92,17 @@
     </insert>
     <insert id="naive_maintenance_jig">
         insert into regular_maintenance_history(code, seq_id, reason, check_id, check_time)
-        values(#{code}, #{seq_id}, #{reason}, #{user_id}, now());
+        values (#{code}, #{seq_id}, #{reason}, #{user_id}, now());
 
         update regular_maintenance
         set last_time = now()
-        where code = #{code} and seq_id = #{seq_id}
+        where code = #{code}
+          and seq_id = #{seq_id}
     </insert>
     <select id="naiveGetOutgoingJigList" resultType="com.jig.entity.out.OutgoingJig">
         select *
         from outgoing_jig_entity_view
         <where>
-            workcell_id = #{workcell_id}
             <if test="code != ''">
                 and code like concat('%',#{code},'%')
             </if>
@@ -117,7 +122,6 @@
         select count(*)
         from outgoing_jig_entity_view
         <where>
-            workcell_id = #{workcell_id}
             <if test="code != ''">
                 and code like concat('%',#{code},'%')
             </if>
@@ -135,7 +139,7 @@
     <update id="naiveReturnJig">
         update jig_position
         set status = 1
-        where code = #{code}and seq_id = #{seq_id};
+        where code = #{code} and seq_id = #{seq_id};
         insert into outgo_income_history(code, seq_id, submit_id, outgo_time, rec_id, status)
         values (#{code}, #{seq_id}, ${submit_id}, now(), #{rec_id}, 1)
     </update>
@@ -255,7 +259,8 @@
         from outgo_submit_entity_view
     </select>
     <select id="getMaxSeqId" resultType="java.lang.Integer">
-        select MAX(seq_id) from jig_entity
+        select MAX(seq_id)
+        from jig_entity
         where code = #{code}
     </select>
 </mapper>
