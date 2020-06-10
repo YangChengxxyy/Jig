@@ -134,19 +134,19 @@ public class PoiUtil {
         System.out.println(ip);
     }
 
-    public void outputFile(HttpServletResponse response, String fileName, List<?> list) throws Exception {
+    public void outputFile(HttpServletResponse response, String fileName, List<?> list) {
         if (list.size() == 0) {
             return;
         }
-        HSSFWorkbook excel = getExcel(list);
-        response.setHeader("content-type", "application/octet-stream");
-        response.setContentType("application/octet-stream;charset=utf-8");
-        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
-        OutputStream os;
         try {
+            HSSFWorkbook excel = getExcel(list);
+            response.setHeader("content-type", "application/octet-stream");
+            response.setContentType("application/octet-stream;charset=utf-8");
+            response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+            OutputStream os;
             os = response.getOutputStream();
             excel.write(os);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

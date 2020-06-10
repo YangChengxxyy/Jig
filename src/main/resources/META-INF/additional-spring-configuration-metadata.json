@@ -1,4 +1,8 @@
 {
   "properties": [
-
+    {
+      "name": "file.resource-url",
+      "type": "java.lang.String",
+      "description": "Description for file.resource-url."
+    }
   ] }
