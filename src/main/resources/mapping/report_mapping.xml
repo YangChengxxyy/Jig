@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jig.mapper.ReportMapper">
+    <select id="getYearByCode" resultType="java.util.Map">
+        SELECT year(outgo_time) as year, count(year(outgo_time)) as count
+        FROM outgo_income_history
+        where code = #{code}
+        GROUP BY code, year(outgo_time)
+    </select>
+    <select id="getMonthByCode" resultType="java.util.Map">
+        SELECT month(outgo_time) as month, count(month(outgo_time)) as count
+        FROM outgo_income_history
+        where code = #{code}
+        GROUP BY code, month(outgo_time)
+    </select>
+</mapper>

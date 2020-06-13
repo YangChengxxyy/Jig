@@ -29,19 +29,19 @@ public interface SupervisorMapper {
     //监管者模式下删除工夹具类别
     int supervisorDeleteJigFamily(@Param("id") String id);
 
-    List<JigDefinition> supervisor_get_jig_definition_list(@Param("family_id") String family_id,
-                                                           @Param("code") String code,
-                                                           @Param("name") String name,
-                                                           @Param("user_for") String user_for,
-                                                           @Param("workcell_id") String workcell_id,
-                                                           @Param("page_size") int page_size,
-                                                           @Param("page_number") int page_number);
+    List<JigDefinition> supervisorGetJigDefinitionList(@Param("family_id") String family_id,
+                                                       @Param("code") String code,
+                                                       @Param("name") String name,
+                                                       @Param("user_for") String user_for,
+                                                       @Param("workcell_id") String workcell_id,
+                                                       @Param("page_size") int page_size,
+                                                       @Param("page_number") int page_number);
 
-    int supervisor_get_jig_definition_list_all(@Param("family_id") String family_id,
-                                               @Param("code") String code,
-                                               @Param("name") String name,
-                                               @Param("user_for") String user_for,
-                                               @Param("workcell_id") String workcell_id);
+    int supervisorGetJigDefinitionListAll(@Param("family_id") String family_id,
+                                          @Param("code") String code,
+                                          @Param("name") String name,
+                                          @Param("user_for") String user_for,
+                                          @Param("workcell_id") String workcell_id);
 
     //监管者模式下搜索工夹具信息
     List<JigDefinition> supervisorSelectJigInfo(@Param("jig_code") String jig_code,
@@ -141,4 +141,8 @@ public interface SupervisorMapper {
                                                        @Param("status") String status,
                                                        @Param("scrap_reason") String scrap_reason,
                                                        @Param("workcell_id") String workcell_id);
+
+    List<PurchaseIncomeSubmit> supervisorGetAllPurchaseSubmitList();
+
+    List<PurchaseIncomeSubmit> supervisorGetAllPurchaseSubmitHistoryList(@Param("bill_no") String bill_no, @Param("submit_name") String submit_name, @Param("start_date") String start_date, @Param("end_date") String end_date, @Param("status") String status, @Param("user_id") String user_id);
 }

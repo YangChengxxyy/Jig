@@ -21,7 +21,7 @@
     <delete id="supervisorDeleteJigFamily">
         delete from jig_family where id = #{id}
     </delete>
-    <select id="supervisor_get_jig_definition_list" resultType="com.jig.entity.jig.JigDefinition">
+    <select id="supervisorGetJigDefinitionList" resultType="com.jig.entity.jig.JigDefinition">
         select jd.*,u1.name 'owner_name',u2.name 'rec_by_name',u3.name 'edit_by_name',jf.family 'family',w.workcell 'workcell'
         from jig_definition jd left join jig_family jf on jd.family_id = jf.id
         left join workcell w on jd.workcell_id = w.id
@@ -47,7 +47,7 @@
         </where>
         limit #{page_number},#{page_size}
     </select>
-    <select id="supervisor_get_jig_definition_list_all" resultType="java.lang.Integer">
+    <select id="supervisorGetJigDefinitionListAll" resultType="java.lang.Integer">
         select count(*) from jig_definition jd left join jig_family jf on jd.family_id = jf.id
         left join workcell w on jd.workcell_id = w.id
         left join user u1 on jd.owner= u1.id
@@ -276,6 +276,42 @@
             <if test="start_date!='' and end_date !=''">
                 and (STR_TO_DATE(s.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
             </if>
+        </where>
+    </select>
+    <select id="supervisorGetAllPurchaseSubmitList" resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
+        select p.*,u.name 'submit_name',
+               pl.name 'production_line_name',
+               u1.name 'first_acceptor_name',
+               u2.name 'final_acceptor_name'
+        from purchase_income_submit p inner join user u on p.submit_id = u.id
+                                      inner join production_line pl on p.production_line_id = pl.id
+                                      left join user u1 on p.first_acceptor = u1.id
+                                      left join user u2 on p.final_acceptor = u2.id
+        where (p.status = 0 or p.status = 1 or p.status = 2)
+    </select>
+    <select id="supervisorGetAllPurchaseSubmitHistoryList"
+            resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
+        select p.*,u.name 'submit_name',
+        pl.name 'production_line_name',
+        u1.name 'first_acceptor_name',
+        u2.name 'final_acceptor'
+        from purchase_income_submit_history p inner join user u on p.submit_id = u.id
+        inner join production_line pl on p.production_line_id = pl.id
+        left join user u1 on p.first_acceptor = u1.id
+        left join user u2 on p.final_acceptor = u2.id
+        <where>
+            u.workcell_id in (select user.workcell_id from user where id = #{user_id})
+            and first_acceptor = #{user_id}
+            <if test="bill_no!=''">
+                and p.bill_no like concat('%',#{bill_no},'%')
+            </if>
+            <if test="submit_name!=''">
+                and u.name like concat('%',#{submit_name},'%')
+            </if>
+            <if test="start_date!='' and end_date !=''">
+                and (STR_TO_DATE(p.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
+            </if>
+            and (status = 1 or status = 2 or status = 0)
         </where>
     </select>
 </mapper>

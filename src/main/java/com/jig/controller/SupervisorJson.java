@@ -10,15 +10,18 @@ import com.jig.entity.scrap.ScrapSubmit;
 import com.jig.service.CommonService;
 import com.jig.service.SupervisorService;
 import com.jig.service.UserService;
+import com.jig.utils.PoiUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 @Permission(Role.supervisor)
 @RestController
 @RequestMapping("/api/supervisor/")
@@ -30,12 +33,14 @@ public class SupervisorJson {
     private CommonService commonService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private PoiUtil poiUtil;
 
-    public User getUserById(String user_id){
-        String user_name = userService.getUserName(user_id);
+    private User getUserById(String user_id) {
         User user = new User();
-        user.setName(user_name);
+        String user_name = userService.getUserName(user_id);
         user.setId(user_id);
+        user.setName(user_name);
         return user;
     }
     //监管者模式的工夹具信息管理的获取工夹具类别family
@@ -78,20 +83,20 @@ public class SupervisorJson {
 
     //通过jig_family和搜索条件 选择工夹具定义list
     @RequestMapping(value = "get_jig_definition_list")
-    public Map<Object,Object> supervisorGetJigDifinitionList(@RequestParam("family_id") String family_id,
-                                                             @RequestParam("code") String code,
-                                                             @RequestParam("name") String name,
-                                                             @RequestParam("user_for") String user_for,
-                                                             @RequestParam("workcell_id") String workcell_id,
-                                                             @RequestParam("page_size") int page_size,
-                                                             @RequestParam("page_number") int page_number){
+    public Map<Object, Object> supervisorGetJigDifinitionList(@RequestParam("family_id") String family_id,
+                                                              @RequestParam("code") String code,
+                                                              @RequestParam("name") String name,
+                                                              @RequestParam("user_for") String user_for,
+                                                              @RequestParam("workcell_id") String workcell_id,
+                                                              @RequestParam("page_size") int page_size,
+                                                              @RequestParam("page_number") int page_number) {
 
 
-        Map<Object,Object> map = new HashMap<>();
-        List<JigDefinition> list = supervisorService.supervisor_get_jig_definition_list(family_id,code,name,user_for,workcell_id,page_size,(page_number - 1)*page_size);
-        int all = supervisorService.supervisor_get_jig_definition_list_all(family_id,code,name,user_for,workcell_id);
-        map.put("data",list);
-        map.put("all",all);
+        Map<Object, Object> map = new HashMap<>();
+        List<JigDefinition> list = supervisorService.supervisorGetJigDefinitionList(family_id, code, name, user_for, workcell_id, page_size, (page_number - 1) * page_size);
+        int all = supervisorService.supervisorGetJigDefinitionListAll(family_id, code, name, user_for, workcell_id);
+        map.put("data", list);
+        map.put("all", all);
         return map;
     }
 
@@ -138,9 +143,8 @@ public class SupervisorJson {
     @RequestMapping(value = "pass_purchase_submit", method = {RequestMethod.GET, RequestMethod.POST})
     public int supervisorPassPurchaseSubmit(@RequestParam("id") String id,
                                             @RequestParam("status") String status,
-                                            @RequestParam("user_id") String user_id) {
-
-        User user = getUserById(user_id);
+                                            @RequestParam("user_id") String first_acceptor) {
+        User user = getUserById(first_acceptor);
         PurchaseIncomeSubmit purchaseIncomeSubmit = commonService.getPurchaseSubmit(id);
 
         String[] a = purchaseIncomeSubmit.PassSubmitInfo("2");
@@ -156,9 +160,8 @@ public class SupervisorJson {
     public int supervisorNoPassPurchaseSubmit(@RequestParam("id") String id,
                                               @RequestParam("status") String status,
                                               @RequestParam("first_reason") String first_reason,
-                                              @RequestParam("user_id") String user_id) {
-        User user = getUserById(user_id);
-
+                                              @RequestParam("user_id") String first_acceptor) {
+        User user = getUserById(first_acceptor);
         PurchaseIncomeSubmit purchaseIncomeSubmit = commonService.getPurchaseSubmit(id);
         String[] a = purchaseIncomeSubmit.NoPassSubmitInfo("1", first_reason);
         String field = a[0];
@@ -276,5 +279,46 @@ public class SupervisorJson {
         map.put("max", max);
         map.put("all_count", all_count);
         return map;
+    }
+
+    @RequestMapping("download_one_purchase_submit")
+    public void downloadOnePurchaseSubmit(@RequestParam("page_number") int page_number,
+                                          @RequestParam("page_size") int page_size,
+                                          @RequestParam("file_name") String file_name,
+                                          HttpServletResponse response)  {
+        poiUtil.outputFile(response, file_name, supervisorService.supervisorGetPurchaseSubmitList(page_number, page_size));
+    }
+
+    @RequestMapping("download_all_purchase_submit")
+    public void downloadAllPurchaseSubmit(HttpServletResponse response, @RequestParam("file_name") String file_name) throws Exception {
+        List<PurchaseIncomeSubmit> list = supervisorService.supervisorGetAllPurchaseSubmitList();
+        poiUtil.outputFile(response, file_name, list);
+    }
+
+    @RequestMapping("download_one_purchase_submit_history")
+    public void downloadOnePurchaseSubmitHistory(@RequestParam("bill_no") String bill_no,
+                                                 @RequestParam("submit_name") String submit_name,
+                                                 @RequestParam("start_date") String start_date,
+                                                 @RequestParam("end_date") String end_date,
+                                                 @RequestParam("status") String status,
+                                                 @RequestParam("page_number") int page_number,
+                                                 @RequestParam("page_size") int page_size,
+                                                 @RequestParam("user_id") String user_id,
+                                                 @RequestParam("file_name")String file_name,
+                                                 HttpServletResponse response){
+        List<PurchaseIncomeSubmit> list = supervisorService.supervisorGetPurchaseSubmitHistory(bill_no, submit_name, start_date, end_date, status, page_number, page_size, user_id);
+        poiUtil.outputFile(response,file_name,list);
+    }
+    @RequestMapping("download_all_purchase_submit_history")
+    public void downloadAllPurchaseSubmitHistory(@RequestParam("bill_no") String bill_no,
+                                                 @RequestParam("submit_name") String submit_name,
+                                                 @RequestParam("start_date") String start_date,
+                                                 @RequestParam("end_date") String end_date,
+                                                 @RequestParam("status") String status,
+                                                 @RequestParam("user_id") String user_id,
+                                                 @RequestParam("file_name")String file_name,
+                                                 HttpServletResponse response){
+        List<PurchaseIncomeSubmit> list = supervisorService.supervisorGetAllPurchaseSubmitHistoryList(bill_no,submit_name,start_date,end_date,status,user_id);
+        poiUtil.outputFile(response,file_name, list);
     }
 }
