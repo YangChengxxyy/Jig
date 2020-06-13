@@ -1,6 +1,7 @@
 package com.jig.service;
 
 import com.jig.entity.common.Family;
+import com.jig.entity.common.User;
 import com.jig.entity.jig.JigDefinition;
 import com.jig.entity.purchase.PurchaseIncomeSubmit;
 import com.jig.entity.scrap.ScrapSubmit;
@@ -70,13 +71,13 @@ public class SupervisorService {
     }
 
     //监管者模式下初审通过我的采购审批
-    public int supervisorPassPurchaseSubmit(String id, String status, String first_acceptor, String field, String old_value, String new_value) {
-        return supervisorMapper.supervisorPassPurchaseSubmit(id, status, first_acceptor, field, old_value, new_value);
+    public int supervisorPassPurchaseSubmit(String id, String status, User user, String field, String old_value, String new_value) {
+        return supervisorMapper.supervisorPassPurchaseSubmit(id, status, user, field, old_value, new_value);
     }
 
     //监管者模式下初审不通过采购审批
-    public int supervisorNoPassPurchaseSubmit(String id, String status, String first_reason, String first_acceptor, String field, String old_value, String new_value) {
-        return supervisorMapper.supervisorNoPassPurchaseSubmit(id, status, first_reason, first_acceptor, field, old_value, new_value);
+    public int supervisorNoPassPurchaseSubmit(String id, String status, String first_reason, User user, String field, String old_value, String new_value) {
+        return supervisorMapper.supervisorNoPassPurchaseSubmit(id, status, first_reason, user, field, old_value, new_value);
     }
 
     //监管者模式下获取历史采购记录及其最大页数
@@ -98,12 +99,12 @@ public class SupervisorService {
     }
 
     //监管者模式下审批待处理的报废申请
-    public int supervisorPassScrapSubmit(String id, String user_id, String field, String old_value, String new_value) {
-        return supervisorMapper.supervisorPassScrapSubmit(id, user_id, field, old_value, new_value);
+    public int supervisorPassScrapSubmit(String id, User user, String field, String old_value, String new_value) {
+        return supervisorMapper.supervisorPassScrapSubmit(id, user, field, old_value, new_value);
     }
 
-    public int supervisorNoPassScrapSubmit(String id, String no_pass_reason, String user_id, String field, String old_value, String new_value) {
-        return supervisorMapper.supervisorNoPassScrapSubmit(id, no_pass_reason, user_id, field, old_value, new_value);
+    public int supervisorNoPassScrapSubmit(String id, String no_pass_reason, User user, String field, String old_value, String new_value) {
+        return supervisorMapper.supervisorNoPassScrapSubmit(id, no_pass_reason, user, field, old_value, new_value);
     }
 
     //监管者模式下获取历史报废记录

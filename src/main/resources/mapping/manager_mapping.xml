@@ -30,6 +30,7 @@
         insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value,operate_string)
         values(#{user.id},#{id},now(),'purchase_income_submit',#{field},'update',#{old_value},#{new_value},
                 concat('经理',#{user.name},'终审通过'))
+
         <!--insert into purchase_income_submit_history select * from purchase_income_submit where id = #{id};
 
         delete from purchase_income_submit where id = #{id}-->

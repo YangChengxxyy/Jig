@@ -9,6 +9,7 @@ import com.jig.entity.purchase.PurchaseIncomeSubmit;
 import com.jig.entity.scrap.ScrapSubmit;
 import com.jig.service.CommonService;
 import com.jig.service.SupervisorService;
+import com.jig.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -27,7 +28,16 @@ public class SupervisorJson {
     private SupervisorService supervisorService;
     @Autowired
     private CommonService commonService;
+    @Autowired
+    private UserService userService;
 
+    public User getUserById(String user_id){
+        String user_name = userService.getUserName(user_id);
+        User user = new User();
+        user.setName(user_name);
+        user.setId(user_id);
+        return user;
+    }
     //监管者模式的工夹具信息管理的获取工夹具类别family
     @RequestMapping(value = "get_jig_family", method = {RequestMethod.GET, RequestMethod.POST})
     public List<Family> supervisorGetJigFamily() {
@@ -128,8 +138,9 @@ public class SupervisorJson {
     @RequestMapping(value = "pass_purchase_submit", method = {RequestMethod.GET, RequestMethod.POST})
     public int supervisorPassPurchaseSubmit(@RequestParam("id") String id,
                                             @RequestParam("status") String status,
-                                            @RequestParam("user_id") String first_acceptor) {
+                                            @RequestParam("user_id") String user_id) {
 
+        User user = getUserById(user_id);
         PurchaseIncomeSubmit purchaseIncomeSubmit = commonService.getPurchaseSubmit(id);
 
         String[] a = purchaseIncomeSubmit.PassSubmitInfo("2");
@@ -137,7 +148,7 @@ public class SupervisorJson {
         String old_value = a[1];
         String new_value = a[2];
 
-        return supervisorService.supervisorPassPurchaseSubmit(id, status, first_acceptor, field, old_value, new_value);
+        return supervisorService.supervisorPassPurchaseSubmit(id, status, user, field, old_value, new_value);
     }
 
     //监管者模式下初审不通过采购审批
@@ -145,7 +156,8 @@ public class SupervisorJson {
     public int supervisorNoPassPurchaseSubmit(@RequestParam("id") String id,
                                               @RequestParam("status") String status,
                                               @RequestParam("first_reason") String first_reason,
-                                              @RequestParam("user_id") String fisrt_acceptor) {
+                                              @RequestParam("user_id") String user_id) {
+        User user = getUserById(user_id);
 
         PurchaseIncomeSubmit purchaseIncomeSubmit = commonService.getPurchaseSubmit(id);
         String[] a = purchaseIncomeSubmit.NoPassSubmitInfo("1", first_reason);
@@ -153,7 +165,7 @@ public class SupervisorJson {
         String old_value = a[1];
         String new_value = a[2];
 
-        return supervisorService.supervisorNoPassPurchaseSubmit(id, status, first_reason, fisrt_acceptor, field, old_value, new_value);
+        return supervisorService.supervisorNoPassPurchaseSubmit(id, status, first_reason, user, field, old_value, new_value);
     }
 
     //监管者模式下获取历史采购记录
@@ -206,7 +218,7 @@ public class SupervisorJson {
     @RequestMapping(value = "pass_scrap_submit", method = {RequestMethod.GET, RequestMethod.POST})
     public int supervisorPassScrapSubmit(@RequestParam("id") String id,
                                          @RequestParam("user_id") String user_id) {
-
+        User user = getUserById(user_id);
         ScrapSubmit scrapSubmit = commonService.getScrapSubmit(id);
 
         String[] a = scrapSubmit.PassSubmitInfo("2");
@@ -214,7 +226,7 @@ public class SupervisorJson {
         String old_value = a[1];
         String new_value = a[2];
 
-        int flag = supervisorService.supervisorPassScrapSubmit(id, user_id, field, old_value, new_value);
+        int flag = supervisorService.supervisorPassScrapSubmit(id, user, field, old_value, new_value);
         return flag;
     }
 
@@ -222,7 +234,7 @@ public class SupervisorJson {
     public int supervisorNoPassScrapSubmit(@RequestParam("id") String id,
                                            @RequestParam("no_pass_reason") String no_pass_reason,
                                            @RequestParam("user_id") String user_id) {
-
+        User user = getUserById(user_id);
         ScrapSubmit scrapSubmit = commonService.getScrapSubmit(id);
 
         String[] a = scrapSubmit.NoPassSubmitInfo("1", no_pass_reason);
@@ -230,7 +242,7 @@ public class SupervisorJson {
         String old_value = a[1];
         String new_value = a[2];
 
-        int flag = supervisorService.supervisorNoPassScrapSubmit(id, no_pass_reason, user_id, field, old_value, new_value);
+        int flag = supervisorService.supervisorNoPassScrapSubmit(id, no_pass_reason, user, field, old_value, new_value);
         return flag;
     }
 

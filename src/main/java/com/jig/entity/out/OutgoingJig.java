@@ -12,6 +12,8 @@ public class OutgoingJig {
     private String jig_cabinet_id;
     private String location_id;
     private String bin;
+    private int production_line_id;
+    private String production_line_name;
 
     public String getId() {
         return id;
@@ -99,5 +101,21 @@ public class OutgoingJig {
 
     public void setBin(String bin) {
         this.bin = bin;
+    }
+
+    public int getProduction_line_id() {
+        return production_line_id;
+    }
+
+    public void setProduction_line_id(int production_line_id) {
+        this.production_line_id = production_line_id;
+    }
+
+    public String getProduction_line_name() {
+        return production_line_name;
+    }
+
+    public void setProduction_line_name(String production_line_name) {
+        this.production_line_name = production_line_name;
     }
 }

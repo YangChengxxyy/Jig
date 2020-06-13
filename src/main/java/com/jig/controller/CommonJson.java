@@ -43,7 +43,7 @@ public class CommonJson {
      * @return 查询到的JigDefinition对象
      */
     @RequestMapping("get_simple_jig_definition")
-    public JigDefinition getSimpleJigDefinition(@RequestParam("id") String id) {
+    public JigDefinition getSimpleJget_workcell_listigDefinition(@RequestParam("id") String id) {
         return commonService.getSimpleJigDefinition(id);
     }
 

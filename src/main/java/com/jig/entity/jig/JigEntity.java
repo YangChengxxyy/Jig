@@ -1,5 +1,9 @@
 package com.jig.entity.jig;
 
+import com.jig.entity.out.OutgoSubmit;
+
+import java.util.List;
+
 public class JigEntity {
     private String id;
     private String bill_no;
@@ -15,9 +19,8 @@ public class JigEntity {
     private int count;
     private String last_time;
     private String pm_period;
-
     private String user_for;
-
+    private List<OutgoSubmit> out_and_in_history_list;
 
     public String getId() {
         return id;
@@ -137,5 +140,22 @@ public class JigEntity {
 
     public void setPm_period(String pm_period) {
         this.pm_period = pm_period;
+    }
+
+    public List<OutgoSubmit> getOut_and_in_history_list() {
+        return out_and_in_history_list;
+    }
+
+    public void setOut_and_in_history_list(List<OutgoSubmit> out_and_in_history_list) {
+        this.out_and_in_history_list = out_and_in_history_list;
+    }
+
+    @Override
+    public String toString() {
+        return "JigEntity{" +
+                "code='" + code + '\'' +
+                ", seq_id='" + seq_id + '\'' +
+                ", out_and_in_history_list=" + out_and_in_history_list +
+                '}';
     }
 }

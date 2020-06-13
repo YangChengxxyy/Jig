@@ -1,6 +1,7 @@
 package com.jig.mapper;
 
 import com.jig.entity.common.Family;
+import com.jig.entity.common.User;
 import com.jig.entity.jig.JigDefinition;
 import com.jig.entity.purchase.PurchaseIncomeSubmit;
 import com.jig.entity.scrap.ScrapSubmit;
@@ -64,17 +65,17 @@ public interface SupervisorMapper {
 
     //监管者模式下初审通过我的采购审批
     int supervisorPassPurchaseSubmit(@Param("id") String id,
-                                        @Param("status") String status,
-                                        @Param("first_acceptor") String first_acceptor,
-                                        @Param("field") String field,
-                                        @Param("old_value") String old_value,
-                                        @Param("new_value") String new_value);
+                                     @Param("status") String status,
+                                     @Param("user") User user,
+                                     @Param("field") String field,
+                                     @Param("old_value") String old_value,
+                                     @Param("new_value") String new_value);
 
     //监管者模式下初审不通过采购审批
     int supervisorNoPassPurchaseSubmit(@Param("id") String id,
                                            @Param("status") String status,
                                            @Param("first_reason") String first_reason,
-                                           @Param("first_acceptor") String first_acceptor,
+                                           @Param("user") User user,
                                            @Param("field") String field,
                                            @Param("old_value") String old_value,
                                            @Param("new_value") String new_value);
@@ -110,14 +111,14 @@ public interface SupervisorMapper {
 
     //监管者模式下审批待处理的报废申请
     int supervisorPassScrapSubmit(@Param("id") String id,
-                                     @Param("user_id") String user_id,
+                                     @Param("user") User user,
                                      @Param("field") String field,
                                      @Param("old_value") String old_value,
                                      @Param("new_value") String new_value);
 
     int supervisorNoPassScrapSubmit(@Param("id") String id,
                                     @Param("no_pass_reason") String no_pass_reason,
-                                    @Param("user_id") String user_id,
+                                    @Param("user") User user,
                                     @Param("field") String field,
                                     @Param("old_value") String old_value,
                                     @Param("new_value") String new_value);

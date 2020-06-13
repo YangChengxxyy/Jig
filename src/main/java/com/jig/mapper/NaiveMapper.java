@@ -11,6 +11,7 @@ import com.jig.entity.repair.RepairJigHistory;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -84,6 +85,9 @@ public interface NaiveMapper {
                                                 @Param("user_for") String user_for,
                                                 @Param("workcell_id") String workcell_id);
 
+    List<OutgoSubmit> naive_get_out_and_in_history_list(@Param("code") String code,
+                                                        @Param("seq_id") String seq_id);
+
     //初级用户 根据夹具柜号和区号确定 检点的工夹具list
     List<JigEntity> navieGetMaintenanceJigDetailList(@Param("jig_cabinet_id") String jig_cabinet_id,
                                                           @Param("jig_location_id") String jig_location_id,
@@ -101,6 +105,7 @@ public interface NaiveMapper {
     void naiveOutgoJig(@Param("code") String code,
                        @Param("seq_id") String seq_id,
                        @Param("submit_id") String submit_id,
+                       @Param("production_line_id") String production_line_id,
                        @Param("rec_id") String rec_id);
 
     /**

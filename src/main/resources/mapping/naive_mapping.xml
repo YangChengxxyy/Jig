@@ -67,6 +67,14 @@
         </where>
         group by jp.code
     </select>
+    <select id="naive_get_out_and_in_history_list" resultType="com.jig.entity.out.OutgoSubmit">
+        select oh.*, u.name as 'submit_name', u1.name as 'rec_name', pl.name as 'production_line_name'
+        from outgo_income_history oh left join user u on oh.submit_id = u.id
+                                     left join user u1 on oh.rec_id = u1.id
+                                     left join production_line pl on oh.production_line_id = pl.id
+        where oh.code = #{code} and oh.seq_id = #{seq_id}
+        order by oh.outgo_time desc
+    </select>
     <select id="navieGetMaintenanceJigDetailList" resultType="com.jig.entity.jig.JigEntity">
         select * from jig_position jp inner join regular_maintenance rm on jp.code = rm.code and jp.seq_id = rm.seq_id
 
@@ -79,11 +87,11 @@
         </if>
     </select>
     <insert id="naiveOutgoJig">
-        insert into outgo_income_history(code, seq_id, submit_id, outgo_time, rec_id, status)
-        values (#{code}, #{seq_id}, #{submit_id}, now(), #{rec_id}, 0);
+        insert into outgo_income_history(code, seq_id, submit_id, outgo_time, rec_id, status, production_line_id)
+        values (#{code}, #{seq_id}, #{submit_id}, now(), #{rec_id}, 0, #{production_line_id});
 
-        insert into outgoing_jig(code, seq_id, user_id, outgo_time)
-        values (#{code}, #{seq_id}, #{submit_id}, now());
+        insert into outgoing_jig(code, seq_id, user_id, outgo_time, production_line_id)
+        values (#{code}, #{seq_id}, #{submit_id}, now(), #{production_line_id});
 
         update jig_position
         set status = 0

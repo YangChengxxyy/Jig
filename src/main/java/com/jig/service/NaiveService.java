@@ -51,14 +51,24 @@ public class NaiveService {
         return naiveMapper.navieGetJigListBySelect(jig_cabinet_id, jig_location_id, code, name, user_for, workcell);
     }
 
+    /**
+     * 根据code和seq_id来获取该工夹具实体的出入库历史list
+     * @param code
+     * @param seq_id
+     * @return
+     */
+    public List<OutgoSubmit> naive_get_out_and_in_history_list(String code, String seq_id) {
+        return naiveMapper.naive_get_out_and_in_history_list(code, seq_id);
+    }
+
     //初级用户 根据夹具柜号和区号确定 检点的工夹具list
     public List<JigEntity> navieGetMaintenanceJigDetailList(String jig_cabinet_id, String jig_location_id, String code) {
         return naiveMapper.navieGetMaintenanceJigDetailList(jig_cabinet_id, jig_location_id, code);
     }
 
     //工夹具出库
-    public void naiveOutgoJig(String code, String seq_id, String submit_id, String rec_id) {
-        naiveMapper.naiveOutgoJig(code, seq_id, submit_id, rec_id);
+    public void naiveOutgoJig(String code, String seq_id, String submit_id, String production_line_id, String rec_id) {
+        naiveMapper.naiveOutgoJig(code, seq_id, submit_id, production_line_id,rec_id);
     }
 
     //工夹具检点

@@ -126,19 +126,23 @@
     </select>
     <update id="supervisorPassPurchaseSubmit">
         update purchase_income_submit
-        set status = #{status},first_time = now(),first_acceptor = #{first_acceptor},first_reason = null
+        set status = #{status},first_time = now(),first_acceptor = #{user.id},first_reason = null
         where id = #{id};
 
-        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
-        values(#{first_acceptor},#{id},now(),'purchase_income_submit',#{field},'update',#{old_value},#{new_value})
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value,operate_string)
+        values(#{user.id},#{id},now(),'purchase_income_submit',#{field},'update',#{old_value},#{new_value},
+        concat('监管员',#{user.name},'初审通过'))
+
+
     </update>
     <update id="supervisorNoPassPurchaseSubmit">
         update purchase_income_submit
-        set status = #{status},first_time = now(),first_reason = #{first_reason},first_acceptor = #{first_acceptor}
+        set status = #{status},first_time = now(),first_reason = #{first_reason},first_acceptor = #{user.id}
         where id = #{id};
 
-        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
-        values(#{first_acceptor},#{id},now(),'purchase_income_submit',#{field},'update',#{old_value},#{new_value})
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value,operate_string)
+        values(#{user.id},#{id},now(),'purchase_income_submit',#{field},'update',#{old_value},#{new_value},
+        concat('监管员',#{user.name},'初审不通过~原因:',#{first_reason}))
     </update>
     <select id="supervisorGetPurchaseSubmitHistory" resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
         select p.*,u.name 'submit_name',
@@ -206,19 +210,21 @@
     </select>
     <update id="supervisorPassScrapSubmit">
         update scrap_submit
-        set status = '2', first_acceptor = #{user_id},first_time = now(),first_reason = null
+        set status = '2', first_acceptor = #{user.id},first_time = now(),first_reason = null
         where id = #{id};
 
-        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
-        values(#{user_id},#{id},now(),'scrap_submit',#{field},'update',#{old_value},#{new_value})
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value,operate_string)
+        values(#{user.id},#{id},now(),'scrap_submit',#{field},'update',#{old_value},#{new_value},
+        concat('监管员',#{user.name},'初审通过'))
     </update>
     <update id="supervisorNoPassScrapSubmit">
         update scrap_submit
-        set status = '1', first_acceptor = #{user_id},first_time = now(),first_reason = #{no_pass_reason}
+        set status = '1', first_acceptor = #{user.id},first_time = now(),first_reason = #{no_pass_reason}
         where id = #{id};
 
-        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value)
-        values(#{user_id},#{id},now(),'scrap_submit',#{field},'update',#{old_value},#{new_value})
+        insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value,operate_string)
+        values(#{user.id},#{id},now(),'scrap_submit',#{field},'update',#{old_value},#{new_value},
+        concat('监管员',#{user.name},'初审不通过~原因:',#{no_pass_reason}))
     </update>
     <select id="supervisorGetScrapSubmitListHistory" resultType="com.jig.entity.scrap.ScrapSubmit">
         select s.*,
