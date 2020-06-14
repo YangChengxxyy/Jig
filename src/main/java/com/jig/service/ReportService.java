@@ -4,6 +4,7 @@ import com.jig.mapper.ReportMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -18,5 +19,21 @@ public class ReportService {
 
     public List<Map<String, String>> getMonthByCode(String code) {
         return reportMapper.getMonthByCode(code);
+    }
+
+    public List<Map<Object, Object>> getAllYearAllCount() {
+        return reportMapper.getAllYearAllCount();
+    }
+
+    public List<Map<Object, Object>> getYearByCodeYear(String code, String year) {
+        return reportMapper.getYearByCodeYear(code,year);
+    }
+
+    public List<Map<Object, Object>> getEveryProductionCount() {
+        return reportMapper.getEveryProductionCount();
+    }
+
+    public List<Map<Object, Object>> getEveryYearProductionLine() {
+        return reportMapper.getEveryYearProductionLine();
     }
 }

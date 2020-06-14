@@ -13,4 +13,12 @@ public interface ReportMapper {
     List<Map<String, Object>> getYearByCode(@Param("code") String code);
 
     List<Map<String, String>> getMonthByCode(@Param("code") String code);
+
+    List<Map<Object, Object>> getAllYearAllCount();
+
+    List<Map<Object, Object>> getYearByCodeYear(@Param("code") String code, @Param("year") String year);
+
+    List<Map<Object, Object>> getEveryProductionCount();
+
+    List<Map<Object, Object>> getEveryYearProductionLine();
 }

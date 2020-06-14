@@ -13,4 +13,34 @@
         where code = #{code}
         GROUP BY code, month(outgo_time)
     </select>
+    <select id="getAllYearAllCount" resultType="java.util.Map">
+        SELECT YEAR(outgo_time) year, code, count(year(outgo_time)) count
+        FROM outgo_income_history
+        GROUP BY code, YEAR(outgo_time)
+        order by YEAR(outgo_time)
+    </select>
+    <select id="getYearByCodeYear" resultType="java.util.Map">
+        SELECT code, production_line_id, count(production_line_id) count, production_line.`name` name
+        FROM outgo_income_history
+                 LEFT JOIN production_line on outgo_income_history.production_line_id = production_line.id
+        WHERE code = #{code}
+          and year(outgo_time) = #{year}
+        GROUP BY production_line_id
+    </select>
+    <select id="getEveryProductionCount" resultType="java.util.Map">
+        SELECT count(production_line_id) count, production_line_id, production_line.`name` name
+        FROM outgo_income_history
+                 LEFT JOIN production_line on outgo_income_history.production_line_id = production_line.id
+        WHERE year(outgo_time) = year(now())
+        GROUP BY production_line_id
+    </select>
+    <select id="getEveryYearProductionLine" resultType="java.util.Map">
+        SELECT year(outgo_time)          year,
+               production_line.`name`    name,
+               production_line_id,
+               count(production_line_id) count
+        FROM outgo_income_history
+                 LEFT JOIN production_line ON outgo_income_history.production_line_id = production_line.id
+        GROUP BY production_line_id
+    </select>
 </mapper>
