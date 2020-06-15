@@ -42,5 +42,53 @@
         FROM outgo_income_history
                  LEFT JOIN production_line ON outgo_income_history.production_line_id = production_line.id
         GROUP BY production_line_id
+        order by year(year)
     </select>
+    <select id="getLifeTotal" resultType="java.util.Map">
+        select sh.code, j.seq_id, j.used_count count
+        FROM scrap_submit_history sh,
+             jig_entity j
+        WHERE `status` = 4
+          and j.code = sh.`code`
+          and j.seq_id = sh.seq_id
+    </select>
+    <select id="getRepairReason" resultType="java.util.Map">
+        SELECT count(repair_submit_history.`code`) count,
+               repair_type.id,
+               repair_type.`name`
+        FROM repair_submit_history
+                 LEFT JOIN repair_type ON repair_submit_history.repair_type = repair_type.`id`
+        GROUP BY repair_submit_history.repair_type
+    </select>
+    <select id="getRepairManufacturer" resultType="java.util.Map">
+        SELECT count(repair_submit_history.`code`) count,
+               repair_type.`name`                  name,
+               manufacturer.id                     id,
+               manufacturer.`name`                 company
+        FROM repair_submit_history
+                 LEFT JOIN jig_definition ON jig_definition.`code` = repair_submit_history.`code`
+                 LEFT JOIN repair_type ON repair_submit_history.repair_type = repair_type.id
+                 LEFT JOIN manufacturer ON jig_definition.`manufacturer_id` = manufacturer.id
+        GROUP BY repair_submit_history.repair_type,
+                 jig_definition.`manufacturer_id`
+    </select>
+    <select id="getManufacturerCount" resultType="java.util.Map">
+        SELECT m.`name`         company,
+               count(je.seq_id) count
+        FROM jig_definition jd
+                 LEFT JOIN jig_entity je ON jd.`code` = je.`code`
+                 LEFT JOIN manufacturer m ON m.id = jd.manufacturer_id
+        GROUP BY jd.`manufacturer_id`
+    </select>
+    <select id="getManufacturerInformation" resultType="java.util.Map">
+        SELECT *
+        from manufacturer
+        where id = #{id}
+    </select>
+    <select id="getManufacturerHistoryCount" resultType="java.util.Map">
+        SELECT *
+        FROM supply_history
+        WHERE manufacturer_id = #{id}
+    </select>
+
 </mapper>

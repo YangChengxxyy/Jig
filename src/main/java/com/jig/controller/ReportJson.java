@@ -57,29 +57,81 @@ public class ReportJson {
     }
 
     /**
-     * 总体寿命分布图
-     *
-     * @return
-     */
-    @RequestMapping("/get_life_total")
-    public List<Map<Object, Object>> getLifeTotal() {
-        //TODO:总体寿命分布图
-        return null;
-    }
-    /**
      * 今年工夹具各个产线的使用占比
      */
     @RequestMapping("/get_every_production_count")
-    public List<Map<Object, Object>> getEveryProductionCount(){
+    public List<Map<Object, Object>> getEveryProductionCount() {
         return reportService.getEveryProductionCount();
     }
 
     /**
      * 历年各条产线的使用次数
+     *
      * @return
      */
     @RequestMapping("get_every_year_production_line")
-    public List<Map<Object,Object>> getEveryYearProductionLine(){
+    public List<Map<Object, Object>> getEveryYearProductionLine() {
         return reportService.getEveryYearProductionLine();
+    }
+
+    /**
+     * 总体寿命分布图
+     *
+     * @return
+     */
+    @RequestMapping("get_life_total")
+    public List<Map<Object, Object>> getLifeTotal() {
+        return reportService.getLifeTotal();
+    }
+
+    /**
+     * 工夹具损坏占比统计
+     *
+     * @return
+     */
+    @RequestMapping("get_repair_reason")
+    public List<Map<Object, Object>> getRepairReason() {
+        return reportService.getRepairReason();
+    }
+
+    /**
+     * 各厂商的损坏统计
+     *
+     * @return
+     */
+    @RequestMapping("get_repair_manufacturer")
+    public List<Map<Object, Object>> getRepairManufacturer() {
+        return reportService.getRepairManufacturer();
+    }
+
+    /**
+     * 厂商供货比例
+     *
+     * @return
+     */
+    @RequestMapping("/get_manufacturer_count")
+    public List<Map<Object, Object>> getManufacturerCount() {
+        return reportService.getManufacturerCount();
+    }
+
+    /**
+     * 厂商各维度分析
+     *
+     * @param id 厂商id
+     * @return
+     */
+    @RequestMapping("/get_manufacturer_information")
+    public List<Map<Object, Object>> getManufacturerInformation(@RequestParam("id") int id) {
+        return reportService.getManufacturerInformation(id);
+    }
+
+    /**
+     * 历史供货量
+     * @param id 厂商id
+     * @return
+     */
+    @RequestMapping("/get_manufacturer_history_count")
+    public List<Map<Object, Object>> getManufacturerHistoryCount(@RequestParam("id")int id){
+        return reportService.getManufacturerHistoryCount(id);
     }
 }

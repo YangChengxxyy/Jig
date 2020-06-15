@@ -36,4 +36,28 @@ public class ReportService {
     public List<Map<Object, Object>> getEveryYearProductionLine() {
         return reportMapper.getEveryYearProductionLine();
     }
+
+    public List<Map<Object, Object>> getLifeTotal() {
+        return reportMapper.getLifeTotal();
+    }
+
+    public List<Map<Object, Object>> getRepairReason() {
+        return reportMapper.getRepairReason();
+    }
+
+    public List<Map<Object, Object>> getRepairManufacturer() {
+        return reportMapper.getRepairManufacturer();
+    }
+
+    public List<Map<Object, Object>> getManufacturerCount() {
+        return reportMapper.getManufacturerCount();
+    }
+
+    public List<Map<Object, Object>> getManufacturerInformation(int id) {
+        return reportMapper.getManufacturerInformation(id);
+    }
+
+    public List<Map<Object, Object>> getManufacturerHistoryCount(int id) {
+        return reportMapper.getManufacturerHistoryCount(id);
+    }
 }
