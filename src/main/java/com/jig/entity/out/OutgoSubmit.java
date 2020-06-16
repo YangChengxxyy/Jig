@@ -17,7 +17,8 @@ public class OutgoSubmit {
     private String rec_name;
     private String production_line_id;
     private String production_line_name;
-    private String status; // 状态,出: 0, 入: 1
+    private String status; // 状态,出: 0, 入: 1;调换位置: 2
+    private String description;
 
     public String getId() {
         return id;
@@ -129,5 +130,13 @@ public class OutgoSubmit {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
