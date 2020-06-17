@@ -8,15 +8,15 @@ import com.jig.entity.jig.JigDefinition;
 import com.jig.entity.jig.JigEntity;
 import com.jig.entity.jig.JigPosition;
 import com.jig.entity.jig.JigStock;
-import com.jig.entity.life.JigLife;
 import com.jig.entity.out.OutgoSubmit;
 import com.jig.entity.out.OutgoingJig;
 import com.jig.entity.repair.RepairJigHistory;
-import com.jig.service.LifeService;
 import com.jig.service.NaiveService;
+import com.jig.service.UserService;
 import com.jig.utils.LoginStatusUtil;
 import com.jig.utils.PoiUtil;
 import org.apache.commons.io.FileUtils;
+import org.apache.ibatis.annotations.Param;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,7 +48,7 @@ public class NaiveJson {
     @Autowired
     private NaiveService naiveService;
     @Autowired
-    private LifeService lifeService;
+    private UserService userService;
     @Autowired
     private PoiUtil poiUtil;
     public static final String SCRAP_IMAGE_NAME = "images/scrap_images/";
@@ -69,6 +69,14 @@ public class NaiveJson {
         map.put("data", data);
         map.put("max", max);
         return map;
+    }
+
+    private User getUserById(String user_id) {
+        User user = new User();
+        String user_name = userService.getUserName(user_id);
+        user.setId(user_id);
+        user.setName(user_name);
+        return user;
     }
 
     //将采购入库的工夹具入库
@@ -135,10 +143,16 @@ public class NaiveJson {
         return jig_list;
     }
 
-    @RequestMapping("get_out_and_in_history_list")
-    public List<OutgoSubmit> naiveGetOutAndInHistoryList(@RequestParam("code") String code,
-                                                         @RequestParam("seq_id") String seq_id){
-        return naiveService.naive_get_out_and_in_history_list(code, seq_id);
+    @RequestMapping("change_jig_position")
+    public int navieChangeJigPosition(@Param("code") String code,
+                                      @Param("seq_id") String seq_id,
+                                      @RequestParam("old_position") String old_position,
+                                      @RequestParam("jig_cabinet_id") String jig_cabinet_id,
+                                      @RequestParam("location_id") String location_id,
+                                      @RequestParam("bin") String bin,
+                                      @RequestParam("user_id") String user_id){
+        User user = getUserById(user_id);
+        return naiveService.naive_change_jig_position(code, seq_id, old_position, jig_cabinet_id, location_id, bin, user);
     }
 
     //初级用户 根据夹具柜号和区号确定 检点的工夹具list
@@ -228,9 +242,10 @@ public class NaiveJson {
                                   @RequestParam("seq_id") String seq_id,
                                   @RequestParam("submit_id") String submit_id,
                                   @RequestParam("id") String id,
-                                  @RequestParam("rec_id") String rec_id) {
+                                  @RequestParam("rec_id") String rec_id,
+                                  @RequestParam("production_line_id") String production_line_id) {
         try {
-            naiveService.naiveReturnJig(id, code, seq_id, submit_id, rec_id);
+            naiveService.naiveReturnJig(id, code, seq_id, submit_id, rec_id, production_line_id);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -296,7 +311,6 @@ public class NaiveJson {
                 pathName.append(fileName);
             }
             naiveService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, pathName.toString());
-            lifeService.changeJigLife(code,seq_id);
         } catch (IOException e) {
             e.printStackTrace();
             return false;

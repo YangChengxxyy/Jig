@@ -75,6 +75,14 @@
         where oh.code = #{code} and oh.seq_id = #{seq_id}
         order by oh.outgo_time desc
     </select>
+    <update id="naive_change_jig_position">
+        update jig_position set jig_cabinet_id = #{jig_cabinet_id}, location_id = #{location_id}, bin = #{bin}
+        where code = #{code} and seq_id = #{seq_id};
+
+        insert into outgo_income_history(code, seq_id, outgo_time, rec_id, status, description)
+        values(#{code}, #{seq_id}, now(), #{user.id}, 2,
+        concat(#{old_position}, ' => ', #{jig_cabinet_id}, '-', #{location_id}, '-', #{bin}))
+    </update>
     <select id="navieGetMaintenanceJigDetailList" resultType="com.jig.entity.jig.JigEntity">
         select * from jig_position jp inner join regular_maintenance rm on jp.code = rm.code and jp.seq_id = rm.seq_id
 
@@ -148,8 +156,8 @@
         update jig_position
         set status = 1
         where code = #{code} and seq_id = #{seq_id};
-        insert into outgo_income_history(code, seq_id, submit_id, outgo_time, rec_id, status)
-        values (#{code}, #{seq_id}, ${submit_id}, now(), #{rec_id}, 1)
+        insert into outgo_income_history(code, seq_id, submit_id, outgo_time, rec_id, status, production_line_id)
+        values (#{code}, #{seq_id}, ${submit_id}, now(), #{rec_id}, 1, #{production_line_id})
     </update>
     <delete id="naiveDeleteOutgoingJig">
         delete

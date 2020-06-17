@@ -1,5 +1,6 @@
 package com.jig.mapper;
 
+import com.jig.entity.common.User;
 import com.jig.entity.jig.JigDefinition;
 import com.jig.entity.jig.JigEntity;
 import com.jig.entity.jig.JigPosition;
@@ -36,6 +37,7 @@ public interface NaiveMapper {
 
     /**
      * 初级用户获取 工夹具出库页面的工夹具存放位置list
+     *
      * @param workcell_id 工作部门
      * @return
      */
@@ -48,6 +50,7 @@ public interface NaiveMapper {
 
     /**
      * 初级用户 根据选择的 夹具柜号和区号确定 工夹具的种类,名字,数目
+     *
      * @param jig_cabinet_id
      * @param jig_location_id
      * @param workcell_id
@@ -59,6 +62,7 @@ public interface NaiveMapper {
 
     /**
      * 初级用户 根据选择的 夹具柜号和区号 确定该code的工夹具list
+     *
      * @param jig_cabinet_id
      * @param jig_location_id
      * @param code
@@ -70,6 +74,7 @@ public interface NaiveMapper {
 
     /**
      * 初级用户 根据选择的工夹具存放区域 和 搜索条件来 确定工夹具list
+     *
      * @param jig_cabinet_id
      * @param jig_location_id
      * @param code
@@ -79,28 +84,36 @@ public interface NaiveMapper {
      * @return
      */
     List<JigStock> navieGetJigListBySelect(@Param("jig_cabinet_id") String jig_cabinet_id,
-                                                @Param("jig_location_id") String jig_location_id,
-                                                @Param("code") String code,
-                                                @Param("name") String name,
-                                                @Param("user_for") String user_for,
-                                                @Param("workcell_id") String workcell_id);
+                                           @Param("jig_location_id") String jig_location_id,
+                                           @Param("code") String code,
+                                           @Param("name") String name,
+                                           @Param("user_for") String user_for,
+                                           @Param("workcell_id") String workcell_id);
 
     List<OutgoSubmit> naive_get_out_and_in_history_list(@Param("code") String code,
                                                         @Param("seq_id") String seq_id);
 
+    int naive_change_jig_position(@Param("code") String code,
+                                  @Param("seq_id") String seq_id,
+                                  @Param("old_position") String old_position,
+                                  @Param("jig_cabinet_id") String jig_cabinet_id,
+                                  @Param("location_id") String location_id,
+                                  @Param("bin") String bin,
+                                  @Param("user") User user);
+
     //初级用户 根据夹具柜号和区号确定 检点的工夹具list
     List<JigEntity> navieGetMaintenanceJigDetailList(@Param("jig_cabinet_id") String jig_cabinet_id,
-                                                          @Param("jig_location_id") String jig_location_id,
-                                                          @Param("code") String code);
+                                                     @Param("jig_location_id") String jig_location_id,
+                                                     @Param("code") String code);
 
 
     /**
      * 工夹具出库
      *
-     * @param code   工夹具代码
-     * @param seq_id 工夹具序列号
+     * @param code      工夹具代码
+     * @param seq_id    工夹具序列号
      * @param submit_id 申请人id
-     * @param rec_id 记录人id
+     * @param rec_id    记录人id
      */
     void naiveOutgoJig(@Param("code") String code,
                        @Param("seq_id") String seq_id,
@@ -110,9 +123,10 @@ public interface NaiveMapper {
 
     /**
      * 工夹具检点
+     *
      * @param code
      * @param seq_id
-     * @param reason 出现的问题,多个用|分开
+     * @param reason  出现的问题,多个用|分开
      * @param user_id
      * @return
      */
@@ -134,7 +148,6 @@ public interface NaiveMapper {
                                               @Param("page_number") int page_number,
                                               @Param("page_size") int page_size,
                                               @Param("workcell_id") String workcell_id);
-
 
 
     /**
@@ -161,7 +174,8 @@ public interface NaiveMapper {
                         @Param("code") String code,
                         @Param("seq_id") String seq_id,
                         @Param("submit_id") String submit_id,
-                        @Param("rec_id") String rec_id);
+                        @Param("rec_id") String rec_id,
+                        @Param("production_line_id") String production_line_id);
 
     /**
      * 删除对应的记录
@@ -199,6 +213,7 @@ public interface NaiveMapper {
      * @param pathName
      */
     void naiveSubmitRepair(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_id") String submit_id, @Param("repair_reason") String repair_reason, @Param("pathName") String pathName);
+
     /**
      * 获取查询到的对应页数的List对象
      *
@@ -235,6 +250,7 @@ public interface NaiveMapper {
      * @return 查询到的所有结果的List对象
      */
     List<JigDefinition> searchAllJigDefinition(@Param("code") String code, @Param("name") String name, @Param("workcell") String workcell, @Param("family") String family, @Param("userFor") String userFor);
+
     /**
      * 获取出库申请集合
      *

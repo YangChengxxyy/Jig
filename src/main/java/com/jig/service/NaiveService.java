@@ -1,5 +1,6 @@
 package com.jig.service;
 
+import com.jig.entity.common.User;
 import com.jig.entity.jig.JigDefinition;
 import com.jig.entity.jig.JigEntity;
 import com.jig.entity.jig.JigPosition;
@@ -61,6 +62,11 @@ public class NaiveService {
         return naiveMapper.naive_get_out_and_in_history_list(code, seq_id);
     }
 
+    //改变工夹具的存放位置
+    public int naive_change_jig_position(String code, String seq_id, String old_position, String jig_cabinet_id, String location_id, String bin, User user) {
+        return naiveMapper.naive_change_jig_position(code, seq_id, old_position, jig_cabinet_id, location_id, bin, user);
+    }
+
     //初级用户 根据夹具柜号和区号确定 检点的工夹具list
     public List<JigEntity> navieGetMaintenanceJigDetailList(String jig_cabinet_id, String jig_location_id, String code) {
         return naiveMapper.navieGetMaintenanceJigDetailList(jig_cabinet_id, jig_location_id, code);
@@ -86,8 +92,8 @@ public class NaiveService {
     }
 
 
-    public void naiveReturnJig(String id, String code, String seq_id, String submit_id, String rec_id) {
-        naiveMapper.naiveReturnJig(id, code, seq_id, submit_id, rec_id);
+    public void naiveReturnJig(String id, String code, String seq_id, String submit_id, String rec_id, String production_line_id) {
+        naiveMapper.naiveReturnJig(id, code, seq_id, submit_id, rec_id, production_line_id);
         naiveMapper.naiveDeleteOutgoingJig(id);
     }
 
