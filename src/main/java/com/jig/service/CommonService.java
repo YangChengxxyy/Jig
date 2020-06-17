@@ -98,4 +98,9 @@ public class CommonService {
     public List<JigCabinet> get_jig_cabinet_list(){
         return commonMapper.get_jig_cabinet_list();
     }
+
+    public List<JigDefinition> getJigDefinition(int page_number, int page_size) {
+        page_number = (page_number-1)*page_size;
+        return commonMapper.getJigDefinition(page_number,page_size);
+    }
 }

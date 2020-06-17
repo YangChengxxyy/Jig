@@ -47,6 +47,11 @@ public class CommonJson {
         return commonService.getSimpleJigDefinition(id);
     }
 
+    @RequestMapping("get_jig_definition")
+    public List<JigDefinition> getJigDefinition(@RequestParam("page_size")int page_size, @RequestParam("page_number")int page_number){
+        return commonService.getJigDefinition(page_number,page_size);
+    }
+
     /**
      * 获取工夹具位置
      *

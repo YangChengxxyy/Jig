@@ -8,6 +8,7 @@ import com.jig.entity.repair.RepairJigHistory;
 import com.jig.entity.scrap.ScrapHistory;
 import com.jig.entity.scrap.ScrapSubmit;
 import com.jig.service.HighService;
+import com.jig.service.LifeService;
 import com.jig.utils.PoiUtil;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
@@ -267,7 +268,7 @@ public class HighJson {
      * @return 成功与否
      */
     @RequestMapping(value = "submit_scrap", method = RequestMethod.POST)
-    public boolean highSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason, @RequestParam("scrap_type") String scrap_type, @RequestParam("file") MultipartFile[] files) {
+    public boolean highSubmitScrap(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason, @RequestParam("scrap_type") String scrap_type, @RequestParam("file") MultipartFile[] files) {
         try {
             StringBuilder pathName = new StringBuilder("");
             if (files.length == 1) {

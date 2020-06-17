@@ -73,4 +73,7 @@
                             left join jig_position jp on jc.jig_cabinet_id = jp.jig_cabinet_id and l.location_id = jp.location_id
         ORDER BY jc.jig_cabinet_id+0 asc,l.location_id asc,jp.bin+0 asc
     </select>
+    <select id="getJigDefinition" resultType="com.jig.entity.jig.JigDefinition">
+        select
+    </select>
 </mapper>

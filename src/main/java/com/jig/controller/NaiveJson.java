@@ -8,9 +8,11 @@ import com.jig.entity.jig.JigDefinition;
 import com.jig.entity.jig.JigEntity;
 import com.jig.entity.jig.JigPosition;
 import com.jig.entity.jig.JigStock;
+import com.jig.entity.life.JigLife;
 import com.jig.entity.out.OutgoSubmit;
 import com.jig.entity.out.OutgoingJig;
 import com.jig.entity.repair.RepairJigHistory;
+import com.jig.service.LifeService;
 import com.jig.service.NaiveService;
 import com.jig.utils.LoginStatusUtil;
 import com.jig.utils.PoiUtil;
@@ -45,6 +47,8 @@ public class NaiveJson {
     public String RESOURCE_URL;
     @Autowired
     private NaiveService naiveService;
+    @Autowired
+    private LifeService lifeService;
     @Autowired
     private PoiUtil poiUtil;
     public static final String SCRAP_IMAGE_NAME = "images/scrap_images/";
@@ -292,6 +296,7 @@ public class NaiveJson {
                 pathName.append(fileName);
             }
             naiveService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, pathName.toString());
+            lifeService.changeJigLife(code,seq_id);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
