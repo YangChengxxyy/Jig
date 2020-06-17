@@ -11,6 +11,7 @@ public class RepairJig {
     private String repair_reason;
     private String acceptor_id;
     private String acceptor_name;
+    private double life_percent;
 
     public String getId() {
         return id;
@@ -90,5 +91,13 @@ public class RepairJig {
 
     public void setSubmit_time(String submit_time) {
         this.submit_time = submit_time;
+    }
+
+    public double getLife_percent() {
+        return life_percent;
+    }
+
+    public void setLife_percent(double life_percent) {
+        this.life_percent = life_percent;
     }
 }

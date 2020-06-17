@@ -293,7 +293,7 @@ public class NaiveJson {
      * @return 成功与否
      */
     @RequestMapping("submit_repair")
-    public boolean naiveSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("repair_reason") String repair_reason, @RequestParam("file") MultipartFile[] files) {
+    public boolean naiveSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("repair_reason") String repair_reason,@RequestParam("repair_type")String repair_type, @RequestParam("file") MultipartFile[] files) {
         try {
             StringBuilder pathName = new StringBuilder("");
             if (files.length == 1) {
@@ -313,7 +313,7 @@ public class NaiveJson {
                         (new File(RESOURCE_URL + fileName), files[files.length - 1].getBytes());
                 pathName.append(fileName);
             }
-            naiveService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, pathName.toString());
+            naiveService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason,repair_type, pathName.toString());
             lifeService.changeJigLife(code,seq_id);
         } catch (IOException e) {
             e.printStackTrace();
