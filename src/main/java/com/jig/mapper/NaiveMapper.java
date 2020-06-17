@@ -212,7 +212,7 @@ public interface NaiveMapper {
      * @param repair_reason
      * @param pathName
      */
-    void naiveSubmitRepair(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_id") String submit_id, @Param("repair_reason") String repair_reason, @Param("pathName") String pathName);
+    void naiveSubmitRepair(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_id") String submit_id, @Param("repair_reason") String repair_reason,@Param("repair_type")String repair_type, @Param("pathName") String pathName);
 
     /**
      * 获取查询到的对应页数的List对象
@@ -266,4 +266,6 @@ public interface NaiveMapper {
     int naiveGetOutgoSubmitPage();
 
     int getMaxSeqId(@Param("code") String code);
+
+    List<OutgoingJig> naiveGetAllOutgoingJigList(@Param("code") String code, @Param("name") String name, @Param("start_date") String start_date, @Param("end_date") String end_date, @Param("user_for") String user_for, @Param("workcell_id") String workcell_id);
 }

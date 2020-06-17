@@ -13,12 +13,12 @@ public class InterceptorConfigurer implements WebMvcConfigurer {
     private PowerInterceptor powerInterceptor;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(powerInterceptor)
-//                .addPathPatterns("/**")
-//                .excludePathPatterns("/api/login_check")
-//                .excludePathPatterns("/api/get_workcell_list")
-//                .excludePathPatterns("/images/**")
-//                .excludePathPatterns("/favicon.ico")
-//                .excludePathPatterns("/error");
+        registry.addInterceptor(powerInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/api/login_check")
+                .excludePathPatterns("/api/get_workcell_list")
+                .excludePathPatterns("/images/**")
+                .excludePathPatterns("/favicon.ico")
+                .excludePathPatterns("/error");
     }
 }

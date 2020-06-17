@@ -341,7 +341,7 @@ public class HighJson {
     }
 
     @RequestMapping("handle_repair_submit")
-    public boolean handleRepairSubmit(@RequestParam("id") int id, @RequestParam("submit_id") String submit_id, @RequestParam("state") boolean state, @RequestParam("reason") String reason) {
+    public boolean handleRepairSubmit(@RequestParam("id") int id, @RequestParam("submit_id") String submit_id, @RequestParam("state") boolean state, @RequestParam(value = "reason",required = false) String reason) {
         try {
             if (state) {
                 highService.highAgreeRepairSubmit(id, submit_id);

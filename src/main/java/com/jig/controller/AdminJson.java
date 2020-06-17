@@ -85,4 +85,9 @@ public class AdminJson {
     public List<CnEn> getCnEn() {
         return adminService.getCnEn();
     }
+
+    @RequestMapping("edit_cn_en")
+    public boolean editCnEn(@RequestParam("id") String id, @RequestParam("chinese") String chinese) {
+        return adminService.editCnEn(id, chinese) == 1;
+    }
 }
