@@ -9,7 +9,7 @@ import com.jig.entity.common.Workcell;
 import com.jig.entity.jig.JigDefinition;
 import com.jig.entity.jig.JigModel;
 import com.jig.entity.jig.JigPart;
-import com.jig.entity.operate.MaintenanceType;
+import com.jig.entity.repair.MaintenanceType;
 import com.jig.entity.warehouse.JigCabinet;
 import com.jig.entity.warehouse.JigLocation;
 import com.jig.service.CommonService;

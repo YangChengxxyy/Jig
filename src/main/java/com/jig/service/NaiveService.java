@@ -7,6 +7,7 @@ import com.jig.entity.jig.JigPosition;
 import com.jig.entity.jig.JigStock;
 import com.jig.entity.out.OutgoSubmit;
 import com.jig.entity.out.OutgoingJig;
+import com.jig.entity.repair.MaintenanceSubmit;
 import com.jig.entity.repair.RepairJig;
 import com.jig.entity.repair.RepairJigHistory;
 import com.jig.mapper.NaiveMapper;
@@ -62,6 +63,16 @@ public class NaiveService {
         return naiveMapper.naive_get_out_and_in_history_list(code, seq_id);
     }
 
+    /**
+     * 根据code和seq_id来获取该工夹具实体的检点历史记录list
+     * @param code
+     * @param seq_id
+     * @return
+     */
+    public List<MaintenanceSubmit> naive_get_maintenance_history_list(String code, String seq_id){
+        return naiveMapper.naive_get_maintenance_history_list(code, seq_id);
+    }
+
     //改变工夹具的存放位置
     public int naive_change_jig_position(String code, String seq_id, String old_position, String jig_cabinet_id, String location_id, String bin, User user) {
         return naiveMapper.naive_change_jig_position(code, seq_id, old_position, jig_cabinet_id, location_id, bin, user);
@@ -78,8 +89,8 @@ public class NaiveService {
     }
 
     //工夹具检点
-    public int naive_maintenance_jig(String code, String seq_id, String reason, String user_id) {
-        return naiveMapper.naive_maintenance_jig(code, seq_id, reason, user_id);
+    public int naive_maintenance_jig(String code, String seq_id, String reason, int is_repair, String user_id) {
+        return naiveMapper.naive_maintenance_jig(code, seq_id, reason, is_repair, user_id);
     }
 
     //获取已经出库的工夹具list
@@ -157,5 +168,21 @@ public class NaiveService {
      */
     public int getMaxSeqId(String code) {
         return naiveMapper.getMaxSeqId(code);
+    }
+
+    public double naive_get_jig_trouble_percent_all(){
+        return naiveMapper.naive_get_jig_trouble_percent_all();
+    }
+
+    public List<MaintenanceSubmit> naive_get_trouble_maintenance_list(int is_repair){
+        return naiveMapper.naive_get_trouble_maintenance_list(is_repair);
+    }
+
+    public int naive_get_trouble_reason_count_by_reason(String code, String seq_id, String reason){
+        return naiveMapper.naive_get_trouble_reason_count_by_reason(code, seq_id, reason);
+    }
+
+    public int naive_get_reason_count_in_all(String reason) {
+        return naiveMapper.naive_get_reason_count_in_all(reason);
     }
 }

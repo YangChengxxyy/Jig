@@ -7,7 +7,7 @@ import com.jig.entity.common.Workcell;
 import com.jig.entity.jig.JigDefinition;
 import com.jig.entity.jig.JigModel;
 import com.jig.entity.jig.JigPart;
-import com.jig.entity.operate.MaintenanceType;
+import com.jig.entity.repair.MaintenanceType;
 import com.jig.entity.purchase.PurchaseIncomeSubmit;
 import com.jig.entity.scrap.ScrapSubmit;
 import com.jig.entity.warehouse.JigCabinet;
@@ -97,5 +97,9 @@ public class CommonService {
 
     public List<JigCabinet> get_jig_cabinet_list(){
         return commonMapper.get_jig_cabinet_list();
+    }
+
+    public MaintenanceType get_maintenance_type(String id) {
+        return commonMapper.get_maintenance_type(id);
     }
 }

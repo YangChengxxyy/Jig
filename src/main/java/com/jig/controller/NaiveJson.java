@@ -10,7 +10,10 @@ import com.jig.entity.jig.JigPosition;
 import com.jig.entity.jig.JigStock;
 import com.jig.entity.out.OutgoSubmit;
 import com.jig.entity.out.OutgoingJig;
+import com.jig.entity.repair.MaintenanceSubmit;
+import com.jig.entity.repair.MaintenanceType;
 import com.jig.entity.repair.RepairJigHistory;
+import com.jig.service.CommonService;
 import com.jig.service.NaiveService;
 import com.jig.service.UserService;
 import com.jig.utils.LoginStatusUtil;
@@ -32,12 +35,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/naive")
@@ -49,6 +50,8 @@ public class NaiveJson {
     private NaiveService naiveService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private CommonService commonService;
     @Autowired
     private PoiUtil poiUtil;
     public static final String SCRAP_IMAGE_NAME = "images/scrap_images/";
@@ -120,8 +123,9 @@ public class NaiveJson {
 
         for (JigStock jigStock : jig_list) {
             jigStock.setJig_entity_list(naiveService.navieGetJigEntityListByLocation(jig_cabinet_id, jig_location_id, jigStock.getCode()));
-            for(JigEntity jigEntity: jigStock.getJig_entity_list()) { // 有更好的解决方法,用resultMap
+            for (JigEntity jigEntity : jigStock.getJig_entity_list()) { // 有更好的解决方法,用resultMap
                 jigEntity.setOut_and_in_history_list(naiveService.naive_get_out_and_in_history_list(jigEntity.getCode(), jigEntity.getSeq_id()));
+                jigEntity.setMaintenance_history_list(naiveService.naive_get_maintenance_history_list(jigEntity.getCode(), jigEntity.getSeq_id()));
             }
         }
 
@@ -150,19 +154,34 @@ public class NaiveJson {
                                       @RequestParam("jig_cabinet_id") String jig_cabinet_id,
                                       @RequestParam("location_id") String location_id,
                                       @RequestParam("bin") String bin,
-                                      @RequestParam("user_id") String user_id){
+                                      @RequestParam("user_id") String user_id) {
         User user = getUserById(user_id);
         return naiveService.naive_change_jig_position(code, seq_id, old_position, jig_cabinet_id, location_id, bin, user);
     }
 
-    //初级用户 根据夹具柜号和区号确定 检点的工夹具list
+    //初级用户 根据夹具柜号和区号确定 检点的工夹具list(因为要取的工夹具的检点时间，所以不用之前写的，重新写了一个，但这样不好，以后需要修改)
     @RequestMapping("get_maintenance_jig_detail_list")
     public List<JigEntity> navieGetCheckJigModalJigDetailList(@RequestParam("jig_cabinet_id") String jig_cabinet_id,
                                                               @RequestParam("jig_location_id") String jig_location_id,
                                                               @RequestParam("code") String code,
                                                               @RequestParam("user_id") String user_id) {
         //应该要根据workcell_id工作部门id区别
-        return naiveService.navieGetMaintenanceJigDetailList(jig_cabinet_id, jig_location_id, code);
+        List<JigEntity> jig_list = naiveService.navieGetMaintenanceJigDetailList(jig_cabinet_id, jig_location_id, code);
+        for (JigEntity jigEntity : jig_list) {
+            jigEntity.setMaintenance_history_list(naiveService.naive_get_maintenance_history_list(jigEntity.getCode(), jigEntity.getSeq_id()));
+            for (MaintenanceSubmit maintenanceSubmit : jigEntity.getMaintenance_history_list()) {
+                String[] reason = maintenanceSubmit.getReason().split("\\|");
+                String r = "";
+                if (reason[0].equals("")) {
+                    continue;
+                }
+                for (int i = 0; i < reason.length; i++) {
+                    MaintenanceType type = commonService.get_maintenance_type(reason[i]);
+                    maintenanceSubmit.getReason_description().add(type.getWrong_description());
+                }
+            }
+        }
+        return jig_list;
     }
 
     /**
@@ -176,8 +195,9 @@ public class NaiveJson {
                                    @RequestParam("code") String code,
                                    @RequestParam("seq_id") String seq_id,
                                    @RequestParam("reason") String reason,
+                                   @RequestParam("is_repair") int is_repair,
                                    @RequestParam("user_id") String user_id) {
-        return naiveService.naive_maintenance_jig(code, seq_id, reason, user_id);
+        return naiveService.naive_maintenance_jig(code, seq_id, reason, is_repair, user_id);
     }
 
     /**
@@ -196,7 +216,7 @@ public class NaiveJson {
                                  @RequestParam("user_id") String accpetor_id) {
         try {
 
-            naiveService.naiveOutgoJig(code, seq_id, submit_id, production_line_id,accpetor_id);
+            naiveService.naiveOutgoJig(code, seq_id, submit_id, production_line_id, accpetor_id);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -361,4 +381,57 @@ public class NaiveJson {
     public Map<String, Object> getOutgoingSubmit(@RequestParam("page_number") int page_number) {
         return getStringObjectMap(naiveService.naiveGetOutgoingSubmit(page_number), naiveService.naiveGetOutgoingSubmitPage());
     }
+
+    @RequestMapping("get_jig_trouble_percent")
+    public String naiveGetJigTroublePercent(@RequestParam("reason") String reason,
+                                            @RequestParam("code") String code,
+                                            @RequestParam("seq_id") String seq_id) {
+        if (reason.equals("")) {
+            return "数据不足,无法准确计算";
+        }
+        String[] reason_list = reason.split("\\|");
+        double percent = 1.0; // 要返回的故障概率值
+        double trouble_percent_all = naiveService.naive_get_jig_trouble_percent_all();
+
+        int reason_count_in_all = 0;
+        // 获取需要报修的记录list,用于计算出现工夹具检点时所出现的该工夹具出现过的问题的次数
+
+
+        percent *= trouble_percent_all;
+        int k = 0;
+        int reason_count_in_the_jig = 0;
+        int reason_count_in_all_jig = 0;
+        for (int i = 0; i < reason_list.length; i++) {
+            reason_count_in_the_jig = naiveService.naive_get_trouble_reason_count_by_reason(code, seq_id, reason_list[i]);
+            reason_count_in_all_jig = naiveService.naive_get_trouble_reason_count_by_reason("", "", reason_list[i]);
+            reason_count_in_all += naiveService.naive_get_reason_count_in_all(reason_list[i]);
+            k++;
+        }
+        if ( k > 0) {
+            percent /= reason_count_in_all;
+            percent *= (reason_count_in_the_jig + 1.0) / (reason_count_in_all_jig + 1.0);
+        }
+
+        NumberFormat num = NumberFormat.getPercentInstance();
+        String str_percent = num.format(percent);
+        return str_percent;
+    }
+
+    public int get_all_reason_count(List<MaintenanceSubmit> list) {
+        int count = 0;
+        for (MaintenanceSubmit submit : list) {
+            int k = 0, i;
+            for (i = 0; i < submit.getReason().length(); i++) {
+                if (submit.getReason().charAt(i) == '|') {
+                    k++;
+                }
+            }
+            if (i != 0) {
+                count += k + 1;
+            }
+        }
+        return count;
+    }
+    // 朴素贝叶斯算法思路 C：工夹具故障, Ai:要判断的工夹具检点时出现的各个问题
+    //  C = (P(C)*P(Ai|C) / P(Ai在所有检点时有出现过的次数))     P(Ai|C) = Ai问题在该工夹具出现过的问题次数+1/工夹具故障时出现过的所有问题的次数+1
 }

@@ -56,7 +56,7 @@
         where code = #{code}
           and status = 1
     </select>
-    <select id="get_maintenance_type_list" resultType="com.jig.entity.operate.MaintenanceType">
+    <select id="get_maintenance_type_list" resultType="com.jig.entity.repair.MaintenanceType">
         select * from maintenance_type
     </select>
 
@@ -72,5 +72,9 @@
         from jig_cabinet jc left join location l on l.jig_cabinet = jc.id
                             left join jig_position jp on jc.jig_cabinet_id = jp.jig_cabinet_id and l.location_id = jp.location_id
         ORDER BY jc.jig_cabinet_id+0 asc,l.location_id asc,jp.bin+0 asc
+    </select>
+    <select id="get_maintenance_type" resultType="com.jig.entity.repair.MaintenanceType">
+        select * from maintenance_type
+        where id = #{id}
     </select>
 </mapper>

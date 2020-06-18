@@ -1,6 +1,7 @@
 package com.jig.entity.jig;
 
 import com.jig.entity.out.OutgoSubmit;
+import com.jig.entity.repair.MaintenanceSubmit;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class JigEntity {
     private String pm_period;
     private String user_for;
     private List<OutgoSubmit> out_and_in_history_list;
+    private List<MaintenanceSubmit> maintenance_history_list; // 历史检点记录
 
     public String getId() {
         return id;
@@ -150,12 +152,22 @@ public class JigEntity {
         this.out_and_in_history_list = out_and_in_history_list;
     }
 
+    public List<MaintenanceSubmit> getMaintenance_history_list() {
+        return maintenance_history_list;
+    }
+
+    public void setMaintenance_history_list(List<MaintenanceSubmit> maintenance_history_list) {
+        this.maintenance_history_list = maintenance_history_list;
+    }
+
     @Override
     public String toString() {
         return "JigEntity{" +
-                "code='" + code + '\'' +
+                "id='" + id + '\'' +
+                ", code='" + code + '\'' +
                 ", seq_id='" + seq_id + '\'' +
                 ", out_and_in_history_list=" + out_and_in_history_list +
+                ", maintenance_history_list=" + maintenance_history_list +
                 '}';
     }
 }

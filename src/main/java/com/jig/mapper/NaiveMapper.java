@@ -7,6 +7,7 @@ import com.jig.entity.jig.JigPosition;
 import com.jig.entity.jig.JigStock;
 import com.jig.entity.out.OutgoSubmit;
 import com.jig.entity.out.OutgoingJig;
+import com.jig.entity.repair.MaintenanceSubmit;
 import com.jig.entity.repair.RepairJig;
 import com.jig.entity.repair.RepairJigHistory;
 import org.apache.ibatis.annotations.Mapper;
@@ -90,8 +91,13 @@ public interface NaiveMapper {
                                            @Param("user_for") String user_for,
                                            @Param("workcell_id") String workcell_id);
 
+    //根据code和seq_id来获取该工夹具实体的出入库历史list
     List<OutgoSubmit> naive_get_out_and_in_history_list(@Param("code") String code,
                                                         @Param("seq_id") String seq_id);
+
+    //根据code和seq_id来获取该工夹具实体的检点历史记录list
+    List<MaintenanceSubmit> naive_get_maintenance_history_list(@Param("code") String code,
+                                                               @Param("seq_id") String seq_id);
 
     int naive_change_jig_position(@Param("code") String code,
                                   @Param("seq_id") String seq_id,
@@ -133,6 +139,7 @@ public interface NaiveMapper {
     int naive_maintenance_jig(@Param("code") String code,
                               @Param("seq_id") String seq_id,
                               @Param("reason") String reason,
+                              @Param("is_repair") int is_repair,
                               @Param("user_id") String user_id);
 
     /**
@@ -266,4 +273,14 @@ public interface NaiveMapper {
     int naiveGetOutgoSubmitPage();
 
     int getMaxSeqId(@Param("code") String code);
+
+    double naive_get_jig_trouble_percent_all();
+
+    List<MaintenanceSubmit> naive_get_trouble_maintenance_list(@Param("is_repair") int is_repair);
+
+    int naive_get_trouble_reason_count_by_reason(@Param("code") String code,
+                                                 @Param("seq_id") String seq_id,
+                                                 @Param("reason") String reason);
+
+    int naive_get_reason_count_in_all(@Param("reason") String reason);
 }
