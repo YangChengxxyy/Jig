@@ -9,6 +9,9 @@
             email       = #{user.email}
         where id = #{user.id}
     </update>
+    <update id="editCnEn">
+        update cn_en set chinese = #{chinese} where id = #{id}
+    </update>
     <delete id="delUser">
         delete
         from user

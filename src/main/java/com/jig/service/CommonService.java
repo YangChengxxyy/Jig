@@ -28,6 +28,7 @@ public class CommonService {
 
     /**
      * 获取单个JigDefinition对象(直接从jig_definition表里取数据)
+     *
      * @param id
      * @return
      */
@@ -71,14 +72,16 @@ public class CommonService {
         return commonMapper.codeGetInSeqId(code);
     }
 
-    public List<MaintenanceType> get_maintenance_type_list(){
+    public List<MaintenanceType> get_maintenance_type_list() {
         return commonMapper.get_maintenance_type_list();
     }
 
 
     //方便其他controller调用的
+
     /**
      * 获取单个报废申请(commonjson中没有)
+     *
      * @param id 申请id
      * @return
      */
@@ -88,6 +91,7 @@ public class CommonService {
 
     /**
      * 获取单个采购入库申请
+     *
      * @param id
      * @return
      */
@@ -95,10 +99,16 @@ public class CommonService {
         return commonMapper.getPurchaseSubmit(id);
     }
 
-    public List<JigCabinet> get_jig_cabinet_list(){
+    public List<JigCabinet> get_jig_cabinet_list() {
         return commonMapper.get_jig_cabinet_list();
     }
 
+    public List<JigDefinition> getJigDefinition(int page_number, int page_size) {
+        page_number = (page_number - 1) * page_size;
+        return commonMapper.getJigDefinition(page_number, page_size);
+    }
+
+    //根据id获取maintenance_type类型
     public MaintenanceType get_maintenance_type(String id) {
         return commonMapper.get_maintenance_type(id);
     }

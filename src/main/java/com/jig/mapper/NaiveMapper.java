@@ -99,6 +99,7 @@ public interface NaiveMapper {
     List<MaintenanceSubmit> naive_get_maintenance_history_list(@Param("code") String code,
                                                                @Param("seq_id") String seq_id);
 
+
     int naive_change_jig_position(@Param("code") String code,
                                   @Param("seq_id") String seq_id,
                                   @Param("old_position") String old_position,
@@ -139,7 +140,6 @@ public interface NaiveMapper {
     int naive_maintenance_jig(@Param("code") String code,
                               @Param("seq_id") String seq_id,
                               @Param("reason") String reason,
-                              @Param("is_repair") int is_repair,
                               @Param("user_id") String user_id);
 
     /**
@@ -219,7 +219,7 @@ public interface NaiveMapper {
      * @param repair_reason
      * @param pathName
      */
-    void naiveSubmitRepair(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_id") String submit_id, @Param("repair_reason") String repair_reason, @Param("pathName") String pathName);
+    void naiveSubmitRepair(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_id") String submit_id, @Param("repair_reason") String repair_reason,@Param("repair_type")String repair_type, @Param("pathName") String pathName);
 
     /**
      * 获取查询到的对应页数的List对象
@@ -273,6 +273,8 @@ public interface NaiveMapper {
     int naiveGetOutgoSubmitPage();
 
     int getMaxSeqId(@Param("code") String code);
+
+    List<OutgoingJig> naiveGetAllOutgoingJigList(@Param("code") String code, @Param("name") String name, @Param("start_date") String start_date, @Param("end_date") String end_date, @Param("user_for") String user_for, @Param("workcell_id") String workcell_id);
 
     double naive_get_jig_trouble_percent_all();
 

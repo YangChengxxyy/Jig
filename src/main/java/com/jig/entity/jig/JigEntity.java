@@ -21,6 +21,7 @@ public class JigEntity {
     private String last_time;
     private String pm_period;
     private String user_for;
+    private double life_percent;
     private List<OutgoSubmit> out_and_in_history_list;
     private List<MaintenanceSubmit> maintenance_history_list; // 历史检点记录
 
@@ -169,5 +170,13 @@ public class JigEntity {
                 ", out_and_in_history_list=" + out_and_in_history_list +
                 ", maintenance_history_list=" + maintenance_history_list +
                 '}';
+    }
+
+    public double getLife_percent() {
+        return life_percent;
+    }
+
+    public void setLife_percent(double life_percent) {
+        this.life_percent = life_percent;
     }
 }

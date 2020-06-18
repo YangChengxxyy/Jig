@@ -55,6 +55,7 @@ public class NaiveService {
 
     /**
      * 根据code和seq_id来获取该工夹具实体的出入库历史list
+     *
      * @param code
      * @param seq_id
      * @return
@@ -85,12 +86,12 @@ public class NaiveService {
 
     //工夹具出库
     public void naiveOutgoJig(String code, String seq_id, String submit_id, String production_line_id, String rec_id) {
-        naiveMapper.naiveOutgoJig(code, seq_id, submit_id, production_line_id,rec_id);
+        naiveMapper.naiveOutgoJig(code, seq_id, submit_id, production_line_id, rec_id);
     }
 
     //工夹具检点
-    public int naive_maintenance_jig(String code, String seq_id, String reason, int is_repair, String user_id) {
-        return naiveMapper.naive_maintenance_jig(code, seq_id, reason, is_repair, user_id);
+    public int naive_maintenance_jig(String code, String seq_id, String reason, String user_id) {
+        return naiveMapper.naive_maintenance_jig(code, seq_id, reason, user_id);
     }
 
     //获取已经出库的工夹具list
@@ -126,13 +127,12 @@ public class NaiveService {
 
     //naive获取报修列表页数
     public int naiveGetRepairListPage(String submit_id) {
-        int a = naiveMapper.naiveGetRepairListPage(submit_id);
-        return (int) Math.ceil(a / 5.0);
+        return naiveMapper.naiveGetRepairListPage(submit_id);
     }
 
     //naive提交报修
-    public void naiveSubmitRepair(String code, String seq_id, String submit_id, String repair_reason, String pathName) {
-        naiveMapper.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, pathName);
+    public void naiveSubmitRepair(String code, String seq_id, String submit_id, String repair_reason,String repair_type, String pathName) {
+        naiveMapper.naiveSubmitRepair(code, seq_id, submit_id, repair_reason,repair_type, pathName);
     }
 
 
@@ -170,6 +170,10 @@ public class NaiveService {
         return naiveMapper.getMaxSeqId(code);
     }
 
+    public List<OutgoingJig> naiveGetAllOutgoingJigList(String code, String name, String start_date, String end_date, String user_for, String workcell_id) {
+        return naiveMapper.naiveGetAllOutgoingJigList(code, name, start_date, end_date, user_for, workcell_id);
+    }
+
     public double naive_get_jig_trouble_percent_all(){
         return naiveMapper.naive_get_jig_trouble_percent_all();
     }
@@ -185,4 +189,5 @@ public class NaiveService {
     public int naive_get_reason_count_in_all(String reason) {
         return naiveMapper.naive_get_reason_count_in_all(reason);
     }
+
 }

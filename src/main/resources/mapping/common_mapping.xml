@@ -16,7 +16,9 @@
         where `id` = #{id}
     </select>
     <select id="get_jig_info" resultType="com.jig.entity.jig.JigDefinition">
-        select * from jig_definition where id = #{id}
+        select *
+        from jig_definition
+        where id = #{id}
     </select>
     <select id="getPosition" resultType="com.jig.entity.common.Position">
         select jig_cabinet_id, location_id, bin, status
@@ -29,16 +31,21 @@
         from production_line
     </select>
     <select id="getWorkcellList" resultType="com.jig.entity.common.Workcell">
-        select * from workcell
+        select *
+        from workcell
     </select>
     <select id="getFamilyList" resultType="com.jig.entity.common.Family">
-        select * from jig_family
+        select *
+        from jig_family
     </select>
     <select id="getModelList" resultType="com.jig.entity.jig.JigModel">
-        select model from jig_definition group by model
+        select model
+        from jig_definition
+        group by model
     </select>
     <select id="getPartNoList" resultType="com.jig.entity.jig.JigPart">
-        select * from jig_part_no
+        select *
+        from jig_part_no
     </select>
 
     <select id="getCodeList" resultType="java.lang.String">
@@ -57,21 +64,30 @@
           and status = 1
     </select>
     <select id="get_maintenance_type_list" resultType="com.jig.entity.repair.MaintenanceType">
-        select * from maintenance_type
+        select *
+        from maintenance_type
     </select>
 
     <!--方便其他controller调用的-->
     <select id="getScrapSubmit" resultType="com.jig.entity.scrap.ScrapSubmit">
-        select * from scrap_submit where id = #{id}
+        select *
+        from scrap_submit
+        where id = #{id}
     </select>
     <select id="getPurchaseSubmit" resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
-        select * from purchase_income_submit where id = #{id}
+        select *
+        from purchase_income_submit
+        where id = #{id}
     </select>
     <select id="get_jig_cabinet_list" resultMap="jig_cabinet_list_map">
-        select jc.jig_cabinet_id,l.location_id,jp.bin
-        from jig_cabinet jc left join location l on l.jig_cabinet = jc.id
-                            left join jig_position jp on jc.jig_cabinet_id = jp.jig_cabinet_id and l.location_id = jp.location_id
-        ORDER BY jc.jig_cabinet_id+0 asc,l.location_id asc,jp.bin+0 asc
+        select jc.jig_cabinet_id, l.location_id, jp.bin
+        from jig_cabinet jc
+                 left join location l on l.jig_cabinet = jc.id
+                 left join jig_position jp on jc.jig_cabinet_id = jp.jig_cabinet_id and l.location_id = jp.location_id
+        ORDER BY jc.jig_cabinet_id + 0 asc, l.location_id asc, jp.bin + 0 asc
+    </select>
+    <select id="getJigDefinition" resultType="com.jig.entity.jig.JigDefinition">
+        select * from jig_definition_entity_view limit #{page_number},#{page_size}
     </select>
     <select id="get_maintenance_type" resultType="com.jig.entity.repair.MaintenanceType">
         select * from maintenance_type

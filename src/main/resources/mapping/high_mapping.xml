@@ -62,9 +62,7 @@
         delete
         from repair_submit
         where id = #{id};
-        insert into message(id, generate_id, generate_time, accept_id, accept_type, status, message)
-        values (UUID(), #{submit_id}, now(), (select submit_id from repair_submit where id = #{id}), 'naive', '00',
-                '同意了你的报修申请');
+
     </insert>
     <insert id="highDisagreeRepairSubmit">
         update repair_submit
@@ -83,9 +81,7 @@
         delete
         from repair_submit
         where id = #{id};
-        insert into message(id, generate_id, generate_time, accept_id, accept_type, status, message)
-        values (UUID(), #{submit_id}, now(), (select submit_id from repair_submit where id = #{id}), 'naive', '00',
-                ' 拒绝了你的报修申请');
+
     </insert>
     <select id="highGetPurchaseIncomeSubmitList" resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
         select ps.*,
@@ -193,10 +189,11 @@
         where id = #{id}
     </delete>
     <select id="highGetRepairJig" resultType="com.jig.entity.repair.RepairJig">
-        select rs.*, u1.name submit_name, u2.name acceptor_name
+        select rs.*, u1.name submit_name, u2.name acceptor_name,jig_entity.life_percent
         from repair_submit rs
                  left join `user` u1 on rs.submit_id = u1.id
                  left join `user` u2 on rs.acceptor_id = u2.id
+                left join jig_entity on rs.code = jig_entity.code and rs.seq_id = jig_entity.seq_id
         where u1.workcell_id in (select user.workcell_id from user where id = #{id})
           and rs.status = 0
         limit #{page_number},#{page_size}

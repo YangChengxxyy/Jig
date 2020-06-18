@@ -7,6 +7,7 @@ import com.jig.entity.common.Position;
 import com.jig.entity.common.ProductionLine;
 import com.jig.entity.common.Workcell;
 import com.jig.entity.jig.JigDefinition;
+import com.jig.entity.jig.JigEntity;
 import com.jig.entity.jig.JigModel;
 import com.jig.entity.jig.JigPart;
 import com.jig.entity.repair.MaintenanceType;
@@ -45,6 +46,11 @@ public class CommonJson {
     @RequestMapping("get_simple_jig_definition")
     public JigDefinition getSimpleJget_workcell_listigDefinition(@RequestParam("id") String id) {
         return commonService.getSimpleJigDefinition(id);
+    }
+
+    @RequestMapping("get_jig_definition")
+    public List<JigDefinition> getJigDefinition(@RequestParam("page_size")int page_size, @RequestParam("page_number")int page_number){
+        return commonService.getJigDefinition(page_number,page_size);
     }
 
     /**

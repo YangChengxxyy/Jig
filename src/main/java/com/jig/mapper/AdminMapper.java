@@ -32,4 +32,6 @@ public interface AdminMapper {
     List<JigModel> getModel();
 
     List<CnEn> getCnEn();
+
+    int editCnEn(@Param("id") String id, @Param("chinese") String chinese);
 }

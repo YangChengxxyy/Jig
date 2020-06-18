@@ -5,9 +5,9 @@ import com.jig.entity.common.Position;
 import com.jig.entity.common.ProductionLine;
 import com.jig.entity.common.Workcell;
 import com.jig.entity.jig.JigDefinition;
+import com.jig.entity.jig.JigEntity;
 import com.jig.entity.jig.JigModel;
 import com.jig.entity.jig.JigPart;
-import com.jig.entity.repair.MaintenanceSubmit;
 import com.jig.entity.repair.MaintenanceType;
 import com.jig.entity.purchase.PurchaseIncomeSubmit;
 import com.jig.entity.scrap.ScrapSubmit;
@@ -86,6 +86,8 @@ public interface CommonMapper {
     PurchaseIncomeSubmit getPurchaseSubmit(@Param("id") String id);
 
     List<JigCabinet> get_jig_cabinet_list();
+
+    List<JigDefinition> getJigDefinition(@Param("page_number") int page_number, @Param("page_size") int page_size);
 
     MaintenanceType get_maintenance_type(@Param("id") String id);
 }

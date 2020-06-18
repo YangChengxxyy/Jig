@@ -1,9 +1,10 @@
 package com.jig.utils;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
-
+@Component
 public class SpringUtil {
     public static ApplicationContext applicationContext = null;
 

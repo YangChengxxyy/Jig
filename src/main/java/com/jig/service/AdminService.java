@@ -52,4 +52,8 @@ public class AdminService {
     public List<CnEn> getCnEn() {
         return adminMapper.getCnEn();
     }
+
+    public int editCnEn(String id, String chinese) {
+        return adminMapper.editCnEn(id,chinese);
+    }
 }
