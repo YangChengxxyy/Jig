@@ -112,4 +112,8 @@ public class CommonService {
     public MaintenanceType get_maintenance_type(String id) {
         return commonMapper.get_maintenance_type(id);
     }
+
+    public int getJigDefinitionPage() {
+        return commonMapper.getJigDefinitionPage();
+    }
 }

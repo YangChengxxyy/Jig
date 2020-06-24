@@ -90,4 +90,6 @@ public interface CommonMapper {
     List<JigDefinition> getJigDefinition(@Param("page_number") int page_number, @Param("page_size") int page_size);
 
     MaintenanceType get_maintenance_type(@Param("id") String id);
+
+    int getJigDefinitionPage();
 }
