@@ -10,6 +10,7 @@ import com.jig.entity.scrap.ScrapSubmit;
 import com.jig.service.HighService;
 import com.jig.service.LifeService;
 import com.jig.utils.PoiUtil;
+import com.jig.utils.RedisUtil;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,8 @@ public class HighJson {
 
     @Autowired
     private HighService highService;
-
+    @Autowired
+    private RedisUtil redisUtil;
     @Value("${file.resource-url}")
     public String RESOURCE_URL;
     @Autowired
@@ -304,6 +306,51 @@ public class HighJson {
         return true;
     }
 
+    @RequestMapping("mobile_get_scrap_uuid")
+    public String mobileGetRepairUuid() {
+        UUID uuid = UUID.randomUUID();
+        redisUtil.set(uuid.toString(), "");
+        return uuid.toString();
+    }
+
+    @RequestMapping("mobile_upload_scrap_photo")
+    public boolean mobileUploadScrapPhoto(@RequestParam("file") MultipartFile file, @RequestParam("uuid") String uuid) {
+        try {
+            String pathName = redisUtil.get(uuid);
+            if ("".equals(pathName)) {
+                pathName = getScrapPathName(file.getOriginalFilename());
+                FileUtils.writeByteArrayToFile
+                        (new File(RESOURCE_URL + pathName), file.getBytes());
+                redisUtil.set(uuid, pathName);
+            } else {
+                String fileName = getScrapPathName(file.getOriginalFilename());
+                pathName += '|' + fileName;
+                FileUtils.writeByteArrayToFile
+                        (new File(RESOURCE_URL + fileName), file.getBytes());
+                redisUtil.set(uuid, pathName);
+            }
+            redisUtil.set(uuid, pathName);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @RequestMapping("mobile_submit_scrap")
+    public boolean mobileSubmitScrap(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason, @RequestParam("scrap_type") String scrap_type, @RequestParam("uuid")String uuid) {
+        String pathName = redisUtil.get(uuid);
+        ScrapSubmit scrapSubmit = new ScrapSubmit();
+        scrapSubmit.setCode(code);
+        scrapSubmit.setSeq_id(seq_id);
+        scrapSubmit.setSubmit_id(submit_id);
+        scrapSubmit.setScrap_reason(scrap_reason);
+        scrapSubmit.setScrap_type(scrap_type);
+        highService.highSubmitScrap(scrapSubmit, pathName);
+        redisUtil.delete(uuid);
+        return true;
+    }
+
     /**
      * high删除报废
      *
@@ -341,7 +388,7 @@ public class HighJson {
     }
 
     @RequestMapping("handle_repair_submit")
-    public boolean handleRepairSubmit(@RequestParam("id") int id, @RequestParam("submit_id") String submit_id, @RequestParam("state") boolean state, @RequestParam(value = "reason",required = false) String reason) {
+    public boolean handleRepairSubmit(@RequestParam("id") int id, @RequestParam("submit_id") String submit_id, @RequestParam("state") boolean state, @RequestParam(value = "reason", required = false) String reason) {
         try {
             if (state) {
                 highService.highAgreeRepairSubmit(id, submit_id);

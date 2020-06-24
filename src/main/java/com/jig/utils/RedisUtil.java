@@ -32,7 +32,6 @@ public class RedisUtil {
         }
         return result;
     }
-    /*
     public boolean delete(final  String key){
         boolean result = false;
         try {
@@ -42,5 +41,5 @@ public class RedisUtil {
             ex.printStackTrace();
         }
         return result;
-    }*/
+    }
 }
