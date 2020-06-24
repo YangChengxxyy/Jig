@@ -11,6 +11,7 @@ public class RepairJig {
     private String repair_reason;
     private String acceptor_id;
     private String acceptor_name;
+    private String acceptor_reason;
     private double life_percent;
 
     public String getId() {
@@ -99,5 +100,13 @@ public class RepairJig {
 
     public void setLife_percent(double life_percent) {
         this.life_percent = life_percent;
+    }
+
+    public String getAcceptor_reason() {
+        return acceptor_reason;
+    }
+
+    public void setAcceptor_reason(String acceptor_reason) {
+        this.acceptor_reason = acceptor_reason;
     }
 }

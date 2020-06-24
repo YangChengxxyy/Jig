@@ -87,10 +87,17 @@
         ORDER BY jc.jig_cabinet_id + 0 asc, l.location_id asc, jp.bin + 0 asc
     </select>
     <select id="getJigDefinition" resultType="com.jig.entity.jig.JigDefinition">
-        select * from jig_definition_entity_view limit #{page_number},#{page_size}
+        select *
+        from jig_definition_entity_view
+        limit #{page_number},#{page_size}
     </select>
     <select id="get_maintenance_type" resultType="com.jig.entity.repair.MaintenanceType">
-        select * from maintenance_type
+        select *
+        from maintenance_type
         where id = #{id}
+    </select>
+    <select id="getJigDefinitionPage" resultType="java.lang.Integer">
+        select count(*)
+        from jig_definition_entity_view
     </select>
 </mapper>

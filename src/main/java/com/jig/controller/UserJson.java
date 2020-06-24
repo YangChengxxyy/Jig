@@ -33,7 +33,6 @@ public class UserJson {
 
     @RequestMapping("login_check")
     public LoginState loginCheck(@RequestParam(value = "id") String id, @RequestParam(value = "password") String password, @RequestParam(value = "workcell_id") String workcell_id) {
-        generateToken();
         LoginState state = userService.loginCheck(id, password, workcell_id);
         if (state.getStateCode() == 0) {
             JSONObject allToken = JSON.parseObject(redisUtil.get("allToken"), JSONObject.class);

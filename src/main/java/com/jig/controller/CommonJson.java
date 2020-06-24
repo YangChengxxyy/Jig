@@ -49,8 +49,13 @@ public class CommonJson {
     }
 
     @RequestMapping("get_jig_definition")
-    public List<JigDefinition> getJigDefinition(@RequestParam("page_size")int page_size, @RequestParam("page_number")int page_number){
-        return commonService.getJigDefinition(page_number,page_size);
+    public Map<String, Object> getJigDefinition(@RequestParam("page_size") int page_size, @RequestParam("page_number") int page_number) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("data", commonService.getJigDefinition(page_number, page_size));
+        int all = commonService.getJigDefinitionPage();
+        map.put("all", all);
+        map.put("max", (int) Math.ceil(all / (double) page_size));
+        return map;
     }
 
     /**
@@ -178,7 +183,7 @@ public class CommonJson {
         return jigCabinetList;
     }
 
-    public static List<String> resetAllBinList(){
+    public static List<String> resetAllBinList() {
         List<String> all_bin_list = new ArrayList<>();
         for (int i = 1; i <= ALL_BIN_COUNT; i++) {
             all_bin_list.add("" + i);
