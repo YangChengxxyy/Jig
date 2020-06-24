@@ -1,5 +1,6 @@
 package com.jig.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jig.annotation.Permission;
 import com.jig.entity.common.Role;
 import com.jig.entity.common.Family;
@@ -110,11 +111,32 @@ public class SupervisorJson {
     }
 
     //监管者模式下编辑更改工夹具信息
-    @ResponseBody
     @RequestMapping(value = "edit_jig_info")
-    public int supervisorEditJigInfo(JigDefinition jig_info) {
-        String user_id = "123456";
-        System.out.println(jig_info.getId());
+    @ResponseBody
+    public int supervisorEditJigInfo(@RequestParam("id") String id,
+                                     @RequestParam("code") String code,
+                                     @RequestParam("name") String name,
+                                     @RequestParam("family_id") String family_id,
+                                     @RequestParam("model") String model,
+                                     @RequestParam("part_no") String part_no,
+                                     @RequestParam("pm_period") String pm_period,
+                                     @RequestParam("user_for") String user_for,
+                                     @RequestParam("upl") String upl,
+                                     @RequestParam("jig_workcell_id") String jig_workcell_id,
+                                     @RequestParam("user_id") String user_id) {
+        JigDefinition jig_info = new JigDefinition();
+        jig_info.setId(id);
+        jig_info.setCode(code);
+        jig_info.setName(name);
+        jig_info.setFamily_id(family_id);
+        jig_info.setModel(model);
+        jig_info.setPart_no(part_no);
+        jig_info.setPm_period(pm_period);
+        jig_info.setUser_for(user_for);
+        jig_info.setUpl(upl);
+        jig_info.setWorkcell_id(jig_workcell_id);
+
+        System.out.println(jig_info);
         JigDefinition old_jig_info = commonService.get_jig_info(jig_info.getId());
 
         String[] a = old_jig_info.compareTo(jig_info);

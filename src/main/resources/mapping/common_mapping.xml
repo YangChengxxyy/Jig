@@ -39,8 +39,8 @@
         from jig_family
     </select>
     <select id="getModelList" resultType="com.jig.entity.jig.JigModel">
-        select model
-        from jig_definition
+        select id, model
+        from jig_model
         group by model
     </select>
     <select id="getPartNoList" resultType="com.jig.entity.jig.JigPart">
