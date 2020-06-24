@@ -96,7 +96,7 @@
                  left join `user` u3 on ps.final_acceptor = u3.id,
              production_line
         where ps.production_line_id = production_line.id
-        limit #{page_number},5
+        limit #{page_number},#{page_size}
     </select>
     <select id="highGetPurchaseIncomeSubmitListPage" resultType="java.lang.Integer">
         select count(*)
@@ -189,11 +189,11 @@
         where id = #{id}
     </delete>
     <select id="highGetRepairJig" resultType="com.jig.entity.repair.RepairJig">
-        select rs.*, u1.name submit_name, u2.name acceptor_name,jig_entity.life_percent
+        select rs.*, u1.name submit_name, u2.name acceptor_name, jig_entity.life_percent
         from repair_submit rs
                  left join `user` u1 on rs.submit_id = u1.id
                  left join `user` u2 on rs.acceptor_id = u2.id
-                left join jig_entity on rs.code = jig_entity.code and rs.seq_id = jig_entity.seq_id
+                 left join jig_entity on rs.code = jig_entity.code and rs.seq_id = jig_entity.seq_id
         where u1.workcell_id in (select user.workcell_id from user where id = #{id})
           and rs.status = 0
         limit #{page_number},#{page_size}
