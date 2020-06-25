@@ -149,7 +149,7 @@ public class NaiveJson {
     @RequestMapping("get_out_and_in_history_list") // 移动端
     public List<OutgoSubmit> navieGetJigStockByLocation(@RequestParam("code") String code,
                                                         @RequestParam("seq_id") String seq_id) {
-             // 获取出入库历史记录List
+        // 获取出入库历史记录List
         return naiveService.naive_get_out_and_in_history_list(code, seq_id);
     }
 
