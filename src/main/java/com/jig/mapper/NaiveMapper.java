@@ -59,7 +59,13 @@ public interface NaiveMapper {
      */
     List<JigStock> navieGetJigListByLocation(@Param("jig_cabinet_id") String jig_cabinet_id,
                                              @Param("jig_location_id") String jig_location_id,
-                                             @Param("workcell_id") String workcell_id);
+                                             @Param("workcell_id") String workcell_id,
+                                             @Param("page_number") int page_number,
+                                             @Param("page_size") int page_size);
+
+    List<List<?>> navieGetJigListByLocationPages(@Param("jig_cabinet_id") String jig_cabinet_id,
+                                       @Param("jig_location_id") String jig_location_id,
+                                       @Param("workcell_id") String workcell_id);
 
     /**
      * 初级用户 根据选择的 夹具柜号和区号 确定该code的工夹具list
@@ -89,7 +95,17 @@ public interface NaiveMapper {
                                            @Param("code") String code,
                                            @Param("name") String name,
                                            @Param("user_for") String user_for,
-                                           @Param("workcell_id") String workcell_id);
+                                           @Param("workcell_id") String workcell_id,
+                                           @Param("page_number") int page_number,
+                                           @Param("page_size") int page_size);
+
+    //获取记录总条数
+    List<List<?>> navieGetJigListBySelectPages(@Param("jig_cabinet_id") String jig_cabinet_id,
+                                     @Param("jig_location_id") String jig_location_id,
+                                     @Param("code") String code,
+                                     @Param("name") String name,
+                                     @Param("user_for") String user_for,
+                                     @Param("workcell_id") String workcell_id);
 
     //根据code和seq_id来获取该工夹具实体的出入库历史list
     List<OutgoSubmit> naive_get_out_and_in_history_list(@Param("code") String code,
@@ -220,7 +236,7 @@ public interface NaiveMapper {
      * @param repair_reason
      * @param pathName
      */
-    void naiveSubmitRepair(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_id") String submit_id, @Param("repair_reason") String repair_reason,@Param("repair_type")String repair_type, @Param("pathName") String pathName);
+    void naiveSubmitRepair(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_id") String submit_id, @Param("repair_reason") String repair_reason, @Param("repair_type") String repair_type, @Param("pathName") String pathName);
 
     /**
      * 获取查询到的对应页数的List对象

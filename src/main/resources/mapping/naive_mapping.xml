@@ -7,6 +7,11 @@
             <result column="location_id"></result>
         </collection>
     </resultMap>
+    <resultMap id="jig_list_by_select_count" type="java.lang.Integer">
+        <result column="count" />
+    </resultMap>
+    <resultMap id="jig_list_by_select_data" type="com.jig.entity.jig.JigEntity">
+    </resultMap>
     <insert id="naiveInputJigEntity">
         insert into jig_entity(code, seq_id, bill_no, reg_date, used_count)
         values (#{code}, #{seq_id}, #{bill_no}, now(), 0);
@@ -31,6 +36,19 @@
           and jp.location_id = #{jig_location_id}
           and jp.status = 1
         group by jp.code
+        limit #{page_number}, #{page_size}
+    </select>
+    <select id="navieGetJigListByLocationPages" resultMap="jig_list_by_select_data, jig_list_by_select_count">
+        select SQL_CALC_FOUND_ROWS *
+        from jig_position jp
+                 inner join jig_entity je on jp.code = je.code and jp.seq_id = je.seq_id
+                 inner join jig_definition jd on jp.code = jd.code
+        where jd.workcell_id = #{workcell_id}
+          and jp.jig_cabinet_id = #{jig_cabinet_id}
+          and jp.location_id = #{jig_location_id}
+          and jp.status = 1
+          group by jp.code;
+          SELECT FOUND_ROWS() as count;
     </select>
     <select id="navieGetJigEntityListByLocation" resultType="com.jig.entity.jig.JigEntity">
         select * from jig_position jp inner join jig_definition jd on jp.code = jd.code
@@ -66,6 +84,32 @@
             </if>
         </where>
         group by jp.code
+        limit #{page_number}, #{page_size}
+    </select>
+    <select id="navieGetJigListBySelectPages" resultMap="jig_list_by_select_data,jig_list_by_select_count">
+        select SQL_CALC_FOUND_ROWS *
+        from jig_position jp inner join jig_entity je on jp.code = je.code and jp.seq_id = je.seq_id
+        inner join jig_definition jd on jp.code = jd.code
+        <where>
+            jd.workcell_id = #{workcell_id} and jp.status = 1
+            <if test="jig_cabinet_id != '' ">
+                and jp.jig_cabinet_id = #{jig_cabinet_id}
+            </if>
+            <if test="jig_location_id != '' ">
+                and jp.location_id = #{jig_location_id}
+            </if>
+            <if test="code != '' ">
+                and jp.code like concat('%',#{code},'%')
+            </if>
+            <if test="name != '' ">
+                and jd.name like concat('%',#{name},'%')
+            </if>
+            <if test="user_for != '' ">
+                and jd.user_for like concat('%',#{user_for},'%')
+            </if>
+        </where>
+        group by jd.code;
+        SELECT FOUND_ROWS() as 'count';
     </select>
     <select id="naive_get_out_and_in_history_list" resultType="com.jig.entity.out.OutgoSubmit">
         select oh.*, u.name as 'submit_name', u1.name as 'rec_name', pl.name as 'production_line_name'

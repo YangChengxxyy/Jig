@@ -39,8 +39,12 @@ public class NaiveService {
     }
 
     //初级用户 根据选择的 夹具柜号和区号确定 工夹具list
-    public List<JigStock> navieGetJigListByLocation(String jig_cabinet_id, String jig_location_id, String workcell) {
-        return naiveMapper.navieGetJigListByLocation(jig_cabinet_id, jig_location_id, workcell);
+    public List<JigStock> navieGetJigListByLocation(String jig_cabinet_id, String jig_location_id, String workcell, int page_number, int page_size) {
+        return naiveMapper.navieGetJigListByLocation(jig_cabinet_id, jig_location_id, workcell, page_number, page_size);
+    }
+
+    public List<List<?>> navieGetJigListByLocationPages(String jig_cabinet_id, String jig_location_id, String workcell) {
+        return naiveMapper.navieGetJigListByLocationPages(jig_cabinet_id, jig_location_id, workcell);
     }
 
     //初级用户 根据选择的 夹具柜号和区号 确定该code的工夹具list
@@ -49,8 +53,13 @@ public class NaiveService {
     }
 
     //初级用户 根据选择的工夹具存放区域 和 搜索条件来 确定工夹具list
-    public List<JigStock> navieGetJigListBySelect(String jig_cabinet_id, String jig_location_id, String code, String name, String user_for, String workcell) {
-        return naiveMapper.navieGetJigListBySelect(jig_cabinet_id, jig_location_id, code, name, user_for, workcell);
+    public List<JigStock> navieGetJigListBySelect(String jig_cabinet_id, String jig_location_id, String code, String name, String user_for, String workcell_id, int page_number, int page_size) {
+        return naiveMapper.navieGetJigListBySelect(jig_cabinet_id, jig_location_id, code, name, user_for, workcell_id, page_number, page_size);
+    }
+
+    //获取记录总条数
+    public List<List<?>> navieGetJigListBySelectPages(String jig_cabinet_id, String jig_location_id, String code, String name, String user_for, String workcell_id) {
+        return naiveMapper.navieGetJigListBySelectPages(jig_cabinet_id, jig_location_id, code, name, user_for, workcell_id);
     }
 
     /**
