@@ -17,6 +17,7 @@ import com.jig.service.CommonService;
 import com.jig.service.LifeService;
 import com.jig.service.NaiveService;
 import com.jig.service.UserService;
+import com.jig.utils.FileUtil;
 import com.jig.utils.LoginStatusUtil;
 import com.jig.utils.PoiUtil;
 import com.jig.utils.RedisUtil;
@@ -108,7 +109,7 @@ public class NaiveJson {
             String jig_cabinet = jig_position_list[i].split(",")[0];
             String location = jig_position_list[i].split(",")[1];
             String[] free_bin_list = free_bin_list_all[i].split(",");
-            for (int j = 0; j < Integer.valueOf(count_list[i]); j++) {
+            for (int j = 0; j < Integer.parseInt(count_list[i]); j++) {
                 flag = naiveService.naiveInputJigEntity(bill_no, code_list[i], max_seq_id + j + 1, jig_cabinet, location, free_bin_list[j]);
             }
         }
@@ -126,10 +127,10 @@ public class NaiveJson {
     //初级用户 根据选择的 夹具柜号和区号确定 工夹具list
     @RequestMapping("get_jig_list_by_location")
     public Map<Object, Object> navieGetJigStockByLocation(@RequestParam("jig_cabinet_id") String jig_cabinet_id,
-                                                     @RequestParam("jig_location_id") String jig_location_id,
-                                                     @RequestParam("page_number") int page_number,
-                                                     @RequestParam("page_size") int page_size,
-                                                     @RequestParam("workcell_id") String workcell_id) {
+                                                          @RequestParam("jig_location_id") String jig_location_id,
+                                                          @RequestParam("page_number") int page_number,
+                                                          @RequestParam("page_size") int page_size,
+                                                          @RequestParam("workcell_id") String workcell_id) {
         Map<Object, Object> map = new HashMap<>();
         List<JigStock> jig_list = naiveService.navieGetJigListByLocation(jig_cabinet_id, jig_location_id, workcell_id, (page_number - 1) * page_size, page_size);
         List<List<?>> all = naiveService.navieGetJigListByLocationPages(jig_cabinet_id, jig_location_id, workcell_id);
@@ -153,7 +154,7 @@ public class NaiveJson {
                                                        @RequestParam("user_for") String user_for,
                                                        @RequestParam("page_number") int page_number,
                                                        @RequestParam("page_size") int page_size,
-                                                       @RequestParam("workcell_id") String workcell_id)  {
+                                                       @RequestParam("workcell_id") String workcell_id) {
 
         Map<Object, Object> map = new HashMap<>();
         List<JigStock> jig_list = naiveService.navieGetJigListBySelect(jig_cabinet_id, jig_location_id, code, name, user_for, workcell_id, (page_number - 1) * page_size, page_size);
@@ -367,9 +368,32 @@ public class NaiveJson {
         redisUtil.set(uuid.toString(), "");
         return uuid.toString();
     }
+
+    /**
+     * 若取消提交报废，需删除原来的图片
+     *
+     * @param uuid
+     * @return
+     */
+    @RequestMapping("mobile_remove_repair_uuid")
+    public boolean mobileRemoveRepairUuid(@RequestParam("uuid") String uuid) {
+        String pathName = redisUtil.get(uuid);
+        redisUtil.delete(uuid);
+        String[] filenames = pathName.split("\\|");
+        for (String filename : filenames) {
+            try {
+                FileUtils.forceDelete(new File(RESOURCE_URL + filename));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return true;
+    }
+
     @RequestMapping("mobile_upload_repair_photo")
     public boolean mobileUploadRepairPhoto(@RequestParam("file") MultipartFile file, @RequestParam("uuid") String uuid) {
-        try{
+        try {
             String pathName = redisUtil.get(uuid);
             if ("".equals(pathName)) {
                 pathName = getRepairPathName(file.getOriginalFilename());
@@ -377,7 +401,7 @@ public class NaiveJson {
                         (new File(RESOURCE_URL + pathName), file.getBytes());
                 redisUtil.set(uuid, pathName);
             } else {
-                String fileName =getRepairPathName(file.getOriginalFilename());
+                String fileName = getRepairPathName(file.getOriginalFilename());
                 pathName += '|' + fileName;
                 FileUtils.writeByteArrayToFile
                         (new File(RESOURCE_URL + fileName), file.getBytes());
@@ -385,13 +409,14 @@ public class NaiveJson {
             }
             redisUtil.set(uuid, pathName);
             return true;
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
     }
+
     @RequestMapping("mobile_submit_repair")
-    public boolean mobileSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("repair_reason") String repair_reason, @RequestParam("repair_type") String repair_type, @RequestParam("uuid")String uuid){
+    public boolean mobileSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("repair_reason") String repair_reason, @RequestParam("repair_type") String repair_type, @RequestParam("uuid") String uuid) {
         String pathName = redisUtil.get(uuid);
         naiveService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, repair_type, pathName);
         lifeService.changeJigLife(code, seq_id);

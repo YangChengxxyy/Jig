@@ -313,20 +313,40 @@ public class HighJson {
         return uuid.toString();
     }
 
+    /**
+     * 若取消提交报废，需删除原来的图片
+     *
+     * @param uuid
+     * @return
+     */
+    @RequestMapping("mobile_remove_scrap_uuid")
+    public boolean mobileRemoveScrapUuid(@RequestParam("uuid") String uuid) {
+        String pathName = redisUtil.get(uuid);
+        redisUtil.delete(uuid);
+        String[] filenames = pathName.split("\\|");
+        for (String filename : filenames) {
+            try {
+                FileUtils.forceDelete(new File(RESOURCE_URL + filename));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return true;
+    }
+
     @RequestMapping("mobile_upload_scrap_photo")
     public boolean mobileUploadScrapPhoto(@RequestParam("file") MultipartFile file, @RequestParam("uuid") String uuid) {
         try {
             String pathName = redisUtil.get(uuid);
             if ("".equals(pathName)) {
                 pathName = getScrapPathName(file.getOriginalFilename());
-                FileUtils.writeByteArrayToFile
-                        (new File(RESOURCE_URL + pathName), file.getBytes());
+                FileUtils.writeByteArrayToFile(new File(RESOURCE_URL + pathName), file.getBytes());
                 redisUtil.set(uuid, pathName);
             } else {
                 String fileName = getScrapPathName(file.getOriginalFilename());
                 pathName += '|' + fileName;
-                FileUtils.writeByteArrayToFile
-                        (new File(RESOURCE_URL + fileName), file.getBytes());
+                FileUtils.writeByteArrayToFile(new File(RESOURCE_URL + fileName), file.getBytes());
                 redisUtil.set(uuid, pathName);
             }
             redisUtil.set(uuid, pathName);
@@ -338,7 +358,7 @@ public class HighJson {
     }
 
     @RequestMapping("mobile_submit_scrap")
-    public boolean mobileSubmitScrap(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason, @RequestParam("scrap_type") String scrap_type, @RequestParam("uuid")String uuid) {
+    public boolean mobileSubmitScrap(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason, @RequestParam("scrap_type") String scrap_type, @RequestParam("uuid") String uuid) {
         String pathName = redisUtil.get(uuid);
         ScrapSubmit scrapSubmit = new ScrapSubmit();
         scrapSubmit.setCode(code);
