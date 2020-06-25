@@ -7,7 +7,6 @@ import com.jig.entity.common.Position;
 import com.jig.entity.common.ProductionLine;
 import com.jig.entity.common.Workcell;
 import com.jig.entity.jig.JigDefinition;
-import com.jig.entity.jig.JigEntity;
 import com.jig.entity.jig.JigModel;
 import com.jig.entity.jig.JigPart;
 import com.jig.entity.repair.MaintenanceType;

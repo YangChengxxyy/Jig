@@ -19,6 +19,7 @@ import com.jig.service.NaiveService;
 import com.jig.service.UserService;
 import com.jig.utils.LoginStatusUtil;
 import com.jig.utils.PoiUtil;
+import com.jig.utils.RedisUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.ibatis.annotations.Param;
 import org.jetbrains.annotations.NotNull;
@@ -60,6 +61,8 @@ public class NaiveJson {
     private CommonService commonService;
     @Autowired
     private PoiUtil poiUtil;
+    @Autowired
+    private RedisUtil redisUtil;
     public static final String SCRAP_IMAGE_NAME = "images/scrap_images/";
     public static final String REPAIR_IMAGE_NAME = "images/repair_images/";
     public static final String SCRAP = "SCRAP";
@@ -355,6 +358,44 @@ public class NaiveJson {
             e.printStackTrace();
             return false;
         }
+        return true;
+    }
+
+    @RequestMapping("mobile_get_repair_uuid")
+    public String mobileGetRepairUuid() {
+        UUID uuid = UUID.randomUUID();
+        redisUtil.set(uuid.toString(), "");
+        return uuid.toString();
+    }
+    @RequestMapping("mobile_upload_repair_photo")
+    public boolean mobileUploadRepairPhoto(@RequestParam("file") MultipartFile file, @RequestParam("uuid") String uuid) {
+        try{
+            String pathName = redisUtil.get(uuid);
+            if ("".equals(pathName)) {
+                pathName = getRepairPathName(file.getOriginalFilename());
+                FileUtils.writeByteArrayToFile
+                        (new File(RESOURCE_URL + pathName), file.getBytes());
+                redisUtil.set(uuid, pathName);
+            } else {
+                String fileName =getRepairPathName(file.getOriginalFilename());
+                pathName += '|' + fileName;
+                FileUtils.writeByteArrayToFile
+                        (new File(RESOURCE_URL + fileName), file.getBytes());
+                redisUtil.set(uuid, pathName);
+            }
+            redisUtil.set(uuid, pathName);
+            return true;
+        }catch (IOException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+    @RequestMapping("mobile_submit_repair")
+    public boolean mobileSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("repair_reason") String repair_reason, @RequestParam("repair_type") String repair_type, @RequestParam("uuid")String uuid){
+        String pathName = redisUtil.get(uuid);
+        naiveService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, repair_type, pathName);
+        lifeService.changeJigLife(code, seq_id);
+        redisUtil.delete(uuid);
         return true;
     }
 
