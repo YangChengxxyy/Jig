@@ -42,12 +42,12 @@ public class SupervisorService {
     }
 
     //
-    public List<JigDefinition> supervisorGetJigDefinitionList(String family_id, String code, String name, String user_for, String workcell_id, int page_size, int page_number){
-        return supervisorMapper.supervisorGetJigDefinitionList(family_id,code,name,user_for,workcell_id,page_size,page_number);
+    public List<JigDefinition> supervisorGetJigDefinitionList(String family_id, String code, String name, String user_for, String workcell_id, int page_size, int page_number) {
+        return supervisorMapper.supervisorGetJigDefinitionList(family_id, code, name, user_for, workcell_id, page_size, page_number);
     }
 
-    public int supervisorGetJigDefinitionListAll(String family_id, String code, String name, String user_for, String workcell_id){
-        return supervisorMapper.supervisorGetJigDefinitionListAll(family_id,code,name,user_for,workcell_id);
+    public int supervisorGetJigDefinitionListAll(String family_id, String code, String name, String user_for, String workcell_id) {
+        return supervisorMapper.supervisorGetJigDefinitionListAll(family_id, code, name, user_for, workcell_id);
     }
 
     //监管者模式下搜索工夹具信息
@@ -122,6 +122,6 @@ public class SupervisorService {
     }
 
     public List<PurchaseIncomeSubmit> supervisorGetAllPurchaseSubmitHistoryList(String bill_no, String submit_name, String start_date, String end_date, String status, String user_id) {
-        return supervisorMapper.supervisorGetAllPurchaseSubmitHistoryList(bill_no,submit_name,start_date,end_date,status,user_id);
+        return supervisorMapper.supervisorGetAllPurchaseSubmitHistoryList(bill_no, submit_name, start_date, end_date, status, user_id);
     }
 }

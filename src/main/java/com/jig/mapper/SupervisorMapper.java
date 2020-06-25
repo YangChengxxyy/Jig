@@ -51,14 +51,14 @@ public interface SupervisorMapper {
 
     //监管者模式下编辑更改工夹具信息
     int supervisorEditJigInfo(@Param("jig_info") JigDefinition jig_info,
-                                 @Param("user_id") String user_id,
-                                 @Param("field") String field,
-                                 @Param("old_value") String old_value,
-                                 @Param("new_value") String new_value);
+                              @Param("user_id") String user_id,
+                              @Param("field") String field,
+                              @Param("old_value") String old_value,
+                              @Param("new_value") String new_value);
 
     //监管者模式下获取我的采购审批list
     List<PurchaseIncomeSubmit> supervisorGetPurchaseSubmitList(@Param("page_number") int page_number,
-                                                                   @Param("page_size") int page_size);
+                                                               @Param("page_size") int page_size);
 
     //监管者模式下获取我的采购审批的最大页数
     int supervisorGetPurchaseSubmitListPages();
@@ -73,32 +73,32 @@ public interface SupervisorMapper {
 
     //监管者模式下初审不通过采购审批
     int supervisorNoPassPurchaseSubmit(@Param("id") String id,
-                                           @Param("status") String status,
-                                           @Param("first_reason") String first_reason,
-                                           @Param("user") User user,
-                                           @Param("field") String field,
-                                           @Param("old_value") String old_value,
-                                           @Param("new_value") String new_value);
+                                       @Param("status") String status,
+                                       @Param("first_reason") String first_reason,
+                                       @Param("user") User user,
+                                       @Param("field") String field,
+                                       @Param("old_value") String old_value,
+                                       @Param("new_value") String new_value);
 
     /**
      * 监管者模式下获取历史采购记录
      */
 
     List<PurchaseIncomeSubmit> supervisorGetPurchaseSubmitHistory(@Param("bill_no") String bill_no,
-                                                                           @Param("submit_name") String submit_name,
-                                                                           @Param("start_date") String start_date,
-                                                                           @Param("end_date") String end_date,
-                                                                           @Param("status") String status,
-                                                                           @Param("page_number") int page_number,
-                                                                           @Param("page_size") int page_size,
-                                                                           @Param("user_id") String user_id);
+                                                                  @Param("submit_name") String submit_name,
+                                                                  @Param("start_date") String start_date,
+                                                                  @Param("end_date") String end_date,
+                                                                  @Param("status") String status,
+                                                                  @Param("page_number") int page_number,
+                                                                  @Param("page_size") int page_size,
+                                                                  @Param("user_id") String user_id);
 
     int supervisorGetPurchaseSubmitHistoryPages(@Param("bill_no") String bill_no,
-                                                          @Param("submit_name") String submit_name,
-                                                          @Param("start_date") String start_date,
-                                                          @Param("end_date") String end_date,
-                                                          @Param("status") String status,
-                                                          @Param("user_id") String user_id);
+                                                @Param("submit_name") String submit_name,
+                                                @Param("start_date") String start_date,
+                                                @Param("end_date") String end_date,
+                                                @Param("status") String status,
+                                                @Param("user_id") String user_id);
 
     /**
      * 监管者模式下获取待处理的报废清单及其最大页数
@@ -111,10 +111,10 @@ public interface SupervisorMapper {
 
     //监管者模式下审批待处理的报废申请
     int supervisorPassScrapSubmit(@Param("id") String id,
-                                     @Param("user") User user,
-                                     @Param("field") String field,
-                                     @Param("old_value") String old_value,
-                                     @Param("new_value") String new_value);
+                                  @Param("user") User user,
+                                  @Param("field") String field,
+                                  @Param("old_value") String old_value,
+                                  @Param("new_value") String new_value);
 
     int supervisorNoPassScrapSubmit(@Param("id") String id,
                                     @Param("no_pass_reason") String no_pass_reason,
@@ -135,12 +135,12 @@ public interface SupervisorMapper {
                                                           @Param("workcell_id") String workcell_id);
 
     int supervisorGetScrapSubmitListHistoryPages(@Param("code") String code,
-                                                       @Param("seq_id") String seq_id,
-                                                       @Param("start_date") String start_date,
-                                                       @Param("end_date") String end_date,
-                                                       @Param("status") String status,
-                                                       @Param("scrap_reason") String scrap_reason,
-                                                       @Param("workcell_id") String workcell_id);
+                                                 @Param("seq_id") String seq_id,
+                                                 @Param("start_date") String start_date,
+                                                 @Param("end_date") String end_date,
+                                                 @Param("status") String status,
+                                                 @Param("scrap_reason") String scrap_reason,
+                                                 @Param("workcell_id") String workcell_id);
 
     List<PurchaseIncomeSubmit> supervisorGetAllPurchaseSubmitList();
 

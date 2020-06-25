@@ -16,10 +16,7 @@ public class jigJson_zhs {
     private CommonService commonService;
 
 
-
     //通用
-
-
 
 
     //获取经理模式采购统计模块下的采购员细节数据
@@ -39,7 +36,6 @@ public class jigJson_zhs {
 
         return map;
     }*/
-
 
 
     //监管者

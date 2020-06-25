@@ -9,32 +9,12 @@ import org.springframework.stereotype.Repository;
 public interface JigMapper {
 
 
-
-
-
-
-
-
-
     /**
      * 删除对应记录
      *
      * @param id outgo_submit表id
      */
     void naiveDeleteOutgoSubmit(@Param("id") String id);
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

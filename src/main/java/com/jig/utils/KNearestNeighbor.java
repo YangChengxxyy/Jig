@@ -25,13 +25,13 @@ public class KNearestNeighbor {
         }
     }
 
-    public static double getLifePercent(List<JigLife> lifeList, JigLife jigLife){
+    public static double getLifePercent(List<JigLife> lifeList, JigLife jigLife) {
         JigLife.OTHER_LIFE = jigLife;
         Collections.sort(lifeList);
         double sums = 0;
         for (int i = 0; i < Math.min(lifeList.size(), K); i++) {
-            sums+=lifeList.get(i).getLife_percent();
+            sums += lifeList.get(i).getLife_percent();
         }
-        return sums/(Math.min(lifeList.size(), K));
+        return sums / (Math.min(lifeList.size(), K));
     }
 }

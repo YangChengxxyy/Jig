@@ -9,20 +9,7 @@ public interface JigMapper_zhs {
     //通用
 
 
-
-
-
-
-
-
-
-
-
-
-
     //监管者
-
-
 
 
     //初级用户

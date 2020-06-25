@@ -39,6 +39,7 @@ public class ManagerJson {
     private CommonService commonService;
     @Autowired
     private UserService userService;
+
     //获取经理模块下的采购审批记录
     @RequestMapping(value = "get_purchase_submit_list", method = {RequestMethod.GET, RequestMethod.POST})
     public Map<Object, Object> getManagerPurchaseSubmitList(@RequestParam("page_number") int page_number,

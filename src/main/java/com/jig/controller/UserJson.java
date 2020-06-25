@@ -47,11 +47,11 @@ public class UserJson {
     @Scheduled(cron = "0 0 0 * * ?")
     private void generateToken() {
         JSONObject allToken = new JSONObject();
-        allToken.put("naive", UUID.randomUUID().toString().replace("-",""));
-        allToken.put("high", UUID.randomUUID().toString().replace("-",""));
-        allToken.put("supervisor", UUID.randomUUID().toString().replace("-",""));
-        allToken.put("manager", UUID.randomUUID().toString().replace("-",""));
-        allToken.put("admin", UUID.randomUUID().toString().replace("-",""));
+        allToken.put("naive", UUID.randomUUID().toString().replace("-", ""));
+        allToken.put("high", UUID.randomUUID().toString().replace("-", ""));
+        allToken.put("supervisor", UUID.randomUUID().toString().replace("-", ""));
+        allToken.put("manager", UUID.randomUUID().toString().replace("-", ""));
+        allToken.put("admin", UUID.randomUUID().toString().replace("-", ""));
         String object = JSON.toJSONString(allToken);
         redisUtil.set("allToken", object);
     }

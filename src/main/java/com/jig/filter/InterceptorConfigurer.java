@@ -11,6 +11,7 @@ public class InterceptorConfigurer implements WebMvcConfigurer {
 
     @Resource
     private PowerInterceptor powerInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(powerInterceptor)

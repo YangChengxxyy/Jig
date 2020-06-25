@@ -1,8 +1,5 @@
 package com.jig.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.jig.entity.common.User;
 import com.jig.entity.jig.JigDefinition;
 import com.jig.entity.jig.JigEntity;
@@ -17,7 +14,6 @@ import com.jig.service.CommonService;
 import com.jig.service.LifeService;
 import com.jig.service.NaiveService;
 import com.jig.service.UserService;
-import com.jig.utils.LoginStatusUtil;
 import com.jig.utils.PoiUtil;
 import com.jig.utils.RedisUtil;
 import org.apache.commons.io.FileUtils;
@@ -28,18 +24,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import javax.print.DocFlavor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.text.NumberFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,7 +102,7 @@ public class NaiveJson {
             String jig_cabinet = jig_position_list[i].split(",")[0];
             String location = jig_position_list[i].split(",")[1];
             String[] free_bin_list = free_bin_list_all[i].split(",");
-            for (int j = 0; j < Integer.valueOf(count_list[i]); j++) {
+            for (int j = 0; j < Integer.parseInt(count_list[i]); j++) {
                 flag = naiveService.naiveInputJigEntity(bill_no, code_list[i], max_seq_id + j + 1, jig_cabinet, location, free_bin_list[j]);
             }
         }
@@ -144,8 +138,6 @@ public class NaiveJson {
         return map;
     }
 
-
-    //获取出入库历史记录List
     @RequestMapping("get_out_and_in_history_list") // 移动端
     public List<OutgoSubmit> navieGetJigStockByLocation(@RequestParam("code") String code,
                                                         @RequestParam("seq_id") String seq_id) {
@@ -370,43 +362,54 @@ public class NaiveJson {
         return true;
     }
 
-    @RequestMapping("mobile_get_repair_uuid")
-    public String mobileGetRepairUuid() {
-        UUID uuid = UUID.randomUUID();
-        redisUtil.set(uuid.toString(), "");
-        return uuid.toString();
+    /**
+     * 若取消提交报废，需删除原来的图片
+     */
+    @RequestMapping("mobile_remove_repair_uuid")
+    public boolean mobileRemoveRepairUuid(@RequestParam("file_name") String[] file_name) {
+        for (String filename : file_name) {
+            try {
+                FileUtils.forceDelete(new File(RESOURCE_URL + filename));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return true;
     }
 
     @RequestMapping("mobile_upload_repair_photo")
-    public boolean mobileUploadRepairPhoto(@RequestParam("file") MultipartFile file, @RequestParam("uuid") String uuid) {
+    public String mobileUploadRepairPhoto(@RequestParam("file") MultipartFile file) {
         try {
-            String pathName = redisUtil.get(uuid);
-            if ("".equals(pathName)) {
-                pathName = getRepairPathName(file.getOriginalFilename());
-                FileUtils.writeByteArrayToFile
-                        (new File(RESOURCE_URL + pathName), file.getBytes());
-                redisUtil.set(uuid, pathName);
-            } else {
-                String fileName = getRepairPathName(file.getOriginalFilename());
-                pathName += '|' + fileName;
-                FileUtils.writeByteArrayToFile
-                        (new File(RESOURCE_URL + fileName), file.getBytes());
-                redisUtil.set(uuid, pathName);
-            }
-            redisUtil.set(uuid, pathName);
-            return true;
+            String pathName = getRepairPathName(file.getOriginalFilename());
+            FileUtils.writeByteArrayToFile
+                    (new File(RESOURCE_URL + pathName), file.getBytes());
+            return pathName;
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            return "error";
         }
     }
 
+    /**
+     *
+     * @param code
+     * @param seq_id
+     * @param submit_id
+     * @param repair_reason
+     * @param repair_type
+     * @param file_name
+     * @return
+     */
     @RequestMapping("mobile_submit_repair")
-    public boolean mobileSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("repair_reason") String repair_reason, @RequestParam("repair_type") String repair_type, @RequestParam("uuid") String uuid) {
-        String pathName = redisUtil.get(uuid);
-        naiveService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, repair_type, pathName);
+    public boolean mobileSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("repair_reason") String repair_reason, @RequestParam("repair_type") String repair_type, @RequestParam("file_name") String[] file_name) {
+        StringBuilder all_path = new StringBuilder();
+        for (int i = 0; i < file_name.length - 1; i++) {
+            all_path.append(file_name[i]).append("|");
+        }
+        all_path.append(file_name[file_name.length - 1]);
+        naiveService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, repair_type, all_path.toString());
         lifeService.changeJigLife(code, seq_id);
-        redisUtil.delete(uuid);
         return true;
     }
 

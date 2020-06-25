@@ -44,6 +44,7 @@ public class SupervisorJson {
         user.setName(user_name);
         return user;
     }
+
     //监管者模式的工夹具信息管理的获取工夹具类别family
     @RequestMapping(value = "get_jig_family", method = {RequestMethod.GET, RequestMethod.POST})
     public List<Family> supervisorGetJigFamily() {
@@ -307,7 +308,7 @@ public class SupervisorJson {
     public void downloadOnePurchaseSubmit(@RequestParam("page_number") int page_number,
                                           @RequestParam("page_size") int page_size,
                                           @RequestParam("file_name") String file_name,
-                                          HttpServletResponse response)  {
+                                          HttpServletResponse response) {
         poiUtil.outputFile(response, file_name, supervisorService.supervisorGetPurchaseSubmitList(page_number, page_size));
     }
 
@@ -326,11 +327,12 @@ public class SupervisorJson {
                                                  @RequestParam("page_number") int page_number,
                                                  @RequestParam("page_size") int page_size,
                                                  @RequestParam("user_id") String user_id,
-                                                 @RequestParam("file_name")String file_name,
-                                                 HttpServletResponse response){
+                                                 @RequestParam("file_name") String file_name,
+                                                 HttpServletResponse response) {
         List<PurchaseIncomeSubmit> list = supervisorService.supervisorGetPurchaseSubmitHistory(bill_no, submit_name, start_date, end_date, status, page_number, page_size, user_id);
-        poiUtil.outputFile(response,file_name,list);
+        poiUtil.outputFile(response, file_name, list);
     }
+
     @RequestMapping("download_all_purchase_submit_history")
     public void downloadAllPurchaseSubmitHistory(@RequestParam("bill_no") String bill_no,
                                                  @RequestParam("submit_name") String submit_name,
@@ -338,9 +340,9 @@ public class SupervisorJson {
                                                  @RequestParam("end_date") String end_date,
                                                  @RequestParam("status") String status,
                                                  @RequestParam("user_id") String user_id,
-                                                 @RequestParam("file_name")String file_name,
-                                                 HttpServletResponse response){
-        List<PurchaseIncomeSubmit> list = supervisorService.supervisorGetAllPurchaseSubmitHistoryList(bill_no,submit_name,start_date,end_date,status,user_id);
-        poiUtil.outputFile(response,file_name, list);
+                                                 @RequestParam("file_name") String file_name,
+                                                 HttpServletResponse response) {
+        List<PurchaseIncomeSubmit> list = supervisorService.supervisorGetAllPurchaseSubmitHistoryList(bill_no, submit_name, start_date, end_date, status, user_id);
+        poiUtil.outputFile(response, file_name, list);
     }
 }
