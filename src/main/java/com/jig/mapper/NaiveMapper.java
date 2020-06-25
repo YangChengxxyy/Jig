@@ -140,6 +140,7 @@ public interface NaiveMapper {
     int naive_maintenance_jig(@Param("code") String code,
                               @Param("seq_id") String seq_id,
                               @Param("reason") String reason,
+                              @Param("is_repair") int is_repair,
                               @Param("user_id") String user_id);
 
     /**

@@ -124,8 +124,8 @@
           and seq_id = #{seq_id};
     </insert>
     <insert id="naive_maintenance_jig">
-        insert into regular_maintenance_history(code, seq_id, reason, check_id, check_time)
-        values (#{code}, #{seq_id}, #{reason}, #{user_id}, now());
+        insert into regular_maintenance_history(code, seq_id, reason, check_id, check_time, is_repair)
+        values (#{code}, #{seq_id}, #{reason}, #{user_id}, now(), #{is_repair});
 
         update regular_maintenance
         set last_time = now()

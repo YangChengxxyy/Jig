@@ -90,8 +90,8 @@ public class NaiveService {
     }
 
     //工夹具检点
-    public int naive_maintenance_jig(String code, String seq_id, String reason, String user_id) {
-        return naiveMapper.naive_maintenance_jig(code, seq_id, reason, user_id);
+    public int naive_maintenance_jig(String code, String seq_id, String reason, int is_repair, String user_id) {
+        return naiveMapper.naive_maintenance_jig(code, seq_id, reason, is_repair, user_id);
     }
 
     //获取已经出库的工夹具list

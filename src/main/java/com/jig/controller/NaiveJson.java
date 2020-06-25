@@ -129,7 +129,7 @@ public class NaiveJson {
 
         for (JigStock jigStock : jig_list) {
             jigStock.setJig_entity_list(naiveService.navieGetJigEntityListByLocation(jig_cabinet_id, jig_location_id, jigStock.getCode()));
-            for(JigEntity jigEntity: jigStock.getJig_entity_list()) { // 有更好的解决方法,用resultMap
+            for(JigEntity jigEntity: jigStock.getJig_entity_list()) { // 获取出入库历史记录List
                 jigEntity.setOut_and_in_history_list(naiveService.naive_get_out_and_in_history_list(jigEntity.getCode(), jigEntity.getSeq_id()));
             }
         }
@@ -137,7 +137,7 @@ public class NaiveJson {
         return jig_list;
     }
 
-    //初级用户 根据选择的工夹具存放区域 和 搜索条件来 确定工夹具list
+    //初级用户 根据选择的工夹具存放区域 和 搜索条件来 确定工夹具list(未用到)
     @RequestMapping("get_jig_list_by_select")
     public List<JigStock> navieGetJigListBySelect(@RequestParam("jig_cabinet_id") String jig_cabinet_id,
                                                   @RequestParam("jig_location_id") String jig_location_id,
@@ -172,9 +172,9 @@ public class NaiveJson {
                                                               @RequestParam("user_id") String user_id) {
         //应该要根据workcell_id工作部门id区别
         List<JigEntity> jig_list = naiveService.navieGetMaintenanceJigDetailList(jig_cabinet_id, jig_location_id, code);
-        for (JigEntity jigEntity : jig_list) {
+        for (JigEntity jigEntity : jig_list) { // 获取检点历史记录list
             jigEntity.setMaintenance_history_list(naiveService.naive_get_maintenance_history_list(jigEntity.getCode(), jigEntity.getSeq_id()));
-            for (MaintenanceSubmit maintenanceSubmit : jigEntity.getMaintenance_history_list()) {
+            for (MaintenanceSubmit maintenanceSubmit : jigEntity.getMaintenance_history_list()) { // 对数据进行处理，方便前端显示
                 String[] reason = maintenanceSubmit.getReason().split("\\|");
                 String r = "";
                 if (reason[0].equals("")) {
@@ -200,8 +200,9 @@ public class NaiveJson {
                                    @RequestParam("code") String code,
                                    @RequestParam("seq_id") String seq_id,
                                    @RequestParam("reason") String reason,
+                                   @RequestParam("is_repair") int is_repair,
                                    @RequestParam("user_id") String user_id) {
-        return naiveService.naive_maintenance_jig(code, seq_id, reason, user_id);
+        return naiveService.naive_maintenance_jig(code, seq_id, reason, is_repair,user_id);
     }
 
     /**
@@ -387,6 +388,13 @@ public class NaiveJson {
         return getStringObjectMap(naiveService.naiveGetOutgoingSubmit(page_number), naiveService.naiveGetOutgoingSubmitPage());
     }
 
+    /**
+     * 计算工夹具故障概率
+     * @param reason
+     * @param code
+     * @param seq_id
+     * @return
+     */
     @RequestMapping("get_jig_trouble_percent")
     public String naiveGetJigTroublePercent(@RequestParam("reason") String reason,
                                             @RequestParam("code") String code,
