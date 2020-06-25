@@ -18,12 +18,12 @@ public class LifeService {
 
     public int changeJigLife(String code, String seq_id) {
         List<JigLife> list = lifeMapper.getAllJigLife();
-        JigLife jigLife = lifeMapper.getOneJigLife(code,seq_id);
-        double percent = KNearestNeighbor.getLifePercent(list,jigLife);
-        return updateJigLife(jigLife,percent);
+        JigLife jigLife = lifeMapper.getOneJigLife(code, seq_id);
+        double percent = KNearestNeighbor.getLifePercent(list, jigLife);
+        return updateJigLife(jigLife, percent);
     }
 
-    public int updateJigLife(JigLife jigLife,double percent){
-        return lifeMapper.updateJigLife(jigLife,percent);
+    public int updateJigLife(JigLife jigLife, double percent) {
+        return lifeMapper.updateJigLife(jigLife, percent);
     }
 }

@@ -64,8 +64,8 @@ public interface NaiveMapper {
                                              @Param("page_size") int page_size);
 
     List<List<?>> navieGetJigListByLocationPages(@Param("jig_cabinet_id") String jig_cabinet_id,
-                                       @Param("jig_location_id") String jig_location_id,
-                                       @Param("workcell_id") String workcell_id);
+                                                 @Param("jig_location_id") String jig_location_id,
+                                                 @Param("workcell_id") String workcell_id);
 
     /**
      * 初级用户 根据选择的 夹具柜号和区号 确定该code的工夹具list
@@ -101,11 +101,11 @@ public interface NaiveMapper {
 
     //获取记录总条数
     List<List<?>> navieGetJigListBySelectPages(@Param("jig_cabinet_id") String jig_cabinet_id,
-                                     @Param("jig_location_id") String jig_location_id,
-                                     @Param("code") String code,
-                                     @Param("name") String name,
-                                     @Param("user_for") String user_for,
-                                     @Param("workcell_id") String workcell_id);
+                                               @Param("jig_location_id") String jig_location_id,
+                                               @Param("code") String code,
+                                               @Param("name") String name,
+                                               @Param("user_for") String user_for,
+                                               @Param("workcell_id") String workcell_id);
 
     //根据code和seq_id来获取该工夹具实体的出入库历史list
     List<OutgoSubmit> naive_get_out_and_in_history_list(@Param("code") String code,

@@ -124,18 +124,18 @@ public interface ManagerMapper {
      *                  分为两步 1.更新
      */
     int manager_pass_scrap_submit(@Param("submit_id") String submit_id,
-                                   @Param("status") String status,
-                                   @Param("user") User user,
-                                   @Param("field") String field,
-                                   @Param("old_value") String old_value,
-                                   @Param("new_value") String new_value);
+                                  @Param("status") String status,
+                                  @Param("user") User user,
+                                  @Param("field") String field,
+                                  @Param("old_value") String old_value,
+                                  @Param("new_value") String new_value);
 
     int manager_no_pass_scrap_submit(@Param("submit_id") String submit_id,
-                               @Param("no_pass_reason") String no_pass_reason,
-                               @Param("user") User user,
-                               @Param("field") String field,
-                               @Param("old_value") String old_value,
-                               @Param("new_value") String new_value);
+                                     @Param("no_pass_reason") String no_pass_reason,
+                                     @Param("user") User user,
+                                     @Param("field") String field,
+                                     @Param("old_value") String old_value,
+                                     @Param("new_value") String new_value);
 
     /**
      * 经理模式下历史报废审批记录的显示及其页数查询

@@ -75,11 +75,12 @@ public class NaiveService {
 
     /**
      * 根据code和seq_id来获取该工夹具实体的检点历史记录list
+     *
      * @param code
      * @param seq_id
      * @return
      */
-    public List<MaintenanceSubmit> naive_get_maintenance_history_list(String code, String seq_id){
+    public List<MaintenanceSubmit> naive_get_maintenance_history_list(String code, String seq_id) {
         return naiveMapper.naive_get_maintenance_history_list(code, seq_id);
     }
 
@@ -140,8 +141,8 @@ public class NaiveService {
     }
 
     //naive提交报修
-    public void naiveSubmitRepair(String code, String seq_id, String submit_id, String repair_reason,String repair_type, String pathName) {
-        naiveMapper.naiveSubmitRepair(code, seq_id, submit_id, repair_reason,repair_type, pathName);
+    public void naiveSubmitRepair(String code, String seq_id, String submit_id, String repair_reason, String repair_type, String pathName) {
+        naiveMapper.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, repair_type, pathName);
     }
 
 
@@ -183,15 +184,15 @@ public class NaiveService {
         return naiveMapper.naiveGetAllOutgoingJigList(code, name, start_date, end_date, user_for, workcell_id);
     }
 
-    public double naive_get_jig_trouble_percent_all(){
+    public double naive_get_jig_trouble_percent_all() {
         return naiveMapper.naive_get_jig_trouble_percent_all();
     }
 
-    public List<MaintenanceSubmit> naive_get_trouble_maintenance_list(int is_repair){
+    public List<MaintenanceSubmit> naive_get_trouble_maintenance_list(int is_repair) {
         return naiveMapper.naive_get_trouble_maintenance_list(is_repair);
     }
 
-    public int naive_get_trouble_reason_count_by_reason(String code, String seq_id, String reason){
+    public int naive_get_trouble_reason_count_by_reason(String code, String seq_id, String reason) {
         return naiveMapper.naive_get_trouble_reason_count_by_reason(code, seq_id, reason);
     }
 

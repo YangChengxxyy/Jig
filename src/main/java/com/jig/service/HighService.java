@@ -17,6 +17,7 @@ import java.util.Map;
 public class HighService {
     @Autowired
     private HighMapper highMapper;
+
     //high添加采购入库申请
     public void highAddShoplist(PurchaseIncomeSubmit purchaseIncomeSubmit) {
         highMapper.highAddShoplist(purchaseIncomeSubmit);

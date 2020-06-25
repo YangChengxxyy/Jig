@@ -26,7 +26,7 @@ public class ReportService {
     }
 
     public List<Map<Object, Object>> getYearByCodeYear(String code, String year) {
-        return reportMapper.getYearByCodeYear(code,year);
+        return reportMapper.getYearByCodeYear(code, year);
     }
 
     public List<Map<Object, Object>> getEveryProductionCount() {

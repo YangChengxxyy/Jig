@@ -31,6 +31,7 @@ public interface CommonMapper {
 
     /**
      * 获取单个JigDefinition对象(这个就是直接从jig_definition表里取数据)
+     *
      * @param id
      * @return
      */

@@ -54,6 +54,6 @@ public class AdminService {
     }
 
     public int editCnEn(String id, String chinese) {
-        return adminMapper.editCnEn(id,chinese);
+        return adminMapper.editCnEn(id, chinese);
     }
 }
