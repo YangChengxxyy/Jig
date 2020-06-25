@@ -126,10 +126,10 @@ public class NaiveJson {
     //初级用户 根据选择的 夹具柜号和区号确定 工夹具list
     @RequestMapping("get_jig_list_by_location")
     public Map<Object, Object> navieGetJigStockByLocation(@RequestParam("jig_cabinet_id") String jig_cabinet_id,
-                                                     @RequestParam("jig_location_id") String jig_location_id,
-                                                     @RequestParam("page_number") int page_number,
-                                                     @RequestParam("page_size") int page_size,
-                                                     @RequestParam("workcell_id") String workcell_id) {
+                                                          @RequestParam("jig_location_id") String jig_location_id,
+                                                          @RequestParam("page_number") int page_number,
+                                                          @RequestParam("page_size") int page_size,
+                                                          @RequestParam("workcell_id") String workcell_id) {
         Map<Object, Object> map = new HashMap<>();
         List<JigStock> jig_list = naiveService.navieGetJigListByLocation(jig_cabinet_id, jig_location_id, workcell_id, (page_number - 1) * page_size, page_size);
         List<List<?>> all = naiveService.navieGetJigListByLocationPages(jig_cabinet_id, jig_location_id, workcell_id);
@@ -144,6 +144,15 @@ public class NaiveJson {
         return map;
     }
 
+
+    //获取出入库历史记录List
+    @RequestMapping("get_out_and_in_history_list") // 移动端
+    public List<OutgoSubmit> navieGetJigStockByLocation(@RequestParam("code") String code,
+                                                        @RequestParam("seq_id") String seq_id) {
+             // 获取出入库历史记录List
+        return naiveService.naive_get_out_and_in_history_list(code, seq_id);
+    }
+
     //初级用户 根据选择的工夹具存放区域 和 搜索条件来 确定工夹具list(未用到)
     @RequestMapping("get_jig_list_by_select")
     public Map<Object, Object> navieGetJigListBySelect(@RequestParam("jig_cabinet_id") String jig_cabinet_id,
@@ -153,7 +162,7 @@ public class NaiveJson {
                                                        @RequestParam("user_for") String user_for,
                                                        @RequestParam("page_number") int page_number,
                                                        @RequestParam("page_size") int page_size,
-                                                       @RequestParam("workcell_id") String workcell_id)  {
+                                                       @RequestParam("workcell_id") String workcell_id) {
 
         Map<Object, Object> map = new HashMap<>();
         List<JigStock> jig_list = naiveService.navieGetJigListBySelect(jig_cabinet_id, jig_location_id, code, name, user_for, workcell_id, (page_number - 1) * page_size, page_size);
@@ -367,9 +376,10 @@ public class NaiveJson {
         redisUtil.set(uuid.toString(), "");
         return uuid.toString();
     }
+
     @RequestMapping("mobile_upload_repair_photo")
     public boolean mobileUploadRepairPhoto(@RequestParam("file") MultipartFile file, @RequestParam("uuid") String uuid) {
-        try{
+        try {
             String pathName = redisUtil.get(uuid);
             if ("".equals(pathName)) {
                 pathName = getRepairPathName(file.getOriginalFilename());
@@ -377,7 +387,7 @@ public class NaiveJson {
                         (new File(RESOURCE_URL + pathName), file.getBytes());
                 redisUtil.set(uuid, pathName);
             } else {
-                String fileName =getRepairPathName(file.getOriginalFilename());
+                String fileName = getRepairPathName(file.getOriginalFilename());
                 pathName += '|' + fileName;
                 FileUtils.writeByteArrayToFile
                         (new File(RESOURCE_URL + fileName), file.getBytes());
@@ -385,13 +395,14 @@ public class NaiveJson {
             }
             redisUtil.set(uuid, pathName);
             return true;
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
     }
+
     @RequestMapping("mobile_submit_repair")
-    public boolean mobileSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("repair_reason") String repair_reason, @RequestParam("repair_type") String repair_type, @RequestParam("uuid")String uuid){
+    public boolean mobileSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("repair_reason") String repair_reason, @RequestParam("repair_type") String repair_type, @RequestParam("uuid") String uuid) {
         String pathName = redisUtil.get(uuid);
         naiveService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, repair_type, pathName);
         lifeService.changeJigLife(code, seq_id);
