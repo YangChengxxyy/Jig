@@ -306,25 +306,14 @@ public class HighJson {
         return true;
     }
 
-    @RequestMapping("mobile_get_scrap_uuid")
-    public String mobileGetRepairUuid() {
-        UUID uuid = UUID.randomUUID();
-        redisUtil.set(uuid.toString(), "");
-        return uuid.toString();
-    }
-
     /**
      * 若取消提交报废，需删除原来的图片
      *
-     * @param uuid
      * @return
      */
     @RequestMapping("mobile_remove_scrap_uuid")
-    public boolean mobileRemoveScrapUuid(@RequestParam("uuid") String uuid) {
-        String pathName = redisUtil.get(uuid);
-        redisUtil.delete(uuid);
-        String[] filenames = pathName.split("\\|");
-        for (String filename : filenames) {
+    public boolean mobileRemoveScrapUuid(@RequestParam("file_name") String[] file_name) {
+        for (String filename : file_name) {
             try {
                 FileUtils.forceDelete(new File(RESOURCE_URL + filename));
             } catch (IOException e) {
@@ -336,38 +325,32 @@ public class HighJson {
     }
 
     @RequestMapping("mobile_upload_scrap_photo")
-    public boolean mobileUploadScrapPhoto(@RequestParam("file") MultipartFile file, @RequestParam("uuid") String uuid) {
+    public String mobileUploadScrapPhoto(@RequestParam("file") MultipartFile file) {
         try {
-            String pathName = redisUtil.get(uuid);
-            if ("".equals(pathName)) {
-                pathName = getScrapPathName(file.getOriginalFilename());
-                FileUtils.writeByteArrayToFile(new File(RESOURCE_URL + pathName), file.getBytes());
-                redisUtil.set(uuid, pathName);
-            } else {
-                String fileName = getScrapPathName(file.getOriginalFilename());
-                pathName += '|' + fileName;
-                FileUtils.writeByteArrayToFile(new File(RESOURCE_URL + fileName), file.getBytes());
-                redisUtil.set(uuid, pathName);
-            }
-            redisUtil.set(uuid, pathName);
-            return true;
+            String pathName = getScrapPathName(file.getOriginalFilename());
+            FileUtils.writeByteArrayToFile
+                    (new File(RESOURCE_URL + pathName), file.getBytes());
+            return pathName;
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            return "error";
         }
     }
 
     @RequestMapping("mobile_submit_scrap")
-    public boolean mobileSubmitScrap(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason, @RequestParam("scrap_type") String scrap_type, @RequestParam("uuid") String uuid) {
-        String pathName = redisUtil.get(uuid);
+    public boolean mobileSubmitScrap(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason, @RequestParam("scrap_type") String scrap_type, @RequestParam("file_name") String[] file_name) {
+        StringBuilder all_path = new StringBuilder();
+        for (int i = 0; i < file_name.length - 1; i++) {
+            all_path.append(file_name[i]).append("|");
+        }
+        all_path.append(file_name[file_name.length - 1]);
         ScrapSubmit scrapSubmit = new ScrapSubmit();
         scrapSubmit.setCode(code);
         scrapSubmit.setSeq_id(seq_id);
         scrapSubmit.setSubmit_id(submit_id);
         scrapSubmit.setScrap_reason(scrap_reason);
         scrapSubmit.setScrap_type(scrap_type);
-        highService.highSubmitScrap(scrapSubmit, pathName);
-        redisUtil.delete(uuid);
+        highService.highSubmitScrap(scrapSubmit, all_path.toString());
         return true;
     }
 

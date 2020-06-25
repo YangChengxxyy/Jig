@@ -127,11 +127,12 @@ public class ReportJson {
 
     /**
      * 历史供货量
+     *
      * @param id 厂商id
      * @return
      */
     @RequestMapping("/get_manufacturer_history_count")
-    public List<Map<Object, Object>> getManufacturerHistoryCount(@RequestParam("id")int id){
+    public List<Map<Object, Object>> getManufacturerHistoryCount(@RequestParam("id") int id) {
         return reportService.getManufacturerHistoryCount(id);
     }
 }

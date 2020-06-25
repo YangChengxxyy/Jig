@@ -354,25 +354,12 @@ public class NaiveJson {
         return true;
     }
 
-    @RequestMapping("mobile_get_repair_uuid")
-    public String mobileGetRepairUuid() {
-        UUID uuid = UUID.randomUUID();
-        redisUtil.set(uuid.toString(), "");
-        return uuid.toString();
-    }
-
     /**
      * 若取消提交报废，需删除原来的图片
-     *
-     * @param uuid
-     * @return
      */
     @RequestMapping("mobile_remove_repair_uuid")
-    public boolean mobileRemoveRepairUuid(@RequestParam("uuid") String uuid) {
-        String pathName = redisUtil.get(uuid);
-        redisUtil.delete(uuid);
-        String[] filenames = pathName.split("\\|");
-        for (String filename : filenames) {
+    public boolean mobileRemoveRepairUuid(@RequestParam("file_name") String[] file_name) {
+        for (String filename : file_name) {
             try {
                 FileUtils.forceDelete(new File(RESOURCE_URL + filename));
             } catch (IOException e) {
@@ -384,35 +371,37 @@ public class NaiveJson {
     }
 
     @RequestMapping("mobile_upload_repair_photo")
-    public boolean mobileUploadRepairPhoto(@RequestParam("file") MultipartFile file, @RequestParam("uuid") String uuid) {
+    public String mobileUploadRepairPhoto(@RequestParam("file") MultipartFile file) {
         try {
-            String pathName = redisUtil.get(uuid);
-            if ("".equals(pathName)) {
-                pathName = getRepairPathName(file.getOriginalFilename());
-                FileUtils.writeByteArrayToFile
-                        (new File(RESOURCE_URL + pathName), file.getBytes());
-                redisUtil.set(uuid, pathName);
-            } else {
-                String fileName = getRepairPathName(file.getOriginalFilename());
-                pathName += '|' + fileName;
-                FileUtils.writeByteArrayToFile
-                        (new File(RESOURCE_URL + fileName), file.getBytes());
-                redisUtil.set(uuid, pathName);
-            }
-            redisUtil.set(uuid, pathName);
-            return true;
+            String pathName = getRepairPathName(file.getOriginalFilename());
+            FileUtils.writeByteArrayToFile
+                    (new File(RESOURCE_URL + pathName), file.getBytes());
+            return pathName;
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            return "error";
         }
     }
 
+    /**
+     *
+     * @param code
+     * @param seq_id
+     * @param submit_id
+     * @param repair_reason
+     * @param repair_type
+     * @param file_name
+     * @return
+     */
     @RequestMapping("mobile_submit_repair")
-    public boolean mobileSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("repair_reason") String repair_reason, @RequestParam("repair_type") String repair_type, @RequestParam("uuid") String uuid) {
-        String pathName = redisUtil.get(uuid);
-        naiveService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, repair_type, pathName);
+    public boolean mobileSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("repair_reason") String repair_reason, @RequestParam("repair_type") String repair_type, @RequestParam("file_name") String[] file_name) {
+        StringBuilder all_path = new StringBuilder();
+        for (int i = 0; i < file_name.length - 1; i++) {
+            all_path.append(file_name[i]).append("|");
+        }
+        all_path.append(file_name[file_name.length - 1]);
+        naiveService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, repair_type, all_path.toString());
         lifeService.changeJigLife(code, seq_id);
-        redisUtil.delete(uuid);
         return true;
     }
 
