@@ -23,10 +23,14 @@ public interface NaiveMapper {
 
     /**
      * 将采购入库的工夹具入库
-     *
-     * @param bill_no
+     * @param bill_no 相关订单单据号
      * @param code
      * @param seq_id
+     * @param jig_cabinet 夹具柜id
+     * @param location  存放区域
+     * @param bin   bin位
+     * @param description 写入出入库历史的描述信息
+     * @param user_id 入库人
      * @return
      */
     int naiveInputJigEntity(@Param("bill_no") String bill_no,
@@ -34,7 +38,9 @@ public interface NaiveMapper {
                             @Param("seq_id") int seq_id,
                             @Param("jig_cabinet") String jig_cabinet,
                             @Param("location") String location,
-                            @Param("bin") String bin);
+                            @Param("bin") String bin,
+                            @Param("description") String description,
+                            @Param("user_id") String user_id);
 
     /**
      * 初级用户获取 工夹具出库页面的工夹具存放位置list

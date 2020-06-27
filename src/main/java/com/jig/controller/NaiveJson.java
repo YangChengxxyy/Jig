@@ -91,7 +91,10 @@ public class NaiveJson {
                              @RequestParam("code") String code,
                              @RequestParam("count") String count,
                              @RequestParam("jig_position") String jig_position,
-                             @RequestParam("free_bin_list") String free_bin) {
+                             @RequestParam("free_bin_list") String free_bin,
+                             @RequestParam("user_id") String user_id) {
+        String desciption = "";
+        desciption += bill_no + "~" + code + "~" + count;
         String[] code_list = code.split("\\|");
         String[] count_list = count.split("\\|");
         String[] jig_position_list = jig_position.split("\\|");
@@ -103,7 +106,7 @@ public class NaiveJson {
             String location = jig_position_list[i].split(",")[1];
             String[] free_bin_list = free_bin_list_all[i].split(",");
             for (int j = 0; j < Integer.parseInt(count_list[i]); j++) {
-                flag = naiveService.naiveInputJigEntity(bill_no, code_list[i], max_seq_id + j + 1, jig_cabinet, location, free_bin_list[j]);
+                flag = naiveService.naiveInputJigEntity(bill_no, code_list[i], max_seq_id + j + 1, jig_cabinet, location, free_bin_list[j], desciption, user_id);
             }
         }
         return flag;

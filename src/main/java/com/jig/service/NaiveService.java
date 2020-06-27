@@ -21,16 +21,21 @@ public class NaiveService {
     @Autowired
     private NaiveMapper naiveMapper;
 
-    /**
+
+     /**
      * 将采购入库的工夹具入库
-     *
-     * @param bill_no
+     * @param bill_no 相关订单单据号
      * @param code
      * @param seq_id
+     * @param jig_cabinet 夹具柜id
+     * @param location  存放区域
+     * @param bin   bin位
+     * @param description 写入出入库历史的描述信息
+     * @param user_id 入库人
      * @return
      */
-    public int naiveInputJigEntity(String bill_no, String code, int seq_id, String jig_cabinet, String location, String bin) {
-        return naiveMapper.naiveInputJigEntity(bill_no, code, seq_id, jig_cabinet, location, bin);
+    public int naiveInputJigEntity(String bill_no, String code, int seq_id, String jig_cabinet, String location, String bin, String description, String user_id) {
+        return naiveMapper.naiveInputJigEntity(bill_no, code, seq_id, jig_cabinet, location, bin, description, user_id);
     }
 
     //初级用户获取 工夹具出库页面的工夹具存放位置list
