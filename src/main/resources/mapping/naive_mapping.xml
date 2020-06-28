@@ -20,7 +20,10 @@
         values (#{code}, #{seq_id}, #{jig_cabinet}, #{location}, #{bin}, 1);
 
         insert into outgo_income_history(code, seq_id, outgo_time, rec_id, status,description)
-        values (#{code}, #{seq_id}, now(), #{user_id}, 3, #{description})
+        values (#{code}, #{seq_id}, now(), #{user_id}, 3, #{description});
+
+        insert into regular_maintenance(code, seq_id, pm_period)
+        values(#{code}, #{seq_id}, 30)
     </insert>
     <select id="navieGetLocationList" resultMap="jig_position_map">
         select jp.jig_cabinet_id, jp.location_id, jd.workcell_id
