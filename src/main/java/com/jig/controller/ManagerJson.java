@@ -12,6 +12,7 @@ import com.jig.service.CommonService;
 import com.jig.service.ManagerService;
 import com.jig.service.UserService;
 import com.jig.utils.LoginStatusUtil;
+import com.jig.utils.PoiUtil;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Isolation;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +41,8 @@ public class ManagerJson {
     private CommonService commonService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private PoiUtil pouiUtil;
 
     //获取经理模块下的采购审批记录
     @RequestMapping(value = "get_purchase_submit_list", method = {RequestMethod.GET, RequestMethod.POST})
@@ -358,4 +362,55 @@ public class ManagerJson {
         return map;
     }
 
+    @RequestMapping("download_one_purchase_submit_history")
+    public void downloadOnePurchaseSubmitHistory(HttpServletResponse response, @RequestParam(value = "bill_no") String bill_no,
+                                                 @RequestParam(value = "submit_name") String submit_name,
+                                                 @RequestParam(value = "start_date") String start_date,
+                                                 @RequestParam(value = "end_date") String end_date,
+                                                 @RequestParam(value = "status") String status,
+                                                 @RequestParam(value = "page_number") int page_number,
+                                                 @RequestParam(value = "page_size") int page_size,
+                                                 @RequestParam(value = "workcell_id") String workcell_id,
+                                                 @RequestParam("file_name") String file_name) {
+        pouiUtil.outputFile(response,file_name,managerService.get_manager_purchase_submit_list_history(bill_no, submit_name, start_date, end_date, status, page_number, page_size, workcell_id));
+    }
+    @RequestMapping("download_all_purchase_submit_history")
+    public void downloadAllPurchaseSubmitHistory(HttpServletResponse response, @RequestParam(value = "bill_no") String bill_no,
+                                                     @RequestParam(value = "submit_name") String submit_name,
+                                                     @RequestParam(value = "start_date") String start_date,
+                                                     @RequestParam(value = "end_date") String end_date,
+                                                     @RequestParam(value = "status") String status,
+                                                     @RequestParam(value = "workcell_id") String workcell_id,
+                                                     @RequestParam("file_name") String file_name){
+        List<PurchaseIncomeSubmit> list = managerService.get_all_manager_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,status,workcell_id);
+        pouiUtil.outputFile(response,file_name, list);
+    }
+
+    @RequestMapping("download_one_scrap_submit_history")
+    public void downloadOneScrapSubmitHistory(HttpServletResponse response,@RequestParam("code") String code,
+                                              @RequestParam("seq_id") String seq_id,
+                                              @RequestParam("start_date") String start_date,
+                                              @RequestParam("end_date") String end_date,
+                                              @RequestParam("status") String status,
+                                              @RequestParam("scrap_reason") String scrap_reason,
+                                              @RequestParam("page_number") int page_number,
+                                              @RequestParam("page_size") int page_size,
+                                              @RequestParam("workcell_id") String workcell_id,
+                                              @RequestParam("file_name")String file_name){
+        page_number = (page_number - 1) * page_size;
+        List<ScrapSubmit> list = managerService.get_manager_scrap_submit_list_history(code, seq_id, start_date, end_date, status, scrap_reason, page_number, page_size, workcell_id);
+        pouiUtil.outputFile(response,file_name,list);
+    }
+    @RequestMapping("download_all_scrap_submit_history")
+    public void downloadAllScrapSubmitHistory(HttpServletResponse response,@RequestParam("code") String code,
+                                              @RequestParam("seq_id") String seq_id,
+                                              @RequestParam("start_date") String start_date,
+                                              @RequestParam("end_date") String end_date,
+                                              @RequestParam("status") String status,
+                                              @RequestParam("scrap_reason") String scrap_reason,
+                                              @RequestParam("workcell_id") String workcell_id,
+                                              @RequestParam("file_name")String file_name){
+        List<ScrapSubmit> list = managerService.get_all_manager_scrap_submit_list_history(code, seq_id, start_date, end_date, status, scrap_reason, workcell_id);
+        pouiUtil.outputFile(response,file_name,list);
+    }
 }

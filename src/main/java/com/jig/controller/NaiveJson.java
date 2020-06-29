@@ -321,8 +321,13 @@ public class NaiveJson {
      * @return 报修列表
      */
     @RequestMapping("get_repair_list")
-    public Map<String, Object> naiveGetRepairList(@RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number) {
-        return getStringObjectMap(naiveService.naiveGetRepairList(submit_id, page_number), naiveService.naiveGetRepairListPage(submit_id));
+    public Map<String, Object> naiveGetRepairList(@RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("data", naiveService.naiveGetRepairList(submit_id, page_number, page_size));
+        int all = naiveService.naiveGetRepairListPage(submit_id);
+        map.put("all", all);
+        map.put("max", (int) Math.ceil(all / (double) page_size));
+        return map;
     }
 
     /**
@@ -395,7 +400,6 @@ public class NaiveJson {
     }
 
     /**
-     *
      * @param code
      * @param seq_id
      * @param submit_id

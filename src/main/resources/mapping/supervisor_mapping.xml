@@ -314,4 +314,31 @@
             and (status = 1 or status = 2 or status = 0)
         </where>
     </select>
+    <select id="supervisorGetAllScrapSubmitListHistory" resultType="com.jig.entity.scrap.ScrapSubmit">
+        select s.*,
+        u1.name submit_name,
+        u2.name first_acceptor_name,
+        u3.name final_acceptor_name
+        from scrap_submit_history s INNER JOIN user u1 on u1.id = s.submit_id
+        LEFT JOIN user u2 on u2.id = s.first_acceptor
+        LEFT JOIN user u3 on u3.id = s.final_acceptor
+        <where>
+            u1.workcell_id = #{workcell_id}
+            <if test="code!=''">
+                and s.code like concat('%',#{code},'%')
+            </if>
+            <if test="seq_id!=''">
+                and s.seq_id like concat('%',#{seq_id},'%')
+            </if>
+            <if test="status!=''">
+                and s.status = #{status}
+            </if>
+            <if test="scrap_reason!=''">
+                and s.scrap_reason like concat('%',#{scrap_reason},'%')
+            </if>
+            <if test="start_date!='' and end_date !=''">
+                and (STR_TO_DATE(s.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
+            </if>
+        </where>
+    </select>
 </mapper>

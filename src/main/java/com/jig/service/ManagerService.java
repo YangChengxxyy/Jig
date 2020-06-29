@@ -124,4 +124,12 @@ public class ManagerService {
     public int get_manager_scrap_submit_list_history_pages(String code, String submit_name, String start_date, String end_date, String status, String scrap_reason, String workcell_id) {
         return managerMapper.get_manager_scrap_submit_list_history_pages(code, submit_name, start_date, end_date, status, scrap_reason, workcell_id);
     }
+
+    public List<PurchaseIncomeSubmit> get_all_manager_purchase_submit_list_history(String bill_no, String submit_name, String start_date, String end_date, String status, String workcell_id) {
+        return managerMapper.get_all_manager_purchase_submit_list_history(bill_no, submit_name, start_date, end_date, status, workcell_id);
+    }
+
+    public List<ScrapSubmit> get_all_manager_scrap_submit_list_history(String code, String seq_id, String start_date, String end_date, String status, String scrap_reason, String workcell_id) {
+        return managerMapper.get_all_manager_scrap_submit_list_history(code,seq_id,start_date,end_date,status,scrap_reason,workcell_id);
+    }
 }

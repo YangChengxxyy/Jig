@@ -124,4 +124,8 @@ public class SupervisorService {
     public List<PurchaseIncomeSubmit> supervisorGetAllPurchaseSubmitHistoryList(String bill_no, String submit_name, String start_date, String end_date, String status, String user_id) {
         return supervisorMapper.supervisorGetAllPurchaseSubmitHistoryList(bill_no, submit_name, start_date, end_date, status, user_id);
     }
+
+    public List<ScrapSubmit> supervisorGetAllScrapSubmitListHistory(String code, String seq_id, String start_date, String end_date, String status, String scrap_reason, String workcell_id) {
+        return supervisorMapper.supervisorGetAllScrapSubmitListHistory(code, seq_id, start_date, end_date, status, scrap_reason, workcell_id);
+    }
 }
