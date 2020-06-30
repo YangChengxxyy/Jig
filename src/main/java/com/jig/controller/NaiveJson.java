@@ -307,10 +307,13 @@ public class NaiveJson {
      * @return 保修历史
      */
     @RequestMapping("get_repair_history")
-    public Map<String, Object> naiveGetRepairHistory(@RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number) {
-        List<RepairJigHistory> list = naiveService.naiveGetRepairHistory(submit_id, page_number);
-        int a = naiveService.naiveGetRepairHistoryPage(submit_id);
-        return getStringObjectMap(list, a);
+    public Map<String, Object> naiveGetRepairHistory(@RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
+        List<RepairJigHistory> list = naiveService.naiveGetRepairHistory(submit_id, page_number, page_size);
+        int all = naiveService.naiveGetRepairHistoryPage(submit_id);
+        Map<String, Object> map = new HashMap<>();
+        map.put("all", all);
+        map.put("data", list);
+        return map;
     }
 
     /**

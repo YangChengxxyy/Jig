@@ -214,7 +214,7 @@ public interface NaiveMapper {
      */
     void naiveDeleteOutgoingJig(@Param("id") String id);
 
-    List<RepairJigHistory> naiveGetRepairHistory(@Param("submit_id") String submit_id, @Param("page_number") int page_number);
+    List<RepairJigHistory> naiveGetRepairHistory(@Param("submit_id") String submit_id, @Param("page_number") int page_number, @Param("page_size") int page_size);
 
     int naiveGetRepairHistoryPage(@Param("submit_id") String submit_id);
 
