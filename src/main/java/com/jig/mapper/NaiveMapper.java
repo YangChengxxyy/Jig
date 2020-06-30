@@ -181,6 +181,18 @@ public interface NaiveMapper {
 
 
     /**
+     * 获得已出库工夹具OutgoingJig对象所有页数
+     *
+     * @return 已出库工夹具OutgoingJig对象
+     */
+    List<OutgoingJig> naiveGetOutgoingJigListAllPages(@Param("code") String code,
+                                              @Param("name") String name,
+                                              @Param("start_date") String start_date,
+                                              @Param("end_date") String end_date,
+                                              @Param("user_for") String user_for,
+                                              @Param("workcell_id") String workcell_id);
+
+    /**
      * 获得已出库工夹具记录数
      *
      * @return 已出库工夹具记录数
