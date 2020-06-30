@@ -251,7 +251,7 @@
                  left join user u1 on rs.submit_id = u1.id
                  left join user u2 on acceptor_id = u2.id
         where submit_id = #{submit_id}
-        limit #{page_number},5
+        limit #{page_number},#{page_size}
     </select>
     <select id="naiveGetRepairListPage" resultType="java.lang.Integer">
         select count(*)

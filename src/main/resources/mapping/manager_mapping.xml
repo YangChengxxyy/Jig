@@ -231,7 +231,7 @@
                 and p.bill_no like concat('%',#{bill_no},'%')
             </if>
             <if test="submit_name!=''">
-                and p.submit_name like concat('%',#{submit_name},'%')
+                and u.name like concat('%',#{submit_name},'%')
             </if>
             <if test="status!=''">
                 and p.status = #{status}
@@ -241,5 +241,61 @@
             </if>
         </where>
         group by u.name
+    </select>
+    <select id="get_all_manager_purchase_submit_list_history"
+            resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
+        select p.*,
+        pl.name production_line_name,
+        u.name submit_name,
+        u1.name first_acceptor_name,
+        u2.name final_acceptor_name
+
+        from purchase_income_submit_history p inner join production_line pl on p.production_line_id = pl.id
+        left join user u on p.submit_id = u.id
+        left join user u1 on p.first_acceptor = u1.id
+        left join user u2 on p.final_acceptor = u2.id
+
+        <where>
+            u.workcell_id = #{workcell_id}
+            <if test="bill_no!=''">
+                and p.bill_no like concat('%',#{bill_no},'%')
+            </if>
+            <if test="submit_name!=''">
+                and u.name like concat('%',#{submit_name},'%')
+            </if>
+            <if test="status!=''">
+                and p.status = #{status}
+            </if>
+            <if test="start_date!='' and end_date !=''">
+                and (STR_TO_DATE(p.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
+            </if>
+        </where>
+    </select>
+    <select id="get_all_manager_scrap_submit_list_history" resultType="com.jig.entity.scrap.ScrapSubmit">
+        select s.*,
+        u1.name submit_name,
+        u2.name first_acceptor_name,
+        u3.name final_acceptor_name
+        from scrap_submit_history s INNER JOIN user u1 on u1.id = s.submit_id
+        LEFT JOIN user u2 on u2.id = s.first_acceptor
+        LEFT JOIN user u3 on u3.id = s.final_acceptor
+        <where>
+            u1.workcell_id = #{workcell_id}
+            <if test="code!=''">
+                and s.code like concat('%',#{code},'%')
+            </if>
+            <if test="seq_id!=''">
+                and s.seq_id like #{seq_id}
+            </if>
+            <if test="status!=''">
+                and s.status = #{status}
+            </if>
+            <if test="scrap_reason!=''">
+                and s.scrap_reason like concat('%',#{scrap_reason},'%')
+            </if>
+            <if test="start_date!='' and end_date !=''">
+                and (STR_TO_DATE(s.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
+            </if>
+        </where>
     </select>
 </mapper>

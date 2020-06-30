@@ -135,9 +135,9 @@ public class NaiveService {
     }
 
     //naive获取报修列表
-    public List<RepairJig> naiveGetRepairList(String submit_id, int page_number) {
-        page_number = (page_number - 1) * 5;
-        return naiveMapper.naiveGetRepairList(submit_id, page_number);
+    public List<RepairJig> naiveGetRepairList(String submit_id, int page_number,int page_size) {
+        page_number = (page_number - 1) * page_size;
+        return naiveMapper.naiveGetRepairList(submit_id, page_number,page_size);
     }
 
     //naive获取报修列表页数

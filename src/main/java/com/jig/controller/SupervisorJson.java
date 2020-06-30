@@ -329,6 +329,7 @@ public class SupervisorJson {
                                                  @RequestParam("user_id") String user_id,
                                                  @RequestParam("file_name") String file_name,
                                                  HttpServletResponse response) {
+        page_number = (page_number - 1) * page_size;
         List<PurchaseIncomeSubmit> list = supervisorService.supervisorGetPurchaseSubmitHistory(bill_no, submit_name, start_date, end_date, status, page_number, page_size, user_id);
         poiUtil.outputFile(response, file_name, list);
     }
@@ -345,4 +346,35 @@ public class SupervisorJson {
         List<PurchaseIncomeSubmit> list = supervisorService.supervisorGetAllPurchaseSubmitHistoryList(bill_no, submit_name, start_date, end_date, status, user_id);
         poiUtil.outputFile(response, file_name, list);
     }
+
+    @RequestMapping("download_one_scrap_history")
+    public void downloadOneScrapHistory(HttpServletResponse response,
+                                        @RequestParam("code") String code,
+                                        @RequestParam("seq_id") String seq_id,
+                                        @RequestParam("start_date") String start_date,
+                                        @RequestParam("end_date") String end_date,
+                                        @RequestParam("status") String status,
+                                        @RequestParam("scrap_reason") String scrap_reason,
+                                        @RequestParam("page_number") int page_number,
+                                        @RequestParam("page_size") int page_size,
+                                        @RequestParam("workcell_id") String workcell_id,
+                                        @RequestParam("file_name") String file_name) {
+        page_number = (page_number - 1) * page_size;
+        List<ScrapSubmit> list = supervisorService.supervisorGetScrapSubmitListHistory(code, seq_id, start_date, end_date, status, scrap_reason, page_number, page_size, workcell_id);
+        poiUtil.outputFile(response, file_name, list);
+    }
+    @RequestMapping("download_all_scrap_history")
+    public void downloadAllScrapHistory(HttpServletResponse response,
+                                        @RequestParam("code") String code,
+                                        @RequestParam("seq_id") String seq_id,
+                                        @RequestParam("start_date") String start_date,
+                                        @RequestParam("end_date") String end_date,
+                                        @RequestParam("status") String status,
+                                        @RequestParam("scrap_reason") String scrap_reason,
+                                        @RequestParam("workcell_id") String workcell_id,
+                                        @RequestParam("file_name") String file_name) {
+        List<ScrapSubmit> list = supervisorService.supervisorGetAllScrapSubmitListHistory(code, seq_id, start_date, end_date, status, scrap_reason, workcell_id);
+        poiUtil.outputFile(response, file_name, list);
+    }
+
 }

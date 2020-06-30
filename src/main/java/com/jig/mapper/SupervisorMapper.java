@@ -145,4 +145,6 @@ public interface SupervisorMapper {
     List<PurchaseIncomeSubmit> supervisorGetAllPurchaseSubmitList();
 
     List<PurchaseIncomeSubmit> supervisorGetAllPurchaseSubmitHistoryList(@Param("bill_no") String bill_no, @Param("submit_name") String submit_name, @Param("start_date") String start_date, @Param("end_date") String end_date, @Param("status") String status, @Param("user_id") String user_id);
+
+    List<ScrapSubmit> supervisorGetAllScrapSubmitListHistory(@Param("code") String code, @Param("seq_id") String seq_id, @Param("start_date") String start_date, @Param("end_date") String end_date, @Param("status") String status, @Param("scrap_reason") String scrap_reason, @Param("workcell_id") String workcell_id);
 }
