@@ -201,6 +201,24 @@
         </where>
         limit #{page_number},#{page_size}
     </select>
+    <select id="naiveGetOutgoingJigListAllPages" resultType="com.jig.entity.out.OutgoingJig">
+        select *
+        from outgoing_jig_entity_view
+        <where>
+            <if test="code != ''">
+                and code like concat('%',#{code},'%')
+            </if>
+            <if test="user_for != ''">
+                and user_for like concat('%',#{user_for},'%')
+            </if>
+            <if test="name != ''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="start_date != '' and end_date !='' ">
+                and (STR_TO_DATE(outgo_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
+            </if>
+        </where>
+    </select>
     <select id="getOutgoingJigListPage" resultType="java.lang.Integer">
         select count(*)
         from outgoing_jig_entity_view

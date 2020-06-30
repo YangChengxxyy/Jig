@@ -264,13 +264,42 @@ public class NaiveJson {
                                                        @RequestParam("page_number") int page_number,
                                                        @RequestParam("page_size") int page_size,
                                                        @RequestParam("workcell_id") String workcell_id) {
-        page_number = (page_number - 1) * page_size;
         Map<String, Object> map = new HashMap<>();
         List<OutgoingJig> list = naiveService.naiveGetOutgoingJigList(code, name, start_date, end_date, user_for, page_number, page_size, workcell_id);
         int all = naiveService.naiveGetOutgoingJigListPage(code, name, start_date, end_date, user_for, workcell_id);
         map.put("data", list);
         map.put("all", all);
         return map;
+    }
+
+    //归还工夹具导出本页
+    @RequestMapping("download_one_outgoing_list")
+    public void naiveDownloadOneOutgoingList(HttpServletResponse response,
+                                             @RequestParam("code") String code,
+                                             @RequestParam("name") String name,
+                                             @RequestParam("start_date") String start_date,
+                                             @RequestParam("end_date") String end_date,
+                                             @RequestParam("user_for") String user_for,
+                                             @RequestParam("page_number") int page_number,
+                                             @RequestParam("page_size") int page_size,
+                                             @RequestParam("workcell_id") String workcell_id,
+                                             @RequestParam("file_name") String file_name) {
+        List<OutgoingJig> list = naiveService.naiveGetOutgoingJigList(code, name, start_date, end_date, user_for, page_number, page_size, workcell_id);
+        poiUtil.outputFile(response, file_name, list);
+    }
+
+    //归还工夹具导出所有页
+    @RequestMapping("download_all_outgoing_list")
+    public void naiveDownloadAllOutgoingList(HttpServletResponse response,
+                                             @RequestParam("code") String code,
+                                             @RequestParam("name") String name,
+                                             @RequestParam("start_date") String start_date,
+                                             @RequestParam("end_date") String end_date,
+                                             @RequestParam("user_for") String user_for,
+                                             @RequestParam("workcell_id") String workcell_id,
+                                             @RequestParam("file_name") String file_name) {
+        List<OutgoingJig> list = naiveService.naiveGetOutgoingJigListAllPages(code, name, start_date, end_date, user_for, workcell_id);
+        poiUtil.outputFile(response, file_name, list);
     }
 
     /**

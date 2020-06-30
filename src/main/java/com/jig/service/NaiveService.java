@@ -111,7 +111,12 @@ public class NaiveService {
 
     //获取已经出库的工夹具list
     public List<OutgoingJig> naiveGetOutgoingJigList(String code, String name, String start_date, String end_date, String user_for, int page_number, int page_size, String workcell_id) {
-        return naiveMapper.naiveGetOutgoingJigList(code, name, start_date, end_date, user_for, page_number, page_size, workcell_id);
+        return naiveMapper.naiveGetOutgoingJigList(code, name, start_date, end_date, user_for, (page_number - 1) * page_size, page_size, workcell_id);
+    }
+
+    //获取已经出库的工夹具list所有(没有页数限制)
+    public List<OutgoingJig> naiveGetOutgoingJigListAllPages(String code, String name, String start_date, String end_date, String user_for, String workcell_id) {
+        return naiveMapper.naiveGetOutgoingJigListAllPages(code, name, start_date, end_date, user_for, workcell_id);
     }
 
     public int naiveGetOutgoingJigListPage(String code, String name, String start_date, String end_date, String user_for, String workcell_id) {
