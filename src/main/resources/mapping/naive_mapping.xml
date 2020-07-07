@@ -418,4 +418,14 @@
         select count(*) from regular_maintenance_history
         where (reason like CONCAT('%|', #{reason}, '%') or reason like CONCAT('%', #{reason}, '|%') or reason like CONCAT(#{reason}, '%'))
     </select>
+    <select id="naive_get_pending_purchase_submit_list" resultType="com.jig.entity.purchase.PendingPuchaseIncomeSubmit">
+        select * from pending_purchase_submit_entity_view
+        where workcell_id = #{workcell_id}
+        limit #{page_number}, #{page_size}
+    </select>
+    <select id="naive_get_pending_purchase_submit_list_pages" resultType="java.lang.Integer">
+        select count(*)
+        from pending_purchase_submit_entity_view
+        where workcell_id = #{workcell_id}
+    </select>
 </mapper>

@@ -7,6 +7,7 @@ import com.jig.entity.jig.JigPosition;
 import com.jig.entity.jig.JigStock;
 import com.jig.entity.out.OutgoSubmit;
 import com.jig.entity.out.OutgoingJig;
+import com.jig.entity.purchase.PendingPuchaseIncomeSubmit;
 import com.jig.entity.repair.MaintenanceSubmit;
 import com.jig.entity.repair.MaintenanceType;
 import com.jig.entity.repair.RepairJigHistory;
@@ -174,9 +175,9 @@ public class NaiveJson {
     }
 
     @RequestMapping("change_jig_position")
-    public int navieChangeJigPosition(@Param("jig_id") String jig_id,
-                                      @Param("code") String code,
-                                      @Param("seq_id") String seq_id,
+    public int navieChangeJigPosition(@RequestParam("jig_id") String jig_id,
+                                      @RequestParam("code") String code,
+                                      @RequestParam("seq_id") String seq_id,
                                       @RequestParam("old_position") String old_position,
                                       @RequestParam("jig_cabinet_id") String jig_cabinet_id,
                                       @RequestParam("location_id") String location_id,
@@ -557,5 +558,25 @@ public class NaiveJson {
     }
     // 朴素贝叶斯算法思路 C：工夹具故障, Ai:要判断的工夹具检点时出现的各个问题
     //  C = (P(C)*P(Ai|C) / P(Ai在所有检点时有出现过的次数))     P(Ai|C) = Ai问题在该工夹具出现过的问题次数+1/工夹具故障时出现过的所有问题的次数+1
+
+    /**
+     * 获取待入库的采购入库清单
+     * @param workcell_id
+     * @param page_number
+     * @param page_size
+     * @return
+     */
+    @RequestMapping("get_pending_purchase_submit_list")
+    public Map<Object, Object> getPendingPurchaseSubmitList(@RequestParam("workcell_id") String workcell_id,
+                                                            @RequestParam("page_number") int page_number,
+                                                            @RequestParam("page_size") int page_size){
+        Map<Object, Object> map = new HashMap<>();
+        List<PendingPuchaseIncomeSubmit> list = naiveService.naive_get_pending_purchase_submit_list(workcell_id, page_number, page_size);
+        int all = naiveService.naive_get_pending_purchase_submit_list_pages(workcell_id);
+
+        map.put("data", list);
+        map.put("all", all);
+        return map;
+    }
 
 }
