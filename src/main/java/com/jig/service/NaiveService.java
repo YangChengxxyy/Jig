@@ -90,8 +90,8 @@ public class NaiveService {
     }
 
     //改变工夹具的存放位置
-    public int naive_change_jig_position(String code, String seq_id, String old_position, String jig_cabinet_id, String location_id, String bin, User user) {
-        return naiveMapper.naive_change_jig_position(code, seq_id, old_position, jig_cabinet_id, location_id, bin, user);
+    public int naive_change_jig_position(String jig_id, String code, String seq_id, String old_position, String jig_cabinet_id, String location_id, String bin, User user) {
+        return naiveMapper.naive_change_jig_position(jig_id, code, seq_id, old_position, jig_cabinet_id, location_id, bin, user);
     }
 
     //初级用户 根据夹具柜号和区号确定 检点的工夹具list
@@ -100,8 +100,8 @@ public class NaiveService {
     }
 
     //工夹具出库
-    public void naiveOutgoJig(String code, String seq_id, String submit_id, String production_line_id, String rec_id) {
-        naiveMapper.naiveOutgoJig(code, seq_id, submit_id, production_line_id, rec_id);
+    public void naiveOutgoJig(String jig_id, String code, String seq_id, String submit_id, String production_line_id, String rec_id) {
+        naiveMapper.naiveOutgoJig(jig_id, code, seq_id, submit_id, production_line_id, rec_id);
     }
 
     //工夹具检点

@@ -148,7 +148,7 @@ public class NaiveJson {
         return naiveService.naive_get_out_and_in_history_list(code, seq_id);
     }
 
-    //初级用户 根据选择的工夹具存放区域 和 搜索条件来 确定工夹具list(未用到)
+    //初级用户 根据选择的工夹具存放区域 和 搜索条件来 确定工夹具list
     @RequestMapping("get_jig_list_by_select")
     public Map<Object, Object> navieGetJigListBySelect(@RequestParam("jig_cabinet_id") String jig_cabinet_id,
                                                        @RequestParam("jig_location_id") String jig_location_id,
@@ -174,7 +174,8 @@ public class NaiveJson {
     }
 
     @RequestMapping("change_jig_position")
-    public int navieChangeJigPosition(@Param("code") String code,
+    public int navieChangeJigPosition(@Param("jig_id") String jig_id,
+                                      @Param("code") String code,
                                       @Param("seq_id") String seq_id,
                                       @RequestParam("old_position") String old_position,
                                       @RequestParam("jig_cabinet_id") String jig_cabinet_id,
@@ -182,7 +183,7 @@ public class NaiveJson {
                                       @RequestParam("bin") String bin,
                                       @RequestParam("user_id") String user_id) {
         User user = getUserById(user_id);
-        return naiveService.naive_change_jig_position(code, seq_id, old_position, jig_cabinet_id, location_id, bin, user);
+        return naiveService.naive_change_jig_position(jig_id, code, seq_id, old_position, jig_cabinet_id, location_id, bin, user);
     }
 
     //初级用户 根据夹具柜号和区号确定 检点的工夹具list
@@ -235,14 +236,15 @@ public class NaiveJson {
      * @return 是否出库成功
      */
     @RequestMapping("outgo_jig")
-    public boolean naiveOutgoJig(@RequestParam("code") String code,
+    public boolean naiveOutgoJig(@RequestParam("jig_id") String jig_id,
+                                 @RequestParam("code") String code,
                                  @RequestParam("seq_id") String seq_id,
                                  @RequestParam("submit_id") String submit_id,
                                  @RequestParam("production_line_id") String production_line_id,
                                  @RequestParam("user_id") String accpetor_id) {
         try {
 
-            naiveService.naiveOutgoJig(code, seq_id, submit_id, production_line_id, accpetor_id);
+            naiveService.naiveOutgoJig(jig_id, code, seq_id, submit_id, production_line_id, accpetor_id);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

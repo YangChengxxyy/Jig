@@ -122,7 +122,8 @@ public interface NaiveMapper {
                                                                @Param("seq_id") String seq_id);
 
 
-    int naive_change_jig_position(@Param("code") String code,
+    int naive_change_jig_position(@Param("jig_id") String jig_id,
+                                  @Param("code") String code,
                                   @Param("seq_id") String seq_id,
                                   @Param("old_position") String old_position,
                                   @Param("jig_cabinet_id") String jig_cabinet_id,
@@ -144,7 +145,8 @@ public interface NaiveMapper {
      * @param submit_id 申请人id
      * @param rec_id    记录人id
      */
-    void naiveOutgoJig(@Param("code") String code,
+    void naiveOutgoJig(@Param("jig_id") String jig_id,
+                       @Param("code") String code,
                        @Param("seq_id") String seq_id,
                        @Param("submit_id") String submit_id,
                        @Param("production_line_id") String production_line_id,

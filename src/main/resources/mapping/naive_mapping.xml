@@ -57,7 +57,7 @@
           SELECT FOUND_ROWS() as count;
     </select>
     <select id="navieGetJigEntityListByLocation" resultType="com.jig.entity.jig.JigEntity">
-        select * from jig_position jp inner join jig_definition jd on jp.code = jd.code
+        select je.*, jp.jig_cabinet_id, jp.location_id, jp.bin, jp.status, jd.* from jig_position jp inner join jig_definition jd on jp.code = jd.code
         inner join jig_entity je on jp.code = je.code and je.seq_id = jp.seq_id
         where jd.code = #{code} and jp.status = 1
         <if test="jig_cabinet_id != '' ">
@@ -68,7 +68,7 @@
         </if>
     </select>
     <select id="navieGetJigListBySelect" resultType="com.jig.entity.jig.JigStock">
-        select *,count(jp.code) as 'count'
+        select *, count(jp.code) as 'count'
         from jig_position jp inner join jig_entity je on jp.code = je.code and jp.seq_id = je.seq_id
         inner join jig_definition jd on jp.code = jd.code
         <where>
@@ -141,13 +141,14 @@
         where code = #{code}
           and seq_id = #{seq_id};
 
-        insert into outgo_income_history(code, seq_id, outgo_time, rec_id, status, description)
-        values (#{code}, #{seq_id}, now(), #{user.id}, 2,
+        insert into outgo_income_history(jig_id, code, seq_id, outgo_time, rec_id, status, description)
+        values (#{jig_id}, #{code}, #{seq_id}, now(), #{user.id}, 2,
                 concat(#{old_position}, ' => ', #{jig_cabinet_id}, '-', #{location_id}, '-', #{bin}))
     </update>
     <select id="navieGetMaintenanceJigDetailList" resultType="com.jig.entity.jig.JigEntity">
-        select * from jig_position jp inner join regular_maintenance rm on jp.code = rm.code and jp.seq_id = rm.seq_id
-
+        select je.id, rm.code, rm.seq_id, rm.pm_period, rm.last_time, jp.jig_cabinet_id, jp.location_id, jp.bin
+        from jig_position jp inner join regular_maintenance rm on jp.code = rm.code and jp.seq_id = rm.seq_id
+                             inner join jig_entity je on jp.code = je.code and jp.seq_id = je.seq_id
         where jp.code = #{code} and jp.status = 1
         <if test="jig_cabinet_id != '' ">
             and jp.jig_cabinet_id = #{jig_cabinet_id}
@@ -157,11 +158,11 @@
         </if>
     </select>
     <insert id="naiveOutgoJig">
-        insert into outgo_income_history(code, seq_id, submit_id, outgo_time, rec_id, status, production_line_id)
-        values (#{code}, #{seq_id}, #{submit_id}, now(), #{rec_id}, 0, #{production_line_id});
+        insert into outgo_income_history(jig_id, code, seq_id, submit_id, outgo_time, rec_id, status, production_line_id)
+        values (#{jig_id}, #{code}, #{seq_id}, #{submit_id}, now(), #{rec_id}, 0, #{production_line_id});
 
-        insert into outgoing_jig(code, seq_id, user_id, outgo_time, production_line_id)
-        values (#{code}, #{seq_id}, #{submit_id}, now(), #{production_line_id});
+        insert into outgoing_jig(jig_id ,code, seq_id, user_id, outgo_time, production_line_id)
+        values (#{jig_id}, #{code}, #{seq_id}, #{submit_id}, now(), #{production_line_id});
 
         update jig_entity
         set used_count = used_count + 1
@@ -242,13 +243,13 @@
         set status = 1
         where code = #{code}
           and seq_id = #{seq_id};
-        insert into outgo_income_history(code, seq_id, submit_id, outgo_time, rec_id, status, production_line_id)
-        values (#{code}, #{seq_id}, ${submit_id}, now(), #{rec_id}, 1, #{production_line_id})
+        insert into outgo_income_history(jig_id, code, seq_id, submit_id, outgo_time, rec_id, status, production_line_id)
+        values (#{id}, #{code}, #{seq_id}, ${submit_id}, now(), #{rec_id}, 1, #{production_line_id})
     </update>
     <delete id="naiveDeleteOutgoingJig">
         delete
         from outgoing_jig
-        where id = #{id}
+        where jig_id = #{id}
     </delete>
     <select id="naiveGetRepairHistory" resultType="com.jig.entity.repair.RepairJigHistory">
         select rs.*, u1.name submit_name, u2.name accrptor_name
