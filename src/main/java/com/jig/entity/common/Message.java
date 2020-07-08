@@ -7,7 +7,7 @@ import java.util.Map;
  */
 public class Message {
     private String path;
-    private Map<String,Object> params;
+    private Map<String, Object> params;
 
     public String getPath() {
         return path;
