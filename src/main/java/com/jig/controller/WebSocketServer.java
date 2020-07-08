@@ -34,17 +34,11 @@ public class WebSocketServer {
     public void onOpen(@PathParam("role") String role, @PathParam("id") String id, Session session) {
         logger.info("连接成功");
         ONLINE_SESSIONS.put(role + "-" + id, session);
-        Message message = new Message();
-        message.setPath("/en-zh");
-        message.setParam("test");
-        message.setCondition("2132");
-        String jsonStr = JSON.toJSONString(message);
-        sendMessageToId(id,jsonStr);
     }
 
     /**
      * 当客户端发送消息：1.获取它的用户名和消息 2.发送消息给所有人
-     * <p>
+     *
      * PS: 这里约定传递的消息为JSON字符串 方便传递更多参数！
      */
     @OnMessage

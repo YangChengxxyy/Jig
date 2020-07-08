@@ -1,12 +1,13 @@
 package com.jig.entity.common;
 
+import java.util.Map;
+
 /**
  * @author YC
  */
 public class Message {
     private String path;
-    private String param;
-    private String condition;
+    private Map<String,Object> params;
 
     public String getPath() {
         return path;
@@ -16,19 +17,11 @@ public class Message {
         this.path = path;
     }
 
-    public String getParam() {
-        return param;
+    public Map<String, Object> getParams() {
+        return params;
     }
 
-    public void setParam(String param) {
-        this.param = param;
-    }
-
-    public String getCondition() {
-        return condition;
-    }
-
-    public void setCondition(String condition) {
-        this.condition = condition;
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
     }
 }
