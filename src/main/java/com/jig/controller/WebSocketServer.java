@@ -1,5 +1,8 @@
 package com.jig.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.jig.entity.common.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -17,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @ServerEndpoint("/socket/{role}/{id}")
 public class WebSocketServer {
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     /**
      * 全部在线会话
@@ -30,6 +34,12 @@ public class WebSocketServer {
     public void onOpen(@PathParam("role") String role, @PathParam("id") String id, Session session) {
         logger.info("连接成功");
         ONLINE_SESSIONS.put(role + "-" + id, session);
+        Message message = new Message();
+        message.setPath("/en-zh");
+        message.setParam("test");
+        message.setCondition("2132");
+        String jsonStr = JSON.toJSONString(message);
+        sendMessageToId(id,jsonStr);
     }
 
     /**
