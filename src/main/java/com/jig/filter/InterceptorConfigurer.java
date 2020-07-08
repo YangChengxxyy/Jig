@@ -16,6 +16,7 @@ public class InterceptorConfigurer implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(powerInterceptor)
                 .addPathPatterns("/**")
+                .addPathPatterns("/socket/**")
                 .excludePathPatterns("/api/login_check")
                 .excludePathPatterns("/api/get_workcell_list")
                 .excludePathPatterns("/images/**")
