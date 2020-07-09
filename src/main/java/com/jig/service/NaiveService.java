@@ -11,6 +11,7 @@ import com.jig.entity.purchase.PendingPuchaseIncomeSubmit;
 import com.jig.entity.repair.MaintenanceSubmit;
 import com.jig.entity.repair.RepairJig;
 import com.jig.entity.repair.RepairJigHistory;
+import com.jig.entity.scrap.PendingScrapSubmit;
 import com.jig.mapper.NaiveMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -217,5 +218,18 @@ public class NaiveService {
 
     public int naive_get_pending_purchase_submit_list_pages(String workcell_id) {
         return naiveMapper.naive_get_pending_purchase_submit_list_pages(workcell_id);
+    }
+
+    public List<PendingScrapSubmit> naive_get_pending_scrap_submit_list(String workcell_id, int page_number, int page_size){
+        page_number = (page_number - 1) * page_size;
+        return naiveMapper.naive_get_pending_scrap_submit_list(workcell_id, page_number, page_size);
+    }
+
+    public int naive_get_pending_scrap_submit_list_pages(String workcell_id) {
+        return naiveMapper.naive_get_pending_scrap_submit_list_pages(workcell_id);
+    }
+
+    public int naive_scrap_jig(String code, String seq_id, String jig_id, String submit_id, String user_id) {
+        return naiveMapper.naive_scrap_jig(code, seq_id, jig_id, submit_id, user_id);
     }
 }

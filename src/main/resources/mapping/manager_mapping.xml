@@ -57,9 +57,9 @@
         values(#{user.id},#{id},now(),'purchase_income_submit',#{field},'update',#{old_value},#{new_value},
                 concat('经理',#{user.name},'终审不通过~原因:',#{final_reason}))
 
-        <!-- insert into purchase_income_submit_history select * from purchase_income_submit where id = #{id};
+        insert into purchase_income_submit_history select * from purchase_income_submit where id = #{id};
 
-        delete from purchase_income_submit where id = #{id}-->
+        delete from purchase_income_submit where id = #{id}
     </update>
     <select id="get_manager_jig_info_list" resultType="com.jig.entity.jig.JigDefinition">
         select *  from jig_definition j inner join jig_family f on j.family_id = f.id
@@ -159,13 +159,24 @@
 
         insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value,operate_string)
         values(#{user.id},#{submit_id},now(),'scrap_submit',#{field},'update',#{old_value},#{new_value},
-        concat('经理',#{user.name},'终审通过'))
-        <!--insert into scrap_submit_history select * from scrap_submit where id = #{submit_id};
+        concat('经理',#{user.name},'终审通过'));
 
-        delete from scrap_submit where id = #{submit_id}-->
+        insert into scrap_submit_history select * from scrap_submit where id = #{submit_id};
 
+        INSERT into pending_scrap_submit
+        (id, code, seq_id, submit_id, submit_time, used_count, scrap_reason, scrap_photo_url,
+         first_time, first_acceptor, first_reason,
+         final_time, final_acceptor, final_reason)
+        SELECT id, code, seq_id, submit_id, submit_time, used_count, scrap_reason, scrap_photo_url,
+         first_time, first_acceptor, first_reason,
+         final_time, final_acceptor, final_reason
+        FROM scrap_submit where id = #{submit_id};
 
+        update pending_scrap_submit
+        set status = 0
+        where id = #{submit_id};
 
+        delete from scrap_submit where id = #{submit_id}
     </update>
     <update id="manager_no_pass_scrap_submit">
         update scrap_submit

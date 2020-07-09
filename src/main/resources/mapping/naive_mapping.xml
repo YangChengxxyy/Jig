@@ -428,4 +428,27 @@
         from pending_purchase_submit_entity_view
         where workcell_id = #{workcell_id}
     </select>
+    <select id="naive_get_pending_scrap_submit_list" resultType="com.jig.entity.scrap.PendingScrapSubmit">
+        select * from pending_scrap_submit_entity_view
+        where workcell_id = #{workcell_id}
+        limit #{page_number}, #{page_size}
+    </select>
+    <select id="naive_get_pending_scrap_submit_list_pages" resultType="java.lang.Integer">
+        select count(*)
+        from pending_scrap_submit_entity_view
+        where workcell_id = #{workcell_id}
+    </select>
+    <insert id="naive_scrap_jig">
+        insert into outgo_income_history(jig_id, code, seq_id, submit_id, outgo_time, rec_id, status)
+        values (#{jig_id}, #{code}, #{seq_id}, #{submit_id}, now(), #{user_id}, 4);
+
+        delete from pending_scrap_submit
+        where code = #{code} and seq_id = #{seq_id};
+
+        delete from jig_entity
+        where id = #{jig_id};
+
+        delete from jig_position
+        where code = #{code} and seq_id = #{seq_id}
+    </insert>
 </mapper>

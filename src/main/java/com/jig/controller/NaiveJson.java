@@ -11,6 +11,7 @@ import com.jig.entity.purchase.PendingPuchaseIncomeSubmit;
 import com.jig.entity.repair.MaintenanceSubmit;
 import com.jig.entity.repair.MaintenanceType;
 import com.jig.entity.repair.RepairJigHistory;
+import com.jig.entity.scrap.PendingScrapSubmit;
 import com.jig.service.CommonService;
 import com.jig.service.LifeService;
 import com.jig.service.NaiveService;
@@ -561,6 +562,7 @@ public class NaiveJson {
 
     /**
      * 获取待入库的采购入库清单
+     *
      * @param workcell_id
      * @param page_number
      * @param page_size
@@ -569,7 +571,7 @@ public class NaiveJson {
     @RequestMapping("get_pending_purchase_submit_list")
     public Map<Object, Object> getPendingPurchaseSubmitList(@RequestParam("workcell_id") String workcell_id,
                                                             @RequestParam("page_number") int page_number,
-                                                            @RequestParam("page_size") int page_size){
+                                                            @RequestParam("page_size") int page_size) {
         Map<Object, Object> map = new HashMap<>();
         List<PendingPuchaseIncomeSubmit> list = naiveService.naive_get_pending_purchase_submit_list(workcell_id, page_number, page_size);
         int all = naiveService.naive_get_pending_purchase_submit_list_pages(workcell_id);
@@ -577,6 +579,36 @@ public class NaiveJson {
         map.put("data", list);
         map.put("all", all);
         return map;
+    }
+
+    /**
+     * 获取待报废的报废清单
+     * @param workcell_id
+     * @param page_number
+     * @param page_size
+     * @return
+     */
+    @RequestMapping("get_pending_scrap_submit_list")
+    public Map<Object, Object> getPendingScrapSubmitList(@RequestParam("workcell_id") String workcell_id,
+                                                         @RequestParam("page_number") int page_number,
+                                                         @RequestParam("page_size") int page_size) {
+        Map<Object, Object> map = new HashMap<>();
+        List<PendingScrapSubmit> list = naiveService.naive_get_pending_scrap_submit_list(workcell_id, page_number, page_size);
+        int all = naiveService.naive_get_pending_scrap_submit_list_pages(workcell_id);
+
+        map.put("data", list);
+        map.put("all", all);
+        return map;
+    }
+
+    //报废工夹具
+    @RequestMapping("scrap_jig")
+    public int NaiveScrapJig(@RequestParam("code") String code,
+                             @RequestParam("seq_id") String seq_id,
+                             @RequestParam("jig_id") String jig_id,
+                             @RequestParam("submit_id") String submit_id,
+                             @RequestParam("user_id") String user_id){
+        return naiveService.naive_scrap_jig(code, seq_id, jig_id, submit_id, user_id);
     }
 
 }
