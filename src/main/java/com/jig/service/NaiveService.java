@@ -24,6 +24,10 @@ public class NaiveService {
     private NaiveMapper naiveMapper;
 
 
+    public int naive_input_purchase_jig(String bill_no, String code, int seq_id, String jig_cabinet, String location, String description, String user_id) {
+        return naiveMapper.naive_input_purchase_jig(bill_no, code, seq_id, jig_cabinet, location, description, user_id);
+    }
+
      /**
      * 将采购入库的工夹具入库
      * @param bill_no 相关订单单据号

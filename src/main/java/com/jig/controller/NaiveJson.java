@@ -87,6 +87,38 @@ public class NaiveJson {
         return user;
     }
 
+    /**
+     * 初级用户将待采购入库的采购单中的工夹具入库
+     * @param bill_no
+     * @param code
+     * @param count
+     * @param jig_position 要入库的工夹具位置信息,格式: 7,A2|8,C1
+     * @param user_id
+     * @return
+     */
+    @RequestMapping("input_purchase_submit_jig")
+    public int naiveInputPurchaseSubmitJig(@RequestParam("bill_no") String bill_no,
+                                           @RequestParam("code") String code,
+                                           @RequestParam("count") String count,
+                                           @RequestParam("jig_position") String jig_position,
+                                           @RequestParam("user_id") String user_id){
+        String desciption = "";
+        desciption += bill_no + "~" + code + "~" + count;
+        String[] code_list = code.split("\\|");
+        String[] count_list = count.split("\\|");
+        String[] jig_position_list = jig_position.split("\\|");
+        int flag = -1;
+        for (int i = 0; i < code_list.length; i++) {
+            int max_seq_id = naiveService.getMaxSeqId(code_list[i]);
+            String jig_cabinet = jig_position_list[i].split(",")[0];
+            String location = jig_position_list[i].split(",")[1];
+            for (int j = 0; j < Integer.parseInt(count_list[i]); j++) {
+                flag = naiveService.naive_input_purchase_jig(bill_no, code_list[i], max_seq_id + j + 1, jig_cabinet, location, desciption, user_id);
+            }
+        }
+        return flag;
+    }
+
     //将采购入库的工夹具入库
     @RequestMapping("input_jig")
     public int naiveInputJig(@RequestParam("bill_no") String bill_no,
@@ -610,5 +642,7 @@ public class NaiveJson {
                              @RequestParam("user_id") String user_id){
         return naiveService.naive_scrap_jig(code, seq_id, jig_id, submit_id, user_id);
     }
+
+
 
 }

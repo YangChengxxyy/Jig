@@ -23,6 +23,14 @@ import java.util.List;
 @Repository
 public interface NaiveMapper {
 
+    int naive_input_purchase_jig(@Param("bill_no") String bill_no,
+                                 @Param("code") String code,
+                                 @Param("seq_id") int seq_id,
+                                 @Param("jig_cabinet") String jig_cabinet,
+                                 @Param("location") String location,
+                                 @Param("description") String description,
+                                 @Param("user_id") String user_id);
+
     /**
      * 将采购入库的工夹具入库
      * @param bill_no 相关订单单据号
