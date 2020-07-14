@@ -30,7 +30,8 @@
         insert into regular_maintenance(code, seq_id, pm_period)
         values(#{code}, #{seq_id}, 30);
 
-        delete from pending_purchase_income_submit
+        update pending_purchase_income_submit
+        set status = 1
         where bill_no = #{bill_no}
     </insert>
     <insert id="naiveInputJigEntity">
@@ -463,7 +464,8 @@
         insert into outgo_income_history(jig_id, code, seq_id, submit_id, outgo_time, rec_id, status)
         values (#{jig_id}, #{code}, #{seq_id}, #{submit_id}, now(), #{user_id}, 4);
 
-        delete from pending_scrap_submit
+        update pending_scrap_submit
+        set status = 1
         where code = #{code} and seq_id = #{seq_id};
 
         delete from jig_entity
