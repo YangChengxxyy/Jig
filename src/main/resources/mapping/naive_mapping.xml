@@ -12,6 +12,27 @@
     </resultMap>
     <resultMap id="jig_list_by_select_data" type="com.jig.entity.jig.JigEntity">
     </resultMap>
+    <insert id="naive_input_purchase_jig">
+        insert into jig_entity(code, seq_id, bill_no, reg_date, used_count)
+        values (#{code}, #{seq_id}, #{bill_no}, now(), 0);
+
+        insert into jig_position(code, seq_id, jig_cabinet_id, location_id, status)
+        values (#{code}, #{seq_id}, #{jig_cabinet}, #{location}, 1);
+
+        insert into outgo_income_history(code, seq_id, outgo_time, rec_id, status,description)
+        values (#{code}, #{seq_id}, now(), #{user_id}, 3, #{description});
+
+        UPDATE outgo_income_history a
+        LEFT JOIN jig_entity b ON a.code = b.code and a.seq_id = b.seq_id
+        SET a.jig_id = b.id
+        where a.code = #{code} AND A.seq_id = #{seq_id};
+
+        insert into regular_maintenance(code, seq_id, pm_period)
+        values(#{code}, #{seq_id}, 30);
+
+        delete from pending_purchase_income_submit
+        where bill_no = #{bill_no}
+    </insert>
     <insert id="naiveInputJigEntity">
         insert into jig_entity(code, seq_id, bill_no, reg_date, used_count)
         values (#{code}, #{seq_id}, #{bill_no}, now(), 0);
@@ -428,4 +449,30 @@
         from pending_purchase_submit_entity_view
         where workcell_id = #{workcell_id}
     </select>
+    <select id="naive_get_pending_scrap_submit_list" resultType="com.jig.entity.scrap.PendingScrapSubmit">
+        select * from pending_scrap_submit_entity_view
+        where workcell_id = #{workcell_id}
+        limit #{page_number}, #{page_size}
+    </select>
+    <select id="naive_get_pending_scrap_submit_list_pages" resultType="java.lang.Integer">
+        select count(*)
+        from pending_scrap_submit_entity_view
+        where workcell_id = #{workcell_id}
+    </select>
+    <insert id="naive_scrap_jig">
+        insert into outgo_income_history(jig_id, code, seq_id, submit_id, outgo_time, rec_id, status)
+        values (#{jig_id}, #{code}, #{seq_id}, #{submit_id}, now(), #{user_id}, 4);
+
+        delete from pending_scrap_submit
+        where code = #{code} and seq_id = #{seq_id};
+
+        delete from jig_entity
+        where id = #{jig_id};
+
+        delete from jig_position
+        where code = #{code} and seq_id = #{seq_id};
+
+        delete from regular_maintenance
+        where code = #{code} and seq_id = #{seq_id}
+    </insert>
 </mapper>

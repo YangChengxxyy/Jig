@@ -11,6 +11,7 @@ import com.jig.entity.purchase.PendingPuchaseIncomeSubmit;
 import com.jig.entity.repair.MaintenanceSubmit;
 import com.jig.entity.repair.MaintenanceType;
 import com.jig.entity.repair.RepairJigHistory;
+import com.jig.entity.scrap.PendingScrapSubmit;
 import com.jig.service.CommonService;
 import com.jig.service.LifeService;
 import com.jig.service.NaiveService;
@@ -84,6 +85,38 @@ public class NaiveJson {
         user.setId(user_id);
         user.setName(user_name);
         return user;
+    }
+
+    /**
+     * 初级用户将待采购入库的采购单中的工夹具入库
+     * @param bill_no
+     * @param code
+     * @param count
+     * @param jig_position 要入库的工夹具位置信息,格式: 7,A2|8,C1
+     * @param user_id
+     * @return
+     */
+    @RequestMapping("input_purchase_submit_jig")
+    public int naiveInputPurchaseSubmitJig(@RequestParam("bill_no") String bill_no,
+                                           @RequestParam("code") String code,
+                                           @RequestParam("count") String count,
+                                           @RequestParam("jig_position") String jig_position,
+                                           @RequestParam("user_id") String user_id){
+        String desciption = "";
+        desciption += bill_no + "~" + code + "~" + count;
+        String[] code_list = code.split("\\|");
+        String[] count_list = count.split("\\|");
+        String[] jig_position_list = jig_position.split("\\|");
+        int flag = -1;
+        for (int i = 0; i < code_list.length; i++) {
+            int max_seq_id = naiveService.getMaxSeqId(code_list[i]);
+            String jig_cabinet = jig_position_list[i].split(",")[0];
+            String location = jig_position_list[i].split(",")[1];
+            for (int j = 0; j < Integer.parseInt(count_list[i]); j++) {
+                flag = naiveService.naive_input_purchase_jig(bill_no, code_list[i], max_seq_id + j + 1, jig_cabinet, location, desciption, user_id);
+            }
+        }
+        return flag;
     }
 
     //将采购入库的工夹具入库
@@ -561,6 +594,7 @@ public class NaiveJson {
 
     /**
      * 获取待入库的采购入库清单
+     *
      * @param workcell_id
      * @param page_number
      * @param page_size
@@ -569,7 +603,7 @@ public class NaiveJson {
     @RequestMapping("get_pending_purchase_submit_list")
     public Map<Object, Object> getPendingPurchaseSubmitList(@RequestParam("workcell_id") String workcell_id,
                                                             @RequestParam("page_number") int page_number,
-                                                            @RequestParam("page_size") int page_size){
+                                                            @RequestParam("page_size") int page_size) {
         Map<Object, Object> map = new HashMap<>();
         List<PendingPuchaseIncomeSubmit> list = naiveService.naive_get_pending_purchase_submit_list(workcell_id, page_number, page_size);
         int all = naiveService.naive_get_pending_purchase_submit_list_pages(workcell_id);
@@ -578,5 +612,37 @@ public class NaiveJson {
         map.put("all", all);
         return map;
     }
+
+    /**
+     * 获取待报废的报废清单
+     * @param workcell_id
+     * @param page_number
+     * @param page_size
+     * @return
+     */
+    @RequestMapping("get_pending_scrap_submit_list")
+    public Map<Object, Object> getPendingScrapSubmitList(@RequestParam("workcell_id") String workcell_id,
+                                                         @RequestParam("page_number") int page_number,
+                                                         @RequestParam("page_size") int page_size) {
+        Map<Object, Object> map = new HashMap<>();
+        List<PendingScrapSubmit> list = naiveService.naive_get_pending_scrap_submit_list(workcell_id, page_number, page_size);
+        int all = naiveService.naive_get_pending_scrap_submit_list_pages(workcell_id);
+
+        map.put("data", list);
+        map.put("all", all);
+        return map;
+    }
+
+    //报废工夹具
+    @RequestMapping("scrap_jig")
+    public int NaiveScrapJig(@RequestParam("code") String code,
+                             @RequestParam("seq_id") String seq_id,
+                             @RequestParam("jig_id") String jig_id,
+                             @RequestParam("submit_id") String submit_id,
+                             @RequestParam("user_id") String user_id){
+        return naiveService.naive_scrap_jig(code, seq_id, jig_id, submit_id, user_id);
+    }
+
+
 
 }

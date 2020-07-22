@@ -11,6 +11,7 @@ import com.jig.entity.purchase.PendingPuchaseIncomeSubmit;
 import com.jig.entity.repair.MaintenanceSubmit;
 import com.jig.entity.repair.RepairJig;
 import com.jig.entity.repair.RepairJigHistory;
+import com.jig.entity.scrap.PendingScrapSubmit;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -21,6 +22,14 @@ import java.util.List;
 @Mapper
 @Repository
 public interface NaiveMapper {
+
+    int naive_input_purchase_jig(@Param("bill_no") String bill_no,
+                                 @Param("code") String code,
+                                 @Param("seq_id") int seq_id,
+                                 @Param("jig_cabinet") String jig_cabinet,
+                                 @Param("location") String location,
+                                 @Param("description") String description,
+                                 @Param("user_id") String user_id);
 
     /**
      * 将采购入库的工夹具入库
@@ -329,4 +338,16 @@ public interface NaiveMapper {
                                                                             @Param("page_size") int page_size);
 
     int naive_get_pending_purchase_submit_list_pages(@Param("workcell_id") String workcell_id);
+
+    List<PendingScrapSubmit> naive_get_pending_scrap_submit_list(@Param("workcell_id") String workcell_id,
+                                                                 @Param("page_number") int page_number,
+                                                                 @Param("page_size") int page_size);
+
+    int naive_get_pending_scrap_submit_list_pages(@Param("workcell_id") String workcell_id);
+
+    int naive_scrap_jig(@Param("code") String code,
+                        @Param("seq_id") String seq_id,
+                        @Param("jig_id") String jig_id,
+                        @Param("submit_id") String submit_id,
+                        @Param("user_id") String user_id);
 }
