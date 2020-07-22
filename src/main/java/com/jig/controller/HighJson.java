@@ -1,6 +1,7 @@
 package com.jig.controller;
 
 import com.jig.annotation.Permission;
+import com.jig.entity.common.Message;
 import com.jig.entity.common.Role;
 import com.jig.entity.purchase.PurchaseIncomeHistory;
 import com.jig.entity.purchase.PurchaseIncomeSubmit;
@@ -8,7 +9,6 @@ import com.jig.entity.repair.RepairJigHistory;
 import com.jig.entity.scrap.ScrapHistory;
 import com.jig.entity.scrap.ScrapSubmit;
 import com.jig.service.HighService;
-import com.jig.service.LifeService;
 import com.jig.utils.PoiUtil;
 import com.jig.utils.RedisUtil;
 import org.apache.commons.io.FileUtils;
@@ -44,6 +44,8 @@ public class HighJson {
     private RedisUtil redisUtil;
     @Value("${file.resource-url}")
     public String RESOURCE_URL;
+    @Autowired
+    private WebSocketServer webSocketServer;
     @Autowired
     private PoiUtil poiUtil;
     public static final String SCRAP_IMAGE_NAME = "images/scrap_images/";
@@ -299,6 +301,8 @@ public class HighJson {
             scrapSubmit.setScrap_type(scrap_type);
 
             highService.highSubmitScrap(scrapSubmit, pathName.toString());
+            Message message = new Message("'/scrap", "id", submit_id, submit_id + "提交了一份新的报废提交");
+            webSocketServer.sendMessageToRole("supervisor", message);
         } catch (IOException e) {
             e.printStackTrace();
             return false;

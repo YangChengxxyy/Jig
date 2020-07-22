@@ -1,6 +1,5 @@
 package com.jig.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jig.entity.common.Message;
 import org.slf4j.Logger;
@@ -31,14 +30,14 @@ public class WebSocketServer {
      * 当客户端打开连接：1.添加会话对象 2.更新在线人数
      */
     @OnOpen
-    public void onOpen(@PathParam("role") String role, @PathParam("id") String id, Session session) {
-        logger.info("连接成功");
+    public void onOpen(@PathParam("role") String role, @PathParam("id") String id, Session session) throws IOException {
         ONLINE_SESSIONS.put(role + "-" + id, session);
+        logger.info("连接成功");
     }
 
     /**
      * 当客户端发送消息：1.获取它的用户名和消息 2.发送消息给所有人
-     *
+     * <p>
      * PS: 这里约定传递的消息为JSON字符串 方便传递更多参数！
      */
     @OnMessage
@@ -98,5 +97,13 @@ public class WebSocketServer {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void sendMessageToRole(String role, Message message) {
+        sendMessageToRole(role, JSONObject.toJSONString(message));
+    }
+
+    public void sendMessageToId(String id, Message message) {
+        sendMessageToId(id, JSONObject.toJSONString(message));
     }
 }

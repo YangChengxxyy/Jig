@@ -29,9 +29,6 @@
                       and seq_id = #{scrap_submit.seq_id}),
                    #{scrap_submit.scrap_reason}, #{scrap_submit.scrap_type},
                    #{pathName}, 0);
-        insert into message(id, generate_id, generate_time, accept_type, status, message, tab_id)
-        values (UUID(), #{scrap_submit.submit_id}, now(), 'supervisor', '00', '提交了新的报废申请', 'scrap_submit');
-
         insert into operate(operate_man_id, operate_key_id, operate_time, table_name, field, type, new_value,
                             operate_string)
         values (#{scrap_submit.submit_id}, #{scrap_submit.id}, now(),
