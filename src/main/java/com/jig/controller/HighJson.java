@@ -301,7 +301,7 @@ public class HighJson {
             scrapSubmit.setScrap_type(scrap_type);
 
             highService.highSubmitScrap(scrapSubmit, pathName.toString());
-            Message message = new Message("'/scrap", "id", submit_id, submit_id + "提交了一份新的报废提交");
+            Message message = new Message("/scrap/my", "id", submit_id, submit_id + "提交了一份新的报废提交");
             webSocketServer.sendMessageToRole("supervisor", message);
         } catch (IOException e) {
             e.printStackTrace();

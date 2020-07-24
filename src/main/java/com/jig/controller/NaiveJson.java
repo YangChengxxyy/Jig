@@ -1,5 +1,6 @@
 package com.jig.controller;
 
+import com.jig.entity.common.Message;
 import com.jig.entity.common.User;
 import com.jig.entity.jig.JigDefinition;
 import com.jig.entity.jig.JigEntity;
@@ -59,6 +60,9 @@ public class NaiveJson {
     private PoiUtil poiUtil;
     @Autowired
     private RedisUtil redisUtil;
+
+    @Autowired
+    private WebSocketServer webSocketServer;
     public static final String SCRAP_IMAGE_NAME = "images/scrap_images/";
     public static final String REPAIR_IMAGE_NAME = "images/repair_images/";
     public static final String SCRAP = "SCRAP";
@@ -430,6 +434,8 @@ public class NaiveJson {
                 pathName.append(fileName);
             }
             naiveService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, repair_type, pathName.toString());
+            Message message = new Message();
+            webSocketServer.sendMessageToRole("high", message);
             lifeService.changeJigLife(code, seq_id);
         } catch (IOException e) {
             e.printStackTrace();
