@@ -2,6 +2,7 @@ package com.jig.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jig.annotation.Permission;
+import com.jig.entity.common.Message;
 import com.jig.entity.common.Role;
 import com.jig.entity.common.Family;
 import com.jig.entity.common.User;
@@ -34,6 +35,8 @@ public class SupervisorJson {
     private CommonService commonService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private WebSocketServer webSocketServer;
     @Autowired
     private PoiUtil poiUtil;
 
@@ -174,8 +177,16 @@ public class SupervisorJson {
         String field = a[0];
         String old_value = a[1];
         String new_value = a[2];
+        User submit_man = commonService.getUserByPurchaseSubmitId(id);
+        int flag = supervisorService.supervisorPassPurchaseSubmit(id, status, user, field, old_value, new_value);
+        if (flag > 0) {
+            Message message = new Message("/purchase/my", "id", id, "监管员" + user.getName() + "通过了你的采购入库申请");
+            webSocketServer.sendMessageToId(submit_man.getId(), message); // 发送给申请人
 
-        return supervisorService.supervisorPassPurchaseSubmit(id, status, user, field, old_value, new_value);
+            Message message_to_manager = new Message("/purchase/my", "id", id, "监管员" + user.getName() + "通过了新的采购入库申请");
+            webSocketServer.sendMessageToRole("manager", message_to_manager);
+        }
+        return flag;
     }
 
     //监管者模式下初审不通过采购审批
@@ -190,8 +201,15 @@ public class SupervisorJson {
         String field = a[0];
         String old_value = a[1];
         String new_value = a[2];
+        User submit_man = commonService.getUserByPurchaseSubmitId(id); // 申请人
 
-        return supervisorService.supervisorNoPassPurchaseSubmit(id, status, first_reason, user, field, old_value, new_value);
+        int flag = supervisorService.supervisorNoPassPurchaseSubmit(id, status, first_reason, user, field, old_value, new_value);
+
+        if (flag > 0) {
+            Message message = new Message("/purchase/my", "id", id, "监管员" + user.getName() + "拒绝了你的采购入库申请");
+            webSocketServer.sendMessageToId(submit_man.getId(), message); // 发送给申请人
+        }
+        return flag;
     }
 
     //监管者模式下获取历史采购记录
@@ -229,7 +247,6 @@ public class SupervisorJson {
         page_number = (page_number - 1) * page_size;
         Map<Object, Object> map = new HashMap<>();
 
-
         List<ScrapSubmit> list = supervisorService.supervisorGetScrapSubmitList(page_number, page_size, workcell_id);
         int all_count = supervisorService.supervisorGetScrapSubmitListPages(workcell_id);
         int max = (int) Math.ceil(all_count / (double) page_size);
@@ -251,8 +268,15 @@ public class SupervisorJson {
         String field = a[0];
         String old_value = a[1];
         String new_value = a[2];
-
+        User submit_man = commonService.getUserByScrapSubmitId(id);
         int flag = supervisorService.supervisorPassScrapSubmit(id, user, field, old_value, new_value);
+        if (flag > 0) {
+            Message message = new Message("/scrap/my", "id", id, "监管员" + user.getName() + "通过了你的报废申请");
+            webSocketServer.sendMessageToId(submit_man.getId(), message); // 发送给申请人
+
+            Message message_to_manager = new Message("/purchase/my", "id", id, "监管员" + user.getName() + "通过了新的报废申请");
+            webSocketServer.sendMessageToRole("manager", message_to_manager); // 发送给经理
+        }
         return flag;
     }
 
@@ -267,8 +291,12 @@ public class SupervisorJson {
         String field = a[0];
         String old_value = a[1];
         String new_value = a[2];
-
+        User submit_man = commonService.getUserByScrapSubmitId(id);
         int flag = supervisorService.supervisorNoPassScrapSubmit(id, no_pass_reason, user, field, old_value, new_value);
+        if (flag > 0) {
+            Message message = new Message("/scrap/my", "id", id, "监管员" + user.getName() + "拒绝了你的报废申请");
+            webSocketServer.sendMessageToId(submit_man.getId(), message); // 发送给申请人
+        }
         return flag;
     }
 
@@ -363,6 +391,7 @@ public class SupervisorJson {
         List<ScrapSubmit> list = supervisorService.supervisorGetScrapSubmitListHistory(code, seq_id, start_date, end_date, status, scrap_reason, page_number, page_size, workcell_id);
         poiUtil.outputFile(response, file_name, list);
     }
+
     @RequestMapping("download_all_scrap_history")
     public void downloadAllScrapHistory(HttpServletResponse response,
                                         @RequestParam("code") String code,

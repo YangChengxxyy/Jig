@@ -1,6 +1,7 @@
 package com.jig.controller;
 
 import com.jig.annotation.Permission;
+import com.jig.entity.common.Message;
 import com.jig.entity.common.Role;
 import com.jig.entity.common.User;
 import com.jig.entity.jig.JigDefinition;
@@ -42,6 +43,8 @@ public class ManagerJson {
     @Autowired
     private UserService userService;
     @Autowired
+    private WebSocketServer webSocketServer;
+    @Autowired
     private PoiUtil pouiUtil;
 
     //获取经理模块下的采购审批记录
@@ -73,17 +76,21 @@ public class ManagerJson {
                                        @RequestParam("user_id") String user_id) {
         User user = new User();
         user.setId(user_id);
-        user.setName(userService.getUserName(user_id));
+        String user_name = userService.getUserName(user_id);
+        user.setName(user_name);
         PurchaseIncomeSubmit purchaseIncomeSubmit = commonService.getPurchaseSubmit(id);
         String[] a = purchaseIncomeSubmit.PassSubmitInfo("4");
         String field = a[0];
         String old_value = a[1];
         String new_value = a[2];
 
+        User submit_man = commonService.getUserByPurchaseSubmitId(id);
         int flag = managerService.manager_pass_purchase_submit(id, "4", user, field, old_value, new_value);
         if (flag < 0) {
             return "操作失败！";
         }
+        Message message = new Message("/purchase/my", "id", user_id, "经理" + user_name + "通过了你的采购入库申请");
+        webSocketServer.sendMessageToId(submit_man.getId(), message);
         return "操作成功！";
     }
 
@@ -95,17 +102,21 @@ public class ManagerJson {
                                                 @RequestParam("user_id") String user_id) {
         User user = new User();
         user.setId(user_id);
-        user.setName(userService.getUserName(user_id));
+        String user_name = userService.getUserName(user_id);
+        user.setName(user_name);
 
         PurchaseIncomeSubmit purchaseIncomeSubmit = commonService.getPurchaseSubmit(id);
         String[] a = purchaseIncomeSubmit.NoPassSubmitInfo("3", final_reason);
         String field = a[0];
         String old_value = a[1];
         String new_value = a[2];
+        User submit_man = commonService.getUserByPurchaseSubmitId(id);
         int flag = managerService.manager_no_pass_purchase_submit(id, "3", final_reason, user, field, old_value, new_value);
         if (flag < 0) {
             return "服务器异常!";
         }
+        Message message = new Message("/purchase/my", "id", user_id, "经理" + user_name + "通过了你的采购入库申请");
+        webSocketServer.sendMessageToId(submit_man.getId(), message);
         return "审批成功!";
     }
 
@@ -303,18 +314,22 @@ public class ManagerJson {
                                           @RequestParam(value = "user_id") String user_id) {
         User user = new User();
         user.setId(user_id);
-        user.setName(userService.getUserName(user_id));
+        String user_name = userService.getUserName(user_id);
+        user.setName(user_name);
 
         ScrapSubmit scrapSubmit = commonService.getScrapSubmit(id);
         String[] a = scrapSubmit.PassSubmitInfo("4");
         String field = a[0];
         String old_value = a[1];
         String new_value = a[2];
-
+        User submit_man = commonService.getUserByScrapSubmitId(id);
         int flag = managerService.manager_pass_scrap_submit(id, "4", user, field, old_value, new_value);
         if (flag < 0) {
             return "服务器异常!";
         }
+
+        Message message = new Message("/scrap/my", "id", id, "经理"+ user_name + "通过了你的报废申请");
+        webSocketServer.sendMessageToId(submit_man.getId(), message);
         return "审批成功！";
     }
 
@@ -325,17 +340,24 @@ public class ManagerJson {
                                       @RequestParam("user_id") String user_id) {
         User user = new User();
         user.setId(user_id);
-        user.setName(userService.getUserName(user_id));
+        String user_name = userService.getUserName(user_id);
+        user.setName(user_name);
 
         ScrapSubmit scrapSubmit = commonService.getScrapSubmit(id);
         String[] a = scrapSubmit.NoPassSubmitInfo("3", no_pass_reason);
         String field = a[0];
         String old_value = a[1];
         String new_value = a[2];
+
+        User submit_man = commonService.getUserByScrapSubmitId(id);
+
         int flag = managerService.manager_no_pass_scrap_submit(id, no_pass_reason, user, field, old_value, new_value);
         if (flag < 0) {
             return "服务器异常!";
         }
+
+        Message message = new Message("/scrap/my", "id", id, "经理" + user_name + "拒绝了你的报废申请");
+        webSocketServer.sendMessageToId(submit_man.getId(), message);
         return "审批成功";
     }
 
@@ -372,22 +394,23 @@ public class ManagerJson {
                                                  @RequestParam(value = "page_size") int page_size,
                                                  @RequestParam(value = "workcell_id") String workcell_id,
                                                  @RequestParam("file_name") String file_name) {
-        pouiUtil.outputFile(response,file_name,managerService.get_manager_purchase_submit_list_history(bill_no, submit_name, start_date, end_date, status, page_number, page_size, workcell_id));
+        pouiUtil.outputFile(response, file_name, managerService.get_manager_purchase_submit_list_history(bill_no, submit_name, start_date, end_date, status, page_number, page_size, workcell_id));
     }
+
     @RequestMapping("download_all_purchase_submit_history")
     public void downloadAllPurchaseSubmitHistory(HttpServletResponse response, @RequestParam(value = "bill_no") String bill_no,
-                                                     @RequestParam(value = "submit_name") String submit_name,
-                                                     @RequestParam(value = "start_date") String start_date,
-                                                     @RequestParam(value = "end_date") String end_date,
-                                                     @RequestParam(value = "status") String status,
-                                                     @RequestParam(value = "workcell_id") String workcell_id,
-                                                     @RequestParam("file_name") String file_name){
-        List<PurchaseIncomeSubmit> list = managerService.get_all_manager_purchase_submit_list_history(bill_no,submit_name,start_date,end_date,status,workcell_id);
-        pouiUtil.outputFile(response,file_name, list);
+                                                 @RequestParam(value = "submit_name") String submit_name,
+                                                 @RequestParam(value = "start_date") String start_date,
+                                                 @RequestParam(value = "end_date") String end_date,
+                                                 @RequestParam(value = "status") String status,
+                                                 @RequestParam(value = "workcell_id") String workcell_id,
+                                                 @RequestParam("file_name") String file_name) {
+        List<PurchaseIncomeSubmit> list = managerService.get_all_manager_purchase_submit_list_history(bill_no, submit_name, start_date, end_date, status, workcell_id);
+        pouiUtil.outputFile(response, file_name, list);
     }
 
     @RequestMapping("download_one_scrap_submit_history")
-    public void downloadOneScrapSubmitHistory(HttpServletResponse response,@RequestParam("code") String code,
+    public void downloadOneScrapSubmitHistory(HttpServletResponse response, @RequestParam("code") String code,
                                               @RequestParam("seq_id") String seq_id,
                                               @RequestParam("start_date") String start_date,
                                               @RequestParam("end_date") String end_date,
@@ -396,21 +419,22 @@ public class ManagerJson {
                                               @RequestParam("page_number") int page_number,
                                               @RequestParam("page_size") int page_size,
                                               @RequestParam("workcell_id") String workcell_id,
-                                              @RequestParam("file_name")String file_name){
+                                              @RequestParam("file_name") String file_name) {
         page_number = (page_number - 1) * page_size;
         List<ScrapSubmit> list = managerService.get_manager_scrap_submit_list_history(code, seq_id, start_date, end_date, status, scrap_reason, page_number, page_size, workcell_id);
-        pouiUtil.outputFile(response,file_name,list);
+        pouiUtil.outputFile(response, file_name, list);
     }
+
     @RequestMapping("download_all_scrap_submit_history")
-    public void downloadAllScrapSubmitHistory(HttpServletResponse response,@RequestParam("code") String code,
+    public void downloadAllScrapSubmitHistory(HttpServletResponse response, @RequestParam("code") String code,
                                               @RequestParam("seq_id") String seq_id,
                                               @RequestParam("start_date") String start_date,
                                               @RequestParam("end_date") String end_date,
                                               @RequestParam("status") String status,
                                               @RequestParam("scrap_reason") String scrap_reason,
                                               @RequestParam("workcell_id") String workcell_id,
-                                              @RequestParam("file_name")String file_name){
+                                              @RequestParam("file_name") String file_name) {
         List<ScrapSubmit> list = managerService.get_all_manager_scrap_submit_list_history(code, seq_id, start_date, end_date, status, scrap_reason, workcell_id);
-        pouiUtil.outputFile(response,file_name,list);
+        pouiUtil.outputFile(response, file_name, list);
     }
 }

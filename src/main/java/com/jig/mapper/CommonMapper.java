@@ -1,9 +1,6 @@
 package com.jig.mapper;
 
-import com.jig.entity.common.Family;
-import com.jig.entity.common.Position;
-import com.jig.entity.common.ProductionLine;
-import com.jig.entity.common.Workcell;
+import com.jig.entity.common.*;
 import com.jig.entity.jig.JigDefinition;
 import com.jig.entity.jig.JigEntity;
 import com.jig.entity.jig.JigModel;
@@ -93,4 +90,8 @@ public interface CommonMapper {
     MaintenanceType get_maintenance_type(@Param("id") String id);
 
     int getJigDefinitionPage();
+
+    User getUserByPurchaseSubmitId(@Param("id") String id);
+
+    User getUserByScrapSubmitId(@Param("id") String id);
 }

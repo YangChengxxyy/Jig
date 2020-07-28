@@ -1,9 +1,6 @@
 package com.jig.service;
 
-import com.jig.entity.common.Family;
-import com.jig.entity.common.Position;
-import com.jig.entity.common.ProductionLine;
-import com.jig.entity.common.Workcell;
+import com.jig.entity.common.*;
 import com.jig.entity.jig.JigDefinition;
 import com.jig.entity.jig.JigModel;
 import com.jig.entity.jig.JigPart;
@@ -115,5 +112,14 @@ public class CommonService {
 
     public int getJigDefinitionPage() {
         return commonMapper.getJigDefinitionPage();
+    }
+
+    // 根据采购审批id获取申请人id
+    public User getUserByPurchaseSubmitId(String id) {
+        return commonMapper.getUserByPurchaseSubmitId(id);
+    }
+
+    public User getUserByScrapSubmitId(String id) {
+        return commonMapper.getUserByScrapSubmitId(id);
     }
 }

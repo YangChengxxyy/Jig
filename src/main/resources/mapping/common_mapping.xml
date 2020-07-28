@@ -100,4 +100,14 @@
         select count(*)
         from jig_definition_entity_view
     </select>
+    <select id="getUserByPurchaseSubmitId" resultType="com.jig.entity.common.User">
+        select u.*
+        from user u inner join purchase_income_submit ps on u.id = ps.submit_id
+        where ps.id = #{id}
+    </select>
+    <select id="getUserByScrapSubmitId" resultType="com.jig.entity.common.User">
+        select u.*
+        from user u inner join scrap_submit s on u.id = s.submit_id
+        where s.id = #{id}
+    </select>
 </mapper>

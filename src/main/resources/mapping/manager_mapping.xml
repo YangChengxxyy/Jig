@@ -187,9 +187,9 @@
         values(#{user.id},#{submit_id},now(),'scrap_submit',#{field},'update',#{old_value},#{new_value},
         concat('经理',#{user.name},'终审不通过~原因:',#{no_pass_reason}))
 
-        <!--insert into scrap_submit_history select * from scrap_submit where id = #{submit_id};
+        insert into scrap_submit_history select * from scrap_submit where id = #{submit_id};
 
-        delete from scrap_submit where id = #{submit_id}-->
+        delete from scrap_submit where id = #{submit_id}
 
 
     </update>
