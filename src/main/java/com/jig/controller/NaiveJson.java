@@ -598,15 +598,17 @@ public class NaiveJson {
      * @param workcell_id
      * @param page_number
      * @param page_size
+     * @param status 清单状态 0：待入库 1:已入库
      * @return
      */
     @RequestMapping("get_pending_purchase_submit_list")
     public Map<Object, Object> getPendingPurchaseSubmitList(@RequestParam("workcell_id") String workcell_id,
                                                             @RequestParam("page_number") int page_number,
-                                                            @RequestParam("page_size") int page_size) {
+                                                            @RequestParam("page_size") int page_size,
+                                                            @RequestParam("status") int status) {
         Map<Object, Object> map = new HashMap<>();
-        List<PendingPuchaseIncomeSubmit> list = naiveService.naive_get_pending_purchase_submit_list(workcell_id, page_number, page_size);
-        int all = naiveService.naive_get_pending_purchase_submit_list_pages(workcell_id);
+        List<PendingPuchaseIncomeSubmit> list = naiveService.naive_get_pending_purchase_submit_list(workcell_id, status, page_number, page_size);
+        int all = naiveService.naive_get_pending_purchase_submit_list_pages(workcell_id, status);
 
         map.put("data", list);
         map.put("all", all);

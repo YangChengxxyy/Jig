@@ -215,13 +215,13 @@ public class NaiveService {
         return naiveMapper.naive_get_reason_count_in_all(reason);
     }
 
-    public List<PendingPuchaseIncomeSubmit> naive_get_pending_purchase_submit_list(String workcell_id, int page_number, int page_size){
+    public List<PendingPuchaseIncomeSubmit> naive_get_pending_purchase_submit_list(String workcell_id, int status, int page_number, int page_size){
         page_number = (page_number - 1) * page_size;
-        return naiveMapper.naive_get_pending_purchase_submit_list(workcell_id, page_number, page_size);
+        return naiveMapper.naive_get_pending_purchase_submit_list(workcell_id, status, page_number, page_size);
     }
 
-    public int naive_get_pending_purchase_submit_list_pages(String workcell_id) {
-        return naiveMapper.naive_get_pending_purchase_submit_list_pages(workcell_id);
+    public int naive_get_pending_purchase_submit_list_pages(String workcell_id, int status) {
+        return naiveMapper.naive_get_pending_purchase_submit_list_pages(workcell_id, status);
     }
 
     public List<PendingScrapSubmit> naive_get_pending_scrap_submit_list(String workcell_id, int page_number, int page_size){

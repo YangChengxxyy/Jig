@@ -334,10 +334,12 @@ public interface NaiveMapper {
     int naive_get_reason_count_in_all(@Param("reason") String reason);
 
     List<PendingPuchaseIncomeSubmit> naive_get_pending_purchase_submit_list(@Param("workcell_id") String workcell_id,
+                                                                            @Param("status") int status,
                                                                             @Param("page_number") int page_number,
                                                                             @Param("page_size") int page_size);
 
-    int naive_get_pending_purchase_submit_list_pages(@Param("workcell_id") String workcell_id);
+    int naive_get_pending_purchase_submit_list_pages(@Param("workcell_id") String workcell_id,
+                                                     @Param("status") int status);
 
     List<PendingScrapSubmit> naive_get_pending_scrap_submit_list(@Param("workcell_id") String workcell_id,
                                                                  @Param("page_number") int page_number,

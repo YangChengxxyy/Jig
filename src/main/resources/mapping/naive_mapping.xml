@@ -442,13 +442,13 @@
     </select>
     <select id="naive_get_pending_purchase_submit_list" resultType="com.jig.entity.purchase.PendingPuchaseIncomeSubmit">
         select * from pending_purchase_submit_entity_view
-        where workcell_id = #{workcell_id}
+        where workcell_id = #{workcell_id} and status = #{status}
         limit #{page_number}, #{page_size}
     </select>
     <select id="naive_get_pending_purchase_submit_list_pages" resultType="java.lang.Integer">
         select count(*)
         from pending_purchase_submit_entity_view
-        where workcell_id = #{workcell_id}
+        where workcell_id = #{workcell_id} and status = #{status}
     </select>
     <select id="naive_get_pending_scrap_submit_list" resultType="com.jig.entity.scrap.PendingScrapSubmit">
         select * from pending_scrap_submit_entity_view
