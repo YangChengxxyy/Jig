@@ -250,6 +250,31 @@ public class NaiveJson {
     }
 
     /**
+     * 根据工夹具实体的code和seq_id获取该工夹具的检点历史
+     * @param code
+     * @param seq_id
+     * @return
+     */
+    @RequestMapping("get_jig_maintenance_history_list")
+    public List<MaintenanceSubmit> getJigMaintenanceHistoryList(@RequestParam("code") String code,
+                                                                @RequestParam("seq_id") String seq_id) {
+        List<MaintenanceSubmit> maintenanceSubmitList = naiveService.naive_get_maintenance_history_list(code, seq_id);
+
+        for (MaintenanceSubmit maintenanceSubmit : maintenanceSubmitList) { // 对数据进行处理，方便前端显示
+            String[] reason = maintenanceSubmit.getReason().split("\\|");
+            String r = "";
+            if (reason[0].equals("")) {
+                continue;
+            }
+            for (int i = 0; i < reason.length; i++) {
+                MaintenanceType type = commonService.get_maintenance_type(reason[i]);
+                maintenanceSubmit.getReason_description().add(type.getWrong_description());
+            }
+        }
+        return maintenanceSubmitList;
+    }
+
+    /**
      * @param code   检点完成的工夹具代码
      * @param seq_id
      * @param reason 原因id 多个用|分开
