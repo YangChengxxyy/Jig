@@ -7,10 +7,12 @@ import java.util.Map;
  * @author YC
  */
 public class Message {
+    private int id;
     private String path;
     private Map<String, Object> params;
     private String content;
     private String title = "提示";
+    private boolean read = false;
 
     public String getPath() {
         return path;
@@ -62,4 +64,21 @@ public class Message {
         this.content = content;
         this.title = title;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
+    }
+    
 }

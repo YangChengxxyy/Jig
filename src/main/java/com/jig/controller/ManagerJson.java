@@ -1,5 +1,13 @@
 package com.jig.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.jig.annotation.Permission;
 import com.jig.entity.common.Message;
 import com.jig.entity.common.Role;
@@ -12,9 +20,8 @@ import com.jig.entity.scrap.ScrapSubmit;
 import com.jig.service.CommonService;
 import com.jig.service.ManagerService;
 import com.jig.service.UserService;
-import com.jig.utils.LoginStatusUtil;
 import com.jig.utils.PoiUtil;
-import org.apache.ibatis.annotations.Param;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -23,13 +30,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Permission(Role.manager)
 @RestController
