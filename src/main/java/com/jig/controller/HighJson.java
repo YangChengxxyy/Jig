@@ -9,6 +9,7 @@ import com.jig.entity.repair.RepairJigHistory;
 import com.jig.entity.scrap.ScrapHistory;
 import com.jig.entity.scrap.ScrapSubmit;
 import com.jig.service.HighService;
+import com.jig.service.MessageService;
 import com.jig.utils.PoiUtil;
 import com.jig.utils.RedisUtil;
 import org.apache.commons.io.FileUtils;
@@ -27,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +50,7 @@ public class HighJson {
     private WebSocketServer webSocketServer;
     @Autowired
     private PoiUtil poiUtil;
+    @Autowired MessageService messageService;
     public static final String SCRAP_IMAGE_NAME = "images/scrap_images/";
     public static final String REPAIR_IMAGE_NAME = "images/repair_images/";
     public static final String SCRAP = "SCRAP";
@@ -303,6 +306,7 @@ public class HighJson {
             highService.highSubmitScrap(scrapSubmit, pathName.toString());
             Message message = new Message("/scrap/my", "id", submit_id, submit_id + "提交了一份新的报废提交");
             webSocketServer.sendMessageToRole("supervisor", message);
+            messageService.add("123456", message);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
