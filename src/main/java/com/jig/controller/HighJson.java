@@ -306,7 +306,6 @@ public class HighJson {
             highService.highSubmitScrap(scrapSubmit, pathName.toString());
             Message message = new Message("/scrap/my", "id", submit_id, submit_id + "提交了一份新的报废提交");
             webSocketServer.sendMessageToRole("supervisor", message);
-            webSocketServer.sendMessageToRole("supervisor","this");//this就是标记没有意义，让前端刷新message
             messageService.add("123456", message);
         } catch (IOException e) {
             e.printStackTrace();
