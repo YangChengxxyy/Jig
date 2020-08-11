@@ -115,7 +115,7 @@ public class ManagerJson {
         if (flag < 0) {
             return "服务器异常!";
         }
-        Message message = new Message("/purchase/my", "id", user_id, "经理" + user_name + "通过了你的采购入库申请");
+        Message message = new Message("/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请");
         webSocketServer.sendMessageToId(submit_man.getId(), message);
         return "审批成功!";
     }
