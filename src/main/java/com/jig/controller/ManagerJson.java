@@ -89,7 +89,7 @@ public class ManagerJson {
         if (flag < 0) {
             return "操作失败！";
         }
-        Message message = new Message("/purchase/my", "id", user_id, "经理" + user_name + "通过了你的采购入库申请");
+        Message message = new Message("/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请");
         webSocketServer.sendMessageToId(submit_man.getId(), message);
         return "操作成功！";
     }
