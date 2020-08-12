@@ -54,4 +54,8 @@ public class UserService {
         }
         return loginState;
     }
+
+    public List<User> getWorkcellUser(int workcell_id) {
+        return null;
+    }
 }

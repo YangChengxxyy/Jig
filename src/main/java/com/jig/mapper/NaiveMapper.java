@@ -15,7 +15,6 @@ import com.jig.entity.scrap.PendingScrapSubmit;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -33,14 +32,15 @@ public interface NaiveMapper {
 
     /**
      * 将采购入库的工夹具入库
-     * @param bill_no 相关订单单据号
+     *
+     * @param bill_no     相关订单单据号
      * @param code
      * @param seq_id
      * @param jig_cabinet 夹具柜id
-     * @param location  存放区域
-     * @param bin   bin位
+     * @param location    存放区域
+     * @param bin         bin位
      * @param description 写入出入库历史的描述信息
-     * @param user_id 入库人
+     * @param user_id     入库人
      * @return
      */
     int naiveInputJigEntity(@Param("bill_no") String bill_no,
@@ -198,11 +198,11 @@ public interface NaiveMapper {
      * @return 已出库工夹具OutgoingJig对象
      */
     List<OutgoingJig> naiveGetOutgoingJigListAllPages(@Param("code") String code,
-                                              @Param("name") String name,
-                                              @Param("start_date") String start_date,
-                                              @Param("end_date") String end_date,
-                                              @Param("user_for") String user_for,
-                                              @Param("workcell_id") String workcell_id);
+                                                      @Param("name") String name,
+                                                      @Param("start_date") String start_date,
+                                                      @Param("end_date") String end_date,
+                                                      @Param("user_for") String user_for,
+                                                      @Param("workcell_id") String workcell_id);
 
     /**
      * 获得已出库工夹具记录数
@@ -260,13 +260,10 @@ public interface NaiveMapper {
     /**
      * 初级用户提交报修
      *
-     * @param code
-     * @param seq_id
-     * @param submit_id
-     * @param repair_reason
+     * @param repiar
      * @param pathName
      */
-    void naiveSubmitRepair(@Param("code") String code, @Param("seq_id") String seq_id, @Param("submit_id") String submit_id, @Param("repair_reason") String repair_reason, @Param("repair_type") String repair_type, @Param("pathName") String pathName);
+    void naiveSubmitRepair(@Param("repair") RepairJig repair, @Param("pathName") String pathName);
 
     /**
      * 获取查询到的对应页数的List对象

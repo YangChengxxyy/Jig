@@ -9,6 +9,7 @@ public class RepairJig {
     private String submit_name;
     private String repair_photo_url;
     private String repair_reason;
+    private int repair_type;
     private String acceptor_id;
     private String acceptor_name;
     private String acceptor_reason;
@@ -108,5 +109,13 @@ public class RepairJig {
 
     public void setAcceptor_reason(String acceptor_reason) {
         this.acceptor_reason = acceptor_reason;
+    }
+
+    public int getRepair_type() {
+        return repair_type;
+    }
+
+    public void setRepair_type(int repair_type) {
+        this.repair_type = repair_type;
     }
 }

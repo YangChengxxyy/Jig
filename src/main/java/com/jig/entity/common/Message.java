@@ -1,6 +1,5 @@
 package com.jig.entity.common;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,20 +51,12 @@ public class Message {
         this.title = title;
     }
 
-    public Message(String path, String param, String condition, String content) {
+    public Message(String path, String param, String condition, String content, long date) {
         this.path = path;
         this.params = new HashMap<>(1);
         this.params.put(param, condition);
         this.content = content;
-        this.date = System.currentTimeMillis();
-    }
-
-    public Message(String path, String param, String condition, String title, String content) {
-        this.path = path;
-        this.params = new HashMap<>(1);
-        this.params.put(param, condition);
-        this.content = content;
-        this.title = title;
+        this.date = date;
     }
 
     public int getId() {
@@ -91,5 +82,5 @@ public class Message {
     public void setDate(long date) {
         this.date = date;
     }
-    
+
 }

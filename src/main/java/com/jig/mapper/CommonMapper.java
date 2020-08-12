@@ -2,11 +2,10 @@ package com.jig.mapper;
 
 import com.jig.entity.common.*;
 import com.jig.entity.jig.JigDefinition;
-import com.jig.entity.jig.JigEntity;
 import com.jig.entity.jig.JigModel;
 import com.jig.entity.jig.JigPart;
-import com.jig.entity.repair.MaintenanceType;
 import com.jig.entity.purchase.PurchaseIncomeSubmit;
+import com.jig.entity.repair.MaintenanceType;
 import com.jig.entity.scrap.ScrapSubmit;
 import com.jig.entity.warehouse.JigCabinet;
 import org.apache.ibatis.annotations.Mapper;

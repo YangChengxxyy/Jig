@@ -11,16 +11,13 @@ import com.jig.entity.out.OutgoingJig;
 import com.jig.entity.purchase.PendingPuchaseIncomeSubmit;
 import com.jig.entity.repair.MaintenanceSubmit;
 import com.jig.entity.repair.MaintenanceType;
+import com.jig.entity.repair.RepairJig;
 import com.jig.entity.repair.RepairJigHistory;
 import com.jig.entity.scrap.PendingScrapSubmit;
-import com.jig.service.CommonService;
-import com.jig.service.LifeService;
-import com.jig.service.NaiveService;
-import com.jig.service.UserService;
+import com.jig.service.*;
 import com.jig.utils.PoiUtil;
 import com.jig.utils.RedisUtil;
 import org.apache.commons.io.FileUtils;
-import org.apache.ibatis.annotations.Param;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,7 +57,8 @@ public class NaiveJson {
     private PoiUtil poiUtil;
     @Autowired
     private RedisUtil redisUtil;
-
+    @Autowired
+    private MessageService messageService;
     @Autowired
     private WebSocketServer webSocketServer;
     public static final String SCRAP_IMAGE_NAME = "images/scrap_images/";
@@ -93,6 +91,7 @@ public class NaiveJson {
 
     /**
      * 初级用户将待采购入库的采购单中的工夹具入库
+     *
      * @param bill_no
      * @param code
      * @param count
@@ -101,11 +100,9 @@ public class NaiveJson {
      * @return
      */
     @RequestMapping("input_purchase_submit_jig")
-    public int naiveInputPurchaseSubmitJig(@RequestParam("bill_no") String bill_no,
-                                           @RequestParam("code") String code,
-                                           @RequestParam("count") String count,
-                                           @RequestParam("jig_position") String jig_position,
-                                           @RequestParam("user_id") String user_id){
+    public int naiveInputPurchaseSubmitJig(@RequestParam("bill_no") String bill_no, @RequestParam("code") String code,
+                                           @RequestParam("count") String count, @RequestParam("jig_position") String jig_position,
+                                           @RequestParam("user_id") String user_id) {
         String desciption = "";
         desciption += bill_no + "~" + code + "~" + count;
         String[] code_list = code.split("\\|");
@@ -117,20 +114,18 @@ public class NaiveJson {
             String jig_cabinet = jig_position_list[i].split(",")[0];
             String location = jig_position_list[i].split(",")[1];
             for (int j = 0; j < Integer.parseInt(count_list[i]); j++) {
-                flag = naiveService.naive_input_purchase_jig(bill_no, code_list[i], max_seq_id + j + 1, jig_cabinet, location, desciption, user_id);
+                flag = naiveService.naive_input_purchase_jig(bill_no, code_list[i], max_seq_id + j + 1, jig_cabinet,
+                        location, desciption, user_id);
             }
         }
         return flag;
     }
 
-    //将采购入库的工夹具入库
+    // 将采购入库的工夹具入库
     @RequestMapping("input_jig")
-    public int naiveInputJig(@RequestParam("bill_no") String bill_no,
-                             @RequestParam("code") String code,
-                             @RequestParam("count") String count,
-                             @RequestParam("jig_position") String jig_position,
-                             @RequestParam("free_bin_list") String free_bin,
-                             @RequestParam("user_id") String user_id) {
+    public int naiveInputJig(@RequestParam("bill_no") String bill_no, @RequestParam("code") String code,
+                             @RequestParam("count") String count, @RequestParam("jig_position") String jig_position,
+                             @RequestParam("free_bin_list") String free_bin, @RequestParam("user_id") String user_id) {
         String desciption = "";
         desciption += bill_no + "~" + code + "~" + count;
         String[] code_list = code.split("\\|");
@@ -144,13 +139,14 @@ public class NaiveJson {
             String location = jig_position_list[i].split(",")[1];
             String[] free_bin_list = free_bin_list_all[i].split(",");
             for (int j = 0; j < Integer.parseInt(count_list[i]); j++) {
-                flag = naiveService.naiveInputJigEntity(bill_no, code_list[i], max_seq_id + j + 1, jig_cabinet, location, free_bin_list[j], desciption, user_id);
+                flag = naiveService.naiveInputJigEntity(bill_no, code_list[i], max_seq_id + j + 1, jig_cabinet,
+                        location, free_bin_list[j], desciption, user_id);
             }
         }
         return flag;
     }
 
-    //初级用户获取 工夹具出库页面的工夹具存放位置list
+    // 初级用户获取 工夹具出库页面的工夹具存放位置list
     @RequestMapping("get_location_list")
     public List<JigPosition> navieGetLocationList() {
         String workcell_id = "7";
@@ -158,20 +154,21 @@ public class NaiveJson {
         return location_list;
     }
 
-    //初级用户 根据选择的 夹具柜号和区号确定 工夹具list
+    // 初级用户 根据选择的 夹具柜号和区号确定 工夹具list
     @RequestMapping("get_jig_list_by_location")
     public Map<Object, Object> navieGetJigStockByLocation(@RequestParam("jig_cabinet_id") String jig_cabinet_id,
-                                                          @RequestParam("jig_location_id") String jig_location_id,
-                                                          @RequestParam("page_number") int page_number,
-                                                          @RequestParam("page_size") int page_size,
-                                                          @RequestParam("workcell_id") String workcell_id) {
+                                                          @RequestParam("jig_location_id") String jig_location_id, @RequestParam("page_number") int page_number,
+                                                          @RequestParam("page_size") int page_size, @RequestParam("workcell_id") String workcell_id) {
         Map<Object, Object> map = new HashMap<>();
-        List<JigStock> jig_list = naiveService.navieGetJigListByLocation(jig_cabinet_id, jig_location_id, workcell_id, (page_number - 1) * page_size, page_size);
+        List<JigStock> jig_list = naiveService.navieGetJigListByLocation(jig_cabinet_id, jig_location_id, workcell_id,
+                (page_number - 1) * page_size, page_size);
         List<List<?>> all = naiveService.navieGetJigListByLocationPages(jig_cabinet_id, jig_location_id, workcell_id);
         for (JigStock jigStock : jig_list) {
-            jigStock.setJig_entity_list(naiveService.navieGetJigEntityListByLocation(jig_cabinet_id, jig_location_id, jigStock.getCode()));
+            jigStock.setJig_entity_list(
+                    naiveService.navieGetJigEntityListByLocation(jig_cabinet_id, jig_location_id, jigStock.getCode()));
             for (JigEntity jigEntity : jigStock.getJig_entity_list()) { // 获取出入库历史记录List
-                jigEntity.setOut_and_in_history_list(naiveService.naive_get_out_and_in_history_list(jigEntity.getCode(), jigEntity.getSeq_id()));
+                jigEntity.setOut_and_in_history_list(
+                        naiveService.naive_get_out_and_in_history_list(jigEntity.getCode(), jigEntity.getSeq_id()));
             }
         }
         map.put("data", jig_list);
@@ -186,24 +183,25 @@ public class NaiveJson {
         return naiveService.naive_get_out_and_in_history_list(code, seq_id);
     }
 
-    //初级用户 根据选择的工夹具存放区域 和 搜索条件来 确定工夹具list
+    // 初级用户 根据选择的工夹具存放区域 和 搜索条件来 确定工夹具list
     @RequestMapping("get_jig_list_by_select")
     public Map<Object, Object> navieGetJigListBySelect(@RequestParam("jig_cabinet_id") String jig_cabinet_id,
-                                                       @RequestParam("jig_location_id") String jig_location_id,
-                                                       @RequestParam("code") String code,
-                                                       @RequestParam("name") String name,
-                                                       @RequestParam("user_for") String user_for,
-                                                       @RequestParam("page_number") int page_number,
-                                                       @RequestParam("page_size") int page_size,
+                                                       @RequestParam("jig_location_id") String jig_location_id, @RequestParam("code") String code,
+                                                       @RequestParam("name") String name, @RequestParam("user_for") String user_for,
+                                                       @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size,
                                                        @RequestParam("workcell_id") String workcell_id) {
 
         Map<Object, Object> map = new HashMap<>();
-        List<JigStock> jig_list = naiveService.navieGetJigListBySelect(jig_cabinet_id, jig_location_id, code, name, user_for, workcell_id, (page_number - 1) * page_size, page_size);
-        List<List<?>> all = naiveService.navieGetJigListBySelectPages(jig_cabinet_id, jig_location_id, code, name, user_for, workcell_id);
+        List<JigStock> jig_list = naiveService.navieGetJigListBySelect(jig_cabinet_id, jig_location_id, code, name,
+                user_for, workcell_id, (page_number - 1) * page_size, page_size);
+        List<List<?>> all = naiveService.navieGetJigListBySelectPages(jig_cabinet_id, jig_location_id, code, name,
+                user_for, workcell_id);
         for (JigStock jigStock : jig_list) {
-            jigStock.setJig_entity_list(naiveService.navieGetJigEntityListByLocation(jig_cabinet_id, jig_location_id, jigStock.getCode()));
+            jigStock.setJig_entity_list(
+                    naiveService.navieGetJigEntityListByLocation(jig_cabinet_id, jig_location_id, jigStock.getCode()));
             for (JigEntity jigEntity : jigStock.getJig_entity_list()) { // 获取出入库历史记录List
-                jigEntity.setOut_and_in_history_list(naiveService.naive_get_out_and_in_history_list(jigEntity.getCode(), jigEntity.getSeq_id()));
+                jigEntity.setOut_and_in_history_list(
+                        naiveService.naive_get_out_and_in_history_list(jigEntity.getCode(), jigEntity.getSeq_id()));
             }
         }
         map.put("data", jig_list);
@@ -212,28 +210,25 @@ public class NaiveJson {
     }
 
     @RequestMapping("change_jig_position")
-    public int navieChangeJigPosition(@RequestParam("jig_id") String jig_id,
-                                      @RequestParam("code") String code,
-                                      @RequestParam("seq_id") String seq_id,
-                                      @RequestParam("old_position") String old_position,
-                                      @RequestParam("jig_cabinet_id") String jig_cabinet_id,
-                                      @RequestParam("location_id") String location_id,
-                                      @RequestParam("bin") String bin,
-                                      @RequestParam("user_id") String user_id) {
+    public int navieChangeJigPosition(@RequestParam("jig_id") String jig_id, @RequestParam("code") String code,
+                                      @RequestParam("seq_id") String seq_id, @RequestParam("old_position") String old_position,
+                                      @RequestParam("jig_cabinet_id") String jig_cabinet_id, @RequestParam("location_id") String location_id,
+                                      @RequestParam("bin") String bin, @RequestParam("user_id") String user_id) {
         User user = getUserById(user_id);
-        return naiveService.naive_change_jig_position(jig_id, code, seq_id, old_position, jig_cabinet_id, location_id, bin, user);
+        return naiveService.naive_change_jig_position(jig_id, code, seq_id, old_position, jig_cabinet_id, location_id,
+                bin, user);
     }
 
-    //初级用户 根据夹具柜号和区号确定 检点的工夹具list
+    // 初级用户 根据夹具柜号和区号确定 检点的工夹具list
     @RequestMapping("get_maintenance_jig_detail_list")
     public List<JigEntity> navieGetCheckJigModalJigDetailList(@RequestParam("jig_cabinet_id") String jig_cabinet_id,
-                                                              @RequestParam("jig_location_id") String jig_location_id,
-                                                              @RequestParam("code") String code,
+                                                              @RequestParam("jig_location_id") String jig_location_id, @RequestParam("code") String code,
                                                               @RequestParam("user_id") String user_id) {
-        //应该要根据workcell_id工作部门id区别
+        // 应该要根据workcell_id工作部门id区别
         List<JigEntity> jig_list = naiveService.navieGetMaintenanceJigDetailList(jig_cabinet_id, jig_location_id, code);
         for (JigEntity jigEntity : jig_list) { // 获取检点历史记录list
-            jigEntity.setMaintenance_history_list(naiveService.naive_get_maintenance_history_list(jigEntity.getCode(), jigEntity.getSeq_id()));
+            jigEntity.setMaintenance_history_list(
+                    naiveService.naive_get_maintenance_history_list(jigEntity.getCode(), jigEntity.getSeq_id()));
             for (MaintenanceSubmit maintenanceSubmit : jigEntity.getMaintenance_history_list()) { // 对数据进行处理，方便前端显示
                 String[] reason = maintenanceSubmit.getReason().split("\\|");
                 String r = "";
@@ -251,6 +246,7 @@ public class NaiveJson {
 
     /**
      * 根据工夹具实体的code和seq_id获取该工夹具的检点历史
+     *
      * @param code
      * @param seq_id
      * @return
@@ -281,12 +277,9 @@ public class NaiveJson {
      * @return
      */
     @RequestMapping("maintenance_jig")
-    public int naiveMaintenanceJig(HttpServletRequest request,
-                                   @RequestParam("code") String code,
-                                   @RequestParam("seq_id") String seq_id,
-                                   @RequestParam("reason") String reason,
-                                   @RequestParam("is_repair") int is_repair,
-                                   @RequestParam("user_id") String user_id) {
+    public int naiveMaintenanceJig(HttpServletRequest request, @RequestParam("code") String code,
+                                   @RequestParam("seq_id") String seq_id, @RequestParam("reason") String reason,
+                                   @RequestParam("is_repair") int is_repair, @RequestParam("user_id") String user_id) {
         return naiveService.naive_maintenance_jig(code, seq_id, reason, is_repair, user_id);
     }
 
@@ -299,10 +292,8 @@ public class NaiveJson {
      * @return 是否出库成功
      */
     @RequestMapping("outgo_jig")
-    public boolean naiveOutgoJig(@RequestParam("jig_id") String jig_id,
-                                 @RequestParam("code") String code,
-                                 @RequestParam("seq_id") String seq_id,
-                                 @RequestParam("submit_id") String submit_id,
+    public boolean naiveOutgoJig(@RequestParam("jig_id") String jig_id, @RequestParam("code") String code,
+                                 @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id,
                                  @RequestParam("production_line_id") String production_line_id,
                                  @RequestParam("user_id") String accpetor_id) {
         try {
@@ -322,48 +313,39 @@ public class NaiveJson {
      */
     @RequestMapping("get_outgoing_jig_list")
     public Map<String, Object> naiveGetOutgoingJigList(@RequestParam("code") String code,
-                                                       @RequestParam("name") String name,
-                                                       @RequestParam("start_date") String start_date,
-                                                       @RequestParam("end_date") String end_date,
-                                                       @RequestParam("user_for") String user_for,
-                                                       @RequestParam("page_number") int page_number,
-                                                       @RequestParam("page_size") int page_size,
+                                                       @RequestParam("name") String name, @RequestParam("start_date") String start_date,
+                                                       @RequestParam("end_date") String end_date, @RequestParam("user_for") String user_for,
+                                                       @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size,
                                                        @RequestParam("workcell_id") String workcell_id) {
         Map<String, Object> map = new HashMap<>();
-        List<OutgoingJig> list = naiveService.naiveGetOutgoingJigList(code, name, start_date, end_date, user_for, page_number, page_size, workcell_id);
+        List<OutgoingJig> list = naiveService.naiveGetOutgoingJigList(code, name, start_date, end_date, user_for,
+                page_number, page_size, workcell_id);
         int all = naiveService.naiveGetOutgoingJigListPage(code, name, start_date, end_date, user_for, workcell_id);
         map.put("data", list);
         map.put("all", all);
         return map;
     }
 
-    //归还工夹具导出本页
+    // 归还工夹具导出本页
     @RequestMapping("download_one_outgoing_list")
-    public void naiveDownloadOneOutgoingList(HttpServletResponse response,
-                                             @RequestParam("code") String code,
-                                             @RequestParam("name") String name,
-                                             @RequestParam("start_date") String start_date,
-                                             @RequestParam("end_date") String end_date,
-                                             @RequestParam("user_for") String user_for,
-                                             @RequestParam("page_number") int page_number,
-                                             @RequestParam("page_size") int page_size,
-                                             @RequestParam("workcell_id") String workcell_id,
-                                             @RequestParam("file_name") String file_name) {
-        List<OutgoingJig> list = naiveService.naiveGetOutgoingJigList(code, name, start_date, end_date, user_for, page_number, page_size, workcell_id);
+    public void naiveDownloadOneOutgoingList(HttpServletResponse response, @RequestParam("code") String code,
+                                             @RequestParam("name") String name, @RequestParam("start_date") String start_date,
+                                             @RequestParam("end_date") String end_date, @RequestParam("user_for") String user_for,
+                                             @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size,
+                                             @RequestParam("workcell_id") String workcell_id, @RequestParam("file_name") String file_name) {
+        List<OutgoingJig> list = naiveService.naiveGetOutgoingJigList(code, name, start_date, end_date, user_for,
+                page_number, page_size, workcell_id);
         poiUtil.outputFile(response, file_name, list);
     }
 
-    //归还工夹具导出所有页
+    // 归还工夹具导出所有页
     @RequestMapping("download_all_outgoing_list")
-    public void naiveDownloadAllOutgoingList(HttpServletResponse response,
-                                             @RequestParam("code") String code,
-                                             @RequestParam("name") String name,
-                                             @RequestParam("start_date") String start_date,
-                                             @RequestParam("end_date") String end_date,
-                                             @RequestParam("user_for") String user_for,
-                                             @RequestParam("workcell_id") String workcell_id,
-                                             @RequestParam("file_name") String file_name) {
-        List<OutgoingJig> list = naiveService.naiveGetOutgoingJigListAllPages(code, name, start_date, end_date, user_for, workcell_id);
+    public void naiveDownloadAllOutgoingList(HttpServletResponse response, @RequestParam("code") String code,
+                                             @RequestParam("name") String name, @RequestParam("start_date") String start_date,
+                                             @RequestParam("end_date") String end_date, @RequestParam("user_for") String user_for,
+                                             @RequestParam("workcell_id") String workcell_id, @RequestParam("file_name") String file_name) {
+        List<OutgoingJig> list = naiveService.naiveGetOutgoingJigListAllPages(code, name, start_date, end_date,
+                user_for, workcell_id);
         poiUtil.outputFile(response, file_name, list);
     }
 
@@ -378,12 +360,9 @@ public class NaiveJson {
      * @return 是否入库成功
      */
     @RequestMapping("return_jig")
-    public boolean naiveReturnJig(@RequestParam("code") String code,
-                                  @RequestParam("seq_id") String seq_id,
-                                  @RequestParam("submit_id") String submit_id,
-                                  @RequestParam("id") String id,
-                                  @RequestParam("rec_id") String rec_id,
-                                  @RequestParam("production_line_id") String production_line_id) {
+    public boolean naiveReturnJig(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id,
+                                  @RequestParam("submit_id") String submit_id, @RequestParam("id") String id,
+                                  @RequestParam("rec_id") String rec_id, @RequestParam("production_line_id") String production_line_id) {
         try {
             naiveService.naiveReturnJig(id, code, seq_id, submit_id, rec_id, production_line_id);
             return true;
@@ -401,7 +380,8 @@ public class NaiveJson {
      * @return 保修历史
      */
     @RequestMapping("get_repair_history")
-    public Map<String, Object> naiveGetRepairHistory(@RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
+    public Map<String, Object> naiveGetRepairHistory(@RequestParam("submit_id") String submit_id,
+                                                     @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
         List<RepairJigHistory> list = naiveService.naiveGetRepairHistory(submit_id, page_number, page_size);
         int all = naiveService.naiveGetRepairHistoryPage(submit_id);
         Map<String, Object> map = new HashMap<>();
@@ -418,7 +398,8 @@ public class NaiveJson {
      * @return 报修列表
      */
     @RequestMapping("get_repair_list")
-    public Map<String, Object> naiveGetRepairList(@RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
+    public Map<String, Object> naiveGetRepairList(@RequestParam("submit_id") String submit_id,
+                                                  @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
         Map<String, Object> map = new HashMap<>();
         map.put("data", naiveService.naiveGetRepairList(submit_id, page_number, page_size));
         int all = naiveService.naiveGetRepairListPage(submit_id);
@@ -438,29 +419,40 @@ public class NaiveJson {
      * @return 成功与否
      */
     @RequestMapping("submit_repair")
-    public boolean naiveSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("repair_reason") String repair_reason, @RequestParam("repair_type") String repair_type, @RequestParam("file") MultipartFile[] files) {
+    public boolean naiveSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id,
+                                     @RequestParam("submit_id") String submit_id, @RequestParam("repair_reason") String repair_reason,
+                                     @RequestParam("repair_type") int repair_type, @RequestParam("file") MultipartFile[] files,
+                                     @RequestParam(value = "workcell_id", defaultValue = "", required = false) String workcell_id) {
         try {
             StringBuilder pathName = new StringBuilder("");
             if (files.length == 1) {
                 String fileName = getRepairPathName(files[0].getOriginalFilename());
-                FileUtils.writeByteArrayToFile
-                        (new File(RESOURCE_URL + fileName), files[0].getBytes());
+                FileUtils.writeByteArrayToFile(new File(RESOURCE_URL + fileName), files[0].getBytes());
                 pathName.append(fileName);
             } else {
                 for (int i = 0; i < files.length - 1; i++) {
                     String fileName = getRepairPathName(files[i].getOriginalFilename());
-                    FileUtils.writeByteArrayToFile
-                            (new File(RESOURCE_URL + fileName), files[i].getBytes());
+                    FileUtils.writeByteArrayToFile(new File(RESOURCE_URL + fileName), files[i].getBytes());
                     pathName.append(fileName).append('|');
                 }
                 String fileName = getRepairPathName(files[files.length - 1].getOriginalFilename());
-                FileUtils.writeByteArrayToFile
-                        (new File(RESOURCE_URL + fileName), files[files.length - 1].getBytes());
+                FileUtils.writeByteArrayToFile(new File(RESOURCE_URL + fileName), files[files.length - 1].getBytes());
                 pathName.append(fileName);
             }
-            naiveService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, repair_type, pathName.toString());
-            Message message = new Message();
+            RepairJig repair = new RepairJig();
+            repair.setCode(code);
+            repair.setSeq_id(seq_id);
+            repair.setSubmit_id(submit_id);
+            repair.setRepair_reason(repair_reason);
+            repair.setRepair_type(repair_type);
+            naiveService.naiveSubmitRepair(repair, pathName.toString());
+            long now = System.currentTimeMillis();
+            Message message = new Message("/repair/my", "id", repair.getId(), submit_id + "提交了一份新的报修请求", now);
             webSocketServer.sendMessageToRole("high", message);
+            if (!"".equals(workcell_id)) {
+                messageService.roleAdd("high", workcell_id, "/repair/my", "id", repair.getId(),
+                        submit_id + "提交了一份新的报修请求", now);
+            }
             lifeService.changeJigLife(code, seq_id);
         } catch (IOException e) {
             e.printStackTrace();
@@ -489,8 +481,7 @@ public class NaiveJson {
     public String mobileUploadRepairPhoto(@RequestParam("file") MultipartFile file) {
         try {
             String pathName = getRepairPathName(file.getOriginalFilename());
-            FileUtils.writeByteArrayToFile
-                    (new File(RESOURCE_URL + pathName), file.getBytes());
+            FileUtils.writeByteArrayToFile(new File(RESOURCE_URL + pathName), file.getBytes());
             return pathName;
         } catch (IOException e) {
             e.printStackTrace();
@@ -508,20 +499,33 @@ public class NaiveJson {
      * @return
      */
     @RequestMapping("mobile_submit_repair")
-    public boolean mobileSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("repair_reason") String repair_reason, @RequestParam("repair_type") String repair_type, @RequestParam("file_name") String[] file_name) {
+    public boolean mobileSubmitRepair(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id,
+                                      @RequestParam("submit_id") String submit_id, @RequestParam("repair_reason") String repair_reason,
+                                      @RequestParam("repair_type") int repair_type, @RequestParam("file_name") String[] file_name) {
         StringBuilder all_path = new StringBuilder();
         for (int i = 0; i < file_name.length - 1; i++) {
             all_path.append(file_name[i]).append("|");
         }
         all_path.append(file_name[file_name.length - 1]);
-        naiveService.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, repair_type, all_path.toString());
+        RepairJig repair = new RepairJig();
+        repair.setCode(code);
+        repair.setSeq_id(seq_id);
+        repair.setSubmit_id(submit_id);
+        repair.setRepair_reason(repair_reason);
+        repair.setRepair_type(repair_type);
+        naiveService.naiveSubmitRepair(repair, all_path.toString());
         lifeService.changeJigLife(code, seq_id);
         return true;
     }
 
     @RequestMapping("download_one_search")
-    public void naiveDownloadOneSearch(HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor, @RequestParam(value = "page_number") int pageNumber, @RequestParam("page_size") int page_size, @RequestParam(value = "file_name") String fileName) throws Exception {
-        List<JigDefinition> list = naiveService.naiveSearchJigDefinition(code, name, workcell, family, userFor, pageNumber, page_size);
+    public void naiveDownloadOneSearch(HttpServletResponse response, @RequestParam(value = "code") String code,
+                                       @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell,
+                                       @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor,
+                                       @RequestParam(value = "page_number") int pageNumber, @RequestParam("page_size") int page_size,
+                                       @RequestParam(value = "file_name") String fileName) throws Exception {
+        List<JigDefinition> list = naiveService.naiveSearchJigDefinition(code, name, workcell, family, userFor,
+                pageNumber, page_size);
         if (list.size() == 0) {
             return;
         }
@@ -529,7 +533,10 @@ public class NaiveJson {
     }
 
     @RequestMapping("download_all_search")
-    public void naiveDownloadAllSearch(HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell, @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor, @RequestParam(value = "file_name") String fileName) throws Exception {
+    public void naiveDownloadAllSearch(HttpServletResponse response, @RequestParam(value = "code") String code,
+                                       @RequestParam(value = "name") String name, @RequestParam(value = "workcell") String workcell,
+                                       @RequestParam(value = "family") String family, @RequestParam(value = "user_for") String userFor,
+                                       @RequestParam(value = "file_name") String fileName) throws Exception {
         List<JigDefinition> list = naiveService.searchAllJigDefinition(code, name, workcell, family, userFor);
         poiUtil.outputFile(response, fileName, list);
     }
@@ -546,9 +553,14 @@ public class NaiveJson {
      * @return 查询到的对应页数的Map对象 { data:数据 ,max:最大页数 }
      */
     @RequestMapping("search_jig_definition")
-    public Map<String, Object> naiveSearchJigDefinition(@RequestParam("code") String code, @RequestParam("name") String name, @RequestParam("workcell") String workcell, @RequestParam("family") String family, @RequestParam("user_for") String userFor, @RequestParam("page_number") int pageNumber, @RequestParam("page_size") int page_size) throws Exception {
+    public Map<String, Object> naiveSearchJigDefinition(@RequestParam("code") String code,
+                                                        @RequestParam("name") String name, @RequestParam("workcell") String workcell,
+                                                        @RequestParam("family") String family, @RequestParam("user_for") String userFor,
+                                                        @RequestParam("page_number") int pageNumber, @RequestParam("page_size") int page_size) throws Exception {
         int all = naiveService.naiveSearchJigDefinitionPage(code, name, workcell, family, userFor);
-        Map<String, Object> map = getStringObjectMap(naiveService.naiveSearchJigDefinition(code, name, workcell, family, userFor, pageNumber, page_size), (int) Math.ceil(all / (double) page_size));
+        Map<String, Object> map = getStringObjectMap(
+                naiveService.naiveSearchJigDefinition(code, name, workcell, family, userFor, pageNumber, page_size),
+                (int) Math.ceil(all / (double) page_size));
         map.put("all", all);
         return map;
     }
@@ -560,7 +572,8 @@ public class NaiveJson {
      */
     @RequestMapping("get_outgoing_submit")
     public Map<String, Object> getOutgoingSubmit(@RequestParam("page_number") int page_number) {
-        return getStringObjectMap(naiveService.naiveGetOutgoingSubmit(page_number), naiveService.naiveGetOutgoingSubmitPage());
+        return getStringObjectMap(naiveService.naiveGetOutgoingSubmit(page_number),
+                naiveService.naiveGetOutgoingSubmitPage());
     }
 
     /**
@@ -572,8 +585,7 @@ public class NaiveJson {
      * @return
      */
     @RequestMapping("get_jig_trouble_percent")
-    public String naiveGetJigTroublePercent(@RequestParam("reason") String reason,
-                                            @RequestParam("code") String code,
+    public String naiveGetJigTroublePercent(@RequestParam("reason") String reason, @RequestParam("code") String code,
                                             @RequestParam("seq_id") String seq_id) {
         if (reason.equals("")) {
             return "数据不足,无法准确计算";
@@ -590,7 +602,8 @@ public class NaiveJson {
         int reason_count_in_the_jig = 0; // 该工夹具自己出现过的当前出现的问题的总次数
         int reason_count_in_all_jig = 0; // 所有故障工夹具出现过的该工夹具出现过的问题的次数
         for (int i = 0; i < reason_list.length; i++) {
-            reason_count_in_the_jig = naiveService.naive_get_trouble_reason_count_by_reason(code, seq_id, reason_list[i]);
+            reason_count_in_the_jig = naiveService.naive_get_trouble_reason_count_by_reason(code, seq_id,
+                    reason_list[i]);
             reason_count_in_all_jig = naiveService.naive_get_trouble_reason_count_by_reason("", "", reason_list[i]);
             reason_count_in_all += naiveService.naive_get_reason_count_in_all(reason_list[i]);
             k++;
@@ -621,7 +634,8 @@ public class NaiveJson {
         return count;
     }
     // 朴素贝叶斯算法思路 C：工夹具故障, Ai:要判断的工夹具检点时出现的各个问题
-    //  C = (P(C)*P(Ai|C) / P(Ai在所有检点时有出现过的次数))     P(Ai|C) = Ai问题在该工夹具出现过的问题次数+1/工夹具故障时出现过的所有问题的次数+1
+    // C = (P(C)*P(Ai|C) / P(Ai在所有检点时有出现过的次数)) P(Ai|C) =
+    // Ai问题在该工夹具出现过的问题次数+1/工夹具故障时出现过的所有问题的次数+1
 
     /**
      * 获取待入库的采购入库清单
@@ -629,16 +643,16 @@ public class NaiveJson {
      * @param workcell_id
      * @param page_number
      * @param page_size
-     * @param status 清单状态 0：待入库 1:已入库
+     * @param status      清单状态 0：待入库 1:已入库
      * @return
      */
     @RequestMapping("get_pending_purchase_submit_list")
     public Map<Object, Object> getPendingPurchaseSubmitList(@RequestParam("workcell_id") String workcell_id,
-                                                            @RequestParam("page_number") int page_number,
-                                                            @RequestParam("page_size") int page_size,
+                                                            @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size,
                                                             @RequestParam("status") int status) {
         Map<Object, Object> map = new HashMap<>();
-        List<PendingPuchaseIncomeSubmit> list = naiveService.naive_get_pending_purchase_submit_list(workcell_id, status, page_number, page_size);
+        List<PendingPuchaseIncomeSubmit> list = naiveService.naive_get_pending_purchase_submit_list(workcell_id, status,
+                page_number, page_size);
         int all = naiveService.naive_get_pending_purchase_submit_list_pages(workcell_id, status);
 
         map.put("data", list);
@@ -648,6 +662,7 @@ public class NaiveJson {
 
     /**
      * 获取待报废的报废清单
+     *
      * @param workcell_id
      * @param page_number
      * @param page_size
@@ -655,10 +670,10 @@ public class NaiveJson {
      */
     @RequestMapping("get_pending_scrap_submit_list")
     public Map<Object, Object> getPendingScrapSubmitList(@RequestParam("workcell_id") String workcell_id,
-                                                         @RequestParam("page_number") int page_number,
-                                                         @RequestParam("page_size") int page_size) {
+                                                         @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
         Map<Object, Object> map = new HashMap<>();
-        List<PendingScrapSubmit> list = naiveService.naive_get_pending_scrap_submit_list(workcell_id, page_number, page_size);
+        List<PendingScrapSubmit> list = naiveService.naive_get_pending_scrap_submit_list(workcell_id, page_number,
+                page_size);
         int all = naiveService.naive_get_pending_scrap_submit_list_pages(workcell_id);
 
         map.put("data", list);
@@ -666,16 +681,12 @@ public class NaiveJson {
         return map;
     }
 
-    //报废工夹具
+    // 报废工夹具
     @RequestMapping("scrap_jig")
-    public int NaiveScrapJig(@RequestParam("code") String code,
-                             @RequestParam("seq_id") String seq_id,
-                             @RequestParam("jig_id") String jig_id,
-                             @RequestParam("submit_id") String submit_id,
-                             @RequestParam("user_id") String user_id){
+    public int NaiveScrapJig(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id,
+                             @RequestParam("jig_id") String jig_id, @RequestParam("submit_id") String submit_id,
+                             @RequestParam("user_id") String user_id) {
         return naiveService.naive_scrap_jig(code, seq_id, jig_id, submit_id, user_id);
     }
-
-
 
 }

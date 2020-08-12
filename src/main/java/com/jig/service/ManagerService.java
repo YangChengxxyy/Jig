@@ -130,6 +130,6 @@ public class ManagerService {
     }
 
     public List<ScrapSubmit> get_all_manager_scrap_submit_list_history(String code, String seq_id, String start_date, String end_date, String status, String scrap_reason, String workcell_id) {
-        return managerMapper.get_all_manager_scrap_submit_list_history(code,seq_id,start_date,end_date,status,scrap_reason,workcell_id);
+        return managerMapper.get_all_manager_scrap_submit_list_history(code, seq_id, start_date, end_date, status, scrap_reason, workcell_id);
     }
 }

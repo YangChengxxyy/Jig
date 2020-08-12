@@ -183,7 +183,7 @@
         insert into outgo_income_history(jig_id, code, seq_id, submit_id, outgo_time, rec_id, status, production_line_id)
         values (#{jig_id}, #{code}, #{seq_id}, #{submit_id}, now(), #{rec_id}, 0, #{production_line_id});
 
-        insert into outgoing_jig(jig_id ,code, seq_id, user_id, outgo_time, production_line_id)
+        insert into outgoing_jig(id ,code, seq_id, user_id, outgo_time, production_line_id)
         values (#{jig_id}, #{code}, #{seq_id}, #{submit_id}, now(), #{production_line_id});
 
         update jig_entity
@@ -271,7 +271,7 @@
     <delete id="naiveDeleteOutgoingJig">
         delete
         from outgoing_jig
-        where jig_id = #{id}
+        where id = #{id}
     </delete>
     <select id="naiveGetRepairHistory" resultType="com.jig.entity.repair.RepairJigHistory">
         select rs.*, u1.name submit_name, u2.name accrptor_name
@@ -299,17 +299,15 @@
         from repair_submit
         where submit_id = #{submit_id};
     </select>
-    <insert id="naiveSubmitRepair">
+    <insert id="naiveSubmitRepair" useGeneratedKeys="true" keyProperty="repair.id" keyColumn="repair_submit.id">
         update jig_position
         set status= 2
-        where code = #{code}
-          and seq_id = #{seq_id};
+        where code = #{repair.code}
+          and seq_id = #{repair.seq_id};
         insert into repair_submit(code, seq_id, repair_reason,repair_type, repair_photo_url, submit_time,
                                   submit_id, status)
-        values (#{code}, #{seq_id}, #{repair_reason},#{repair_type}, #{pathName}, now(),
-                #{submit_id}, 0);
-        insert into message(id, generate_id, generate_time, accept_type, status, message, tab_id)
-        values (uuid(), #{submit_id}, now(), 'high', '00', '提交了新的报修申请', 'myrepair')
+        values (#{repair.code}, #{repair.seq_id}, #{repair.repair_reason},#{repair.repair_type}, #{pathName}, now(),
+                #{repair.submit_id}, 0);
     </insert>
 
     <select id="naiveSearchJigDefinition" resultType="com.jig.entity.jig.JigDefinition">

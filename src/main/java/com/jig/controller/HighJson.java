@@ -28,7 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +49,8 @@ public class HighJson {
     private WebSocketServer webSocketServer;
     @Autowired
     private PoiUtil poiUtil;
-    @Autowired MessageService messageService;
+    @Autowired
+    MessageService messageService;
     public static final String SCRAP_IMAGE_NAME = "images/scrap_images/";
     public static final String REPAIR_IMAGE_NAME = "images/repair_images/";
     public static final String SCRAP = "SCRAP";
@@ -108,7 +108,8 @@ public class HighJson {
      * @return 采购入库申请列表
      */
     @RequestMapping("/get_purchase_income_submit_list")
-    public Map<String, Object> highGetPurchaseIncomeSubmitList(@RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
+    public Map<String, Object> highGetPurchaseIncomeSubmitList(@RequestParam("page_number") int page_number,
+                                                               @RequestParam("page_size") int page_size) {
         Map<String, Object> map = new HashMap<>(3);
         map.put("data", highService.highGetPurchaseIncomeSubmitList(page_number, page_size));
         int all = highService.highGetPurchaseIncomeSubmitListPage();
@@ -128,8 +129,7 @@ public class HighJson {
      */
     @RequestMapping("update_purchase_income_submit")
     public boolean highUpdatePurchaseIncomeSubmit(@RequestParam("id") String id, @RequestParam("code") String code,
-                                                  @RequestParam("count") String count,
-                                                  @RequestParam("production_line_id") String production_line_id) {
+                                                  @RequestParam("count") String count, @RequestParam("production_line_id") String production_line_id) {
         try {
             highService.highUpdatePurchaseIncomeSubmit(id, code, count, production_line_id);
             return true;
@@ -153,14 +153,16 @@ public class HighJson {
      * @return 查询到的入库申请历史
      */
     @RequestMapping("search_purchase_income_history")
-    public Map<String, Object> highSearchPurchaseIncomeHistory(@RequestParam("bill_no") String bill_no, @RequestParam("submit_name") String submit_name,
-                                                               @RequestParam("code") String code, @RequestParam("production_line_id") String production_line_id,
-                                                               @RequestParam("status") String status, @RequestParam("start_date") String start_date,
-                                                               @RequestParam("end_date") String end_date, @RequestParam("page_number") int page_number,
-                                                               @RequestParam("page_size") int page_size) {
-        int all = highService.highSearchPurchaseIncomeHistoryPage(bill_no, submit_name, code, production_line_id, status, start_date, end_date);
+    public Map<String, Object> highSearchPurchaseIncomeHistory(@RequestParam("bill_no") String bill_no,
+                                                               @RequestParam("submit_name") String submit_name, @RequestParam("code") String code,
+                                                               @RequestParam("production_line_id") String production_line_id, @RequestParam("status") String status,
+                                                               @RequestParam("start_date") String start_date, @RequestParam("end_date") String end_date,
+                                                               @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
+        int all = highService.highSearchPurchaseIncomeHistoryPage(bill_no, submit_name, code, production_line_id,
+                status, start_date, end_date);
         Map<String, Object> map = new HashMap<>(3);
-        map.put("data", highService.highSearchPurchaseIncomeHistory(bill_no, submit_name, code, production_line_id, status, start_date, end_date, page_number, page_size));
+        map.put("data", highService.highSearchPurchaseIncomeHistory(bill_no, submit_name, code, production_line_id,
+                status, start_date, end_date, page_number, page_size));
         map.put("max", (int) Math.ceil(all / (double) all));
         map.put("all", all);
         return map;
@@ -189,9 +191,11 @@ public class HighJson {
      * @return 获取报修申请记录
      */
     @RequestMapping("get_repair_jig")
-    public Map<String, Object> highGetRepairJig(@RequestParam("id") String id, @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
+    public Map<String, Object> highGetRepairJig(@RequestParam("id") String id,
+                                                @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
         int all = highService.highGetRepairJigPage(id);
-        Map<String, Object> map = getStringObjectMap(highService.highGetRepairJig(id, page_number, page_size), (int) Math.ceil(all / (double) all));
+        Map<String, Object> map = getStringObjectMap(highService.highGetRepairJig(id, page_number, page_size),
+                (int) Math.ceil(all / (double) all));
         map.put("all", all);
         return map;
     }
@@ -210,10 +214,14 @@ public class HighJson {
      * @return 搜索到历史报修记录
      */
     @RequestMapping("search_repair_history")
-    public Map<String, Object> highSearchRepairHistory(@RequestParam("id") String id, @RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_name") String submit_name, @RequestParam("status") String status, @RequestParam("start_date") String start_date, @RequestParam("end_date") String end_date, @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
+    public Map<String, Object> highSearchRepairHistory(@RequestParam("id") String id, @RequestParam("code") String code,
+                                                       @RequestParam("seq_id") String seq_id, @RequestParam("submit_name") String submit_name,
+                                                       @RequestParam("status") String status, @RequestParam("start_date") String start_date,
+                                                       @RequestParam("end_date") String end_date, @RequestParam("page_number") int page_number,
+                                                       @RequestParam("page_size") int page_size) {
         int all = highService.highSearchRepairHistoryPage(id, code, seq_id, submit_name, status, start_date, end_date);
-        Map<String, Object> map = getStringObjectMap(highService.highSearchRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date, page_number, page_size)
-                , (int) Math.ceil(all / (double) all));
+        Map<String, Object> map = getStringObjectMap(highService.highSearchRepairHistory(id, code, seq_id, submit_name,
+                status, start_date, end_date, page_number, page_size), (int) Math.ceil(all / (double) all));
         map.put("all", all);
         return map;
     }
@@ -226,11 +234,11 @@ public class HighJson {
      * @return 报废申请
      */
     @RequestMapping("get_scrap")
-    public Map<String, Object> highGetScrap(@RequestParam("submit_id") String submit_id, @RequestParam("page_number") int page_number,
-                                            @RequestParam("page_size") int page_size) {
+    public Map<String, Object> highGetScrap(@RequestParam("submit_id") String submit_id,
+                                            @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
         int all = highService.highGetScrapPage(submit_id);
-        Map<String, Object> map = getStringObjectMap(highService.highGetScrap(submit_id, page_number, page_size)
-                , (int) Math.ceil(all / (double) all));
+        Map<String, Object> map = getStringObjectMap(highService.highGetScrap(submit_id, page_number, page_size),
+                (int) Math.ceil(all / (double) all));
         map.put("all", all);
         return map;
     }
@@ -249,17 +257,15 @@ public class HighJson {
      */
     @RequestMapping("search_scrap_history")
     public Map<String, Object> highSearchScrapHistory(@RequestParam("code") String code,
-                                                      @RequestParam("seq_id") String seq_id,
-                                                      @RequestParam("submit_id") String submit_id,
-                                                      @RequestParam("scrap_reason") String scrap_reason,
-                                                      @RequestParam("status") String status,
-                                                      @RequestParam("start_date") String start_date,
-                                                      @RequestParam("end_date") String end_date,
-                                                      @RequestParam("page_number") int page_number,
-                                                      @RequestParam("page_size") int page_size) {
-        int all = highService.highSearchScrapHistoryPage(code, seq_id, submit_id, scrap_reason, status, start_date, end_date);
-        Map<String, Object> map = getStringObjectMap(highService.highSearchScrapHistory(code, seq_id, submit_id, scrap_reason, status, start_date, end_date, page_number, page_size)
-                , (int) Math.ceil(all / (double) all));
+                                                      @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id,
+                                                      @RequestParam("scrap_reason") String scrap_reason, @RequestParam("status") String status,
+                                                      @RequestParam("start_date") String start_date, @RequestParam("end_date") String end_date,
+                                                      @RequestParam("page_number") int page_number, @RequestParam("page_size") int page_size) {
+        int all = highService.highSearchScrapHistoryPage(code, seq_id, submit_id, scrap_reason, status, start_date,
+                end_date);
+        Map<String, Object> map = getStringObjectMap(highService.highSearchScrapHistory(code, seq_id, submit_id,
+                scrap_reason, status, start_date, end_date, page_number, page_size),
+                (int) Math.ceil(all / (double) all));
         map.put("all", all);
         return map;
     }
@@ -275,24 +281,24 @@ public class HighJson {
      * @return 成功与否
      */
     @RequestMapping(value = "submit_scrap", method = RequestMethod.POST)
-    public boolean highSubmitScrap(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason, @RequestParam("scrap_type") String scrap_type, @RequestParam("file") MultipartFile[] files) {
+    public boolean highSubmitScrap(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id,
+                                   @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason,
+                                   @RequestParam("scrap_type") String scrap_type, @RequestParam("file") MultipartFile[] files,
+                                   @RequestParam(value = "workcell_id", defaultValue = "", required = false) String workcell_id) {
         try {
             StringBuilder pathName = new StringBuilder("");
             if (files.length == 1) {
                 String fileName = getScrapPathName(files[0].getOriginalFilename());
-                FileUtils.writeByteArrayToFile
-                        (new File(RESOURCE_URL + fileName), files[0].getBytes());
+                FileUtils.writeByteArrayToFile(new File(RESOURCE_URL + fileName), files[0].getBytes());
                 pathName.append(fileName);
             } else {
                 for (int i = 0; i < files.length - 1; i++) {
                     String fileName = getScrapPathName(files[i].getOriginalFilename());
-                    FileUtils.writeByteArrayToFile
-                            (new File(RESOURCE_URL + fileName), files[i].getBytes());
+                    FileUtils.writeByteArrayToFile(new File(RESOURCE_URL + fileName), files[i].getBytes());
                     pathName.append(fileName).append('|');
                 }
                 String fileName = getScrapPathName(files[files.length - 1].getOriginalFilename());
-                FileUtils.writeByteArrayToFile
-                        (new File(RESOURCE_URL + fileName), files[files.length - 1].getBytes());
+                FileUtils.writeByteArrayToFile(new File(RESOURCE_URL + fileName), files[files.length - 1].getBytes());
                 pathName.append(fileName);
             }
 
@@ -304,9 +310,12 @@ public class HighJson {
             scrapSubmit.setScrap_type(scrap_type);
 
             highService.highSubmitScrap(scrapSubmit, pathName.toString());
-            Message message = new Message("/scrap/my", "id", submit_id, submit_id + "提交了一份新的报废提交");
+            long now = System.currentTimeMillis();
+            Message message = new Message("/scrap/my", "id", scrapSubmit.getId(), submit_id + "提交了一份新的报废请求", now);
             webSocketServer.sendMessageToRole("supervisor", message);
-            messageService.add("123456", message);
+            if (!"".equals(workcell_id)) {
+                messageService.roleAdd("supervisor", workcell_id, "/scrap/my", "id", scrapSubmit.getId(), submit_id + "提交了一份新的报废请求", now);
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -336,8 +345,7 @@ public class HighJson {
     public String mobileUploadScrapPhoto(@RequestParam("file") MultipartFile file) {
         try {
             String pathName = getScrapPathName(file.getOriginalFilename());
-            FileUtils.writeByteArrayToFile
-                    (new File(RESOURCE_URL + pathName), file.getBytes());
+            FileUtils.writeByteArrayToFile(new File(RESOURCE_URL + pathName), file.getBytes());
             return pathName;
         } catch (IOException e) {
             e.printStackTrace();
@@ -346,7 +354,9 @@ public class HighJson {
     }
 
     @RequestMapping("mobile_submit_scrap")
-    public boolean mobileSubmitScrap(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id, @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason, @RequestParam("scrap_type") String scrap_type, @RequestParam("file_name") String[] file_name) {
+    public boolean mobileSubmitScrap(@RequestParam("code") String code, @RequestParam("seq_id") String seq_id,
+                                     @RequestParam("submit_id") String submit_id, @RequestParam("scrap_reason") String scrap_reason,
+                                     @RequestParam("scrap_type") String scrap_type, @RequestParam("file_name") String[] file_name) {
         StringBuilder all_path = new StringBuilder();
         for (int i = 0; i < file_name.length - 1; i++) {
             all_path.append(file_name[i]).append("|");
@@ -370,7 +380,8 @@ public class HighJson {
      * @return 成功与否
      */
     @RequestMapping("delete_scrap")
-    public boolean highDeleteScrap(@RequestParam("id") String id, @RequestParam("scrap_photo_url") String scrap_photo_url) {
+    public boolean highDeleteScrap(@RequestParam("id") String id,
+                                   @RequestParam("scrap_photo_url") String scrap_photo_url) {
         String fileName = RESOURCE_URL + scrap_photo_url;
         File file = new File(fileName);
         return highService.highDeleteScrap(id) && file.delete();
@@ -399,7 +410,8 @@ public class HighJson {
     }
 
     @RequestMapping("handle_repair_submit")
-    public boolean handleRepairSubmit(@RequestParam("id") int id, @RequestParam("submit_id") String submit_id, @RequestParam("state") boolean state, @RequestParam(value = "reason", required = false) String reason) {
+    public boolean handleRepairSubmit(@RequestParam("id") int id, @RequestParam("submit_id") String submit_id,
+                                      @RequestParam("state") boolean state, @RequestParam(value = "reason", required = false) String reason) {
         try {
             if (state) {
                 highService.highAgreeRepairSubmit(id, submit_id);
@@ -414,34 +426,52 @@ public class HighJson {
     }
 
     @RequestMapping("download_one_purchase_history")
-    public void highDownloadOnePurchaseHistory(HttpServletResponse response, @RequestParam(value = "bill_no") String bill_no, @RequestParam(value = "submit_name") String submit_name,
-                                               @RequestParam(value = "code") String code, @RequestParam(value = "production_line_id") String production_line_id,
+    public void highDownloadOnePurchaseHistory(HttpServletResponse response,
+                                               @RequestParam(value = "bill_no") String bill_no, @RequestParam(value = "submit_name") String submit_name,
+                                               @RequestParam(value = "code") String code,
+                                               @RequestParam(value = "production_line_id") String production_line_id,
                                                @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
                                                @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number,
-                                               @RequestParam(value = "file_name") String file_name, @RequestParam("page_size") int page_size) throws Exception {
-        List<PurchaseIncomeHistory> list = highService.highSearchPurchaseIncomeHistory(bill_no, submit_name, code, production_line_id, status, start_date, end_date, page_number, page_size);
+                                               @RequestParam(value = "file_name") String file_name, @RequestParam("page_size") int page_size)
+            throws Exception {
+        List<PurchaseIncomeHistory> list = highService.highSearchPurchaseIncomeHistory(bill_no, submit_name, code,
+                production_line_id, status, start_date, end_date, page_number, page_size);
         poiUtil.outputFile(response, file_name, list);
     }
 
     @RequestMapping("download_all_purchase_history")
-    public void highDownloadAllPurchaseHistory(HttpServletResponse response, @RequestParam(value = "bill_no") String bill_no, @RequestParam(value = "submit_name") String submit_name,
-                                               @RequestParam(value = "code") String code, @RequestParam(value = "production_line_id") String production_line_id,
+    public void highDownloadAllPurchaseHistory(HttpServletResponse response,
+                                               @RequestParam(value = "bill_no") String bill_no, @RequestParam(value = "submit_name") String submit_name,
+                                               @RequestParam(value = "code") String code,
+                                               @RequestParam(value = "production_line_id") String production_line_id,
                                                @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
-                                               @RequestParam(value = "end_date") String end_date, @RequestParam(value = "file_name") String file_name) throws Exception {
-        List<PurchaseIncomeHistory> list = highService.highSearchAllPurchaseIncomeHistory(bill_no, submit_name, code, production_line_id, status, start_date, end_date);
+                                               @RequestParam(value = "end_date") String end_date, @RequestParam(value = "file_name") String file_name)
+            throws Exception {
+        List<PurchaseIncomeHistory> list = highService.highSearchAllPurchaseIncomeHistory(bill_no, submit_name, code,
+                production_line_id, status, start_date, end_date);
         poiUtil.outputFile(response, file_name, list);
     }
 
-
     @RequestMapping("download_one_repair_history")
-    public void highDownloadOneRepairHistory(HttpServletResponse response, @RequestParam("id") String id, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number, @RequestParam(value = "file_name") String file_name, @RequestParam("page_size") int page_size) throws Exception {
-        List<RepairJigHistory> list = highService.highSearchRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date, page_number, page_size);
+    public void highDownloadOneRepairHistory(HttpServletResponse response, @RequestParam("id") String id,
+                                             @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id,
+                                             @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status,
+                                             @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date,
+                                             @RequestParam(value = "page_number") int page_number, @RequestParam(value = "file_name") String file_name,
+                                             @RequestParam("page_size") int page_size) throws Exception {
+        List<RepairJigHistory> list = highService.highSearchRepairHistory(id, code, seq_id, submit_name, status,
+                start_date, end_date, page_number, page_size);
         poiUtil.outputFile(response, file_name, list);
     }
 
     @RequestMapping("download_all_repair_history")
-    public void highDownloadAllRepairHistory(HttpServletResponse response, @RequestParam("id") String id, @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date, @RequestParam(value = "file_name") String file_name) throws Exception {
-        List<RepairJigHistory> list = highService.highSearchAllRepairHistory(id, code, seq_id, submit_name, status, start_date, end_date);
+    public void highDownloadAllRepairHistory(HttpServletResponse response, @RequestParam("id") String id,
+                                             @RequestParam(value = "code") String code, @RequestParam(value = "seq_id") String seq_id,
+                                             @RequestParam(value = "submit_name") String submit_name, @RequestParam(value = "status") String status,
+                                             @RequestParam(value = "start_date") String start_date, @RequestParam(value = "end_date") String end_date,
+                                             @RequestParam(value = "file_name") String file_name) throws Exception {
+        List<RepairJigHistory> list = highService.highSearchAllRepairHistory(id, code, seq_id, submit_name, status,
+                start_date, end_date);
         poiUtil.outputFile(response, file_name, list);
     }
 
@@ -452,7 +482,8 @@ public class HighJson {
                                             @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number,
                                             @RequestParam("page_size") int page_size, @RequestParam(value = "scrap_reason") String scrap_reason,
                                             @RequestParam(value = "file_name") String file_name) throws Exception {
-        List<ScrapHistory> list = highService.highSearchScrapHistory(code, seq_id, submit_id, scrap_reason, status, start_date, end_date, page_number, page_size);
+        List<ScrapHistory> list = highService.highSearchScrapHistory(code, seq_id, submit_id, scrap_reason, status,
+                start_date, end_date, page_number, page_size);
         poiUtil.outputFile(response, file_name, list);
     }
 
@@ -461,8 +492,10 @@ public class HighJson {
                                             @RequestParam(value = "seq_id") String seq_id, @RequestParam(value = "submit_id") String submit_id,
                                             @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
                                             @RequestParam(value = "scrap_reason") String scrap_reason,
-                                            @RequestParam(value = "end_date") String end_date, @RequestParam(value = "file_name") String file_name) throws Exception {
-        List<ScrapHistory> list = highService.highSearchAllScrapHistory(code, seq_id, submit_id, scrap_reason, status, start_date, end_date);
+                                            @RequestParam(value = "end_date") String end_date, @RequestParam(value = "file_name") String file_name)
+            throws Exception {
+        List<ScrapHistory> list = highService.highSearchAllScrapHistory(code, seq_id, submit_id, scrap_reason, status,
+                start_date, end_date);
         poiUtil.outputFile(response, file_name, list);
     }
 }

@@ -212,7 +212,7 @@ public interface HighMapper {
      *
      * @param pathName
      */
-    void highSubmitScrap(@Param("scrap_submit") ScrapSubmit scrap_submit, @Param("pathName") String pathName);
+    int highSubmitScrap(@Param("scrap_submit") ScrapSubmit scrap_submit, @Param("pathName") String pathName);
 
     /**
      * 高级用户删除报废

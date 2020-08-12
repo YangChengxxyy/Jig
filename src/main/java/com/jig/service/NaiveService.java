@@ -28,16 +28,17 @@ public class NaiveService {
         return naiveMapper.naive_input_purchase_jig(bill_no, code, seq_id, jig_cabinet, location, description, user_id);
     }
 
-     /**
+    /**
      * 将采购入库的工夹具入库
-     * @param bill_no 相关订单单据号
+     *
+     * @param bill_no     相关订单单据号
      * @param code
      * @param seq_id
      * @param jig_cabinet 夹具柜id
-     * @param location  存放区域
-     * @param bin   bin位
+     * @param location    存放区域
+     * @param bin         bin位
      * @param description 写入出入库历史的描述信息
-     * @param user_id 入库人
+     * @param user_id     入库人
      * @return
      */
     public int naiveInputJigEntity(String bill_no, String code, int seq_id, String jig_cabinet, String location, String bin, String description, String user_id) {
@@ -135,9 +136,9 @@ public class NaiveService {
         naiveMapper.naiveDeleteOutgoingJig(id);
     }
 
-    public List<RepairJigHistory> naiveGetRepairHistory(String submit_id, int page_number,int page_size) {
+    public List<RepairJigHistory> naiveGetRepairHistory(String submit_id, int page_number, int page_size) {
         page_number = (page_number - 1) * page_size;
-        return naiveMapper.naiveGetRepairHistory(submit_id, page_number,page_size);
+        return naiveMapper.naiveGetRepairHistory(submit_id, page_number, page_size);
     }
 
     public int naiveGetRepairHistoryPage(String submit_id) {
@@ -145,9 +146,9 @@ public class NaiveService {
     }
 
     //naive获取报修列表
-    public List<RepairJig> naiveGetRepairList(String submit_id, int page_number,int page_size) {
+    public List<RepairJig> naiveGetRepairList(String submit_id, int page_number, int page_size) {
         page_number = (page_number - 1) * page_size;
-        return naiveMapper.naiveGetRepairList(submit_id, page_number,page_size);
+        return naiveMapper.naiveGetRepairList(submit_id, page_number, page_size);
     }
 
     //naive获取报修列表页数
@@ -156,8 +157,8 @@ public class NaiveService {
     }
 
     //naive提交报修
-    public void naiveSubmitRepair(String code, String seq_id, String submit_id, String repair_reason, String repair_type, String pathName) {
-        naiveMapper.naiveSubmitRepair(code, seq_id, submit_id, repair_reason, repair_type, pathName);
+    public void naiveSubmitRepair(RepairJig repair, String pathName) {
+        naiveMapper.naiveSubmitRepair(repair, pathName);
     }
 
 
@@ -215,7 +216,7 @@ public class NaiveService {
         return naiveMapper.naive_get_reason_count_in_all(reason);
     }
 
-    public List<PendingPuchaseIncomeSubmit> naive_get_pending_purchase_submit_list(String workcell_id, int status, int page_number, int page_size){
+    public List<PendingPuchaseIncomeSubmit> naive_get_pending_purchase_submit_list(String workcell_id, int status, int page_number, int page_size) {
         page_number = (page_number - 1) * page_size;
         return naiveMapper.naive_get_pending_purchase_submit_list(workcell_id, status, page_number, page_size);
     }
@@ -224,7 +225,7 @@ public class NaiveService {
         return naiveMapper.naive_get_pending_purchase_submit_list_pages(workcell_id, status);
     }
 
-    public List<PendingScrapSubmit> naive_get_pending_scrap_submit_list(String workcell_id, int page_number, int page_size){
+    public List<PendingScrapSubmit> naive_get_pending_scrap_submit_list(String workcell_id, int page_number, int page_size) {
         page_number = (page_number - 1) * page_size;
         return naiveMapper.naive_get_pending_scrap_submit_list(workcell_id, page_number, page_size);
     }

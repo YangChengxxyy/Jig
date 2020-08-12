@@ -1,11 +1,7 @@
 package com.jig.controller;
 
 import com.jig.annotation.Permission;
-import com.jig.entity.common.Role;
-import com.jig.entity.common.Family;
-import com.jig.entity.common.Position;
-import com.jig.entity.common.ProductionLine;
-import com.jig.entity.common.Workcell;
+import com.jig.entity.common.*;
 import com.jig.entity.jig.JigDefinition;
 import com.jig.entity.jig.JigModel;
 import com.jig.entity.jig.JigPart;

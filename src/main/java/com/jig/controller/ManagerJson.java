@@ -1,13 +1,5 @@
 package com.jig.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.jig.annotation.Permission;
 import com.jig.entity.common.Message;
 import com.jig.entity.common.Role;
@@ -19,9 +11,9 @@ import com.jig.entity.purchase.PurchaseIncomeSubmit;
 import com.jig.entity.scrap.ScrapSubmit;
 import com.jig.service.CommonService;
 import com.jig.service.ManagerService;
+import com.jig.service.MessageService;
 import com.jig.service.UserService;
 import com.jig.utils.PoiUtil;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -30,6 +22,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Permission(Role.manager)
 @RestController
@@ -44,6 +43,9 @@ public class ManagerJson {
     private UserService userService;
     @Autowired
     private WebSocketServer webSocketServer;
+    @Autowired
+    private MessageService messageService;
+
     @Autowired
     private PoiUtil pouiUtil;
 
@@ -73,7 +75,8 @@ public class ManagerJson {
     //经理模块下的终审审批，@RequestParam pass 相当于经过终审审批后的采购审批单的状态
     @RequestMapping(value = "pass_purchase_submit", method = {RequestMethod.GET, RequestMethod.POST})
     public String managerCheckPurchase(@RequestParam("id") String id,
-                                       @RequestParam("user_id") String user_id) {
+                                       @RequestParam("user_id") String user_id,
+                                       @RequestParam(value = "workcell_id", defaultValue = "", required = false) String workcell_id) {
         User user = new User();
         user.setId(user_id);
         String user_name = userService.getUserName(user_id);
@@ -89,8 +92,12 @@ public class ManagerJson {
         if (flag < 0) {
             return "操作失败！";
         }
-        Message message = new Message("/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请");
+        long now = System.currentTimeMillis();
+        Message message = new Message("/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
         webSocketServer.sendMessageToId(submit_man.getId(), message);
+        if (!"".equals(workcell_id)) {
+            messageService.idAdd(id, "high", workcell_id, "/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
+        }
         return "操作成功！";
     }
 
@@ -99,7 +106,7 @@ public class ManagerJson {
     public String dontPassManagerPurchaseSubmit(HttpServletRequest request,
                                                 @RequestParam(value = "id") String id,
                                                 @RequestParam(value = "final_reason") String final_reason,
-                                                @RequestParam("user_id") String user_id) {
+                                                @RequestParam("user_id") String user_id, @RequestParam(value = "workcell_id", defaultValue = "", required = false) String workcell_id) {
         User user = new User();
         user.setId(user_id);
         String user_name = userService.getUserName(user_id);
@@ -115,7 +122,11 @@ public class ManagerJson {
         if (flag < 0) {
             return "服务器异常!";
         }
-        Message message = new Message("/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请");
+        long now = System.currentTimeMillis();
+        Message message = new Message("/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
+        if (!"".equals(workcell_id)) {
+            messageService.idAdd(user_id, "high", workcell_id, "/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
+        }
         webSocketServer.sendMessageToId(submit_man.getId(), message);
         return "审批成功!";
     }
@@ -311,7 +322,8 @@ public class ManagerJson {
     //经理模式下审批通过 报废申请 操作
     @RequestMapping(value = "pass_scrap_submit", method = {RequestMethod.GET, RequestMethod.POST})
     public String checkManagerScrapSubmit(@RequestParam(value = "id") String id,
-                                          @RequestParam(value = "user_id") String user_id) {
+                                          @RequestParam(value = "user_id") String user_id,
+                                          @RequestParam(value = "workcell_id", defaultValue = "", required = false) String workcell_id) {
         User user = new User();
         user.setId(user_id);
         String user_name = userService.getUserName(user_id);
@@ -327,8 +339,11 @@ public class ManagerJson {
         if (flag < 0) {
             return "服务器异常!";
         }
-
-        Message message = new Message("/scrap/my", "id", id, "经理"+ user_name + "通过了你的报废申请");
+        long now = System.currentTimeMillis();
+        Message message = new Message("/scrap/my", "id", id, "经理" + user_name + "通过了你的报废申请", now);
+        if (!"".equals(workcell_id)) {
+            messageService.idAdd(user_id, "high", workcell_id, "/scrap/my", "id", id, "经理" + user_name + "通过了你的报废申请", now);
+        }
         webSocketServer.sendMessageToId(submit_man.getId(), message);
         return "审批成功！";
     }
@@ -337,7 +352,7 @@ public class ManagerJson {
     @RequestMapping(value = "no_pass_scrap_submit")
     public String managerNoPassSubmit(@RequestParam("id") String id,
                                       @RequestParam("no_pass_reason") String no_pass_reason,
-                                      @RequestParam("user_id") String user_id) {
+                                      @RequestParam("user_id") String user_id, @RequestParam(value = "workcell_id", defaultValue = "", required = false) String workcell_id) {
         User user = new User();
         user.setId(user_id);
         String user_name = userService.getUserName(user_id);
@@ -355,8 +370,11 @@ public class ManagerJson {
         if (flag < 0) {
             return "服务器异常!";
         }
-
-        Message message = new Message("/scrap/my", "id", id, "经理" + user_name + "拒绝了你的报废申请");
+        long now = System.currentTimeMillis();
+        Message message = new Message("/scrap/my", "id", id, "经理" + user_name + "拒绝了你的报废申请", now);
+        if (!"".equals(workcell_id)) {
+            messageService.idAdd(user_id, "high", workcell_id, "/scrap/my", "id", id, "经理" + user_name + "拒绝了你的报废申请", now);
+        }
         webSocketServer.sendMessageToId(submit_man.getId(), message);
         return "审批成功";
     }
