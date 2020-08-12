@@ -96,7 +96,7 @@ public class ManagerJson {
         Message message = new Message("/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
         webSocketServer.sendMessageToId(submit_man.getId(), message);
         if (!"".equals(workcell_id)) {
-            messageService.idAdd(id, "high", workcell_id, "/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
+            messageService.idAdd(id, "supervisor", workcell_id, "/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
         }
         return "操作成功！";
     }
@@ -125,7 +125,7 @@ public class ManagerJson {
         long now = System.currentTimeMillis();
         Message message = new Message("/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
         if (!"".equals(workcell_id)) {
-            messageService.idAdd(user_id, "high", workcell_id, "/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
+            messageService.idAdd(user_id, "supervisor", workcell_id, "/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
         }
         webSocketServer.sendMessageToId(submit_man.getId(), message);
         return "审批成功!";
@@ -342,7 +342,7 @@ public class ManagerJson {
         long now = System.currentTimeMillis();
         Message message = new Message("/scrap/my", "id", id, "经理" + user_name + "通过了你的报废申请", now);
         if (!"".equals(workcell_id)) {
-            messageService.idAdd(user_id, "high", workcell_id, "/scrap/my", "id", id, "经理" + user_name + "通过了你的报废申请", now);
+            messageService.idAdd(user_id, "supervisor", workcell_id, "/scrap/my", "id", id, "经理" + user_name + "通过了你的报废申请", now);
         }
         webSocketServer.sendMessageToId(submit_man.getId(), message);
         return "审批成功！";
@@ -373,7 +373,7 @@ public class ManagerJson {
         long now = System.currentTimeMillis();
         Message message = new Message("/scrap/my", "id", id, "经理" + user_name + "拒绝了你的报废申请", now);
         if (!"".equals(workcell_id)) {
-            messageService.idAdd(user_id, "high", workcell_id, "/scrap/my", "id", id, "经理" + user_name + "拒绝了你的报废申请", now);
+            messageService.idAdd(user_id, "supervisor", workcell_id, "/scrap/my", "id", id, "经理" + user_name + "拒绝了你的报废申请", now);
         }
         webSocketServer.sendMessageToId(submit_man.getId(), message);
         return "审批成功";
