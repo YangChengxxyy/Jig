@@ -335,7 +335,7 @@ public class ManagerJson {
         String field = a[0];
         String old_value = a[1];
         String new_value = a[2];
-        User submit_man = commonService.getUserByScrapSubmitId(id);
+        User submit_man = commonService.getUserByScrapSubmitId(id); // 审批申请人
         int flag = managerService.manager_pass_scrap_submit(id, "4", user, field, old_value, new_value);
         if (flag < 0) {
             return "服务器异常!";
@@ -343,7 +343,7 @@ public class ManagerJson {
         long now = System.currentTimeMillis();
         Message message = new Message("/scrap/my", "id", id, "经理" + user_name + "通过了你的报废申请", now);
         if (!"".equals(workcell_id)) {
-            messageService.idAdd(user_id, "supervisor", workcell_id, "/scrap/my", "id", id, "经理" + user_name + "通过了你的报废申请", now);
+            messageService.idAdd(submit_man.getId(), "high", workcell_id, "/scrap/my", "id", id, "经理" + user_name + "通过了你的报废申请", now);
         }
         webSocketServer.sendMessageToId(submit_man.getId(), message);
         return "审批成功！";
@@ -366,7 +366,7 @@ public class ManagerJson {
         String old_value = a[1];
         String new_value = a[2];
 
-        User submit_man = commonService.getUserByScrapSubmitId(id);
+        User submit_man = commonService.getUserByScrapSubmitId(id); // 审批申请人
 
         int flag = managerService.manager_no_pass_scrap_submit(id, no_pass_reason, user, field, old_value, new_value);
         if (flag < 0) {
@@ -375,7 +375,7 @@ public class ManagerJson {
         long now = System.currentTimeMillis();
         Message message = new Message("/scrap/my", "id", id, "经理" + user_name + "拒绝了你的报废申请", now);
         if (!"".equals(workcell_id)) {
-            messageService.idAdd(user_id, "supervisor", workcell_id, "/scrap/my", "id", id, "经理" + user_name + "拒绝了你的报废申请", now);
+            messageService.idAdd(submit_man.getId(), "high", workcell_id, "/scrap/my", "id", id, "经理" + user_name + "拒绝了你的报废申请", now);
         }
         webSocketServer.sendMessageToId(submit_man.getId(), message);
         return "审批成功";
