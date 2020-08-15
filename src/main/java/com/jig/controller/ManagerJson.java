@@ -96,7 +96,7 @@ public class ManagerJson {
         Message message = new Message("/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
         webSocketServer.sendMessageToId(submit_man.getId(), message);
         if (!"".equals(workcell_id)) {
-            messageService.idAdd(id, "supervisor", workcell_id, "/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
+            messageService.idAdd(submit_man.getId(), "naive", workcell_id, "/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
         }
         return "操作成功！";
     }
@@ -106,8 +106,9 @@ public class ManagerJson {
     public String dontPassManagerPurchaseSubmit(HttpServletRequest request,
                                                 @RequestParam(value = "id") String id,
                                                 @RequestParam(value = "final_reason") String final_reason,
-                                                @RequestParam("user_id") String user_id, @RequestParam(value = "workcell_id", defaultValue = "", required = false) String workcell_id) {
-        User user = new User();
+                                                @RequestParam("user_id") String user_id,
+                                                @RequestParam(value = "workcell_id", defaultValue = "", required = false) String workcell_id) {
+        User user = new User(); // 处理人的user信息
         user.setId(user_id);
         String user_name = userService.getUserName(user_id);
         user.setName(user_name);
@@ -117,7 +118,7 @@ public class ManagerJson {
         String field = a[0];
         String old_value = a[1];
         String new_value = a[2];
-        User submit_man = commonService.getUserByPurchaseSubmitId(id);
+        User submit_man = commonService.getUserByPurchaseSubmitId(id); // 获取审批申请人的user信息
         int flag = managerService.manager_no_pass_purchase_submit(id, "3", final_reason, user, field, old_value, new_value);
         if (flag < 0) {
             return "服务器异常!";
@@ -125,7 +126,7 @@ public class ManagerJson {
         long now = System.currentTimeMillis();
         Message message = new Message("/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
         if (!"".equals(workcell_id)) {
-            messageService.idAdd(user_id, "supervisor", workcell_id, "/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
+            messageService.idAdd(submit_man.getId(), "naive", workcell_id, "/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
         }
         webSocketServer.sendMessageToId(submit_man.getId(), message);
         return "审批成功!";
@@ -352,7 +353,8 @@ public class ManagerJson {
     @RequestMapping(value = "no_pass_scrap_submit")
     public String managerNoPassSubmit(@RequestParam("id") String id,
                                       @RequestParam("no_pass_reason") String no_pass_reason,
-                                      @RequestParam("user_id") String user_id, @RequestParam(value = "workcell_id", defaultValue = "", required = false) String workcell_id) {
+                                      @RequestParam("user_id") String user_id,
+                                      @RequestParam(value = "workcell_id", defaultValue = "", required = false) String workcell_id) {
         User user = new User();
         user.setId(user_id);
         String user_name = userService.getUserName(user_id);

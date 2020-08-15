@@ -9,6 +9,7 @@ import com.jig.entity.jig.JigDefinition;
 import com.jig.entity.purchase.PurchaseIncomeSubmit;
 import com.jig.entity.scrap.ScrapSubmit;
 import com.jig.service.CommonService;
+import com.jig.service.MessageService;
 import com.jig.service.SupervisorService;
 import com.jig.service.UserService;
 import com.jig.utils.PoiUtil;
@@ -36,6 +37,8 @@ public class SupervisorJson {
     private UserService userService;
     @Autowired
     private WebSocketServer webSocketServer;
+    @Autowired
+    private MessageService messageService;
     @Autowired
     private PoiUtil poiUtil;
 
@@ -168,7 +171,8 @@ public class SupervisorJson {
     @RequestMapping(value = "pass_purchase_submit", method = {RequestMethod.GET, RequestMethod.POST})
     public int supervisorPassPurchaseSubmit(@RequestParam("id") String id,
                                             @RequestParam("status") String status,
-                                            @RequestParam("user_id") String first_acceptor) {
+                                            @RequestParam("user_id") String first_acceptor,
+                                            @RequestParam(value = "workcell_id", defaultValue = "", required = false) String workcell_id) {
         User user = getUserById(first_acceptor);
         PurchaseIncomeSubmit purchaseIncomeSubmit = commonService.getPurchaseSubmit(id);
 
@@ -179,11 +183,17 @@ public class SupervisorJson {
         User submit_man = commonService.getUserByPurchaseSubmitId(id);
         int flag = supervisorService.supervisorPassPurchaseSubmit(id, status, user, field, old_value, new_value);
         if (flag > 0) {
-            Message message = new Message("/purchase/my", "id", id, "监管员" + user.getName() + "通过了你的采购入库申请");
+            long now = System.currentTimeMillis();
+            Message message = new Message("/purchase/my", "id", id, "监管员" + user.getName() + "通过了你的采购入库申请", now);
             webSocketServer.sendMessageToId(submit_man.getId(), message); // 发送给申请人
 
-            Message message_to_manager = new Message("/purchase/my", "id", id, "监管员" + user.getName() + "通过了新的采购入库申请");
+            Message message_to_manager = new Message("/purchase/my", "id", id, "监管员" + user.getName() + "通过了新的采购入库申请", now);
             webSocketServer.sendMessageToRole("manager", message_to_manager);
+
+            if (!"".equals(workcell_id)) {
+                messageService.idAdd(submit_man.getId(), "naive", workcell_id, "/purchase/my", "id", id, "监管员" + user.getName() + "通过了你的采购入库申请", now);
+                messageService.roleAdd("manager", workcell_id,"/purchase/my", "id", id, "监管员" + user.getName() + "通过了新的采购入库申请", now);
+            }
         }
         return flag;
     }
@@ -193,7 +203,8 @@ public class SupervisorJson {
     public int supervisorNoPassPurchaseSubmit(@RequestParam("id") String id,
                                               @RequestParam("status") String status,
                                               @RequestParam("first_reason") String first_reason,
-                                              @RequestParam("user_id") String first_acceptor) {
+                                              @RequestParam("user_id") String first_acceptor,
+                                              @RequestParam(value = "workcell_id", defaultValue = "", required = false) String workcell_id) {
         User user = getUserById(first_acceptor);
         PurchaseIncomeSubmit purchaseIncomeSubmit = commonService.getPurchaseSubmit(id);
         String[] a = purchaseIncomeSubmit.NoPassSubmitInfo("1", first_reason);
@@ -205,8 +216,13 @@ public class SupervisorJson {
         int flag = supervisorService.supervisorNoPassPurchaseSubmit(id, status, first_reason, user, field, old_value, new_value);
 
         if (flag > 0) {
-            Message message = new Message("/purchase/my", "id", id, "监管员" + user.getName() + "拒绝了你的采购入库申请");
+            long now = System.currentTimeMillis();
+            Message message = new Message("/purchase/my", "id", id, "监管员" + user.getName() + "拒绝了你的采购入库申请", now);
             webSocketServer.sendMessageToId(submit_man.getId(), message); // 发送给申请人
+
+            if (!"".equals(workcell_id)) {
+                messageService.idAdd(submit_man.getId(), "naive", workcell_id, "/purchase/my", "id", id, "监管员" + user.getName() + "拒绝了你的采购入库申请", now);
+            }
         }
         return flag;
     }
@@ -256,10 +272,11 @@ public class SupervisorJson {
         return map;
     }
 
-    //监管者模式下审批待处理的报废申请
+    //监管者模式下通过待处理的报废申请
     @RequestMapping(value = "pass_scrap_submit", method = {RequestMethod.GET, RequestMethod.POST})
     public int supervisorPassScrapSubmit(@RequestParam("id") String id,
-                                         @RequestParam("user_id") String user_id) {
+                                         @RequestParam("user_id") String user_id,
+                                         @RequestParam(value = "workcell_id", defaultValue = "", required = false) String workcell_id) {
         User user = getUserById(user_id);
         ScrapSubmit scrapSubmit = commonService.getScrapSubmit(id);
 
@@ -267,14 +284,20 @@ public class SupervisorJson {
         String field = a[0];
         String old_value = a[1];
         String new_value = a[2];
-        User submit_man = commonService.getUserByScrapSubmitId(id);
+        User submit_man = commonService.getUserByScrapSubmitId(id); // 审批申请人(high)
         int flag = supervisorService.supervisorPassScrapSubmit(id, user, field, old_value, new_value);
         if (flag > 0) {
-            Message message = new Message("/scrap/my", "id", id, "监管员" + user.getName() + "通过了你的报废申请");
+            long now = System.currentTimeMillis();
+            Message message = new Message("/scrap/my", "id", id, "监管员" + user.getName() + "通过了你的报废申请", now);
             webSocketServer.sendMessageToId(submit_man.getId(), message); // 发送给申请人
 
-            Message message_to_manager = new Message("/purchase/my", "id", id, "监管员" + user.getName() + "通过了新的报废申请");
+            Message message_to_manager = new Message("/scrap/my", "id", id, "监管员" + user.getName() + "通过了新的报废申请", now);
             webSocketServer.sendMessageToRole("manager", message_to_manager); // 发送给经理
+
+            if (!"".equals(workcell_id)) {
+                messageService.idAdd(submit_man.getId(), "high", workcell_id, "/scrap/my", "id", id, "监管员" + user.getName() + "通过了你的报废申请", now);
+                messageService.roleAdd("manager", workcell_id,"/scrap/my", "id", id, "监管员" + user.getName() + "通过了新的报废申请", now);
+            }
         }
         return flag;
     }
@@ -282,7 +305,8 @@ public class SupervisorJson {
     @RequestMapping(value = "no_pass_scrap_submit", method = {RequestMethod.GET, RequestMethod.POST})
     public int supervisorNoPassScrapSubmit(@RequestParam("id") String id,
                                            @RequestParam("no_pass_reason") String no_pass_reason,
-                                           @RequestParam("user_id") String user_id) {
+                                           @RequestParam("user_id") String user_id,
+                                           @RequestParam(value = "workcell_id", defaultValue = "", required = false) String workcell_id) {
         User user = getUserById(user_id);
         ScrapSubmit scrapSubmit = commonService.getScrapSubmit(id);
 
@@ -293,8 +317,13 @@ public class SupervisorJson {
         User submit_man = commonService.getUserByScrapSubmitId(id);
         int flag = supervisorService.supervisorNoPassScrapSubmit(id, no_pass_reason, user, field, old_value, new_value);
         if (flag > 0) {
-            Message message = new Message("/scrap/my", "id", id, "监管员" + user.getName() + "拒绝了你的报废申请");
+            long now = System.currentTimeMillis();
+            Message message = new Message("/scrap/my", "id", id, "监管员" + user.getName() + "拒绝了你的报废申请", now);
             webSocketServer.sendMessageToId(submit_man.getId(), message); // 发送给申请人
+
+            if (!"".equals(workcell_id)) {
+                messageService.idAdd(submit_man.getId(), "high", workcell_id, "/scrap/my", "id", id, "监管员" + user.getName() + "拒绝了你的报废申请", now);
+            }
         }
         return flag;
     }
