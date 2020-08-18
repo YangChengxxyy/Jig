@@ -9,6 +9,7 @@ import com.jig.entity.out.OutgoSubmit;
 import com.jig.entity.out.OutgoingJig;
 import com.jig.entity.purchase.PendingPuchaseIncomeSubmit;
 import com.jig.entity.repair.MaintenanceSubmit;
+import com.jig.entity.repair.PendingRepairSubmit;
 import com.jig.entity.repair.RepairJig;
 import com.jig.entity.repair.RepairJigHistory;
 import com.jig.entity.scrap.PendingScrapSubmit;
@@ -260,7 +261,7 @@ public interface NaiveMapper {
     /**
      * 初级用户提交报修
      *
-     * @param repiar
+     * @param repair
      * @param pathName
      */
     void naiveSubmitRepair(@Param("repair") RepairJig repair, @Param("pathName") String pathName);
@@ -349,4 +350,17 @@ public interface NaiveMapper {
                         @Param("jig_id") String jig_id,
                         @Param("submit_id") String submit_id,
                         @Param("user_id") String user_id);
+
+    List<PendingRepairSubmit> naive_get_pending_repair_submit_list(@Param("workcell_id") String workcell_id,
+                                                                   @Param("page_number") int page_number,
+                                                                   @Param("page_size") int page_size);
+
+    int naive_get_pending_repair_submit_list_pages(@Param("workcell_id") String workcell_id);
+
+    List<User> naive_get_repair_man_list(@Param("workcell_id") String workcell_id);
+
+    int naive_choose_repair_man(@Param("repair_man_id") String repair_man_id,
+                                @Param("repair_submit_id") String repair_submit_id);
+
+    void naive_repair_finish(@Param("submit") PendingRepairSubmit submit);
 }

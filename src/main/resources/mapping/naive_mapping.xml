@@ -150,8 +150,9 @@
         order by oh.outgo_time desc
     </select>
     <select id="naive_get_maintenance_history_list" resultType="com.jig.entity.repair.MaintenanceSubmit">
-        select rm.*, u.name as 'check_name'
+        select rm.*, u.name as 'check_name', rt.name as 'repair_type_description'
         from regular_maintenance_history rm left join user u on rm.check_id = u.id
+                                            left join repair_type rt on rm.repair_type = rt.id
         where rm.code = #{code} and rm.seq_id = #{seq_id}
         order by rm.check_time desc
     </select>
@@ -309,7 +310,6 @@
         values (#{repair.code}, #{repair.seq_id}, #{repair.repair_reason},#{repair.repair_type}, #{pathName}, now(),
                 #{repair.submit_id}, 0);
     </insert>
-
     <select id="naiveSearchJigDefinition" resultType="com.jig.entity.jig.JigDefinition">
         select * from jig_definition_entity_view
         <where>
@@ -475,4 +475,33 @@
         delete from regular_maintenance
         where code = #{code} and seq_id = #{seq_id}
     </insert>
+    <select id="naive_get_pending_repair_submit_list" resultType="com.jig.entity.repair.PendingRepairSubmit">
+        select * from pending_repair_submit_entity_view
+        where workcell_id = #{workcell_id};
+    </select>
+    <select id="naive_get_pending_repair_submit_list_pages" resultType="java.lang.Integer">
+        select count(*)
+        from pending_repair_submit_entity_view
+        where workcell_id = #{workcell_id}
+    </select>
+    <select id="naive_get_repair_man_list" resultType="com.jig.entity.common.User">
+        select * from user where workcell_id = #{workcell_id} and type = 'repair'
+    </select>
+    <update id="naive_choose_repair_man">
+        update pending_repair_submit
+        set repair_man_id = #{repair_man_id}, repair_time = now(), status = '1'
+        where id = #{repair_submit_id}
+    </update>
+    <select id="naive_repair_finish">
+        insert into
+        regular_maintenance_history(code, seq_id, check_id, check_time, is_repair, repair_type)
+        values(#{submit.code}, #{submidt.seq_id}, #{submit.repair_man_id}, now(), 2, #{submit.repair_type});
+
+        update jig_position
+        set status = '1'
+        where code = #{submit.code} and seq_id = #{submit.seq_id};
+
+        delete from pending_repair_submit
+        where id = #{submit.id}
+    </select>
 </mapper>

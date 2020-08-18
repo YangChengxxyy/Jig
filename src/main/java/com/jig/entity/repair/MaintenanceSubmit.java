@@ -13,6 +13,8 @@ public class MaintenanceSubmit {
     private String check_name;
     private String check_time;
     private int is_repair; // 是否需要进行报修，是：1，否：0
+    private int repair_type;
+    private String repair_type_description;
 
     public String getId() {
         return id;
@@ -84,6 +86,22 @@ public class MaintenanceSubmit {
 
     public void setReason_description(List<String> reason_description) {
         this.reason_description = reason_description;
+    }
+
+    public int getRepair_type() {
+        return repair_type;
+    }
+
+    public void setRepair_type(int repair_type) {
+        this.repair_type = repair_type;
+    }
+
+    public String getRepair_type_description() {
+        return repair_type_description;
+    }
+
+    public void setRepair_type_description(String repair_type_description) {
+        this.repair_type_description = repair_type_description;
     }
 
     @Override
