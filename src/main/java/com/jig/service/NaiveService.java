@@ -9,6 +9,7 @@ import com.jig.entity.out.OutgoSubmit;
 import com.jig.entity.out.OutgoingJig;
 import com.jig.entity.purchase.PendingPuchaseIncomeSubmit;
 import com.jig.entity.repair.MaintenanceSubmit;
+import com.jig.entity.repair.PendingRepairSubmit;
 import com.jig.entity.repair.RepairJig;
 import com.jig.entity.repair.RepairJigHistory;
 import com.jig.entity.scrap.PendingScrapSubmit;
@@ -236,5 +237,22 @@ public class NaiveService {
 
     public int naive_scrap_jig(String code, String seq_id, String jig_id, String submit_id, String user_id) {
         return naiveMapper.naive_scrap_jig(code, seq_id, jig_id, submit_id, user_id);
+    }
+
+    public List<PendingRepairSubmit> naive_get_pending_repair_submit_list(String workcell_id, int page_number, int page_size) {
+        page_number = (page_number - 1) * page_size;
+        return naiveMapper.naive_get_pending_repair_submit_list(workcell_id, page_number, page_size);
+    }
+
+    public int naive_get_pending_repair_submit_list_pages(String workcell) {
+        return naiveMapper.naive_get_pending_repair_submit_list_pages(workcell);
+    }
+
+    public List<User> naive_get_repair_man_list(String workcell_id) {
+        return naiveMapper.naive_get_repair_man_list(workcell_id);
+    }
+
+    public int naive_choose_repair_man(String repair_man_id, String repair_submit_id) {
+        return naiveMapper.naive_choose_repair_man(repair_man_id, repair_submit_id);
     }
 }

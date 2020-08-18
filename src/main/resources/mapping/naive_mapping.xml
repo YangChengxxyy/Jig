@@ -309,7 +309,6 @@
         values (#{repair.code}, #{repair.seq_id}, #{repair.repair_reason},#{repair.repair_type}, #{pathName}, now(),
                 #{repair.submit_id}, 0);
     </insert>
-
     <select id="naiveSearchJigDefinition" resultType="com.jig.entity.jig.JigDefinition">
         select * from jig_definition_entity_view
         <where>
@@ -475,4 +474,21 @@
         delete from regular_maintenance
         where code = #{code} and seq_id = #{seq_id}
     </insert>
+    <select id="naive_get_pending_repair_submit_list" resultType="com.jig.entity.repair.PendingRepairSubmit">
+        select * from pending_repair_submit_entity_view
+        where workcell_id = #{workcell_id};
+    </select>
+    <select id="naive_get_pending_repair_submit_list_pages" resultType="java.lang.Integer">
+        select count(*)
+        from pending_repair_submit_entity_view
+        where workcell_id = #{workcell_id}
+    </select>
+    <select id="naive_get_repair_man_list" resultType="com.jig.entity.common.User">
+        select * from user where workcell_id = #{workcell_id} and type = 'repair'
+    </select>
+    <update id="naive_choose_repair_man">
+        update pending_repair_submit
+        set repair_man_id = #{repair_man_id}, repair_time = now(), status = '1'
+        where id = #{repair_submit_id}
+    </update>
 </mapper>

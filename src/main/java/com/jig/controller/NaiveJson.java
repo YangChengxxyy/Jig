@@ -9,10 +9,7 @@ import com.jig.entity.jig.JigStock;
 import com.jig.entity.out.OutgoSubmit;
 import com.jig.entity.out.OutgoingJig;
 import com.jig.entity.purchase.PendingPuchaseIncomeSubmit;
-import com.jig.entity.repair.MaintenanceSubmit;
-import com.jig.entity.repair.MaintenanceType;
-import com.jig.entity.repair.RepairJig;
-import com.jig.entity.repair.RepairJigHistory;
+import com.jig.entity.repair.*;
 import com.jig.entity.scrap.PendingScrapSubmit;
 import com.jig.service.*;
 import com.jig.utils.PoiUtil;
@@ -688,5 +685,48 @@ public class NaiveJson {
                              @RequestParam("user_id") String user_id) {
         return naiveService.naive_scrap_jig(code, seq_id, jig_id, submit_id, user_id);
     }
+
+    /**
+     * 获取待维修的报修工夹具list
+     * @param workcell_id
+     * @param page_number
+     * @param page_size
+     * @return
+     */
+    @RequestMapping("get_pending_repair_submit_list")
+    public Map<Object, Object> NaiveGetPendingRepairSubmit(@RequestParam("workcell_id") String workcell_id,
+                                                           @RequestParam("page_number") int page_number,
+                                                           @RequestParam("page_size") int page_size) {
+        Map<Object, Object> map = new HashMap<>();
+        List<PendingRepairSubmit> list = naiveService.naive_get_pending_repair_submit_list(workcell_id, page_number, page_size);
+        int max = naiveService.naive_get_pending_repair_submit_list_pages(workcell_id);
+        map.put("data", list);
+        map.put("all", max);
+        return map;
+    }
+
+    /**
+     * 获取维修工夹具的人员list
+     * @param workcell_id
+     * @return
+     */
+    @RequestMapping("get_repair_man_list")
+    public List<User> NaiveGetRepairManList(@RequestParam("workcell_id") String workcell_id) {
+        return naiveService.naive_get_repair_man_list(workcell_id);
+    }
+
+    /**
+     * 为报修审批通过的需要维修的工夹具选择维修人员
+     * @param repair_man_id 维修人员id
+     * @param repair_submit_id 待处理的报修审批id
+     * @return
+     */
+    @RequestMapping("choose_repair_man")
+    public int NaiveChooseRepairMan(@RequestParam("repair_man_id") String repair_man_id,
+                                    @RequestParam("repair_submit_id") String repair_submit_id) {
+        return naiveService.naive_choose_repair_man(repair_man_id, repair_submit_id);
+    }
+
+
 
 }

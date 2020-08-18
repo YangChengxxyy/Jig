@@ -56,10 +56,18 @@
         select *
         from repair_submit
         where id = #{id};
+        insert into pending_repair_submit
+        (id, code, seq_id, repair_reason, repair_photo_url, repair_type, submit_time,
+        submit_id, acceptor_id, acceptor_time, acceptor_reason)
+        select id, code, seq_id, repair_reason, repair_photo_url, repair_type, submit_time,
+        submit_id, acceptor_id, acceptor_time, acceptor_reason
+        from repair_submit where id = #{id};
+        update pending_repair_submit
+        set status = 0
+        where id = #{id};
         delete
         from repair_submit
         where id = #{id};
-
     </insert>
     <insert id="highDisagreeRepairSubmit">
         update repair_submit
