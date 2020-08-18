@@ -361,4 +361,6 @@ public interface NaiveMapper {
 
     int naive_choose_repair_man(@Param("repair_man_id") String repair_man_id,
                                 @Param("repair_submit_id") String repair_submit_id);
+
+    void naive_repair_finish(@Param("submit") PendingRepairSubmit submit);
 }

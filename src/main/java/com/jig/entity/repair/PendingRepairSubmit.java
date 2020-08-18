@@ -163,4 +163,18 @@ public class PendingRepairSubmit {
     public void setRepair_time(String repair_time) {
         this.repair_time = repair_time;
     }
+
+    @Override
+    public String toString() {
+        return "PendingRepairSubmit{" +
+                "id='" + id + '\'' +
+                ", code='" + code + '\'' +
+                ", seq_id='" + seq_id + '\'' +
+                ", status='" + status + '\'' +
+                ", repair_type=" + repair_type +
+                ", repair_man_id='" + repair_man_id + '\'' +
+                ", repair_man_name='" + repair_man_name + '\'' +
+                ", repair_time='" + repair_time + '\'' +
+                '}';
+    }
 }

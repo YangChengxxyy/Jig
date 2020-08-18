@@ -255,4 +255,8 @@ public class NaiveService {
     public int naive_choose_repair_man(String repair_man_id, String repair_submit_id) {
         return naiveMapper.naive_choose_repair_man(repair_man_id, repair_submit_id);
     }
+
+    public void naive_repair_finish(PendingRepairSubmit submit) {
+        naiveMapper.naive_repair_finish(submit);
+    }
 }

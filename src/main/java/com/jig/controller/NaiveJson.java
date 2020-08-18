@@ -1,5 +1,6 @@
 package com.jig.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jig.entity.common.Message;
 import com.jig.entity.common.User;
 import com.jig.entity.jig.JigDefinition;
@@ -727,6 +728,10 @@ public class NaiveJson {
         return naiveService.naive_choose_repair_man(repair_man_id, repair_submit_id);
     }
 
-
+    @RequestMapping("repair_finish")
+    public void NaiveRepairFinsh(@RequestParam("repair_submit") String repair_submit) {
+        PendingRepairSubmit submit = JSONObject.parseObject(repair_submit, PendingRepairSubmit.class);
+        naiveService.naive_repair_finish(submit);
+    }
 
 }
