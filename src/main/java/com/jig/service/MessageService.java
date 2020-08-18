@@ -17,9 +17,9 @@ public class MessageService {
 
     public void roleAdd(String role, String workcell_id, String path, String param, String condition, String content,
                         long date) {
-        String insertSql = "insert into message(role,workcell_id,path,param,`condition`,content,date) values('{}',{},'{}','{}','{}','{}',{})";
-        insertSql = StrUtil.format(insertSql, role, role, workcell_id, path, param, condition, content, date);
-        logger.debug(insertSql);
+        String insertSql = "insert into message(role,workcell_id,path,param,`condition`,content,date) values('{}','{}','{}','{}','{}','{}',{})";
+        insertSql = StrUtil.format(insertSql, role, workcell_id, path, param, condition, content, date);
+        logger.info(insertSql);
         jdbcTemplate.update(insertSql);
     }
 

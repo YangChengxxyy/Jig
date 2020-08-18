@@ -14,6 +14,7 @@ public class Message {
     private String title = "提示";
     private boolean read = false;
     private long date;
+    private String user_id = "";
 
     public String getPath() {
         return path;
@@ -83,4 +84,11 @@ public class Message {
         this.date = date;
     }
 
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
 }

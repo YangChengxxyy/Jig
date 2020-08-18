@@ -27,23 +27,25 @@ public class MessageJson {
     private MessageService messageService;
 
     @RequestMapping("/get_message")
-    public List<Message> getAllMessage(@RequestParam("role") String role, @RequestParam("id") String id) {
-        String sql = "select * from message where role = '{}' and user_id = '{}'";
-        sql = StrUtil.format(sql, role, id);
+    public List<Message> getAllMessage(@RequestParam("role") String role, @RequestParam("id") String id, @RequestParam("workcell_id") String workcell_id) {
+        String sql = "select * from message where role = '{}' and (user_id = '{}' or user_id = '')and workcell_id = '{}'";
+        sql = StrUtil.format(sql, role, id, workcell_id);
         List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         List<Message> messages = new LinkedList<>();
         for (Map<String, Object> map : maps) {
             Message message = new Message(map.get("path").toString(), map.get("param").toString(), map.get("condition").toString(), map.get("content").toString(), Long.parseLong(map.get("date").toString()));
             message.setId(Integer.parseInt(map.get("id").toString()));
+            message.setRead(Integer.parseInt(map.get("read").toString()) == 1);
+            message.setUser_id(map.get("user_id").toString());
             messages.add(message);
         }
         return messages;
     }
 
     @RequestMapping("read_message")
-    public boolean readMessage(@RequestParam("role") String role, @RequestParam("id") String id,
-                               @RequestParam("message_id") int message_id) {
-
+    public boolean readMessage(@RequestParam("message_id") int message_id) {
+        String sql = "update message set `read` = 1 where id = " + message_id;
+        jdbcTemplate.update(sql);
         return true;
     }
 }

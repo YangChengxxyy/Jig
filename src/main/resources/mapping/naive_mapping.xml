@@ -299,7 +299,7 @@
         from repair_submit
         where submit_id = #{submit_id};
     </select>
-    <insert id="naiveSubmitRepair" useGeneratedKeys="true" keyProperty="repair.id" keyColumn="repair_submit.id">
+    <insert id="naiveSubmitRepair" useGeneratedKeys="true" keyProperty="repair.id">
         update jig_position
         set status= 2
         where code = #{repair.code}
