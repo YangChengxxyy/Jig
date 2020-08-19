@@ -310,12 +310,6 @@ public class HighJson {
             scrapSubmit.setScrap_type(scrap_type);
 
             highService.highSubmitScrap(scrapSubmit, pathName.toString());
-            long now = System.currentTimeMillis();
-            Message message = new Message("/scrap/my", "id", scrapSubmit.getId(), submit_id + "提交了一份新的报废请求", now);
-            webSocketServer.sendMessageToRole("supervisor", message);
-            if (!"".equals(workcell_id)) {
-                messageService.roleAdd("supervisor", workcell_id, "/scrap/my", "id", scrapSubmit.getId(), submit_id + "提交了一份新的报废请求", now);
-            }
         } catch (IOException e) {
             e.printStackTrace();
             return false;

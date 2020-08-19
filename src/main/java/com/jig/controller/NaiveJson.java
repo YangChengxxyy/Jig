@@ -444,13 +444,6 @@ public class NaiveJson {
             repair.setRepair_reason(repair_reason);
             repair.setRepair_type(repair_type);
             naiveService.naiveSubmitRepair(repair, pathName.toString());
-            long now = System.currentTimeMillis();
-            Message message = new Message("/repair/my", "id", repair.getId(), submit_id + "提交了一份新的报修请求", now);
-            webSocketServer.sendMessageToRole("high", message);
-            if (!"".equals(workcell_id)) {
-                messageService.roleAdd("high", workcell_id, "/repair/my", "id", repair.getId(),
-                        submit_id + "提交了一份新的报修请求", now);
-            }
             lifeService.changeJigLife(code, seq_id);
         } catch (IOException e) {
             e.printStackTrace();
