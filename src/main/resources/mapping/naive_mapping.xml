@@ -8,7 +8,7 @@
         </collection>
     </resultMap>
     <resultMap id="jig_list_by_select_count" type="java.lang.Integer">
-        <result column="count" />
+        <result column="count"/>
     </resultMap>
     <resultMap id="jig_list_by_select_data" type="com.jig.entity.jig.JigEntity">
     </resultMap>
@@ -19,16 +19,17 @@
         insert into jig_position(code, seq_id, jig_cabinet_id, location_id, status)
         values (#{code}, #{seq_id}, #{jig_cabinet}, #{location}, 1);
 
-        insert into outgo_income_history(code, seq_id, outgo_time, rec_id, status,description)
+        insert into outgo_income_history(code, seq_id, outgo_time, rec_id, status, description)
         values (#{code}, #{seq_id}, now(), #{user_id}, 3, #{description});
 
         UPDATE outgo_income_history a
-        LEFT JOIN jig_entity b ON a.code = b.code and a.seq_id = b.seq_id
+            LEFT JOIN jig_entity b ON a.code = b.code and a.seq_id = b.seq_id
         SET a.jig_id = b.id
-        where a.code = #{code} AND A.seq_id = #{seq_id};
+        where a.code = #{code}
+          AND A.seq_id = #{seq_id};
 
         insert into regular_maintenance(code, seq_id, pm_period)
-        values(#{code}, #{seq_id}, 30);
+        values (#{code}, #{seq_id}, 30);
 
         update pending_purchase_income_submit
         set status = 1
@@ -41,11 +42,11 @@
         insert into jig_position(code, seq_id, jig_cabinet_id, location_id, bin, status)
         values (#{code}, #{seq_id}, #{jig_cabinet}, #{location}, #{bin}, 1);
 
-        insert into outgo_income_history(code, seq_id, outgo_time, rec_id, status,description)
+        insert into outgo_income_history(code, seq_id, outgo_time, rec_id, status, description)
         values (#{code}, #{seq_id}, now(), #{user_id}, 3, #{description});
 
         insert into regular_maintenance(code, seq_id, pm_period)
-        values(#{code}, #{seq_id}, 30)
+        values (#{code}, #{seq_id}, 30)
     </insert>
     <select id="navieGetLocationList" resultMap="jig_position_map">
         select jp.jig_cabinet_id, jp.location_id, jd.workcell_id
@@ -75,11 +76,12 @@
           and jp.jig_cabinet_id = #{jig_cabinet_id}
           and jp.location_id = #{jig_location_id}
           and jp.status = 1
-          group by jp.code;
-          SELECT FOUND_ROWS() as count;
+        group by jp.code;
+        SELECT FOUND_ROWS() as count;
     </select>
     <select id="navieGetJigEntityListByLocation" resultType="com.jig.entity.jig.JigEntity">
-        select je.*, jp.jig_cabinet_id, jp.location_id, jp.bin, jp.status, jd.* from jig_position jp inner join jig_definition jd on jp.code = jd.code
+        select je.*, jp.jig_cabinet_id, jp.location_id, jp.bin, jp.status, jd.* from jig_position jp inner join
+        jig_definition jd on jp.code = jd.code
         inner join jig_entity je on jp.code = je.code and je.seq_id = jp.seq_id
         where jd.code = #{code} and jp.status = 1
         <if test="jig_cabinet_id != '' ">
@@ -151,9 +153,11 @@
     </select>
     <select id="naive_get_maintenance_history_list" resultType="com.jig.entity.repair.MaintenanceSubmit">
         select rm.*, u.name as 'check_name', rt.name as 'repair_type_description'
-        from regular_maintenance_history rm left join user u on rm.check_id = u.id
-                                            left join repair_type rt on rm.repair_type = rt.id
-        where rm.code = #{code} and rm.seq_id = #{seq_id}
+        from regular_maintenance_history rm
+                 left join user u on rm.check_id = u.id
+                 left join repair_type rt on rm.repair_type = rt.id
+        where rm.code = #{code}
+          and rm.seq_id = #{seq_id}
         order by rm.check_time desc
     </select>
     <update id="naive_change_jig_position">
@@ -171,7 +175,7 @@
     <select id="navieGetMaintenanceJigDetailList" resultType="com.jig.entity.jig.JigEntity">
         select je.id, rm.code, rm.seq_id, rm.pm_period, rm.last_time, jp.jig_cabinet_id, jp.location_id, jp.bin
         from jig_position jp inner join regular_maintenance rm on jp.code = rm.code and jp.seq_id = rm.seq_id
-                             inner join jig_entity je on jp.code = je.code and jp.seq_id = je.seq_id
+        inner join jig_entity je on jp.code = je.code and jp.seq_id = je.seq_id
         where jp.code = #{code} and jp.status = 1
         <if test="jig_cabinet_id != '' ">
             and jp.jig_cabinet_id = #{jig_cabinet_id}
@@ -181,10 +185,11 @@
         </if>
     </select>
     <insert id="naiveOutgoJig">
-        insert into outgo_income_history(jig_id, code, seq_id, submit_id, outgo_time, rec_id, status, production_line_id)
+        insert into outgo_income_history(jig_id, code, seq_id, submit_id, outgo_time, rec_id, status,
+                                         production_line_id)
         values (#{jig_id}, #{code}, #{seq_id}, #{submit_id}, now(), #{rec_id}, 0, #{production_line_id});
 
-        insert into outgoing_jig(id ,code, seq_id, user_id, outgo_time, production_line_id)
+        insert into outgoing_jig(id, code, seq_id, user_id, outgo_time, production_line_id)
         values (#{jig_id}, #{code}, #{seq_id}, #{submit_id}, now(), #{production_line_id});
 
         update jig_entity
@@ -266,7 +271,8 @@
         set status = 1
         where code = #{code}
           and seq_id = #{seq_id};
-        insert into outgo_income_history(jig_id, code, seq_id, submit_id, outgo_time, rec_id, status, production_line_id)
+        insert into outgo_income_history(jig_id, code, seq_id, submit_id, outgo_time, rec_id, status,
+                                         production_line_id)
         values (#{id}, #{code}, #{seq_id}, ${submit_id}, now(), #{rec_id}, 1, #{production_line_id})
     </update>
     <delete id="naiveDeleteOutgoingJig">
@@ -305,9 +311,9 @@
         set status= 2
         where code = #{repair.code}
           and seq_id = #{repair.seq_id};
-        insert into repair_submit(code, seq_id, repair_reason,repair_type, repair_photo_url, submit_time,
+        insert into repair_submit(code, seq_id, repair_reason, repair_type, repair_photo_url, submit_time,
                                   submit_id, status)
-        values (#{repair.code}, #{repair.seq_id}, #{repair.repair_reason},#{repair.repair_type}, #{pathName}, now(),
+        values (#{repair.code}, #{repair.seq_id}, #{repair.repair_reason}, #{repair.repair_type}, #{pathName}, now(),
                 #{repair.submit_id}, 0);
     </insert>
     <select id="naiveSearchJigDefinition" resultType="com.jig.entity.jig.JigDefinition">
@@ -406,10 +412,10 @@
     </select>
     <select id="naive_get_jig_trouble_percent_all" resultType="java.lang.Double">
         select (
-            (select count(*) as s1 from regular_maintenance_history where is_repair = 1)
-            /
-            (select count(*) as s2 from regular_maintenance_history)
-        )
+                       (select count(*) as s1 from regular_maintenance_history where is_repair = 1)
+                       /
+                       (select count(*) as s2 from regular_maintenance_history)
+                   )
     </select>
     <select id="naive_get_trouble_maintenance_list" resultType="com.jig.entity.repair.MaintenanceSubmit">
         select * from regular_maintenance_history
@@ -431,25 +437,32 @@
             <if test="code == '' and seq_id == ''">
                 and is_repair = 1
             </if>
-            and (reason like CONCAT('%|', #{reason}, '%') or reason like CONCAT('%', #{reason}, '|%') or reason like CONCAT(#{reason}, '%'))
+            and (reason like CONCAT('%|', #{reason}, '%') or reason like CONCAT('%', #{reason}, '|%') or reason like
+            CONCAT(#{reason}, '%'))
         </where>
     </select>
     <select id="naive_get_reason_count_in_all" resultType="java.lang.Integer">
-        select count(*) from regular_maintenance_history
-        where (reason like CONCAT('%|', #{reason}, '%') or reason like CONCAT('%', #{reason}, '|%') or reason like CONCAT(#{reason}, '%'))
+        select count(*)
+        from regular_maintenance_history
+        where (reason like CONCAT('%|', #{reason}, '%') or reason like CONCAT('%', #{reason}, '|%') or
+               reason like CONCAT(#{reason}, '%'))
     </select>
     <select id="naive_get_pending_purchase_submit_list" resultType="com.jig.entity.purchase.PendingPuchaseIncomeSubmit">
-        select * from pending_purchase_submit_entity_view
-        where workcell_id = #{workcell_id} and status = #{status}
+        select *
+        from pending_purchase_submit_entity_view
+        where workcell_id = #{workcell_id}
+          and status = #{status}
         limit #{page_number}, #{page_size}
     </select>
     <select id="naive_get_pending_purchase_submit_list_pages" resultType="java.lang.Integer">
         select count(*)
         from pending_purchase_submit_entity_view
-        where workcell_id = #{workcell_id} and status = #{status}
+        where workcell_id = #{workcell_id}
+          and status = #{status}
     </select>
     <select id="naive_get_pending_scrap_submit_list" resultType="com.jig.entity.scrap.PendingScrapSubmit">
-        select * from pending_scrap_submit_entity_view
+        select *
+        from pending_scrap_submit_entity_view
         where workcell_id = #{workcell_id}
         limit #{page_number}, #{page_size}
     </select>
@@ -464,19 +477,26 @@
 
         update pending_scrap_submit
         set status = 1
-        where code = #{code} and seq_id = #{seq_id};
+        where code = #{code}
+          and seq_id = #{seq_id};
 
-        delete from jig_entity
+        delete
+        from jig_entity
         where id = #{jig_id};
 
-        delete from jig_position
-        where code = #{code} and seq_id = #{seq_id};
+        delete
+        from jig_position
+        where code = #{code}
+          and seq_id = #{seq_id};
 
-        delete from regular_maintenance
-        where code = #{code} and seq_id = #{seq_id}
+        delete
+        from regular_maintenance
+        where code = #{code}
+          and seq_id = #{seq_id}
     </insert>
     <select id="naive_get_pending_repair_submit_list" resultType="com.jig.entity.repair.PendingRepairSubmit">
-        select * from pending_repair_submit_entity_view
+        select *
+        from pending_repair_submit_entity_view
         where workcell_id = #{workcell_id};
     </select>
     <select id="naive_get_pending_repair_submit_list_pages" resultType="java.lang.Integer">
@@ -485,23 +505,34 @@
         where workcell_id = #{workcell_id}
     </select>
     <select id="naive_get_repair_man_list" resultType="com.jig.entity.common.User">
-        select * from user where workcell_id = #{workcell_id} and type = 'repair'
+        select *
+        from user
+        where workcell_id = #{workcell_id}
+          and type = 'repair'
     </select>
     <update id="naive_choose_repair_man">
         update pending_repair_submit
-        set repair_man_id = #{repair_man_id}, repair_time = now(), status = '1'
+        set repair_man_id = #{repair_man_id},
+            repair_time   = now(),
+            status        = '1'
         where id = #{repair_submit_id}
     </update>
     <select id="naive_repair_finish">
-        insert into
-        regular_maintenance_history(code, seq_id, check_id, check_time, is_repair, repair_type)
-        values(#{submit.code}, #{submidt.seq_id}, #{submit.repair_man_id}, now(), 2, #{submit.repair_type});
+        insert into regular_maintenance_history(code, seq_id, check_id, check_time, is_repair, repair_type)
+        values (#{submit.code}, #{submidt.seq_id}, #{submit.repair_man_id}, now(), 2, #{submit.repair_type});
 
         update jig_position
         set status = '1'
-        where code = #{submit.code} and seq_id = #{submit.seq_id};
+        where code = #{submit.code}
+          and seq_id = #{submit.seq_id};
 
-        delete from pending_repair_submit
+        delete
+        from pending_repair_submit
         where id = #{submit.id}
+    </select>
+    <select id="getARepairHistory" resultType="com.jig.entity.repair.RepairJigHistory">
+        select *
+        from repair_submit_history
+        where id = #{id}
     </select>
 </mapper>

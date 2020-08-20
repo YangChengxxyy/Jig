@@ -259,4 +259,8 @@ public class NaiveService {
     public void naive_repair_finish(PendingRepairSubmit submit) {
         naiveMapper.naive_repair_finish(submit);
     }
+
+    public RepairJigHistory getARepairHistory(String id) {
+        return naiveMapper.getARepairHistory(id);
+    }
 }

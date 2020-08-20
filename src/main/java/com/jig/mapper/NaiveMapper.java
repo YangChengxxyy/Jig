@@ -363,4 +363,6 @@ public interface NaiveMapper {
                                 @Param("repair_submit_id") String repair_submit_id);
 
     void naive_repair_finish(@Param("submit") PendingRepairSubmit submit);
+
+    RepairJigHistory getARepairHistory(@Param("id") String id);
 }

@@ -404,13 +404,19 @@ public class HighJson {
     }
 
     @RequestMapping("handle_repair_submit")
-    public boolean handleRepairSubmit(@RequestParam("id") int id, @RequestParam("submit_id") String submit_id,
+    public boolean handleRepairSubmit(@RequestParam("id") int id, @RequestParam("submit_id") String submit_id, @RequestParam("informed_id") String informed_id,
                                       @RequestParam("state") boolean state, @RequestParam(value = "reason", required = false) String reason) {
         try {
             if (state) {
                 highService.highAgreeRepairSubmit(id, submit_id);
+                long now = System.currentTimeMillis();
+                Message message = new Message("/repair/search", "id", String.valueOf(id), submit_id + "通过了你的报修申请", now);
+                webSocketServer.sendMessageToId(informed_id, message);
             } else {
                 highService.highDisagreeRepairSubmit(id, submit_id, reason);
+                long now = System.currentTimeMillis();
+                Message message = new Message("/repair/search", "id", String.valueOf(id), submit_id + "拒绝了你的报修申请", now);
+                webSocketServer.sendMessageToId(informed_id, message);
             }
             return true;
         } catch (Exception e) {

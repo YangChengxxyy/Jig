@@ -682,6 +682,7 @@ public class NaiveJson {
 
     /**
      * 获取待维修的报修工夹具list
+     *
      * @param workcell_id
      * @param page_number
      * @param page_size
@@ -701,6 +702,7 @@ public class NaiveJson {
 
     /**
      * 获取维修工夹具的人员list
+     *
      * @param workcell_id
      * @return
      */
@@ -711,7 +713,8 @@ public class NaiveJson {
 
     /**
      * 为报修审批通过的需要维修的工夹具选择维修人员
-     * @param repair_man_id 维修人员id
+     *
+     * @param repair_man_id    维修人员id
      * @param repair_submit_id 待处理的报修审批id
      * @return
      */
@@ -722,9 +725,18 @@ public class NaiveJson {
     }
 
     @RequestMapping("repair_finish")
-    public void NaiveRepairFinsh(@RequestParam("repair_submit") String repair_submit) {
+    public void NaiveRepairFinish(@RequestParam("repair_submit") String repair_submit) {
         PendingRepairSubmit submit = JSONObject.parseObject(repair_submit, PendingRepairSubmit.class);
         naiveService.naive_repair_finish(submit);
     }
 
+    /**
+     * 获取单个报修历史
+     * @param id
+     * @return
+     */
+    @RequestMapping("get_a_repair_history")
+    public RepairJigHistory getARepairHistory(@RequestParam("id") String id) {
+        return naiveService.getARepairHistory(id);
+    }
 }
