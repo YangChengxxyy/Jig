@@ -318,11 +318,11 @@ public class SupervisorJson {
         int flag = supervisorService.supervisorNoPassScrapSubmit(id, no_pass_reason, user, field, old_value, new_value);
         if (flag > 0) {
             long now = System.currentTimeMillis();
-            Message message = new Message("/scrap/my", "id", id, "监管员" + user.getName() + "拒绝了你的报废申请", now);
+            Message message = new Message("/scrap/history", "id", id, "监管员" + user.getName() + "拒绝了你的报废申请", now);
             webSocketServer.sendMessageToId(submit_man.getId(), message); // 发送给申请人
 
             if (!"".equals(workcell_id)) {
-                messageService.idAdd(submit_man.getId(), "high", workcell_id, "/scrap/my", "id", id, "监管员" + user.getName() + "拒绝了你的报废申请", now);
+                messageService.idAdd(submit_man.getId(), "high", workcell_id, "/scrap/history", "id", id, "监管员" + user.getName() + "拒绝了你的报废申请", now);
             }
         }
         return flag;

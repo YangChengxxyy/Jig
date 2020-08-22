@@ -77,7 +77,7 @@ public class CommonService {
     //方便其他controller调用的
 
     /**
-     * 获取单个报废申请(commonjson中没有)
+     * 获取单个报废申请
      *
      * @param id 申请id
      * @return
@@ -94,6 +94,26 @@ public class CommonService {
      */
     public PurchaseIncomeSubmit getPurchaseSubmit(String id) {
         return commonMapper.getPurchaseSubmit(id);
+    }
+
+    /**
+     * 获取单个报废申请历史记录
+     *
+     * @param id 申请id
+     * @return
+     */
+    public ScrapSubmit getScrapSubmitHistory(String id) {
+        return commonMapper.getScrapSubmitHistory(id);
+    }
+
+    /**
+     * 获取单个采购入库申请历史记录
+     *
+     * @param id
+     * @return
+     */
+    public PurchaseIncomeSubmit getPurchaseSubmitHistory(String id) {
+        return commonMapper.getPurchaseSubmitHistory(id);
     }
 
     public List<JigCabinet> get_jig_cabinet_list() {

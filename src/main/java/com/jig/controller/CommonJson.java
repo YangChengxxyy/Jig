@@ -197,8 +197,18 @@ public class CommonJson {
         return commonService.getPurchaseSubmit(id);
     }
 
+    @RequestMapping("get_a_purchase_submit_history")
+    public PurchaseIncomeSubmit getAPurchaseSubmitHistory(@RequestParam("id") String id) {
+        return commonService.getPurchaseSubmitHistory(id);
+    }
+
     @RequestMapping("get_a_scrap_submit")
     public ScrapSubmit getAScrapSubmit(@RequestParam("id") String id) {
         return commonService.getScrapSubmit(id);
+    }
+
+    @RequestMapping("get_a_scrap_submit_history")
+    public ScrapSubmit getAScrapSubmitHistory(@RequestParam("id") String id) {
+        return commonService.getScrapSubmitHistory(id);
     }
 }

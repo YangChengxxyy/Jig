@@ -91,6 +91,28 @@
                                       left join user u2 on p.final_acceptor = u2.id
         where p.id = #{id}
     </select>
+    <select id="getScrapSubmitHistory" resultType="com.jig.entity.scrap.ScrapSubmit">
+        select s.*,
+        u1.name submit_name,
+        u2.name first_acceptor_name,
+        u3.name final_acceptor_name
+        from scrap_submit_history s INNER JOIN user u1 on u1.id = s.submit_id
+                            LEFT JOIN user u2 on u2.id = s.first_acceptor
+                            LEFT JOIN user u3 on u3.id = s.final_acceptor
+        where s.id = #{id}
+    </select>
+    <select id="getPurchaseSubmitHistory" resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
+        select p.*,
+        u.name submit_name,
+        pl.name production_line_name,
+        u1.name 'first_acceptor_name',
+        u2.name 'final_acceptor_name'
+        from purchase_income_submit_history p inner join user u on p.submit_id = u.id
+                                      inner join production_line pl on p.production_line_id = pl.id
+                                      left join user u1 on p.first_acceptor = u1.id
+                                      left join user u2 on p.final_acceptor = u2.id
+        where p.id = #{id}
+    </select>
     <select id="get_jig_cabinet_list" resultMap="jig_cabinet_list_map">
         select jc.jig_cabinet_id, l.location_id, jp.bin
         from jig_cabinet jc

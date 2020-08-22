@@ -82,6 +82,10 @@ public interface CommonMapper {
 
     PurchaseIncomeSubmit getPurchaseSubmit(@Param("id") String id);
 
+    ScrapSubmit getScrapSubmitHistory(@Param("id") String id);
+
+    PurchaseIncomeSubmit getPurchaseSubmitHistory(@Param("id") String id);
+
     List<JigCabinet> get_jig_cabinet_list();
 
     List<JigDefinition> getJigDefinition(@Param("page_number") int page_number, @Param("page_size") int page_size);
