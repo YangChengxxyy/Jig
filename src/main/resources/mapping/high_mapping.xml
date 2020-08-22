@@ -301,7 +301,7 @@
                  left join `user` u3 on ss.final_acceptor = u3.id
         where ss.submit_id = #{submit_id}
     </select>
-    <select id="highSearchScrapHistory" resultType="com.jig.entity.scrap.ScrapHistory">
+    <select id="highSearchScrapHistory" resultType="com.jig.entity.scrap.ScrapSubmit">
         select ss.*,u1.name submit_name,u2.name first_acceptor_name
         from scrap_submit_history ss
         left join `user` u1 on ss.submit_id = u1.id

@@ -102,7 +102,7 @@ public class HighService {
     //high搜索报废历史页数
     public int highSearchScrapHistoryPage(String code, String seq_id, String submit_id, String scrap_reason, String status, String start_date, String end_date) {
         int a = highMapper.highSearchScrapHistoryPage(code, seq_id, submit_id, scrap_reason, status, start_date, end_date);
-        return (int) Math.ceil(a / 5.0);
+        return a;
     }
 
     public List<ScrapHistory> highSearchAllScrapHistory(String code, String seq_id, String submit_name, String scrap_reason, String status, String start_date, String end_date) {
