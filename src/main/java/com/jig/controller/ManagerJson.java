@@ -126,7 +126,7 @@ public class ManagerJson {
         long now = System.currentTimeMillis();
         Message message = new Message("/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
         if (!"".equals(workcell_id)) {
-            messageService.idAdd(submit_man.getId(), "naive", workcell_id, "/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
+            messageService.idAdd(submit_man.getId(), "high", workcell_id, "/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
         }
         webSocketServer.sendMessageToId(submit_man.getId(), message);
         return "审批成功!";

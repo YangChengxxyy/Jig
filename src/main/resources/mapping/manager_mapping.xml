@@ -12,6 +12,7 @@
                                       left join user u1 on p.first_acceptor = u1.id
                                       left join user u2 on p.final_acceptor = u2.id
         where (status = 2 or p.final_acceptor = #{user_id}) and u.workcell_id = #{workcell_id}
+        order by p.submit_time asc
         limit #{page_number},#{page_size}
     </select>
     <select id="get_manager_purchase_submit_list_pages" resultType="java.lang.Integer">
@@ -95,10 +96,10 @@
                 and (STR_TO_DATE(p.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
             </if>
         </where>
+        order by p.submit_time desc
         <if test="page_number!='-1'.toString()">
             limit #{page_number},#{page_size}
         </if>
-
     </select>
     <select id="get_manager_purchase_submit_list_history_pages" resultType="java.lang.Integer">
         select count(*) from purchase_income_submit_history p inner join production_line pl on p.production_line_id = pl.id
@@ -146,6 +147,7 @@
                             LEFT JOIN user u2 on u2.id = s.first_acceptor
                             LEFT JOIN user u3 on u3.id = s.final_acceptor
         where (s.status = 2 or s.final_acceptor = #{user_id}) and u1.workcell_id = #{workcell_id}
+        order by s.submit_time asc
         limit #{page_number},#{page_size}
     </select>
     <select id="manager_get_scrap_submit_list_pages" resultType="java.lang.Integer">
@@ -219,6 +221,7 @@
                 and (STR_TO_DATE(s.submit_time,'%Y-%m-%d') BETWEEN '${start_date}' AND '${end_date}')
             </if>
         </where>
+        order by s.submit_time desc
         limit #{page_number},#{page_size}
     </select>
     <select id="get_manager_scrap_submit_list_history_pages" resultType="java.lang.Integer">
