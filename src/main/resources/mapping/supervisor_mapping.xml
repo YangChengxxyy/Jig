@@ -118,6 +118,7 @@
                                       left join user u1 on p.first_acceptor = u1.id
                                       left join user u2 on p.final_acceptor = u2.id
         where (p.status = 0 or p.status = 1 or p.status = 2)
+        order by p.submit_time asc
         limit #{page_number},#{page_size}
     </select>
     <select id="supervisorGetPurchaseSubmitListPages" resultType="java.lang.Integer">
@@ -172,6 +173,7 @@
             </if>
             and (status = 1 or status = 2 or status = 0)
         </where>
+        order by p.submit_time desc
         limit #{page_number},#{page_size}
     </select>
     <select id="supervisorGetPurchaseSubmitHistoryPages" resultType="java.lang.Integer">
