@@ -217,11 +217,11 @@ public class SupervisorJson {
 
         if (flag > 0) {
             long now = System.currentTimeMillis();
-            Message message = new Message("/purchase/my", "id", id, "监管员" + user.getName() + "拒绝了你的采购入库申请", now);
+            Message message = new Message("/purchase/history", "id", id, "监管员" + user.getName() + "拒绝了你的采购入库申请", now);
             webSocketServer.sendMessageToId(submit_man.getId(), message); // 发送给申请人
 
             if (!"".equals(workcell_id)) {
-                messageService.idAdd(submit_man.getId(), "naive", workcell_id, "/purchase/my", "id", id, "监管员" + user.getName() + "拒绝了你的采购入库申请", now);
+                messageService.idAdd(submit_man.getId(), "high", workcell_id, "/purchase/my", "id", id, "监管员" + user.getName() + "拒绝了你的采购入库申请", now);
             }
         }
         return flag;

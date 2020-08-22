@@ -142,7 +142,12 @@
 
         insert into operate(operate_man_id,operate_key_id,operate_time,table_name,field,type,old_value,new_value,operate_string)
         values(#{user.id},#{id},now(),'purchase_income_submit',#{field},'update',#{old_value},#{new_value},
-        concat('监管员',#{user.name},'初审不通过~原因:',#{first_reason}))
+        concat('监管员',#{user.name},'初审不通过~原因:',#{first_reason}));
+
+        insert into purchase_income_submit_history select * from purchase_income_submit where id = #{id};
+
+        delete from purchase_income_submit
+        where id = #{id}
     </update>
     <select id="supervisorGetPurchaseSubmitHistory" resultType="com.jig.entity.purchase.PurchaseIncomeSubmit">
         select p.*,u.name 'submit_name',
