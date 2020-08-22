@@ -101,6 +101,7 @@
                  left join `user` u3 on ps.final_acceptor = u3.id,
              production_line
         where ps.production_line_id = production_line.id
+        order by ps.submit_time asc
         limit #{page_number},#{page_size}
     </select>
     <select id="highGetPurchaseIncomeSubmitListPage" resultType="java.lang.Integer">
@@ -137,6 +138,7 @@
         <if test="start_date != end_date">
             and ph.submit_time between #{start_date} and #{end_date}
         </if>
+        order by ph.submit_time desc
         limit #{page_number},#{page_size}
     </select>
     <select id="highSearchPurchaseIncomeHistoryPage" resultType="java.lang.Integer">
