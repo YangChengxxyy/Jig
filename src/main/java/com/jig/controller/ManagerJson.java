@@ -96,7 +96,7 @@ public class ManagerJson {
         Message message = new Message("/purchase/history", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
         webSocketServer.sendMessageToId(submit_man.getId(), message);
         if (!"".equals(workcell_id)) {
-            messageService.idAdd(submit_man.getId(), "naive", workcell_id, "/purchase/history", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
+            messageService.idAdd(submit_man.getId(), "high", workcell_id, "/purchase/history", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
         }
         return "操作成功！";
     }
