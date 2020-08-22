@@ -93,10 +93,10 @@ public class ManagerJson {
             return "操作失败！";
         }
         long now = System.currentTimeMillis();
-        Message message = new Message("/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
+        Message message = new Message("/purchase/history", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
         webSocketServer.sendMessageToId(submit_man.getId(), message);
         if (!"".equals(workcell_id)) {
-            messageService.idAdd(submit_man.getId(), "naive", workcell_id, "/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
+            messageService.idAdd(submit_man.getId(), "naive", workcell_id, "/purchase/history", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
         }
         return "操作成功！";
     }
@@ -124,11 +124,12 @@ public class ManagerJson {
             return "服务器异常!";
         }
         long now = System.currentTimeMillis();
-        Message message = new Message("/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
-        if (!"".equals(workcell_id)) {
-            messageService.idAdd(submit_man.getId(), "high", workcell_id, "/purchase/my", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
-        }
+        Message message = new Message("/purchase/history", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
         webSocketServer.sendMessageToId(submit_man.getId(), message);
+
+        if (!"".equals(workcell_id)) {
+            messageService.idAdd(submit_man.getId(), "high", workcell_id, "/purchase/history", "id", id, "经理" + user_name + "通过了你的采购入库申请", now);
+        }
         return "审批成功!";
     }
 
