@@ -93,4 +93,6 @@ public interface CommonMapper {
     User getUserByPurchaseSubmitId(@Param("id") String id);
 
     User getUserByScrapSubmitId(@Param("id") String id);
+
+
 }

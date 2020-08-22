@@ -537,4 +537,9 @@
         from repair_submit_history
         where id = #{id}
     </select>
+    <select id="naive_get_a_pending_repair_submit" resultType="com.jig.entity.repair.PendingRepairSubmit">
+        select *
+        from pending_repair_submit_entity_view
+        where id = #{id}
+    </select>
 </mapper>

@@ -410,7 +410,7 @@ public class HighJson {
             if (state) {
                 highService.highAgreeRepairSubmit(id, submit_id);
                 long now = System.currentTimeMillis();
-                Message message = new Message("/repair/search", "id", String.valueOf(id), submit_id + "通过了你的报修申请", now);
+                Message message = new Message("/warehouse/repair", "id", String.valueOf(id), submit_id + "通过了你的报修申请", now);
                 webSocketServer.sendMessageToId(informed_id, message);
             } else {
                 highService.highDisagreeRepairSubmit(id, submit_id, reason);

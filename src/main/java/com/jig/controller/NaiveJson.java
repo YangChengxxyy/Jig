@@ -739,4 +739,14 @@ public class NaiveJson {
     public RepairJigHistory getARepairHistory(@RequestParam("id") String id) {
         return naiveService.getARepairHistory(id);
     }
+
+    /**
+     * 根据id获取单个待处理的报修审批
+     * @param id
+     * @return
+     */
+    @RequestMapping("get_a_pending_repair_submit")
+    public PendingRepairSubmit getAPendingRepairSubmit(@RequestParam("id") String id) {
+        return naiveService.naive_get_a_pending_repair_submit(id);
+    }
 }

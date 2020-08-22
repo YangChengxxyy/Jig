@@ -122,4 +122,5 @@ public class CommonService {
     public User getUserByScrapSubmitId(String id) {
         return commonMapper.getUserByScrapSubmitId(id);
     }
+
 }
