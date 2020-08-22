@@ -203,6 +203,7 @@
                  left join jig_entity on rs.code = jig_entity.code and rs.seq_id = jig_entity.seq_id
         where u1.workcell_id in (select user.workcell_id from user where id = #{id})
           and rs.status = 0
+        order by rs.submit asc
         limit #{page_number},#{page_size}
     </select>
     <select id="highGetRepairJigPage" resultType="java.lang.Integer">
@@ -234,7 +235,8 @@
         <if test="start_date != end_date">
             and rh.submit_time between #{start_date} and #{end_date}
         </if>
-        limit #{page_number},5
+        order by rh.submit_time desc
+        limit #{page_number},#{page_size}
     </select>
     <select id="highSearchAllRepairHistory" resultType="com.jig.entity.repair.RepairJigHistory">
         select rh.*,u1.name submit_name,u2.name acceptor_name
@@ -257,6 +259,7 @@
         <if test="start_date != end_date">
             and rh.submit_time between #{start_date} and #{end_date}
         </if>
+        order by rh.submit_time desc
     </select>
     <select id="highSearchRepairHistoryPage" resultType="java.lang.Integer">
         select count(*)
@@ -287,6 +290,7 @@
                  left join `user` u2 on ss.first_acceptor = u2.id
                  left join `user` u3 on ss.final_acceptor = u3.id
         where ss.submit_id = #{submit_id}
+        order by ss.submit_time asc
         limit #{page_number},#{page_size}
     </select>
     <select id="highGetScrapPage" resultType="java.lang.Integer">
@@ -319,6 +323,7 @@
         <if test="start_date != end_date">
             and ss.submit_time between #{start_date} and #{end_date}
         </if>
+        order by ss.submit_time desc
         limit #{page_number},#{page_size}
     </select>
     <select id="highSearchScrapHistoryPage" resultType="java.lang.Integer">
