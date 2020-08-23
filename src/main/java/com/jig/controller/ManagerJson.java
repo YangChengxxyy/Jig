@@ -342,9 +342,9 @@ public class ManagerJson {
             return "服务器异常!";
         }
         long now = System.currentTimeMillis();
-        Message message = new Message("/scrap/my", "id", id, "经理" + user_name + "通过了你的报废申请", now);
+        Message message = new Message("/scrap/history", "id", id, "经理" + user_name + "通过了你的报废申请", now);
         if (!"".equals(workcell_id)) {
-            messageService.idAdd(submit_man.getId(), "high", workcell_id, "/scrap/my", "id", id, "经理" + user_name + "通过了你的报废申请", now);
+            messageService.idAdd(submit_man.getId(), "high", workcell_id, "/scrap/history", "id", id, "经理" + user_name + "通过了你的报废申请", now);
         }
         webSocketServer.sendMessageToId(submit_man.getId(), message);
         return "审批成功！";
@@ -374,11 +374,11 @@ public class ManagerJson {
             return "服务器异常!";
         }
         long now = System.currentTimeMillis();
-        Message message = new Message("/scrap/my", "id", id, "经理" + user_name + "拒绝了你的报废申请", now);
-        if (!"".equals(workcell_id)) {
-            messageService.idAdd(submit_man.getId(), "high", workcell_id, "/scrap/my", "id", id, "经理" + user_name + "拒绝了你的报废申请", now);
-        }
+        Message message = new Message("/scrap/history", "id", id, "经理" + user_name + "拒绝了你的报废申请", now);
         webSocketServer.sendMessageToId(submit_man.getId(), message);
+        if (!"".equals(workcell_id)) {
+            messageService.idAdd(submit_man.getId(), "high", workcell_id, "/scrap/history", "id", id, "经理" + user_name + "拒绝了你的报废申请", now);
+        }
         return "审批成功";
     }
 

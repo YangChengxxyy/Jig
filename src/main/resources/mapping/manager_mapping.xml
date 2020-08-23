@@ -192,8 +192,6 @@
         insert into scrap_submit_history select * from scrap_submit where id = #{submit_id};
 
         delete from scrap_submit where id = #{submit_id}
-
-
     </update>
     <select id="get_manager_scrap_submit_list_history" resultType="com.jig.entity.scrap.ScrapSubmit">
         select s.*,
