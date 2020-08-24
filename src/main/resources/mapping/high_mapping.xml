@@ -203,7 +203,7 @@
                  left join jig_entity on rs.code = jig_entity.code and rs.seq_id = jig_entity.seq_id
         where u1.workcell_id in (select user.workcell_id from user where id = #{id})
           and rs.status = 0
-        order by rs.submit asc
+        order by rs.submit_time asc
         limit #{page_number},#{page_size}
     </select>
     <select id="highGetRepairJigPage" resultType="java.lang.Integer">
