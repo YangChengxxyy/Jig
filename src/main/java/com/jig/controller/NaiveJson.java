@@ -228,6 +228,9 @@ public class NaiveJson {
             jigEntity.setMaintenance_history_list(
                     naiveService.naive_get_maintenance_history_list(jigEntity.getCode(), jigEntity.getSeq_id()));
             for (MaintenanceSubmit maintenanceSubmit : jigEntity.getMaintenance_history_list()) { // 对数据进行处理，方便前端显示
+                if (maintenanceSubmit.getReason() == null) {
+                    continue;
+                }
                 String[] reason = maintenanceSubmit.getReason().split("\\|");
                 String r = "";
                 if (reason[0].equals("")) {
@@ -255,6 +258,9 @@ public class NaiveJson {
         List<MaintenanceSubmit> maintenanceSubmitList = naiveService.naive_get_maintenance_history_list(code, seq_id);
 
         for (MaintenanceSubmit maintenanceSubmit : maintenanceSubmitList) { // 对数据进行处理，方便前端显示
+            if (maintenanceSubmit.getReason() == null) {
+                continue;
+            }
             String[] reason = maintenanceSubmit.getReason().split("\\|");
             String r = "";
             if (reason[0].equals("")) {
