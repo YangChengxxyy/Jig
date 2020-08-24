@@ -523,7 +523,7 @@
     </update>
     <select id="naive_repair_finish">
         insert into regular_maintenance_history(code, seq_id, check_id, check_time, is_repair, repair_type)
-        values (#{submit.code}, #{submidt.seq_id}, #{submit.repair_man_id}, now(), 2, #{submit.repair_type});
+        values (#{submit.code}, #{submit.seq_id}, #{submit.repair_man_id}, now(), 2, #{submit.repair_type});
 
         update jig_position
         set status = '1'
