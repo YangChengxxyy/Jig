@@ -453,6 +453,7 @@
         from pending_purchase_submit_entity_view
         where workcell_id = #{workcell_id}
           and status = #{status}
+        order by final_time asc
         limit #{page_number}, #{page_size}
     </select>
     <select id="naive_get_pending_purchase_submit_list_pages" resultType="java.lang.Integer">
@@ -465,6 +466,7 @@
         select *
         from pending_scrap_submit_entity_view
         where workcell_id = #{workcell_id}
+        order by final_time asc
         limit #{page_number}, #{page_size}
     </select>
     <select id="naive_get_pending_scrap_submit_list_pages" resultType="java.lang.Integer">
