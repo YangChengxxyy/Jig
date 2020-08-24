@@ -389,8 +389,7 @@
         from outgo_submit_entity_view
     </select>
     <select id="getMaxSeqId" resultType="java.lang.Integer">
-        select MAX(seq_id)
-        from jig_entity
+        select IFNULL(MAX(seq_id),0) from jig_entity
         where code = #{code}
     </select>
     <select id="naiveGetAllOutgoingJigList" resultType="com.jig.entity.out.OutgoingJig">
