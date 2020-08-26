@@ -367,4 +367,6 @@ public interface NaiveMapper {
     RepairJigHistory getARepairHistory(@Param("id") String id);
 
     PendingRepairSubmit naive_get_a_pending_repair_submit(@Param("id") String id);
+
+    void delRepairSubmit(String id);
 }

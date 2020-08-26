@@ -755,4 +755,14 @@ public class NaiveJson {
     public PendingRepairSubmit getAPendingRepairSubmit(@RequestParam("id") String id) {
         return naiveService.naive_get_a_pending_repair_submit(id);
     }
+    @RequestMapping("del_repair_submit")
+    public boolean delRepairSubmit(@RequestParam("id")String id){
+        try{
+            naiveService.delRepairSubmit(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }

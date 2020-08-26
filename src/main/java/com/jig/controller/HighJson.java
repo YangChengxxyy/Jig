@@ -405,18 +405,24 @@ public class HighJson {
 
     @RequestMapping("handle_repair_submit")
     public boolean handleRepairSubmit(@RequestParam("id") int id, @RequestParam("submit_id") String submit_id, @RequestParam("informed_id") String informed_id,
-                                      @RequestParam("state") boolean state, @RequestParam(value = "reason", required = false) String reason) {
+                                      @RequestParam("state") boolean state, @RequestParam(value = "reason", required = false) String reason,@RequestParam(value = "workcell_id",required = false,defaultValue = "")String workcell_id) {
         try {
             if (state) {
                 highService.highAgreeRepairSubmit(id, submit_id);
-                long now = System.currentTimeMillis();
-                Message message = new Message("/warehouse/repair", "id", String.valueOf(id), submit_id + "通过了你的报修申请", now);
-                webSocketServer.sendMessageToId(informed_id, message);
+                if(!"".equals(workcell_id)){
+                    long now = System.currentTimeMillis();
+                    Message message = new Message("/warehouse/repair", "id", String.valueOf(id), submit_id + "通过了你的报修申请", now);
+                    webSocketServer.sendMessageToId(informed_id, message);
+                    messageService.idAdd(informed_id,"naive",workcell_id,"/warehouse/repair", "id", String.valueOf(id), submit_id + "通过了你的报修申请", now);
+                }
             } else {
                 highService.highDisagreeRepairSubmit(id, submit_id, reason);
-                long now = System.currentTimeMillis();
-                Message message = new Message("/repair/search", "id", String.valueOf(id), submit_id + "拒绝了你的报修申请", now);
-                webSocketServer.sendMessageToId(informed_id, message);
+                if(!"".equals(workcell_id)){
+                    long now = System.currentTimeMillis();
+                    Message message = new Message("/repair/search", "id", String.valueOf(id), submit_id + "拒绝了你的报修申请", now);
+                    webSocketServer.sendMessageToId(informed_id, message);
+                    messageService.idAdd(informed_id,"naive",workcell_id,"/repair/search", "id", String.valueOf(id), submit_id + "通过了你的报修申请", now);
+                }
             }
             return true;
         } catch (Exception e) {
@@ -432,8 +438,7 @@ public class HighJson {
                                                @RequestParam(value = "production_line_id") String production_line_id,
                                                @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
                                                @RequestParam(value = "end_date") String end_date, @RequestParam(value = "page_number") int page_number,
-                                               @RequestParam(value = "file_name") String file_name, @RequestParam("page_size") int page_size)
-            throws Exception {
+                                               @RequestParam(value = "file_name") String file_name, @RequestParam("page_size") int page_size) {
         List<PurchaseIncomeHistory> list = highService.highSearchPurchaseIncomeHistory(bill_no, submit_name, code,
                 production_line_id, status, start_date, end_date, page_number, page_size);
         poiUtil.outputFile(response, file_name, list);
@@ -445,8 +450,7 @@ public class HighJson {
                                                @RequestParam(value = "code") String code,
                                                @RequestParam(value = "production_line_id") String production_line_id,
                                                @RequestParam(value = "status") String status, @RequestParam(value = "start_date") String start_date,
-                                               @RequestParam(value = "end_date") String end_date, @RequestParam(value = "file_name") String file_name)
-            throws Exception {
+                                               @RequestParam(value = "end_date") String end_date, @RequestParam(value = "file_name") String file_name) {
         List<PurchaseIncomeHistory> list = highService.highSearchAllPurchaseIncomeHistory(bill_no, submit_name, code,
                 production_line_id, status, start_date, end_date);
         poiUtil.outputFile(response, file_name, list);

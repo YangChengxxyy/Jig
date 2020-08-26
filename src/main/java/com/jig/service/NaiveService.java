@@ -267,4 +267,8 @@ public class NaiveService {
     public PendingRepairSubmit naive_get_a_pending_repair_submit(String id) {
         return naiveMapper.naive_get_a_pending_repair_submit(id);
     }
+
+    public void delRepairSubmit(String id) {
+        naiveMapper.delRepairSubmit(id);
+    }
 }
