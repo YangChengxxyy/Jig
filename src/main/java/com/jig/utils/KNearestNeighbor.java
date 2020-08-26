@@ -32,6 +32,6 @@ public class KNearestNeighbor {
         for (int i = 0; i < Math.min(lifeList.size(), K); i++) {
             sums += lifeList.get(i).getLife_percent();
         }
-        return sums / (Math.min(lifeList.size(), K));
+        return sums / (Math.min(lifeList.size() == 0 ? 1 : lifeList.size(), K));
     }
 }

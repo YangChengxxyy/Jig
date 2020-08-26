@@ -2,7 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jig.mapper.LifeMapper">
     <update id="updateJigLife">
-        update jig_entity set life_percent = #{percent} where code = #{jigLife.code} and seq_id = #{jigLife.seq_id}
+        update jig_entity
+        set life_percent = #{percent}
+        where code = #{jigLife.code}
+          and seq_id = #{jigLife.seq_id}
     </update>
     <select id="getAllJigLife" resultType="com.jig.entity.life.JigLife">
         SELECT jig_entity.`code`,
@@ -12,7 +15,7 @@
                repair_submit_history.repair_type,
                count(repair_submit_history.repair_type) repair_count
         FROM jig_entity
-                 LEFT JOIN repair_submit_history ON jig_entity.`code` = repair_submit_history.`code`
+                 inner JOIN repair_submit_history ON jig_entity.`code` = repair_submit_history.`code`
             AND jig_entity.seq_id = repair_submit_history.seq_id
         WHERE repair_submit_history.repair_type != ''
         GROUP BY jig_entity.`code`,
