@@ -421,7 +421,7 @@ public class HighJson {
                     long now = System.currentTimeMillis();
                     Message message = new Message("/repair/search", "id", String.valueOf(id), submit_id + "拒绝了你的报修申请", now);
                     webSocketServer.sendMessageToId(informed_id, message);
-                    messageService.idAdd(informed_id,"naive",workcell_id,"/repair/search", "id", String.valueOf(id), submit_id + "通过了你的报修申请", now);
+                    messageService.idAdd(informed_id,"naive",workcell_id,"/repair/search", "id", String.valueOf(id), submit_id + "拒绝了你的报修申请", now);
                 }
             }
             return true;
